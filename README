@@ -114,8 +114,6 @@ Die Karte wird bei vielen Objekten sehr unübersichtlich.
 Die momentane Art, wie Planeten und Schiffe dargestellt werden,
 muss gründlich überarbeitet werden.
 
-Hardware-Surfaces funktionieren nicht.
-
 
 
 Performance
@@ -141,28 +139,6 @@ UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigroesse der
 Auswertung an RAM.  Da laesst sich vermutlich nur wenig daran aendern;
 tendenziell wird der Speicherbedarf eher steigen als sinken, da mir
 gute Performance wichtiger ist als ein niedriger Speicherbedarf.
-
-
-
-Hardware Surfaces / Grafikbeschleunigung
-----------------------------------------
-
-SDL kann die Grafikbeschleunigung einiger Karten nutzen.  Dies ist
-jedoch momentan von UV Navigator noch nicht sauber unterstützt.
-
-Unter Unix muss dazu UV Navigator mit root-Rechten gestartet werden,
-und die Env-Var SDL_VIDEODRIVER auf "dga" gesetzt werden.  Falls ein
-beschleunigter DGA-Driver zu Verfügung steht, kann dann uvnav mit -S
-gestartet werden, z.B. so:
-
- $ SDL_VIDEODRIVER=dga sudo uvnav -S /pfad/zu/auswertung.txt
-
-Unter Windows koennen Hardware-Surfaces nur im Vollbildmodus
-genutzt werden.
-
-ACHTUNG: DIES IST MOMENTAN NOCH SEHR EXPERIMENTELL UND NICHT RICHTIG
-         UNTERSTUETZT.  AUSPROBIEREN AUF EIGENE GEFAHR.
-         Bei mir funktionierts jedenfalls momentan nicht sauber :)
 
 
 

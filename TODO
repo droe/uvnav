@@ -204,19 +204,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - auswertung nach unicode
   - iconv?
 
-- Hardware surfaces:
-  - probleme wenn windowed:
-    - in fremde windows zeichnen
-  - hardware unter unix nur als root
-    - message ausgeben
-  - hardware langsamer als software
-    - timing einbauen und testen
-  - nur so und so viel video-memory
-    - wie detecten wenn memory full?
-  - double-buf: verschiedene modi!
-    - wie detecten?
-    - wie handeln wenn detected?
-
 - Exceptions "richtig" implementieren
   - eigene Klassenhierarchie
   - Fehlertypen erlauben
