@@ -19,6 +19,6 @@
 
 if [ -d .svn ]; then
 	echo "Updating ChangeLog..."
-	svn -v log > ChangeLog
+	svn -v log svn://projects.roe.ch/repos/uvnav > ChangeLog
 	echo "Done."
 fi
