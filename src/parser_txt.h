@@ -69,18 +69,21 @@ class UVParserTXT
 		void parse_auswertung();
 
 		void parse_header();
+		void parse_oldschool_header();
 		void parse_spielerinfos();
 		void parse_spielstand();
 		void parse_imperatorinfos();
 		void parse_allianzen();
 		void parse_schiffe(UVPlanet* p = NULL);
 		void parse_planeten();
+		void parse_oldschool_planeten();
 		void parse_sensorenreport();
 		void parse_fremde_lager();
 		void parse_nachrichten();
 
 		void parse_schiff(UVPlanet* p = NULL);
 		void parse_planet();
+		void parse_oldschool_planet();
 		void parse_handelsstation(UVPlanet*);
 		void parse_report_schiff();
 		void parse_report_container();

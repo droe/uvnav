@@ -5,7 +5,6 @@ $Id$
 - Screenshots
 - Lizenzrechtliche Abklärungen zum Bildmaterial und Fonts
 - Transparente PNGs einlesen statt Würg-PNGs
-- Fonts konfigurierbar mit konstanter Grösse
 - Rest der RoadMap
 
 Weiter gemäss RoadMap im Wiki:
@@ -76,6 +75,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Minimap
   - Statusinformationen in ein sauberes Info-Overlay überführen.
   - Maushandling einführen
+    - Koordinaten laufend anzeigen
   - Zeichenreihenfolge
   - Such-Overlay à la Celestia
 
@@ -193,8 +193,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 - Warnings "richtig" implementieren
   - zentrale WARN(); Facility
-
-- Historische Auswertungen einlesen
 
 - Verbleibende verstreute TODOs und *** und FIXMEs abarbeiten
 

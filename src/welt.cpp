@@ -574,7 +574,7 @@ UVHandelsstation::~UVHandelsstation()
  * Konstruktor.
  */
 UVPlanet::UVPlanet(long n, string na, string be, long x_, long y_, long d)
-: nummer(n), name(na), besitzer(be), x(x_), y(y_), dim(d)
+: nummer(n), name(na), besitzer(be), x(x_), y(y_), dim(d), drawflag(false)
 , beschreibung(""), bevoelkerung(0.0), zustand(""), minen(0), minen_max(0)
 , produktion(0), klima(""), image(0), diameter(0), techlevel(0)
 , energiegenerator(0), tribut(0), xbatts(0), ybatts(0), zbatts(0)
@@ -1043,7 +1043,7 @@ ladung_iterator UVSchiff::last_ladung()
  * Konstruktor.
  */
 UVWelt::UVWelt()
-: partie(""), copyright(""), motu(""), sternzeit(0)
+: partie(""), copyright(""), galaxie(""), motu(""), sternzeit(0)
 {
 	spieler = new UVSpieler();
 }
@@ -1150,7 +1150,14 @@ void UVWelt::set_planet(UVPlanet* p)
 }
 UVPlanet* UVWelt::get_planet(const long n) const
 {
-	return planeten[n];
+	if(planeten.count(n) > 0)
+	{
+		return planeten[n];
+	}
+	else
+	{
+		return NULL;
+	}
 }
 planeten_iterator UVWelt::first_planet()
 {

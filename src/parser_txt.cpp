@@ -231,32 +231,51 @@ void UVParserTXT::parse(const string& file, UVProgress* pro)
 void UVParserTXT::parse_auswertung()
 {
 	parse_header();
-	parse_spielerinfos();
-	parse_spielstand();
 
-	if(match("^Spionageabwehr:"))
+	if(welt->copyright == "a PBM (c) 1994-97 by Black Bird Software")
 	{
-		parse_imperatorinfos();
+		// Uralte Auswertung
+		parse_oldschool_header();
+		parse_oldschool_planeten();
+		if(cur == "Besondere Nachrichten:")
+		{
+			// Rest ueberspringen
+			while(good())
+			{
+				getline();
+			}
+		}
+	}
+	else
+	{
+		parse_spielerinfos();
+		parse_spielstand();
+	
+		if(match("^Spionageabwehr:"))
+		{
+			parse_imperatorinfos();
+		}
+
+		parse_allianzen();
+		parse_schiffe();
+		parse_planeten();
+
+		if(cur == "Sensorenreport:")
+		{
+			parse_sensorenreport();
+		}
+
+		if(match("^Lagerbest.nde auf fremden Schiffen:"))
+		{
+			parse_fremde_lager();
+		}
+
+		if(cur == "Besondere Nachrichten:")
+		{
+			parse_nachrichten();
+		}
 	}
 
-	parse_allianzen();
-	parse_schiffe();
-	parse_planeten();
-
-	if(cur == "Sensorenreport:")
-	{
-		parse_sensorenreport();
-	}
-
-	if(match("^Lagerbest.nde auf fremden Schiffen:"))
-	{
-		parse_fremde_lager();
-	}
-
-	if(cur == "Besondere Nachrichten:")
-	{
-		parse_nachrichten();
-	}
 }
 
 
@@ -274,6 +293,118 @@ void UVParserTXT::parse_header()
 	welt->set_partie((*re)[0]);
 	welt->copyright = (*re)[1];
 	getline();
+
+	parse_leerzeile();
+}
+
+
+/*
+ * Header einer uralten Auswertung parsen.
+ */
+void UVParserTXT::parse_oldschool_header()
+{
+	UVSpieler* s = new UVSpieler();
+
+	// Busy Eagle der Kämpfer
+	if(!match("^Name: +(.*)$"))
+	{
+		throw EXCEPTION("Name: fehlt!");
+	}
+	s->name = (*re)[0];
+	getline();
+
+	// Spieler: Daniel Röthlisberger
+	// Spieler: NSC
+	if(!match("^Spieler: +(.*)$"))
+	{
+		throw EXCEPTION("Spieler: fehlt!");
+	}
+	s->spieler = (*re)[0];
+	getline();
+
+	s->status = "Imperator";
+
+	// Galaxie: Awakening
+	if(!match("^Galaxie: +(.*)$"))
+	{
+		throw EXCEPTION("Galaxie: fehlt!");
+	}
+	welt->galaxie = (*re)[0];
+	getline();
+
+	// MotU: Roman Meng
+	if(!match("^MotU: +(.*)$"))
+	{
+		throw EXCEPTION("MotU: fehlt!");
+	}
+	welt->motu = (*re)[0];
+	getline();
+
+	// Sternzeit: 55
+	if(!match("^Sternzeit: +(.*)$"))
+	{
+		throw EXCEPTION("Sternzeit: fehlt!");
+	}
+	welt->sternzeit = atol((*re)[0].c_str());
+	getline();
+
+	// Punkte: 846000
+	if(!match("^Punkte: +(.*)$"))
+	{
+		throw EXCEPTION("Punkte: fehlt!");
+	}
+	s->legal = atoll((*re)[0].c_str());
+	getline();
+
+	//?Einkommen: 543074 t Erz
+	if(match("^Einkommen: +(.*) t Erz$"))
+	{
+		s->erzertrag = atol((*re)[0].c_str());
+		getline();
+	}
+
+	// Konto: 376761 Credits
+	if(!match("^Konto: +(.*) Credits$"))
+	{
+		throw EXCEPTION("Konto: fehlt!");
+	}
+	s->konto = atoll((*re)[0].c_str());
+	getline();
+
+	welt->set_spieler(s);
+
+	parse_leerzeile();
+
+	// Allianz mit: Duncan (2), Zwellar (2), Black Guy (1), IG Weltraum (1), _
+	// 	Loco (2), Commander Strike (2), Proteus (1), Lord McFalcon (1), _
+	// 	Johannes-Urban IX (3), Kane (2), Idaho Roschd (2), Mith (2), _
+	// 	Huitzilopochtli (3), Phan-Thomas (3), Starlord (2)
+	if(!match("^Allianz mit: +(.*)$"))
+	{
+		throw EXCEPTION("Allianz mit fehlt!");
+	}
+//	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+	getline();
+
+	// 0 Prozent des Erzertrages (an die Lager) für
+	if(match("^([0-9]+) Prozent des Erzertrages"))
+	{
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
+	}
+
+	// Spionageabwehr
+	if(match("^Spionageabwehr\\.$"))
+	{
+		getline();
+	}
+
+	// Erzkurs: 2 Credits pro Tonne Erz
+	if(match("^Erzkurs: ([0-9]+) Credits pro Tonne Erz$"))
+	{
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
+	}
 
 	parse_leerzeile();
 }
@@ -418,52 +549,51 @@ void UVParserTXT::parse_allianzen()
 	// Allianz mit Spieler: Zsakash (2), Xantes hocar (1), Kynar (2)
 	if(!match("^Allianz mit Spieler: +(.*)$"))
 	{
-		throw EXCEPTION("Allianz mit Spieler: fehlt!");
+		throw EXCEPTION("Allianzen mit Spieler fehlen!");
 	}
 //	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
 	getline();
 
 	// Sie haben diesen Spielern den Krieg erklärt: 
-	if(!match("^Sie haben diesen Spielern den Krieg erkl.rt: +(.*)$"))
+	// Krieg mit Spieler: 
+	if(!match("^(?:Sie haben diesen Spielern den Krieg erkl.rt|Krieg mit Spieler): +(.*)$"))
 	{
-		throw EXCEPTION("Sie haben diesen Spielern den Krieg erklärt: fehlt!");
+		throw EXCEPTION("Kriegserklärungen an Spieler fehlen!");
 	}
 //	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
 	getline();
 
-	// Diese Spieler haben Ihnen den Krieg erklärt: 
-	if(!match("^Diese Spieler haben Ihnen den Krieg erkl.rt: +(.*)$"))
+	//?Diese Spieler haben Ihnen den Krieg erklärt: 
+	if(match("^Diese Spieler haben Ihnen den Krieg erkl.rt: +(.*)$"))
 	{
-		throw EXCEPTION("Diese Spieler haben Ihnen den Krieg erklärt: fehlt!");
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
 	}
-//	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
-	getline();
 
 	// Sie haben diesen Gesellschaften den Krieg erklärt: 
-	if(!match("^Sie haben diesen Gesellschaften den Krieg erkl.rt: +(.*)$"))
+	// Krieg mit Gesellschaft: 
+	if(!match("^(?:Sie haben diesen Gesellschaften den Krieg erkl.rt|Krieg mit Gesellschaft): +(.*)$"))
 	{
-		throw EXCEPTION("Sie haben diesen Gesellschaften den Krieg erklärt: fehlt!");
+		throw EXCEPTION("Kriegserklärungen an Gesellschaften fehlen!");
 	}
 //	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
 	getline();
 
-	// Diese Spieler haben Ihrer Gesellschaft den Krieg erklärt: 
-	if(!match("^Diese Spieler haben Ihrer Gesellschaft den Krieg erkl.rt: +(.*)$"))
+	//?Diese Spieler haben Ihrer Gesellschaft den Krieg erklärt: 
+	if(match("^Diese Spieler haben Ihrer Gesellschaft den Krieg erkl.rt: +(.*)$"))
 	{
-		throw EXCEPTION("Diese Spieler haben Ihrer Gesellschaft den Krieg erklärt: fehlt!");
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
 	}
-//	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
-	getline();
 
-	// Diese Spieler haben allen den Krieg erklärt: Clingons Wadish, _
+	//?Diese Spieler haben allen den Krieg erklärt: Clingons Wadish, _
 	//     Clingons Emen, Pirat Fjodr, Pirat Knork, Pirat Killerjoe, _
 	//     Clingons Ishmani, Pirat Langfinger-Ede
-	if(!match("^Diese Spieler haben allen den Krieg erkl.rt: +(.*)$"))
+	if(match("^Diese Spieler haben allen den Krieg erkl.rt: +(.*)$"))
 	{
-		throw EXCEPTION("Diese Spieler haben allen den Krieg erklärt: fehlt!");
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
 	}
-//	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
-	getline();
 
 	parse_leerzeile();
 }
@@ -511,6 +641,22 @@ void UVParserTXT::parse_planeten()
 
 
 /*
+ * Die Planeten uralter Auswertungen parsen.
+ */
+void UVParserTXT::parse_oldschool_planeten()
+{
+	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
+	Pcre pcre("^.*? \\([0-9]+\\) \\(.*?\\) \\( ?-?[0-9]+, ?-?[0-9]+\\)(?: \\([0-9,]+\\))?$");
+	while(pcre.search(cur))
+	{
+		parse_oldschool_planet();
+	}
+
+	parse_leerzeile();
+}
+
+
+/*
  * Den Sensorenreport parsen.
  */
 void UVParserTXT::parse_sensorenreport()
@@ -524,7 +670,7 @@ void UVParserTXT::parse_sensorenreport()
 	
 	parse_leerzeile();
 
-	Pcre pcre("^  (Schiff|Container|Kosmische|SensorSonde|InfoSonde)");
+	Pcre pcre("^(?:  )?(Schiff|Container|Kosmische|SensorSonde|InfoSonde)");
 	while(pcre.search(cur))
 	{
 		if(pcre[0] == "Schiff")
@@ -554,7 +700,10 @@ void UVParserTXT::parse_sensorenreport()
 	}
 
 	parse_leerzeile();
-	parse_leerzeile();
+	if(cur == "")
+	{
+		parse_leerzeile();
+	}
 }
 
 
@@ -679,18 +828,23 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	}
 
 	//?  Waffenstatus: 3 / Offensivbereich: 0 / Fluchtwert: 296/367 HP
-	if(match("^  Waffenstatus: ([0-9]) / Offensivbereich: ([0-9]+) / Fluchtwert: ([0-9]+)/([0-9]+) HP$"))
+	//?  Waffenstatus: 3 / Offensivbereich: 0 / Fluchtwert: 120 HP
+	if(match("^  Waffenstatus: ([0-9]) / Offensivbereich: ([0-9]+) / Fluchtwert: ([0-9]+)(?:/([0-9]+))? HP$"))
 	{
 		debug("schiff-waffenstatus");
 		s->waffenstatus = atol((*re)[0].c_str());
 		s->offensivbereich = atol((*re)[1].c_str());
 		s->fluchtwert = atol((*re)[2].c_str());
-		s->hitpoints = atol((*re)[3].c_str());
+		if(re->matches() > 3)
+		{
+			s->hitpoints = atol((*re)[3].c_str());
+		}
 		getline();
 	}
 
 	//?  Traktorstrahl: An / Treibstofftanks: 14058.008/20000 BRT 
-	if(match("^  Traktorstrahl: (An|Aus) / Treibstofftanks: ([0-9.]+)/([0-9]+) BRT $"))
+	//?  Traktorstrahl: Aus / Treibstofftanks: 20000 / 20000 BRT
+	if(match("^  Traktorstrahl: (An|Aus) / Treibstofftanks: ([0-9.]+) ?/ ?([0-9]+) BRT $"))
 	{
 		debug("schiff-traktorstrahl");
 		s->traktorstrahl = ((*re)[0] == "An");
@@ -818,11 +972,15 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	}
 
 	//?  Lagerraum: 10000 BRT gesamt, 5259 BRT frei
-	if(match("^  Lagerraum: ([0-9]+) BRT gesamt, ([0-9]+) BRT frei$"))
+	//?  Lagerraum: 10000 BRT
+	if(match("^  Lagerraum: ([0-9]+) BRT(?: gesamt, ([0-9]+) BRT frei)?$"))
 	{
 		debug("schiff-lagerraum");
 		s->lagerraum = atol((*re)[0].c_str());
-		s->lagerraum_frei = atol((*re)[1].c_str());
+		if(re->matches() > 1)
+		{
+			s->lagerraum_frei = atol((*re)[1].c_str());
+		}
 		getline();
 	}
 
@@ -998,6 +1156,126 @@ void UVParserTXT::parse_planet()
 
 
 /*
+ * Ein Planet einer uralten Auswertung parsen.
+ */
+void UVParserTXT::parse_oldschool_planet()
+{
+	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
+	if(!match("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\( ?(-?[0-9]+), ?(-?[0-9]+)\\)(?: \\(([0-9,]+)\\))?$"))
+	{
+		throw EXCEPTION("Fehler in Planet!");
+	}
+	debug("oldschool-planet");
+	UVPlanet* p = new UVPlanet(
+		atol((*re)[1].c_str()),
+		(*re)[0],
+		(*re)[2],
+		atol((*re)[3].c_str()),
+		atol((*re)[4].c_str()),
+		1);
+	welt->set_dim(p->dim, welt->galaxie);
+	if(re->matches() > 5)
+	{
+		string links_str = (*re)[5];
+		set_re(",");
+		vector<string> links_v = re->split(links_str);
+		for(unsigned long i = 0; i < links_v.size(); i++)
+		{
+			p->nachbarn.push_back(atol(links_v[i].c_str()));
+		}
+	}
+	getline();
+
+	// Bevölkerung: 1485.2 Millionen (Ruhig)
+	// Bevölkerung: 623.8 Millionen (REVOLUTION!)
+	if(!match("^Bev.lkerung: ([0-9.]+) Millionen \\((.+?)\\)$"))
+	{
+		throw EXCEPTION("Fehler in Planet!");
+	}
+	p->bevoelkerung = atof((*re)[0].c_str());
+	p->zustand = (*re)[1];
+	debug("oldschool-planet-bevoelkerung");
+	getline();
+
+	// Minen: 7/65 
+	if(!match("^Minen: ([0-9]+)/([0-9]+) $"))
+	{
+		throw EXCEPTION("Fehler in Planet!");
+	}
+	debug("oldschool-planet-minen");
+	p->minen = atol((*re)[0].c_str());
+	p->minen_max = atol((*re)[1].c_str());
+	getline();
+
+	// Fabriken: 5/43
+	if(!match("^Fabriken: ([0-9]+)/([0-9]+)$"))
+	{
+		throw EXCEPTION("Fehler in Planet!");
+	}
+	debug("oldschool-planet-fabriken");
+	p->fabriken = atol((*re)[0].c_str());
+	p->fabriken_max = atol((*re)[1].c_str());
+	getline();
+
+	//?Produktion: 0% für Lager, 100% für Bevölkerung
+	if(match("^Produktion: ([0-9]+)% f.r Lager, [0-9]+% f.r Bev.lkerung$"))
+	{
+		debug("oldschool-planet-produktion");
+		p->produktion = atol((*re)[0].c_str());
+		getline();
+	}
+
+	// Tropische Vegetation, sehr fruchtbar, 29710 km Diameter
+	if(!match("^(.*), ([0-9]+) km Diameter$"))
+	{
+		throw EXCEPTION("Fehler in Planet!");
+	}
+	debug("oldschool-planet-klima");
+	p->klima = (*re)[0];
+	p->image = get_image_planet(p->klima);
+	p->diameter = atol((*re)[1].c_str());
+	getline();
+
+	//?X-Batts: 1 Y-Batts: 1 Z-Batts: 1
+	if(match("^X-Batts: ([0-9]+) Y-Batts: ([0-9]+) Z-Batts: ([0-9]+) $"))
+	{
+		debug("oldschool-planet-batts");
+		p->xbatts = atol((*re)[0].c_str());
+		p->ybatts = atol((*re)[1].c_str());
+		p->zbatts = atol((*re)[2].c_str());
+		getline();
+	}
+
+	//?Energiegenerator: 5 Tribut: 1234 t Erz
+	if(match("^Energiegenerator: ([0-9]+) Tribut: ([0-9]+) t Erz$"))
+	{
+		debug("oldschool-planet-energietribut");
+		p->techlevel = 0;
+		p->energiegenerator = atol((*re)[0].c_str());
+		p->tribut = atol((*re)[1].c_str());
+		getline();
+	}
+
+	welt->set_planet(p);
+
+	// Handelsstation 'Paradysse'
+	if(match("^Handelsstation "))
+	{
+		parse_handelsstation(p);
+	}
+
+	// *** Skip alle Imp-Toys
+	while(cur != "")
+	{
+		debug("oldschool-planet-imp-skip");
+		getline();
+	}
+
+	parse_leerzeile();
+}
+
+
+/*
  * Eine Zone parsen.
  */
 UVZone* UVParserTXT::parse_zone(UVPlanet* p)
@@ -1017,7 +1295,7 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	getline();
 
 	// Beschreibung
-	if(!match("^(?:[ -][0-9.]+ \\t){12}T:[ -][0-9.]+ °C$"))
+	if(!match("^(?:[ -][0-9.]+ \\t){12}D?T:[ -][0-9.]+ °C$"))
 	{
 		debug("zone-beschreibung");
 		z->beschreibung = cur;
@@ -1029,7 +1307,8 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	//  5.8 	 5.7 	 6.3 	 7.7 	 9.7 	 11.3 	 12.5 	 10.6 	 9.3 	 7 	 5.7 	 5.8 	T: 8.1 °C
 	// -3.3 	-3.5 	-1.4 	 3.8 	 11.2 	 16.9 	 21.3 	 14.5 	 9.6 	 1.1 	-3.5 	-3.3 	T: 5.2 °C
 	// -25 	-27.5 	-25 	-20.1 	-15.1 	-10.1 	-5.2 	-10.1 	-15.1 	-20.1 	-23.8 	-25 	T:-18.6 °C
-	if(!match("^([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\tT:([ -][0-9.]+) °C$"))
+	//  22.8 	 22.2 	 21.6 	 20.8 	 20.2 	 20.2 	 19.8 	 20.8 	 20.1 	 19.1 	 20.2 	 19.5 	DT: 20.6 °C
+	if(!match("^([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\tD?T:([ -][0-9.]+) °C$"))
 	{
 		throw EXCEPTION("Fehler in Klimadaten!");
 	}
@@ -1044,16 +1323,29 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	//  138 	 124 	 111 	 69 	 76 	 41 	 21 	 14 	 32 	 111 	 124 	 138 	N: 99.9 cm
 	//  127 	 164 	 146 	 91 	 73 	 84 	 100 	 120 	 91 	 146 	 164 	 127 	N: 143.3 cm
 	//  17 	 13 	 9 	 6 	 8 	 13 	 6 	 7 	 8 	 4 	 9 	 13 	N: 11.3 cm
-	if(!match("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tN: ([0-9.]+) cm$"))
+	if(match("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tN: ([0-9.]+) cm$"))
 	{
-		throw EXCEPTION("Fehler in Klima!");
+		debug("klima-niederschlag-cm");
+		for(i = 0; i < 12; i++)
+		{
+			z->niederschlag[i] = atof((*re)[i].c_str());
+		}
+		z->N = atof((*re)[i].c_str());
 	}
-	debug("klima-niederschlag");
-	for(i = 0; i < 12; i++)
+	//  149 	 196 	 164 	 161 	 201 	 214 	 262 	 264 	 299 	 342 	 358 	 405 	GN: 3015 mm
+	else if(match("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tGN: ([0-9]+) mm$"))
 	{
-		z->niederschlag[i] = atof((*re)[i].c_str());
+		debug("klima-niederschlag-mm");
+		for(i = 0; i < 12; i++)
+		{
+			z->niederschlag[i] = atof((*re)[i].c_str());
+		}
+		z->N = atof((*re)[i].c_str()) / 10.0;
 	}
-	z->N = atof((*re)[i].c_str());
+	else
+	{
+		throw EXCEPTION("Fehler in Klimadaten!");
+	}
 	getline();
 
 	if(z->N != z->get_N())
@@ -1307,7 +1599,8 @@ void UVParserTXT::parse_handelsstation(UVPlanet* p)
 	UVHandelsstation* h;
 
 	// § Handelsstation 'Red Blood'
-	if(!match("^§ Handelsstation '(.*)'$"))
+	// Handelsstation 'Paradysse'
+	if(!match("^(?:§ )?Handelsstation '(.*)'$"))
 	{
 		throw EXCEPTION("Fehler in Handelsstation!");
 	}
@@ -1334,7 +1627,7 @@ void UVParserTXT::parse_report_schiff()
 {
 
 	//   Schiff Foo (Doctor Who) 20000 BRT (-12345,12345,4)
-	if(!match("^  Schiff (.*) \\((.*)\\) ([0-9]+) BRT \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	if(!match("^(?:  )?Schiff (.*) \\((.*)\\) ([0-9]+) BRT \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
 	{
 		throw EXCEPTION("Fehler in Schiff!");
 	}
@@ -1349,7 +1642,7 @@ void UVParserTXT::parse_report_schiff()
 	getline();
 
 	//     Geschwindigkeit: 54.62 KpZ / Ausrichtung: 123°
-	if(match("^    Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$"))
+	if(match("^(?:  )?  Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$"))
 	{
 		debug("report-schiff-geschwindigkeit");
 		s->v = atof((*re)[0].c_str());
@@ -1369,7 +1662,7 @@ void UVParserTXT::parse_report_container()
 	UVContainer* c = new UVContainer();
 
 	//   Container 10 BRT  (-45433,74445,4)
-	if(!match("^  Container ([0-9]+) BRT  \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	if(!match("^(?:  )?Container ([0-9]+) BRT  \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
 	{
 		throw EXCEPTION("Fehler in Container!");
 	}
@@ -1392,7 +1685,7 @@ void UVParserTXT::parse_report_anomalie()
 	UVAnomalie* a = new UVAnomalie();
 
 	//   Kosmische Anomalie mit 6 Lichtjahren Durchmesser (-1316,-26761,1)
-	if(!match("^  Kosmische Anomalie mit ([0-9]+) Lichtjahren Durchmesser \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	if(!match("^(?:  )?Kosmische Anomalie mit ([0-9]+) Lichtjahren Durchmesser \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
 	{
 		throw EXCEPTION("Fehler in Anomalie!");
 	}
@@ -1416,7 +1709,7 @@ void UVParserTXT::parse_report_sensorsonde()
 
 	//   SensorSonde 123 (33339,3333,4)
 	//   SensorSonde 123 - Lebensdauer: 12 (33339,3333,4)
-	if(!match("^  SensorSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	if(!match("^(?:  )?SensorSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
 	{
 		throw EXCEPTION("Fehler in Sensorsonde!");
 	}
@@ -1450,7 +1743,7 @@ void UVParserTXT::parse_report_infosonde()
 
 	//   InfoSonde 123 (33339,3333,4)
 	//   InfoSonde 123 - Lebensdauer: 12 (33339,3333,4)
-	if(!match("^  InfoSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	if(!match("^(?:  )?InfoSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
 	{
 		throw EXCEPTION("Fehler in Infosonde!");
 	}

@@ -259,6 +259,7 @@ class UVPlanet
 		long dim;
 
 		vector<long> nachbarn;	// key: UVPlanet in UVWelt
+		bool drawflag;			// fuer UVMap::draw_planet
 
 		string beschreibung;
 		double bevoelkerung;	// in Millionen
@@ -438,6 +439,7 @@ class UVWelt
 		void set_partie(const string&);
 
 		string copyright;
+		string galaxie;
 		string motu;
 		long sternzeit;
 
