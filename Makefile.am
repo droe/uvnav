@@ -35,5 +35,12 @@ distcleancheck_listfiles = \
 
 # maintainer-clean etwas erweitern ... verhindert bugs
 MAINTAINERCLEANFILES = \
-    Makefile.in configure aclocal.m4 config.h.in \
+    Makefile.in configure aclocal.m4 config.h.in ChangeLog \
     config.guess config.sub depcomp install-sh missing mkinstalldirs
+
+ChangeLog: FORCE
+	touch ChangeLog
+	tools/svn2log.sh
+
+FORCE:
+
