@@ -63,6 +63,10 @@ void UVProgress::init(unsigned long newtot)
 /*
  * Fortschritt quantifizieren und neu zeichnen.
  *
+ * Zeichnet Fortschrittsbalen neu, updated die Surface, und
+ * klappert SDL Events ab, damit SDL benötigte Refreshs machen
+ * kann, und wir das Laden der Auswertung beenden können.
+ *
  * +---------------------------------------------------------+
  * ¦ (rect.x/rect.y                                          ¦
  * ¦ +----------------------------------------+ - - - - - -+ ¦
@@ -80,6 +84,23 @@ void UVProgress::init(unsigned long newtot)
  */
 void UVProgress::update(unsigned long current)
 {
+	// Events abklopfen - aber nur bei Programmabbruch handeln.
+	// Alle andern Events werden einfach ignoriert.
+	SDL_Event event;
+	while(SDL_PollEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:
+				if(event.key.keysym.sym != SDLK_ESCAPE)
+				{
+					break;
+				}
+			case SDL_QUIT:
+				throw EXCEPTION("Abgebrochen.");
+		}
+	}
+
 	double progress = 1.0 * current / total;
 
 //*** DEBUG

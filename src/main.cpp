@@ -256,7 +256,7 @@ int main(int argc, char* argv[])
 		UVNavigator* nav = new UVNavigator(conf);
 		nav->splash();
 		nav->load(argv[0], v);
-		sleep(1);
+		nav->wait();
 		nav->run();
 
 		delete nav;

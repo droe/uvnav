@@ -3,25 +3,23 @@ $Id$
 
 == 0.0.1 ==
 
-- Event Loop während Auswertung Laden
-  - Abbrechen
-  - Redraw
-  - Enter für weiter
-  - Während parsen abbrechen können
-  - Während parsen redraw können
-    (beides in progressbar realisierbar -- mini SDL event loop?)
-
 - Map Eye-Candy
   - Grid
     - Linien mit Maschengrösse in Abhängigkeit vom Zoomfaktor
     - Coole Windrose
     - Grob-Koordinaten am Bildschirmrand
+  - Sonden mit unbekanntem Radius entsprechend markieren
+    - Sonde mit Zentrum versehen
+    - Radius nur zeichnen falls notwendig und 
+  - Dirty Rect erkennung der Objekte verbessern
 
 
 == 0.2.0 ==
 
 - Alles andere.
 
+
+------------------------------------------------------------------------------
 
 == HOHE PRIORITAET ==
 
@@ -127,6 +125,8 @@ $Id$
 - Imperatoren-Support
   - parse_imp_*
   - Display-Support
+    - Extra Hash-Map für alle Verbindungen zum schnellen anzeigen
+      planeten-nummer x planeten-nummer -> x1, y1, x2, y2
 
 - billigen demo-effekt nach splash screen als übergang zum navigator
   (warp-effekt wäre ultra-cool)
@@ -166,4 +166,12 @@ $Id$
   - testen
   - flicken
 
+- Exceptions "richtig" implementieren
+  - eigene Klassenhierarchie
+  - Fehlertypen erlauben
+  - graceful Exit ermöglichen
+
+- Historische Auswertungen einlesen
+
 - Verbleibende verstreute TODOs und *** und FIXMEs abarbeiten
+

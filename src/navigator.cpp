@@ -160,7 +160,7 @@ UVNavigator::~UVNavigator()
 void UVNavigator::splash()
 {
 	SDL_Surface* img;
-	SDL_Rect dst;
+	SDL_Rect dst = { 0, 0, 0, 0 };
 
 	if(SDL_MUSTLOCK(screen))
 	{
@@ -170,6 +170,13 @@ void UVNavigator::splash()
 		}
 	}
 
+	// Bildschirm loeschen.
+	dst.w = screen->w;
+	dst.h = screen->h;
+	SDL_FillRect(screen, &dst, SDL_MapRGB(screen->format, 0, 0, 0));
+
+	dst.w = 0;
+	dst.h = 0;
 	// Universum V mitte oben, h / 12 unter rand
 	img = images->get_surface(IMG_UNIVERSUM, 0, screen->h / 6);
 	dst.x = screen->w / 2 - img->w / 2;
@@ -194,15 +201,10 @@ void UVNavigator::splash()
 	dst.y = screen->h / 2 - line1->h / 2;
 	SDL_BlitSurface(line2, 0, screen, &dst);
 
-	// Status
-	SDL_Surface* line3 = font_splash->get_surface("Lade Auswertung...");
-	dst.x = screen->w / 2 - line3->w / 2;
-	dst.y = screen->h / 2 + line1->h / 2 * 3;
-	SDL_BlitSurface(line3, 0, screen, &dst);
+	status_y = screen->h / 2 + line1->h / 2 * 3;
 
 	SDL_FreeSurface(line1);
 	SDL_FreeSurface(line2);
-	SDL_FreeSurface(line3);
 
 	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
 	{
@@ -224,6 +226,46 @@ void UVNavigator::splash()
 
 
 /*
+ * Status anzeigen.
+ */
+void UVNavigator::status(const string& text)
+{
+	SDL_Surface* surface = font_splash->get_surface(text);
+	SDL_Rect bounds = { 0, status_y, screen->w, surface->h };
+
+	if(SDL_MUSTLOCK(screen))
+	{
+		if(SDL_LockSurface(screen) < 0)
+		{
+			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
+		}
+	}
+
+	SDL_FillRect(screen, &bounds, SDL_MapRGB(screen->format, 0, 0, 0));
+	bounds.x = screen->w / 2 - surface->w / 2;
+	SDL_BlitSurface(surface, 0, screen, &bounds);
+
+	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
+	{
+		SDL_Flip(screen);
+	}
+	else
+	{
+		SDL_UpdateRect(screen, 0, 0, 0, 0);
+		//SDL_UpdateRects(screen, nupdates, updates);
+		// with SDL_Rect* updates
+	}
+
+	if(SDL_MUSTLOCK(screen))
+	{
+		SDL_UnlockSurface(screen);
+	}
+
+	SDL_FreeSurface(surface);
+}
+
+
+/*
  * Auswertung laden.
  *
  * FIXME: Momentan nur eine Auswertung aufs Mal unterstuetzt...
@@ -232,6 +274,8 @@ void UVNavigator::load(const string& file, bool v)
 {
 	if(welt == NULL)
 	{
+		status("Lade Auswertung: " + file);
+
 		UVParserTXT* parser = new UVParserTXT(conf);
 		if(v)
 		{
@@ -250,6 +294,31 @@ void UVNavigator::load(const string& file, bool v)
 	else
 	{
 		throw EXCEPTION("Mehrere Auswertungen nicht implementiert!");
+	}
+}
+
+
+/*
+ * Warten auf Godot.
+ *
+ * Wartet bis der Benutzer eine Taste drueckt.
+ */
+void UVNavigator::wait()
+{
+	status("Weiter mit beliebiger Taste!");
+
+	SDL_Event event;
+	bool waiting = true;
+	while(waiting && SDL_WaitEvent(&event))
+	{
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:
+				waiting = false;
+				break;
+			case SDL_QUIT:
+				throw EXCEPTION("Abgebrochen.");
+		}
 	}
 }
 

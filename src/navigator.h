@@ -36,7 +36,9 @@ class UVNavigator
 		~UVNavigator();
 
 		void splash();
-		void load(const string& file, bool v = false);
+		void status(const string&);
+		void load(const string&, bool = false);
+		void wait();
 		void run();
 
 	private:
@@ -49,6 +51,7 @@ class UVNavigator
 
 		int flags;
 		SDL_Surface* screen;
+		long status_y;
 };
 
 #endif // NAVIGATOR_H

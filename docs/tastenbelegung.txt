@@ -9,5 +9,6 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  PgDn          Hinauszoomen
 
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
- q             Beenden
+ q, ESC        Beenden
 
+Während dem Ladevorgang kann mit ESC abgebrochen und beendet werden.
