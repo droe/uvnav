@@ -1,5 +1,5 @@
 UV Navigator - Auswertungsvisualisierung fuer Universum V
-Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,10 +32,10 @@ Ich habe UVNav primaer für mich selber entwickelt, und momentan
 gibt UVNav sicher auch noch nicht genug Features her, um AMAP,
 PoN und ToVU ernsthaft zu konkurrenzieren.  Trotzdem ist UVNav
 oeffentlich.  Ihr seid eingeladen, auch selber an UVNav
-Verbesserungen anzubringen, und mir die in Form von Unified
+Verbesserungen anzubringen, und mir die in Form von unified
 Diffs (diff -ruN) zu schicken.
 
-UV Navigator ist Open Source.  Aktuelle Version und Source Code
+UV Navigator ist freie Software.  Aktuelle Version und Source Code
 gibts auf den Projektseiten:
 
   https://projects.roe.ch/trac/uvnav/
@@ -76,7 +76,7 @@ UV Navigator befindet sich in der Frühphase der Entwicklung.
 Der Parser ist mittlerwile stabil und kann die allermeisten
 Auswertungen korrekt einlesen, inklusive alte und uralte
 Auswertungen (getestet wurden derzeit Sternzeit 55, 128,
-144-152, 154-162, 211-218).
+144-152, 154-162, 211-228).
 Was hier noch fehlt ist das Parsen der Nachrichten, speziell
 der Resultate von Zonendaten-Abfragen.
 
@@ -125,12 +125,13 @@ Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 
 Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
 Workstation 2-3 MB/s, auf meinem alten 700 MHz Thinkpad 700-800 KB/s,
-je nach Komplexitaet der Auswertungsdaten.
+und auf meinem neuen 1.2 GHz Centrino Thinkpad ca 4 MB/s, je nach
+Komplexitaet der Auswertungsdaten.
 
 Zum Vergleich:  ToVU 4.13 ist ca um einen Faktor von 20 langsamer,
 AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
 
-Die Anzeige ist sogar auf meinem Thinkpad mit grossen Auswertungen
+Die Anzeige ist sogar auf meinem alten Thinkpad mit grossen Auswertungen
 noch einigermassen flüssig.  Notfalls kann man das rechenintensive
 Anti-Aliasing und die Interpolation im Zoom-Code mit -Q deaktivieren,
 muss dafür aber mit haesslich verpixelter Anzeige leben.  Wie bei PoN,

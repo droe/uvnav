@@ -1,6 +1,6 @@
 #!/bin/sh
 # UV Navigator - Auswertungsvisualisierung fuer Universum V
-# Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+# Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

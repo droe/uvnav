@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,7 @@
 #include "SDL_gfxPrimitives.h"	// SDL_gfx
 
 #define TITLE			"Universum V Navigator"
-#define COPYRIGHT		"Copyright (C) 2004 Daniel Roethlisberger"
+#define COPYRIGHT		"Copyright (C) 2004-2005 Daniel Roethlisberger"
 
 #define STRING(x)	# x
 #define XSTRING(x)	STRING(x)
