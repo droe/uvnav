@@ -464,24 +464,23 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 		double center_y = 1.0 * (schiff->y - offset_y) / zoom;
 
 		/*
+		 *         dx
+		 *      +------.
+		 *      ¦     /
+		 *      ¦    /
+		 *   dy ¦   /
+		 *      ¦__/ v
+		 *      ¦w/
+		 *      ¦/
+		 *      o
 		 *
-		 *           ¦      .
-		 *           ¦     /|
-		 *           ¦    / |
-		 *           ¦ v /  | dy
-		 *           ¦  /   |
-		 *        ..-¦ /.   |
-		 *       /   ¦/  \  |    w° = PI * w / 180 rad
-		 *      |    o----|-+
-		 *       \ w     / dx
-		 *        ''---''
-		 *
-		 *       dy = v * sin( w - 270 )
-		 *       dx = v * cos( w - 270 )
+		 *       w(rad) = w(°) / 180 * PI
+		 *       dy = v * cos( w - 270 )
+		 *       dx = v * sin( w - 270 )
 		 */
 
-		double target_x = center_x + cos(PI * (schiff->w - 270) / 180.0) * schiff->v * 100.0 / zoom;
-		double target_y = center_y - sin(PI * (schiff->w - 270) / 180.0) * schiff->v * 100.0 / zoom;
+		double target_x = center_x + sin(PI * (schiff->w) / 180.0) * schiff->v * 100.0 / zoom;
+		double target_y = center_y - cos(PI * (schiff->w) / 180.0) * schiff->v * 100.0 / zoom;
 
 //		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 
