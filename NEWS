@@ -1,5 +1,8 @@
 $Id$
 
+                   Bugfix: Vollbildschirm-Toggle vergroessert Screen nun
+                   auch in der Vertikalen wieder.
+
 2004-08-19  0.0.2  Windows ist nun unterstuetzt, getestet mit MinGW32,
                    und die Bibliothek PCRE++ wird nicht mehr benoetigt.
                    Der Parser wurde deutlich verbessert und ist nun in

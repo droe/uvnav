@@ -19,11 +19,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     - Eigene Routinen mit 32bit Arithmetik implementieren
     - oder allen Linien zeichnenden Code mit "dirty Rect"-Correctness versehen
 
-- Statistik
-  - UVWelt zählt Anzahl Objekte jedes relevanten Typs
-  - Statistik ausgeben in UVNavigator nach Parsen
-  - Statistik pro Dim ausgeben bei Dim Switch
-
 - Geschwindigkeit / Usability optimieren
   - SDL_Surface temp als zweiten buffer führen,
     generell nur dort reinzeichnen (fuzzy dirty rect matching), und dann
@@ -41,6 +36,11 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     - API für abgekoppeltes zeichnen
       Liste aller zu zeichnenden Labels
     - evtl Quick'n'Dirty optimieren; überschneidende Labels -> "..."
+  - Abgesetztes zeichnen?
+    - anstatt direkt zeichnen nur zu zeichnende objekte registrieren
+    - abgesetzt werden die objekte dann in der richtigen reihenfolge
+      gezeichnet
+    - evtl schweine-langsam?
 
 - UVMap
   - Mehr Informationen zeichnen
@@ -60,6 +60,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 - Freund/Feind-Erkennung
   - zentralisieren
+  - Schiffe färben
 
 - UVFontCache
   - cachen und blitten anstatt immer neu rendern und blitten
@@ -101,7 +102,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     speichern, inklusive Statistik à la wieviele Objekte welchen Typs
     besitzt er.
   - korrektes destroyen aller Objekte
-  - set_partie eliminieren
 
 
 
@@ -134,6 +134,8 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
          - UVHistory stellt vergangene Daten zu Verfuegung
            inklusive effizientem Enum von Dingen, die noch aktuell sind
            und inklusive Quellenangabe (index in tbl_source (spieler/sz/file))
+    - Wie Fremdauswertungen dazuladen?
+    - Wie Fremdauswertungen anschauen, mit / ohne Zusatzwissen?
 
 - Imperatoren-Support
   - parse_imp_*
@@ -143,6 +145,8 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 - billigen demo-effekt nach splash screen als übergang zum navigator
   (warp-effekt wäre ultra-cool)
+
+- Statistik-Features
 
 - Splash-Screen beim Laden mit Zeichenerklärung für die verwendeten Signaturen
   - erst wenn Grafix fix entschieden ist
