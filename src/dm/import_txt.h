@@ -23,7 +23,7 @@
 
 #include "../lib/observer.h"
 #include "../lib/regexp.h"
-#include "../pd/welt.h"
+#include "../pd/universum.h"
 #include "abstractimporter.h"
 
 class UVImportTXT : public UVAbstractImporter
@@ -33,12 +33,12 @@ class UVImportTXT : public UVAbstractImporter
 //		~UVImportTXT();
 
 		void set_verbosity(int v);
-		UVWelt* import(const string& file);
+		UVUniversum* import(const string& file);
 		unsigned long get_filesize() const;
 		unsigned long get_bytecount() const;
 
 	private:
-		UVWelt* welt;
+		UVUniversum* universum;
 
 		ifstream stream;
 		string cur;

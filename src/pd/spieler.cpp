@@ -18,39 +18,29 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#include "spieler.h"
 
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "../pd/universum.h"
-#include "map.h"
+/*
+ * UVSpieler - Stellt einen Spieler dar.
+ */
 
-class UVNavigator
+
+/*
+ * Konstruktor.
+ */
+UVSpieler::UVSpieler()
+: name(""), spieler(""), gesellschaft(""), legal(0), punkte(0), konto(0)
 {
-	public:
-		UVNavigator();
-		~UVNavigator();
+}
 
-		void splash();
-		void load(const string&, int = 0);
-		void wait();
-		void run();
 
-	private:
-		UVUniversum* universum;
-		UVMap* map;
-		// *** GUI
-		UVConf* conf;
-		UVFont* font_splash;
+/*
+ * Destruktor.
+ */
+/*
+UVSpieler::~UVSpieler()
+{
+}
+*/
 
-		SDL_Surface* screen;
-
-		long status_y;
-		void splash_status(const string&);
-
-		void init_video();
-};
-
-#endif // NAVIGATOR_H
 

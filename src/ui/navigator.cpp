@@ -23,9 +23,9 @@
 #include "../lib/version.h"
 #include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
-#include "../dm/importhandler.h"
 #include "../si/imagehandler.h"
 #include "../si/fonthandler.h"
+#include "../dm/importhandler.h"
 #include "progress.h"
 
 /*
@@ -51,7 +51,7 @@
  * Initialisiert automatisch die SDL Surface des Bildschirms.
  */
 UVNavigator::UVNavigator()
-: welt(NULL), map(NULL)
+: universum(NULL), map(NULL)
 {
 	conf = UVConf::get_instance();
 
@@ -257,7 +257,7 @@ void UVNavigator::splash_status(const string& text)
  */
 void UVNavigator::load(const string& file, int v)
 {
-	if(welt == NULL)
+	if(universum == NULL)
 	{
 		splash_status("Lade Auswertung: " + file);
 
@@ -269,10 +269,10 @@ void UVNavigator::load(const string& file, int v)
 		dest.y = screen->h * 5 / 8;  dest.h = screen->h / 16;
 		UVProgress* progress = new UVProgress(screen, &dest);
 		importer->attach(progress);
-		welt = importer->import(file);
+		universum = importer->import(file);
 		importer->detach(progress);
 		delete progress;
-		conf->set_auswertung(welt->get_spieler()->name, welt->sternzeit);
+		conf->set_auswertung(universum->get_spieler()->name, universum->sternzeit);
 	}
 	else
 	{
@@ -313,7 +313,7 @@ void UVNavigator::run()
 {
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 
-	map = new UVMap(welt, screen);
+	map = new UVMap(universum, screen);
 	map->draw(&rect);
 
 	SDL_Event event;

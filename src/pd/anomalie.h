@@ -18,39 +18,65 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef ANOMALIE_H
+#define ANOMALIE_H
 
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "../pd/universum.h"
-#include "map.h"
+#include "../lib/stl.h"
 
-class UVNavigator
+// ===========================================================================
+
+class UVAnomalie
 {
 	public:
-		UVNavigator();
-		~UVNavigator();
+		UVAnomalie();
+//		~UVAnomalie();
 
-		void splash();
-		void load(const string&, int = 0);
-		void wait();
-		void run();
-
-	private:
-		UVUniversum* universum;
-		UVMap* map;
-		// *** GUI
-		UVConf* conf;
-		UVFont* font_splash;
-
-		SDL_Surface* screen;
-
-		long status_y;
-		void splash_status(const string&);
-
-		void init_video();
+		long radius;
+		long x;
+		long y;
+		long dim;
 };
 
-#endif // NAVIGATOR_H
+class UVContainer
+{
+	public:
+		UVContainer();
+//		~UVContainer();
+
+		long groesse;			// in BRT
+		long x;
+		long y;
+		long dim;
+};
+
+class UVInfosonde
+{
+	public:
+		UVInfosonde(long);
+//		~UVInfosonde();
+
+		long nummer;			// key in UVWelt
+
+		long lebensdauer;		// in Runden
+		long x;
+		long y;
+		long dim;
+		// *** Nachricht
+};
+
+class UVSensorsonde
+{
+	public:
+		UVSensorsonde(long);
+//		~UVSensorsonde();
+
+		long nummer;			// key in UVWelt
+
+		long lebensdauer;		// in Runden
+		long x;
+		long y;
+		long dim;
+};
+
+#endif // ANOMALIE_H
 

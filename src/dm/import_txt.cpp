@@ -26,7 +26,7 @@
 /*
  * UVImportTXT - Importer fuer Text-Auswertungen
  *
- * Parst Textauswertungen und erstellt eine entsprechende UVWelt,
+ * Parst Textauswertungen und erstellt eine entsprechende UVUniversum,
  * welche die Daten der Auswertung repraesentiert.
  *
  * *** FIXME: Nachrichten parsen!
@@ -51,7 +51,7 @@
  * Konstruktor.
  */
 UVImportTXT::UVImportTXT()
-: welt(NULL), line(0), filesize(0), bytecount(0), verbosity(0)
+: universum(NULL), line(0), filesize(0), bytecount(0), verbosity(0)
 , stats_schiffe(0), stats_planeten(0)
 {
 }
@@ -165,13 +165,13 @@ string UVImportTXT::strip(string& s) const
 /*
  * Laedt eine Datei und jagt sie durch den Parser.
  */
-UVWelt* UVImportTXT::import(const string& file)
+UVUniversum* UVImportTXT::import(const string& file)
 {
 	cout << "Lade Auswertung: " << file << endl;
 
-	if(welt)
-		delete welt;
-	welt = new UVWelt();
+	if(universum)
+		delete universum;
+	universum = new UVUniversum();
 
 	filesize = sysdep_filesize(file);
 	line = 0;
@@ -202,7 +202,7 @@ UVWelt* UVImportTXT::import(const string& file)
 	cout << "------------------------------------------------------------------------------" << endl;
 
 	notify();
-	return welt;
+	return universum;
 }
 
 
@@ -213,7 +213,7 @@ void UVImportTXT::parse_auswertung()
 {
 	parse_header();
 
-	if(welt->copyright == "a PBM (c) 1994-97 by Black Bird Software")
+	if(universum->copyright == "a PBM (c) 1994-97 by Black Bird Software")
 	{
 		// Uralte Auswertung
 		parse_oldschool_header();
@@ -274,8 +274,8 @@ void UVImportTXT::parse_header()
 		getline();
 	}
 	debug("header", &hdr_re);
-	welt->partie = hdr_re.sub(1);
-	welt->copyright = hdr_re.sub(2);
+	universum->partie = hdr_re.sub(1);
+	universum->copyright = hdr_re.sub(2);
 	getline();
 
 	parse_leerzeile();
@@ -319,7 +319,7 @@ void UVImportTXT::parse_oldschool_header()
 	{
 		throw EXCEPTION("Galaxie: fehlt!");
 	}
-	welt->galaxie = gal_re.sub(1);
+	universum->galaxie = gal_re.sub(1);
 	getline();
 
 	// MotU: Roman Meng
@@ -328,7 +328,7 @@ void UVImportTXT::parse_oldschool_header()
 	{
 		throw EXCEPTION("MotU: fehlt!");
 	}
-	welt->motu = motu_re.sub(1);
+	universum->motu = motu_re.sub(1);
 	getline();
 
 	// Sternzeit: 55
@@ -337,7 +337,7 @@ void UVImportTXT::parse_oldschool_header()
 	{
 		throw EXCEPTION("Sternzeit: fehlt!");
 	}
-	welt->sternzeit = sz_re.subtol(1);
+	universum->sternzeit = sz_re.subtol(1);
 	getline();
 
 	// Punkte: 846000
@@ -366,7 +366,7 @@ void UVImportTXT::parse_oldschool_header()
 	s->konto = kt_re.subtoll(1);
 	getline();
 
-	welt->set_spieler(s);
+	universum->set_spieler(s);
 
 	parse_leerzeile();
 
@@ -498,7 +498,7 @@ void UVImportTXT::parse_spielerinfos()
 	s->konto = kt_re.subtoll(1);
 	getline();
 
-	welt->set_spieler(s);
+	universum->set_spieler(s);
 
 	parse_leerzeile();
 }
@@ -515,7 +515,7 @@ void UVImportTXT::parse_spielstand()
 	{
 		throw EXCEPTION("MotU: fehlt!");
 	}
-	welt->motu = motu_re.sub(1);
+	universum->motu = motu_re.sub(1);
 	getline();
 
 	// Sternzeit: 214
@@ -524,7 +524,7 @@ void UVImportTXT::parse_spielstand()
 	{
 		throw EXCEPTION("Sternzeit: fehlt!");
 	}
-	welt->sternzeit = sz_re.subtol(1);
+	universum->sternzeit = sz_re.subtol(1);
 	getline();
 
 	parse_leerzeile();
@@ -542,7 +542,7 @@ void UVImportTXT::parse_imperatorinfos()
 	{
 		throw EXCEPTION("Spionageabwehr: fehlt!");
 	}
-	welt->get_spieler()->spionageabwehr = spio_re.subtol(1);
+	universum->get_spieler()->spionageabwehr = spio_re.subtol(1);
 	getline();
 
 	parse_leerzeile();
@@ -2297,7 +2297,7 @@ void UVImportTXT::parse_schiff(UVPlanet* p)
 		s->x = schiff_re.subtol(6);
 		s->y = schiff_re.subtol(7);
 		s->dim = schiff_re.subtol(8);
-		welt->set_dim(s->dim, schiff_re.sub(9));
+		universum->set_dim(s->dim, schiff_re.sub(9));
 		s->planet = 0;
 	}
 	getline();
@@ -2513,7 +2513,7 @@ void UVImportTXT::parse_schiff(UVPlanet* p)
 		getline();
 	}
 
-	welt->set_schiff(s, p);
+	universum->set_schiff(s, p);
 	stats_schiffe++;
 }
 
@@ -2537,7 +2537,7 @@ void UVImportTXT::parse_planet()
 		planet_re.subtol(4),
 		planet_re.subtol(5),
 		planet_re.subtol(6));
-	welt->set_dim(p->dim, planet_re.sub(7));
+	universum->set_dim(p->dim, planet_re.sub(7));
 	if(planet_re.subs() > 7)
 	{
 		string links_str = planet_re.sub(8);
@@ -2638,7 +2638,7 @@ void UVImportTXT::parse_planet()
 		cout << "  " << p->to_string_terse() << endl;
 	}
 
-	welt->set_planet(p);
+	universum->set_planet(p);
 	stats_planeten++;
 
 	// Zone  (3) (Niemand) (278 FUs)
@@ -2708,7 +2708,7 @@ void UVImportTXT::parse_oldschool_planet()
 		planet_re.subtol(4),
 		planet_re.subtol(5),
 		1);
-	welt->set_dim(p->dim, welt->galaxie);
+	universum->set_dim(p->dim, universum->galaxie);
 	if(planet_re.subs() > 5)
 	{
 		string links_str = planet_re.sub(6);
@@ -2799,7 +2799,7 @@ void UVImportTXT::parse_oldschool_planet()
 		getline();
 	}
 
-	welt->set_planet(p);
+	universum->set_planet(p);
 	stats_planeten++;
 
 	// Handelsstation 'Paradysse'
@@ -3073,7 +3073,7 @@ UVWerft* UVImportTXT::parse_werft(UVZone* z)
 		debug("werft-katalog-skip", NULL);
 		// *** katalog 2x
 		// *** w->set_bauteil(...)
-		// *** welt->set_bauteil(...)
+		// *** universum->set_bauteil(...)
 		getline();
 		getline();
 	}
@@ -3182,7 +3182,7 @@ void UVImportTXT::parse_handelsstation(UVPlanet* p)
 		getline();
 	}
 
-	welt->set_handelsstation(h, p);
+	universum->set_handelsstation(h, p);
 }
 
 
@@ -3218,7 +3218,7 @@ void UVImportTXT::parse_report_schiff()
 		getline();
 	}
 
-	welt->set_schiff(s);
+	universum->set_schiff(s);
 	stats_schiffe++;
 }
 
@@ -3243,7 +3243,7 @@ void UVImportTXT::parse_report_container()
 	c->dim = cont_re.subtol(4);
 	getline();
 
-	welt->set_container(c);
+	universum->set_container(c);
 }
 
 
@@ -3267,7 +3267,7 @@ void UVImportTXT::parse_report_anomalie()
 	a->dim = anomalie_re.subtol(4);
 	getline();
 
-	welt->set_anomalie(a);
+	universum->set_anomalie(a);
 }
 
 
@@ -3302,7 +3302,7 @@ void UVImportTXT::parse_report_sensorsonde()
 	}
 	getline();
 
-	welt->set_sensorsonde(s);
+	universum->set_sensorsonde(s);
 }
 
 
@@ -3337,7 +3337,7 @@ void UVImportTXT::parse_report_infosonde()
 	}
 	getline();
 
-	welt->set_infosonde(i);
+	universum->set_infosonde(i);
 }
 
 

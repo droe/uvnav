@@ -18,39 +18,30 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef SPIELER_H
+#define SPIELER_H
 
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "../pd/universum.h"
-#include "map.h"
+#include "../lib/stl.h"
 
-class UVNavigator
+class UVSpieler
 {
 	public:
-		UVNavigator();
-		~UVNavigator();
+		UVSpieler();
+//		~UVSpieler();
 
-		void splash();
-		void load(const string&, int = 0);
-		void wait();
-		void run();
+		string name;			// key in UVWelt
 
-	private:
-		UVUniversum* universum;
-		UVMap* map;
-		// *** GUI
-		UVConf* conf;
-		UVFont* font_splash;
-
-		SDL_Surface* screen;
-
-		long status_y;
-		void splash_status(const string&);
-
-		void init_video();
+		string spieler;
+		string status;
+		string gesellschaft;
+		string talent;
+		long long legal;
+		long long punkte;
+		long long konto;		// in Credits
+		long erzertrag;			// in t Erz
+		long spionageabwehr;	// in % Erzertrag
+		// *** Information UV-DB
 };
 
-#endif // NAVIGATOR_H
+#endif // SPIELER_H
 

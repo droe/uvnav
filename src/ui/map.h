@@ -24,7 +24,7 @@
 #include "../si/imagehandler.h"
 #include "../si/font.h"
 #include "../si/draw.h"
-#include "../pd/welt.h"
+#include "../pd/universum.h"
 
 /*
 class UVMapSektor
@@ -49,7 +49,7 @@ class UVMapQuadrant
 class UVMap
 {
 	public:
-		UVMap(UVWelt*, SDL_Surface*);
+		UVMap(UVUniversum*, SDL_Surface*);
 		~UVMap();
 
 		void set_dim(long);
@@ -80,7 +80,7 @@ class UVMap
 
 	private:
 		UVImageHandler* imagehandler;
-		UVWelt* welt;
+		UVUniversum* universum;
 		UVSpieler* spieler;
 		SDL_Surface* screen;
 		SDL_Rect screen_size;

@@ -22,7 +22,7 @@
 #define ABSTRACTIMPORTER_H
 
 #include "../lib/observer.h"
-#include "../pd/welt.h"
+#include "../pd/universum.h"
 
 class UVAbstractImporter : public Subject
 {
@@ -31,7 +31,7 @@ class UVAbstractImporter : public Subject
 //		virtual ~UVAbstractImporter() { };
 //
 		virtual void set_verbosity(int v) = 0;
-		virtual UVWelt* import(const string& file) = 0;
+		virtual UVUniversum* import(const string& file) = 0;
 		virtual unsigned long get_filesize() const = 0;
 		virtual unsigned long get_bytecount() const = 0;
 };

@@ -124,8 +124,8 @@ UVMapQuadrant::~UVMapQuadrant()
  *    ¦
  *    V +y
  *
- * UVMap Zeichnet UVWelt. UVWelt ist die Datenstruktur, welche von UVMap
- * iteriert und gezeichnet wird. UVWelt hat lediglich eine passive Rolle
+ * UVMap zeichnet UVUniversum, die Datenstruktur, welche von UVMap
+ * iteriert und gezeichnet wird. UVUniversum hat lediglich eine passive Rolle
  * in der Bildschirmdarstellung.
  */
 
@@ -139,8 +139,8 @@ UVMapQuadrant::~UVMapQuadrant()
  * Waehlt sinnvollen Kartenausschnitt und Dimension falls alte Werte sinnlos,
  * d.h. wenn keine Daten sichtbar waeren.
  */
-UVMap::UVMap(UVWelt* w, SDL_Surface* s)
-: welt(w), spieler(NULL), screen(s), phys(NULL)
+UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
+: universum(u), spieler(NULL), screen(s), phys(NULL)
 , virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
@@ -150,7 +150,7 @@ UVMap::UVMap(UVWelt* w, SDL_Surface* s)
 	screen_size.w = s->w;
 	screen_size.h = s->h;
 
-	spieler = welt->get_spieler();
+	spieler = universum->get_spieler();
 
 	UVConf* conf = UVConf::get_instance();
 
@@ -164,16 +164,16 @@ UVMap::UVMap(UVWelt* w, SDL_Surface* s)
 	dim = conf->l_get("map-dim", true);
 
 	// Sinnvolle Dimension waehlen, falls keine Daten in dim.
-	if(welt->get_dim(dim) == "")
+	if(universum->get_dim(dim) == "")
 	{
-		for(dim_iterator iter = welt->first_dim(); iter != welt->last_dim(); iter++)
+		for(dim_iterator iter = universum->first_dim(); iter != universum->last_dim(); iter++)
 		{
 			if((*iter).second != "")
 			{
 				dim = (*iter).first;
 			}
 		}
-		if(welt->get_dim(dim) == "")
+		if(universum->get_dim(dim) == "")
 		{
 			throw EXCEPTION("Keine Dimension hat Daten!");
 		}
@@ -228,7 +228,7 @@ void UVMap::jump_init()
 	bool first_eigene = true;
 
 	// Ueber alle Objekte loopen.
-	for(planeten_iterator iter = welt->first_planet(); iter != welt->last_planet(); iter++)
+	for(planeten_iterator iter = universum->first_planet(); iter != universum->last_planet(); iter++)
 	{
 		UVPlanet* p = (*iter).second;
 		if(p->dim == dim)
@@ -283,7 +283,7 @@ void UVMap::jump_init()
 			}
 		}
 	}
-	for(schiffe_iterator iter = welt->first_schiff(); iter != welt->last_schiff(); iter++)
+	for(schiffe_iterator iter = universum->first_schiff(); iter != universum->last_schiff(); iter++)
 	{
 		UVSchiff* s = (*iter).second;
 		if(s->dim == dim)
@@ -323,7 +323,7 @@ void UVMap::jump_init()
 			}
 		}
 	}
-	for(container_iterator iter = welt->first_container(); iter != welt->last_container(); iter++)
+	for(container_iterator iter = universum->first_container(); iter != universum->last_container(); iter++)
 	{
 		UVContainer* c = (*iter);
 		if(c->dim == dim)
@@ -345,7 +345,7 @@ void UVMap::jump_init()
 			}
 		}
 	}
-	for(anomalien_iterator iter = welt->first_anomalie(); iter != welt->last_anomalie(); iter++)
+	for(anomalien_iterator iter = universum->first_anomalie(); iter != universum->last_anomalie(); iter++)
 	{
 		UVAnomalie* a = (*iter);
 		if(a->dim == dim)
@@ -367,7 +367,7 @@ void UVMap::jump_init()
 			}
 		}
 	}
-	for(sensorsonden_iterator iter = welt->first_sensorsonde(); iter != welt->last_sensorsonde(); iter++)
+	for(sensorsonden_iterator iter = universum->first_sensorsonde(); iter != universum->last_sensorsonde(); iter++)
 	{
 		UVSensorsonde* s = (*iter).second;
 		if(s->dim == dim)
@@ -389,7 +389,7 @@ void UVMap::jump_init()
 			}
 		}
 	}
-	for(infosonden_iterator iter = welt->first_infosonde(); iter != welt->last_infosonde(); iter++)
+	for(infosonden_iterator iter = universum->first_infosonde(); iter != universum->last_infosonde(); iter++)
 	{
 		UVInfosonde* s = (*iter).second;
 		if(s->dim == dim)
@@ -623,42 +623,42 @@ void UVMap::draw(SDL_Rect* rect)
 	draw_grid();
 
 	// Ueber alle zeichenbaren Objekte loopen.
-	for(planeten_iterator iter = welt->first_planet(); iter != welt->last_planet(); iter++)
+	for(planeten_iterator iter = universum->first_planet(); iter != universum->last_planet(); iter++)
 	{
 		if((*iter).second->dim == dim)
 		{
 			draw_planet((*iter).second);
 		}
 	}
-	for(anomalien_iterator iter = welt->first_anomalie(); iter != welt->last_anomalie(); iter++)
+	for(anomalien_iterator iter = universum->first_anomalie(); iter != universum->last_anomalie(); iter++)
 	{
 		if((*iter)->dim == dim)
 		{
 			draw_anomalie(*iter);
 		}
 	}
-	for(sensorsonden_iterator iter = welt->first_sensorsonde(); iter != welt->last_sensorsonde(); iter++)
+	for(sensorsonden_iterator iter = universum->first_sensorsonde(); iter != universum->last_sensorsonde(); iter++)
 	{
 		if((*iter).second->dim == dim)
 		{
 			draw_sensorsonde((*iter).second);
 		}
 	}
-	for(infosonden_iterator iter = welt->first_infosonde(); iter != welt->last_infosonde(); iter++)
+	for(infosonden_iterator iter = universum->first_infosonde(); iter != universum->last_infosonde(); iter++)
 	{
 		if((*iter).second->dim == dim)
 		{
 			draw_infosonde((*iter).second);
 		}
 	}
-	for(container_iterator iter = welt->first_container(); iter != welt->last_container(); iter++)
+	for(container_iterator iter = universum->first_container(); iter != universum->last_container(); iter++)
 	{
 		if((*iter)->dim == dim)
 		{
 			draw_container(*iter);
 		}
 	}
-	for(schiffe_iterator iter = welt->first_schiff(); iter != welt->last_schiff(); iter++)
+	for(schiffe_iterator iter = universum->first_schiff(); iter != universum->last_schiff(); iter++)
 	{
 		if((*iter).second->dim == dim)
 		{
@@ -672,10 +672,10 @@ void UVMap::draw(SDL_Rect* rect)
 
 	// Status-Overlay
 	SDL_Surface* status = debug_font->get_surface(
-		             to_string(dim) + " - " + welt->get_dim(dim) + ", "
+		             to_string(dim) + " - " + universum->get_dim(dim) + ", "
 		             + spieler->name
 		             + ((spieler->talent != "") ? " der " + spieler->talent : "")
-		             + ", Sternzeit " + to_string(welt->sternzeit), LABEL_RGB);
+		             + ", Sternzeit " + to_string(universum->sternzeit), LABEL_RGB);
 	dst.x = screen->w - status->w - status->h * 2;
 	dst.y = status->h;
 	drw->box(screen, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
@@ -872,7 +872,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 	// *** optional
 	for(vector<long>::iterator iter = planet->nachbarn.begin(); iter != planet->nachbarn.end(); iter++)
 	{
-		UVPlanet* p = welt->get_planet((*iter));
+		UVPlanet* p = universum->get_planet((*iter));
 		// *** Verbindungen zu unbekannten Planeten auch zeichnen!
 		if((p != NULL) && (p->drawflag != planet->drawflag))
 		{

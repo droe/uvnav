@@ -1,7 +1,8 @@
 $Id$
 
 - OO-Architecture Redesign
-  - welt -> universum, und aufsplitten
+  - Klassenbenutzung in planet.h eliminieren (Zone anstatt key)
+  - pd weiter aufsplitten
   - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
                             ui/rootpane.{h,cpp}
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren

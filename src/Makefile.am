@@ -34,7 +34,11 @@ uvnav_SOURCES = rev.h rev.cpp \
 	si/imagehandler.h si/imagehandler.cpp \
 	si/font.h si/font.cpp \
 	si/fonthandler.h si/fonthandler.cpp \
-	pd/welt.h pd/welt.cpp \
+	pd/spieler.h pd/spieler.cpp \
+	pd/anomalie.h pd/anomalie.cpp \
+	pd/planet.h pd/planet.cpp \
+	pd/schiff.h pd/schiff.cpp \
+	pd/universum.h pd/universum.cpp \
 	dm/abstractimporter.h \
 	dm/import_txt.h dm/import_txt.cpp \
 	dm/importhandler.h dm/importhandler.cpp \
