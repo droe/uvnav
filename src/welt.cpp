@@ -390,7 +390,7 @@ string UVZone::get_klimazone() const
 		}
 	}
 	T_winter /= 6;
-	T_winter /= 6;
+	T_sommer /= 6;
 
 	// 2: Sommerregen
 	// 1: ohne Regenperiode
