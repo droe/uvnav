@@ -25,6 +25,7 @@
 #include "lib/sysdep.h"
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
+#include "si/video.h"
 #include "dm/importhandler.h"
 #include "ui/progress.h"
 
@@ -60,11 +61,12 @@ UVNavigator::UVNavigator()
 		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
 	}
 
-	init_video();
-
 	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
+
+	UVVideo::get_instance()->init();
+	screen = UVVideo::get_instance()->get_screen();
 
 	if(conf->b_get("screen-quality"))
 	{
@@ -92,62 +94,6 @@ UVNavigator::~UVNavigator()
 	if(TTF_WasInit())
 		TTF_Quit();
 	SDL_Quit();
-}
-
-
-/*
- * Video Mode initialisieren.
- *
- * Initialisiert den SDL-Video-Mode aufgrund der aktuellen
- * Einstellungen im globalen Konfigurationsobjekt conf neu.
- * Ueberschreibt die globale SDL_Surface.
- */
-void UVNavigator::init_video()
-{
-	int flags = SDL_SWSURFACE;
-
-	cout << "Angeforderte Bildschirmoptionen:";
-	SDL_Rect r = { 0, 0, 0, 0 };
-	if(conf->b_get("screen-fullscreen"))
-	{
-		sysdep_screensize(&r);
-		cout << " Fullscreen(" << r.w << "x" << r.h << "x?)";
-		flags |= SDL_FULLSCREEN;
-	}
-	else
-	{
-		r.w = conf->l_get("screen-width");
-		r.h = conf->l_get("screen-height");
-		cout << " Windowed(" << r.w << "x" << r.h << "x?)";
-	}
-	if(conf->b_get("screen-resizable"))
-	{
-		cout << " Resizable";
-		flags |= SDL_RESIZABLE;
-	}
-	cout << "." << endl;
-
-	screen = SDL_SetVideoMode(r.w, r.h, 0, flags);
-	if(screen == NULL)
-	{
-		throw EXCEPTION(string("SDL: ") + SDL_GetError());
-	}
-
-	cout << "Effektiv erhaltene Optionen:";
-	if((screen->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN)
-	{
-		cout << " Fullscreen(" << screen->w << "x" << screen->h << "x" << (screen->format->BytesPerPixel * 8) << ")";
-	}
-	else
-	{
-		cout << " Windowed(" << screen->w << "x" << screen->h << "x" << (screen->format->BytesPerPixel * 8) << ")";
-	}
-	if((screen->flags & SDL_RESIZABLE) == SDL_RESIZABLE)
-	{
-		cout << " Resizable";
-	}
-	cout << "." << endl;
-	cout << "------------------------------------------------------------------------------" << endl;
 }
 
 
@@ -326,7 +272,8 @@ void UVNavigator::run()
 			case SDL_VIDEORESIZE:
 				conf->l_set("screen-width", event.resize.w);
 				conf->l_set("screen-height", event.resize.h);
-				init_video();
+				UVVideo::get_instance()->init();
+				screen = UVVideo::get_instance()->get_screen();
 				map->resize(screen);
 				break;
 			case SDL_KEYDOWN:
@@ -339,7 +286,8 @@ void UVNavigator::run()
 
 					case SDLK_f:
 						conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
-						init_video();
+						UVVideo::get_instance()->init();
+						screen = UVVideo::get_instance()->get_screen();
 						map->resize(screen);
 						break;
 

@@ -1,15 +1,30 @@
 $Id$
 
 - OO-Architecture Redesign
-  - Widget-Architetur implementieren
-    - RootWindow
+  - ui/widgets/GUI* -> ui/core/UV*, commit
   - si/UVKeyboard als Singleton implementieren
-    - observer pattern (?)
+    - interface base class UVKeydownListener mit ::handle_keydown()
     - multiplext keypresses an alle interessierten objekte
-  - si/UVMouse ?
-  - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/rootpane.{h,cpp}
+    - kann ich das noch irgendwie filtern, damit nicht 10 objekte alle
+      keypresses erhalten? -> hash table
+    - konfigurierbar ... apps registrieren string "map-scroll-left"
+      und UVKeyboard mappt die keydowns zu strings (via conf), und die
+      strings zu owners (via registry hash table)
+  - map.* -> mapwidget.*
+    - keys registrieren via UVKeyboard
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
-    - model interface (virtual class)
+    - model interface (virtual class) oder spezialisiertes progress widget
+  - navigator.* -> application.* ui/splash/rootwindow.*
+                   ui/main/rootwindow.* ui/load/rootwindow.*
+    - keys registrieren via UVKeyboard
+    - map extern als widget
+    - progress extern als widget
+      - ui/load/rootwindow ist zweiter observer von importer, um eventqueue
+        abzuarbeiten
+        - brauche exception um dem importer abbruch zu signalisieren
+  - Mausklick handling einklinken
+    - wie doppelklick und drag behandeln?
+  - GUI Architektur verfeinern ...
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)

@@ -30,6 +30,7 @@ uvnav_SOURCES = rev.h rev.cpp \
 	lib/regexp.h lib/regexp.cpp \
 	lib/sdl.h \
 	si/conf.h si/conf.cpp \
+	si/video.h si/video.cpp \
 	si/draw.h si/draw.cpp \
 	si/imagehandler.h si/imagehandler.cpp \
 	si/font.h si/font.cpp \
@@ -60,6 +61,7 @@ uvnav_SOURCES = rev.h rev.cpp \
 	ui/widgets/widget.h ui/widgets/widget.cpp \
 	ui/widgets/compositewidget.h ui/widgets/compositewidget.cpp \
 	ui/widgets/window.h ui/widgets/window.cpp \
+	ui/widgets/rootwindow.h ui/widgets/rootwindow.cpp \
 	ui/map.h ui/map.cpp \
 	ui/progress.h ui/progress.cpp \
 	ui/navigator.h ui/navigator.cpp \
