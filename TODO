@@ -1,20 +1,22 @@
 $Id$
 
 
-== 0.0.1 ==
+== post 0.0.1 ==
 
-- Erste Dinge anschreiben
-  - Font-Surface-Cache?
-    - UVFontCache?
-- Autotools Upgrade 257->259 & 17->18
+- Wiki: Roadmap
+- Wiki: Downloads
+- Wiki: Screenshots
 
 
 Weiter gemäss Roadmap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
+
 ------------------------------------------------------------------------------
 
 == HOHE PRIORITAET ==
+
+- Autotools Upgrade 257->259 & 17->18
 
 - Besseres Dirty Rect Verhalten / DR-Correctness der Objekte
   - Kreis nicht zeichnen wenn komplett reingezoomt
@@ -74,8 +76,11 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Minimap
   - Statusinformationen in ein sauberes Info-Overlay überführen.
   - Maushandling einführen
+  - Zeichenreihenfolge
+  - Such-Overlay à la Celestia
 
-- Fonts cachen und blitten anstatt immer neu rendern und blitten
+- UVFontCache
+  - cachen und blitten anstatt immer neu rendern und blitten
 
 
 

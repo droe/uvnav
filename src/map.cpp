@@ -491,22 +491,26 @@ void UVMap::draw_grid()
 	long s_x2 = long(rint(double(first_x + d/2 - offset_x) / zoom));
 	long s_y1 = long(rint(double(first_y - offset_y) / zoom));
 	long s_y2 = long(rint(double(first_y + d/2 - offset_y) / zoom));
-	drw->line(screen, s_x1, s_y1, s_x2, s_y1, 0x66, 0x66, 0x66);
-	drw->line(screen, s_x1, s_y1, s_x1, s_y2, 0x66, 0x66, 0x66);
-	drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 - tick, 0x66, 0x66, 0x66);
-	drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
-	drw->line(screen, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
-	drw->line(screen, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
-	SDL_Surface* x_label = grid_font->get_surface(str_stream() << "X", 0x88, 0x88, 0x88);
-	SDL_Surface* y_label = grid_font->get_surface(str_stream() << "Y", 0x88, 0x88, 0x88);
-	dst.x = s_x2 + tick;
-	dst.y = s_y1 - x_label->h / 2;
-	SDL_BlitSurface(x_label, 0, screen, &dst);
-	SDL_FreeSurface(x_label);
-	dst.x = s_x1 - y_label->w / 2;
-	dst.y = s_y2;
-	SDL_BlitSurface(y_label, 0, screen, &dst);
-	SDL_FreeSurface(y_label);
+	// nur zeichnen, falls Pfeilsystem oberhalb des Massstabs zu liegen kommt
+	if(s_y1 < m_y)
+	{
+		drw->line(screen, s_x1, s_y1, s_x2, s_y1, 0x66, 0x66, 0x66);
+		drw->line(screen, s_x1, s_y1, s_x1, s_y2, 0x66, 0x66, 0x66);
+		drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 - tick, 0x66, 0x66, 0x66);
+		drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
+		drw->line(screen, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
+		drw->line(screen, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
+		SDL_Surface* x_label = grid_font->get_surface(str_stream() << "X", 0x88, 0x88, 0x88);
+		dst.x = s_x2 + tick;
+		dst.y = s_y1 - x_label->h / 2;
+		SDL_BlitSurface(x_label, 0, screen, &dst);
+		SDL_FreeSurface(x_label);
+		SDL_Surface* y_label = grid_font->get_surface(str_stream() << "Y", 0x88, 0x88, 0x88);
+		dst.x = s_x1 - y_label->w / 2;
+		dst.y = s_y2;
+		SDL_BlitSurface(y_label, 0, screen, &dst);
+		SDL_FreeSurface(y_label);
+	}
 }
 
 
@@ -552,12 +556,20 @@ void UVMap::draw_planet(UVPlanet* planet)
 		dst.x = long(rint(center_x - h / 2));
 		dst.y = long(rint(center_y - h / 2));
 
-//		cout << "draw Planet (" << center_x << "/" << center_y << ")" << endl;
-
 		SDL_BlitSurface(surface, 0, screen, &dst);
+
+		if((zoom < 100.0) && (planet->handelsstation != ""))
+		{
+			// Handelsstation
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    h / 2 + 4, 0xFF, 0x00, 0xFF, 0xFF);
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    h / 2 + 5, 0xFF, 0x00, 0xFF, 0xFF);
+		}
 
 		if(h > 5)
 		{
+			// *** provisorisch
 			// *** Alternative: statt kreis ein rechteck zeichnen, in farbe, mit zahl.
 
 			// 10:  00 ff 00
@@ -572,6 +584,19 @@ void UVMap::draw_planet(UVPlanet* planet)
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2 + 2, r, g, b, 0xFF);
 		}
+
+		if(zoom < 20.0)
+		{
+			// Beschriftung
+			// *** provisorisch
+			SDL_Surface* label = grid_font->get_surface(str_stream() << planet->name.substr(0,3) << " (" << planet->nummer << ")", 0x88, 0x88, 0x88);
+			dst.x = long(rint(center_x + h / 2)) + 4;
+			dst.y = long(rint(center_y - label->h / 2));
+			SDL_BlitSurface(label, 0, screen, &dst);
+			SDL_FreeSurface(label);
+		}
+
+//		cout << "draw Planet (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
@@ -620,13 +645,25 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 		double target_x = center_x + sin(PI * (schiff->w) / 180.0) * schiff->v * 100.0 / zoom;
 		double target_y = center_y - cos(PI * (schiff->w) / 180.0) * schiff->v * 100.0 / zoom;
 
-//		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
-
+		// *** provisorisch
 		drw->circle(screen, long(rint(center_x)), long(rint(center_y)), h/2,
 		                    0xFF, 0xFF, 0xFF);
 		drw->line(screen, long(rint(center_x)), long(rint(center_y)),
 		                  long(rint(target_x)), long(rint(target_y)),
 		                  0xFF, 0xFF, 0xFF);
+		if(zoom < 50.0)
+		{
+			// Beschriftung
+			// *** provisorisch
+			SDL_Rect dst = { 0, 0, 0, 0};
+			SDL_Surface* label = grid_font->get_surface(str_stream() << schiff->name << " (" << schiff->besitzer << ")", 0x88, 0x88, 0x88);
+			dst.x = long(rint(center_x + h / 2)) + 4;
+			dst.y = long(rint(center_y - label->h / 2));
+			SDL_BlitSurface(label, 0, screen, &dst);
+			SDL_FreeSurface(label);
+		}
+
+//		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
@@ -653,11 +690,11 @@ void UVMap::draw_container(UVContainer* container)
 		double center_x = double(container->x - offset_x) / zoom;
 		double center_y = double(container->y - offset_y) / zoom;
 
-//		cout << "draw Container (" << center_x << "/" << center_y << ")" << endl;
-
 		drw->box(screen, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
 		                 long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
 		                 0xFF, 0xFF, 0xFF);
+
+//		cout << "draw Container (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
