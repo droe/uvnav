@@ -80,6 +80,10 @@ sind um einzeln erkannt zu werden. Das bedingt eine baumartige
 Strukturierung dieser Objekte, und ist daher nicht ganz einfach
 zu implementieren.
 
+Die Karte wird bei vielen Objekten sehr unübersichtlich.
+Die momentane Art, wie Planeten und Schiffe dargestellt werden,
+muss gründlich überarbeitet werden.
+
 
 
 Systemvoraussetzungen: Hardware
@@ -118,6 +122,9 @@ benötigen. Die systemabhängigen Teile befinden sich in sysdep.cpp;
 um UVNav zu portieren müssen also nur einige wenige Zeilen Code zu
 diesem File für dein Betriebssystem hinzugefügt werden.
 
+Die Autotools-Toolchain ist noch etwas lückenhaft.  Korrekturen,
+zusätzliche oder bessere Tests sind natürlich willkommen.
+
 UVNav wird ganz sicher unter BSD, Linux und Windows sauber laufen,
 wenns dann mal fertig ist. Patches sind jederzeit willkommen.
 
@@ -138,7 +145,7 @@ gestartet werden, z.B. so:
 
 ACHTUNG: DIES IST MOMENTAN NOCH SEHR EXPERIMENTELL UND NICHT RICHTIG
          UNTERSTUETZT. AUSPROBIEREN AUF EIGENE GEFAHR.
-         Bei mir funktionierts jedenfalls momentan nicht :)
+         Bei mir funktionierts jedenfalls momentan nicht sauber :)
 
 
 
