@@ -165,8 +165,9 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 	// *** gleichzeitig muss aber der Default in conf.cpp geaendert werden
 
 	drw = new UVDraw(conf);
-	overlay_font = new UVFont(conf, FNT_SANS, screen->h / 48);
-	grid_font = new UVFont(conf, FNT_SANS, screen->h / 64);
+	debug_font = new UVFont(conf, FNT_SANS, conf->l_get("map-debug-font-size"));
+	grid_font = new UVFont(conf, FNT_SANS, conf->l_get("map-grid-font-size"));
+	label_font = new UVFont(conf, FNT_SANS, conf->l_get("map-label-font-size"));
 }
 
 
@@ -181,8 +182,9 @@ UVMap::~UVMap()
 	conf->l_set("map-dim", dim, true);
 
 	delete drw;
-	delete overlay_font;
+	delete debug_font;
 	delete grid_font;
+	delete label_font;
 }
 
 
@@ -274,11 +276,6 @@ void UVMap::resize(SDL_Surface* s)
 
 	zoom *= wf;
 
-	delete overlay_font;
-	overlay_font = new UVFont(conf, FNT_SANS, screen->h / 48);
-	delete grid_font;
-	grid_font = new UVFont(conf, FNT_SANS, screen->h / 64);
-
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 	draw(&rect);
 }
@@ -354,8 +351,8 @@ void UVMap::draw(SDL_Rect* rect)
 		}
 	}
 
-	// Overlay, GUI, etc
-	SDL_Surface* status = overlay_font->get_surface(
+	// Overlays
+	SDL_Surface* status = debug_font->get_surface(
 		str_stream() << "zoom=" << zoom
 		             << " offx=" << offset_x
 		             << " offy=" << offset_y
@@ -413,7 +410,7 @@ void UVMap::draw(SDL_Rect* rect)
  */
 void UVMap::draw_grid()
 {
-	static const long tick = screen->h / 64 / 2;
+	static const long tick = conf->l_get("map-grid-font-size") / 2;
 
 	// Maschengroesse = groesste Zweierpotenz in Lichtjahren kleiner als 100px
 	long d = long(rint(zoom / 10.0));
@@ -589,7 +586,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 		{
 			// Beschriftung
 			// *** provisorisch
-			SDL_Surface* label = grid_font->get_surface(str_stream() << planet->name.substr(0,3) << " (" << planet->nummer << ")", 0x88, 0x88, 0x88);
+			SDL_Surface* label = label_font->get_surface(str_stream() << planet->name.substr(0,3) << " (" << planet->nummer << ")", 0x88, 0x88, 0x88);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
 			SDL_BlitSurface(label, 0, screen, &dst);
@@ -656,7 +653,7 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			// Beschriftung
 			// *** provisorisch
 			SDL_Rect dst = { 0, 0, 0, 0};
-			SDL_Surface* label = grid_font->get_surface(str_stream() << schiff->name << " (" << schiff->besitzer << ")", 0x88, 0x88, 0x88);
+			SDL_Surface* label = label_font->get_surface(str_stream() << schiff->name << " (" << schiff->besitzer << ")", 0x88, 0x88, 0x88);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
 			SDL_BlitSurface(label, 0, screen, &dst);

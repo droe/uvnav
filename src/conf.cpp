@@ -76,8 +76,9 @@ UVConf::UVConf()
 	l_set("map-offset-y", 0);
 	f_set("map-zoom", 200.0);
 	l_set("map-dim", 1);
-//	l_set("map-grid-font-size", 8);
-//	l_set("map-label-font-size", 8);
+	l_set("map-debug-font-size", 20);
+	l_set("map-grid-font-size", 10);
+	l_set("map-label-font-size", 10);
 
 	// Konfigurationsdatei drueberladen
 	load();

@@ -79,8 +79,9 @@ class UVMap
 		long dim;
 
 		UVDraw* drw;
-		UVFont* overlay_font;
+		UVFont* debug_font;
 		UVFont* grid_font;
+		UVFont* label_font;
 
 		void draw_grid();
 
