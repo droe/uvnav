@@ -18,28 +18,23 @@
  * $Id$
  */
 
-#ifndef OBSERVER_H
-#define OBSERVER_H
+#ifndef IMPORTHANDLER_H
+#define IMPORTHANDLER_H
 
-#include "stl.h"
+#include "../lib/singleton.h"
+#include "abstractimporter.h"
 
-class Subject;
-
-class Observer
+class UVImportHandler : public Singleton<UVImportHandler>
 {
+	friend class Singleton<UVImportHandler>;
+
 	public:
-		virtual void update(Subject*) = 0;
+		UVAbstractImporter* get_importer(const string& file);
+
+	protected:
+		UVImportHandler();
+//		~UVImportHandler();
 };
 
-class Subject
-{
-	public:
-		void attach(Observer*);
-		void detach(Observer*);
-		void notify();
+#endif // IMPORTHANDLER_H
 
-	private:
-		vector<Observer*> observers;
-};
-
-#endif // OBSERVER_H

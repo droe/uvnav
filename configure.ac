@@ -107,7 +107,7 @@ CXXFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -W
 AC_SUBST(CXXFLAGS_PEDANTIC)
 
 # Additional compiler flags
-CXXFLAGS="$CXXFLAGS -fno-rtti -DDATADIR=\\\"\$(datadir)\\\""
+CXXFLAGS="$CXXFLAGS -fno-rtti -Wno-non-virtual-dtor -DDATADIR=\\\"\$(datadir)\\\""
 CFLAGS="$CFLAGS -DDATADIR=\\\"\$(datadir)\\\""
 
 # Option: Tools

@@ -1,10 +1,7 @@
 $Id$
 
 - OO-Architecture Redesign
-  - parser_txt.* refactoren:
-    - abstractimporter.*
-    - txtimporter.*/xmlimporter.*/htmimporter.*
-    - importhandler.*
+  - welt -> universum, und aufsplitten
   - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
                             ui/rootpane.{h,cpp}
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren

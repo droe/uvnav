@@ -10,7 +10,7 @@ lib  Observer, STL, Exceptions
 
 OS/SysDep: Singleton oder static? si oder lib?
 
-      app
+     main()
        |
        V
      __ui_

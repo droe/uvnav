@@ -18,28 +18,23 @@
  * $Id$
  */
 
-#ifndef OBSERVER_H
-#define OBSERVER_H
+#ifndef ABSTRACTIMPORTER_H
+#define ABSTRACTIMPORTER_H
 
-#include "stl.h"
+#include "../lib/observer.h"
+#include "../pd/welt.h"
 
-class Subject;
-
-class Observer
+class UVAbstractImporter : public Subject
 {
 	public:
-		virtual void update(Subject*) = 0;
+//		UVAbstractImporter() { };
+//		virtual ~UVAbstractImporter() { };
+//
+		virtual void set_verbosity(int v) = 0;
+		virtual UVWelt* import(const string& file) = 0;
+		virtual unsigned long get_filesize() const = 0;
+		virtual unsigned long get_bytecount() const = 0;
 };
 
-class Subject
-{
-	public:
-		void attach(Observer*);
-		void detach(Observer*);
-		void notify();
+#endif // ABSTRACTIMPORTER_H
 
-	private:
-		vector<Observer*> observers;
-};
-
-#endif // OBSERVER_H

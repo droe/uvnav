@@ -18,18 +18,16 @@
  * $Id$
  */
 
-#include "parser_txt.h"
+#include "import_txt.h"
 
 #include "../si/imagehandler.h"
 #include "../lib/sysdep.h"
 
 /*
- * UVParserTXT - Parser fuer Text-Auswertungen
+ * UVImportTXT - Importer fuer Text-Auswertungen
  *
  * Parst Textauswertungen und erstellt eine entsprechende UVWelt,
  * welche die Daten der Auswertung repraesentiert.
- *
- * Es muss ::parse() aufgerufen werden, um eine Auswertung zu parsen.
  *
  * *** FIXME: Nachrichten parsen!
  * *** FIXME: Imperatoren-Toys parsen!
@@ -52,38 +50,36 @@
 /*
  * Konstruktor.
  */
-UVParserTXT::UVParserTXT(int v, UVWelt* w)
-: welt(w), line(0), filesize(0), bytecount(0), verbosity(v)
+UVImportTXT::UVImportTXT()
+: welt(NULL), line(0), filesize(0), bytecount(0), verbosity(0)
 , stats_schiffe(0), stats_planeten(0)
 {
-	if(welt == NULL)
-	{
-		welt = new UVWelt();
-	}
 }
 
 
 /*
  * Destruktor.
  */
-UVParserTXT::~UVParserTXT()
+/*
+UVImportTXT::~UVImportTXT()
 {
 }
+*/
 
 
 /*
- * Resultat des Parsens als UVWelt* zurueckgeben.
+ * Laedt eine Datei und jagt sie durch den Parser.
  */
-UVWelt* UVParserTXT::get_welt() const
+void UVImportTXT::set_verbosity(int v)
 {
-	return welt;
+	verbosity = v;
 }
 
 
 /*
  * Gibt den aktuellen Filesize zurueck.
  */
-unsigned long UVParserTXT::get_filesize() const
+unsigned long UVImportTXT::get_filesize() const
 {
 	return filesize;
 }
@@ -92,7 +88,7 @@ unsigned long UVParserTXT::get_filesize() const
 /*
  * Gibt den aktuellen Bytecount zurueck.
  */
-unsigned long UVParserTXT::get_bytecount() const
+unsigned long UVImportTXT::get_bytecount() const
 {
 	return bytecount;
 }
@@ -101,7 +97,7 @@ unsigned long UVParserTXT::get_bytecount() const
 /*
  * Koennen noch Daten aus Auswertung gelesen werden?
  */
-bool UVParserTXT::good() const
+bool UVImportTXT::good() const
 {
 	return stream.good();
 }
@@ -110,7 +106,7 @@ bool UVParserTXT::good() const
 /*
  * Eine Zeile aus Auswertung lesen.
  */
-string UVParserTXT::getline()
+string UVImportTXT::getline()
 {
 	if(!stream.good())
 	{
@@ -139,7 +135,7 @@ string UVParserTXT::getline()
  * Gematchten Bereich aus der aktuellen Zeile entfernen.
  * Falls ganze Zeile gematcht hat, neue Zeile einlesen.
  */
-void UVParserTXT::shiftline(UVRegExp* re)
+void UVImportTXT::shiftline(UVRegExp* re)
 {
 	cur = cur.substr(re->get_match_end(), cur.length() - re->get_match_end());
 	if(cur == "")
@@ -152,7 +148,7 @@ void UVParserTXT::shiftline(UVRegExp* re)
 /*
  * Leerschlaege an Anfang und Ende eines Strings entfernen.
  */
-string UVParserTXT::strip(string& s) const
+string UVImportTXT::strip(string& s) const
 {
 	while(s[0] == ' ')
 	{
@@ -169,9 +165,13 @@ string UVParserTXT::strip(string& s) const
 /*
  * Laedt eine Datei und jagt sie durch den Parser.
  */
-void UVParserTXT::parse(const string& file)
+UVWelt* UVImportTXT::import(const string& file)
 {
 	cout << "Lade Auswertung: " << file << endl;
+
+	if(welt)
+		delete welt;
+	welt = new UVWelt();
 
 	filesize = sysdep_filesize(file);
 	line = 0;
@@ -202,13 +202,14 @@ void UVParserTXT::parse(const string& file)
 	cout << "------------------------------------------------------------------------------" << endl;
 
 	notify();
+	return welt;
 }
 
 
 /*
  * Eine ganze Auswertung parsen.
  */
-void UVParserTXT::parse_auswertung()
+void UVImportTXT::parse_auswertung()
 {
 	parse_header();
 
@@ -264,7 +265,7 @@ void UVParserTXT::parse_auswertung()
 /*
  * Die Kopfzeile suchen und parsen.
  */
-void UVParserTXT::parse_header()
+void UVImportTXT::parse_header()
 {
 	//   --- Universum V --- a PBM (c) 1994-2004 by Black Bird Software
 	static UVRegExp hdr_re("--- (.*?) --- (.*)$");
@@ -284,7 +285,7 @@ void UVParserTXT::parse_header()
 /*
  * Header einer uralten Auswertung parsen.
  */
-void UVParserTXT::parse_oldschool_header()
+void UVImportTXT::parse_oldschool_header()
 {
 	UVSpieler* s = new UVSpieler();
 
@@ -411,7 +412,7 @@ void UVParserTXT::parse_oldschool_header()
 /*
  * Die Spielerinfos parsen.
  */
-void UVParserTXT::parse_spielerinfos()
+void UVImportTXT::parse_spielerinfos()
 {
 	UVSpieler* s = new UVSpieler();
 
@@ -506,7 +507,7 @@ void UVParserTXT::parse_spielerinfos()
 /*
  * Die Spielstand-Infos parsen.
  */
-void UVParserTXT::parse_spielstand()
+void UVImportTXT::parse_spielstand()
 {
 	// MotU: Roman Meng
 	static UVRegExp motu_re("^MotU: +(.*)$");
@@ -533,7 +534,7 @@ void UVParserTXT::parse_spielstand()
 /*
  * Die Imperatoren-Infos parsen.
  */
-void UVParserTXT::parse_imperatorinfos()
+void UVImportTXT::parse_imperatorinfos()
 {
 	// Spionageabwehr: 0% Erzertrag
 	static UVRegExp spio_re("^Spionageabwehr: +(.*)% Erzertrag$");
@@ -551,7 +552,7 @@ void UVParserTXT::parse_imperatorinfos()
 /*
  * Die Allianzen und Kriege parsen.
  */
-void UVParserTXT::parse_allianzen()
+void UVImportTXT::parse_allianzen()
 {
 	// *** TODO: Parsing der Allianzpartner vollenden
 
@@ -630,7 +631,7 @@ void UVParserTXT::parse_allianzen()
  * globale Schiffssektion am Auswertungsanfang, ansonsten werden die
  * Schiffe Planet p zugeordnet.
  */
-void UVParserTXT::parse_schiffe(UVPlanet* p)
+void UVImportTXT::parse_schiffe(UVPlanet* p)
 {
 	// * Schiff Cristina (Doctor Who) 100000 BRT  (118314,15922,4 - Vaeroch Agei)
 	//   [...]
@@ -650,7 +651,7 @@ void UVParserTXT::parse_schiffe(UVPlanet* p)
 /*
  * Die Planeten parsen.
  */
-void UVParserTXT::parse_planeten()
+void UVImportTXT::parse_planeten()
 {
 	// Coventina (5201) (Niemand) (120588,16267,4 - Vaeroch Agei) (5498,5527)
 	//  (5152) (Niemand) (123048,21142,4 - Vaeroch Agei)
@@ -671,7 +672,7 @@ void UVParserTXT::parse_planeten()
 /*
  * Die Planeten uralter Auswertungen parsen.
  */
-void UVParserTXT::parse_oldschool_planeten()
+void UVImportTXT::parse_oldschool_planeten()
 {
 	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
 	static UVRegExp old_planet_re("^.*? \\([0-9]+\\) \\(.*?\\) \\( ?-?[0-9]+, ?-?[0-9]+\\)(?: \\([0-9,]+\\))?$");
@@ -691,7 +692,7 @@ void UVParserTXT::parse_oldschool_planeten()
 /*
  * Den Sensorenreport parsen.
  */
-void UVParserTXT::parse_sensorenreport()
+void UVImportTXT::parse_sensorenreport()
 {
 	// Sensorenreport:
 	if(cur != "Sensorenreport:")
@@ -742,7 +743,7 @@ void UVParserTXT::parse_sensorenreport()
 /*
  * Lagerbestaende auf fremden Schiffen parsen.
  */
-void UVParserTXT::parse_fremde_lager()
+void UVImportTXT::parse_fremde_lager()
 {
 	static UVRegExp lager_re("^Lagerbest.nde auf fremden Schiffen:$");
 	if(!lager_re.match(cur))
@@ -771,7 +772,7 @@ void UVParserTXT::parse_fremde_lager()
 /*
  * Nachrichten parsen.
  */
-void UVParserTXT::parse_nachrichten()
+void UVImportTXT::parse_nachrichten()
 {
 	static UVRegExp beso_re("^Besondere Nachrichten:$");
 	if(!beso_re.match(cur))
@@ -1987,7 +1988,7 @@ void UVParserTXT::parse_nachrichten()
 /*
  * Ein Kampfreport aus den Nachrichten parsen.
  */
-void UVParserTXT::parse_kampfreport()
+void UVImportTXT::parse_kampfreport()
 {
 	static UVRegExp dash_re("^- ");
 
@@ -2257,7 +2258,7 @@ void UVParserTXT::parse_kampfreport()
  * in der globalen Schiffssektion am Auswertungsanfang, ansonsten wird das
  * Schiff dem Planet p zugeordnet.
  */
-void UVParserTXT::parse_schiff(UVPlanet* p)
+void UVImportTXT::parse_schiff(UVPlanet* p)
 {
 	// * Schiff Cristina (Doctor Who) 100000 BRT 
 	// * Schiff Cristina (Doctor Who) 100000 BRT in der Werft Hubertus (1) 
@@ -2520,7 +2521,7 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 /*
  * Ein Planet parsen.
  */
-void UVParserTXT::parse_planet()
+void UVImportTXT::parse_planet()
 {
 	// Coventina (5201) (Niemand) (120588,16267,4 - Vaeroch Agei) (5498,5527)
 	static UVRegExp planet_re("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\((-?[0-9]+),(-?[0-9]+),([0-9]+) - (.*?)\\)(?: \\(([0-9,]+)\\))?$");
@@ -2691,7 +2692,7 @@ void UVParserTXT::parse_planet()
 /*
  * Ein Planet einer uralten Auswertung parsen.
  */
-void UVParserTXT::parse_oldschool_planet()
+void UVImportTXT::parse_oldschool_planet()
 {
 	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
 	static UVRegExp planet_re("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\( ?(-?[0-9]+), ?(-?[0-9]+)\\)(?: \\(([0-9,]+)\\))?$");
@@ -2821,7 +2822,7 @@ void UVParserTXT::parse_oldschool_planet()
 /*
  * Eine Zone parsen.
  */
-UVZone* UVParserTXT::parse_zone(UVPlanet* p)
+UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 {
 	UVZone* z;
 
@@ -3030,7 +3031,7 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 /*
  * Eine Werft parsen.
  */
-UVWerft* UVParserTXT::parse_werft(UVZone* z)
+UVWerft* UVImportTXT::parse_werft(UVZone* z)
 {
 	UVWerft* w;
 
@@ -3083,7 +3084,7 @@ UVWerft* UVParserTXT::parse_werft(UVZone* z)
 /*
  * Eine Forschungsstation parsen.
  */
-UVForschungsstation* UVParserTXT::parse_forschungsstation(UVZone* z)
+UVForschungsstation* UVImportTXT::parse_forschungsstation(UVZone* z)
 {
 	UVForschungsstation* f;
 
@@ -3120,7 +3121,7 @@ UVForschungsstation* UVParserTXT::parse_forschungsstation(UVZone* z)
 /*
  * Eine Stadt parsen.
  */
-UVStadt* UVParserTXT::parse_stadt(UVZone* z)
+UVStadt* UVImportTXT::parse_stadt(UVZone* z)
 {
 	UVStadt* s;
 
@@ -3157,7 +3158,7 @@ UVStadt* UVParserTXT::parse_stadt(UVZone* z)
 /*
  * Eine Handelsstation parsen.
  */
-void UVParserTXT::parse_handelsstation(UVPlanet* p)
+void UVImportTXT::parse_handelsstation(UVPlanet* p)
 {
 	UVHandelsstation* h;
 
@@ -3188,7 +3189,7 @@ void UVParserTXT::parse_handelsstation(UVPlanet* p)
 /*
  * Ein Schiff im Sensorreport parsen.
  */
-void UVParserTXT::parse_report_schiff()
+void UVImportTXT::parse_report_schiff()
 {
 
 	//   Schiff Foo (Doctor Who) 20000 BRT (-12345,12345,4)
@@ -3225,7 +3226,7 @@ void UVParserTXT::parse_report_schiff()
 /*
  * Ein Container im Sensorreport parsen.
  */
-void UVParserTXT::parse_report_container()
+void UVImportTXT::parse_report_container()
 {
 	UVContainer* c = new UVContainer();
 
@@ -3249,7 +3250,7 @@ void UVParserTXT::parse_report_container()
 /*
  * Eine Anomalie im Sensorreport parsen.
  */
-void UVParserTXT::parse_report_anomalie()
+void UVImportTXT::parse_report_anomalie()
 {
 	UVAnomalie* a = new UVAnomalie();
 
@@ -3273,7 +3274,7 @@ void UVParserTXT::parse_report_anomalie()
 /*
  * Eine Sensorsonde aus dem Sensorenreport parsen.
  */
-void UVParserTXT::parse_report_sensorsonde()
+void UVImportTXT::parse_report_sensorsonde()
 {
 	UVSensorsonde* s;
 
@@ -3308,7 +3309,7 @@ void UVParserTXT::parse_report_sensorsonde()
 /*
  * Eine Infosonde aus dem Sensorenreport parsen.
  */
-void UVParserTXT::parse_report_infosonde()
+void UVImportTXT::parse_report_infosonde()
 {
 	UVInfosonde* i;
 
@@ -3343,7 +3344,7 @@ void UVParserTXT::parse_report_infosonde()
 /*
  * Eine Leerzeile parsen.
  */
-void UVParserTXT::parse_leerzeile()
+void UVImportTXT::parse_leerzeile()
 {
 	// 
 	if(cur != "")
@@ -3362,7 +3363,7 @@ void UVParserTXT::parse_leerzeile()
  * Lizenziert unter der GNU GPL
  * http://www.duffy.ch/universum/tovu/
  */
-long UVParserTXT::get_image_planet(const string& s) const
+long UVImportTXT::get_image_planet(const string& s) const
 {
 	if(s.find("Starke St") != string::npos)
 	{
@@ -3414,7 +3415,7 @@ long UVParserTXT::get_image_planet(const string& s) const
 /*
  * Findet die Sichtweite zu einem Sensorentyp.
  */
-long UVParserTXT::get_sichtweite(const string& s) const
+long UVImportTXT::get_sichtweite(const string& s) const
 {
 	if(s == "ScanCipher 1a")
 	{
@@ -3475,7 +3476,7 @@ long UVParserTXT::get_sichtweite(const string& s) const
  * Den letztem Regexp-Match zum Debuggen ausgeben.
  */
 #ifdef DEBUG
-void UVParserTXT::parse_debug(const string& s, UVRegExp* re) const
+void UVImportTXT::parse_debug(const string& s, UVRegExp* re) const
 {
 	if(V_RE)
 	{
@@ -3496,7 +3497,7 @@ void UVParserTXT::parse_debug(const string& s, UVRegExp* re) const
 /*
  * Fehlermeldung aufbereiten.
  */
-string UVParserTXT::get_exception(const string& text, const string& src_file, const int src_line, const string& src_func) const
+string UVImportTXT::get_exception(const string& text, const string& src_file, const int src_line, const string& src_func) const
 {
 	return text + " in " + src_func + "() at " + src_file + ":"
 	            + to_string(src_line) + " while processing:\n"

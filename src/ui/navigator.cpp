@@ -23,7 +23,7 @@
 #include "../lib/version.h"
 #include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
-#include "../dm/parser_txt.h"
+#include "../dm/importhandler.h"
 #include "../si/imagehandler.h"
 #include "../si/fonthandler.h"
 #include "progress.h"
@@ -261,17 +261,17 @@ void UVNavigator::load(const string& file, int v)
 	{
 		splash_status("Lade Auswertung: " + file);
 
-		UVParserTXT* parser = new UVParserTXT(v);
+		UVAbstractImporter* importer = UVImportHandler::get_instance()->get_importer(file);
+		importer->set_verbosity(v);
 
 		SDL_Rect dest;
 		dest.x = screen->w / 16; dest.w = screen->w * 7 / 8;
 		dest.y = screen->h * 5 / 8;  dest.h = screen->h / 16;
 		UVProgress* progress = new UVProgress(screen, &dest);
-		parser->attach(progress);
-		parser->parse(file);
-		parser->detach(progress);
+		importer->attach(progress);
+		welt = importer->import(file);
+		importer->detach(progress);
 		delete progress;
-		welt = parser->get_welt();
 		conf->set_auswertung(welt->get_spieler()->name, welt->sternzeit);
 	}
 	else

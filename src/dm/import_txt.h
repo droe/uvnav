@@ -18,21 +18,22 @@
  * $Id$
  */
 
-#ifndef PARSER_TXT_H
-#define PARSER_TXT_H
+#ifndef IMPORT_TXT_H
+#define IMPORT_TXT_H
 
-#include "../pd/welt.h"
-#include "../lib/regexp.h"
 #include "../lib/observer.h"
+#include "../lib/regexp.h"
+#include "../pd/welt.h"
+#include "abstractimporter.h"
 
-class UVParserTXT : public Subject
+class UVImportTXT : public UVAbstractImporter
 {
 	public:
-		UVParserTXT(int = 0, UVWelt* = NULL);
-		~UVParserTXT();
+		UVImportTXT();
+//		~UVImportTXT();
 
-		void parse(const string& file);
-		UVWelt* get_welt() const;
+		void set_verbosity(int v);
+		UVWelt* import(const string& file);
 		unsigned long get_filesize() const;
 		unsigned long get_bytecount() const;
 
@@ -98,5 +99,5 @@ class UVParserTXT : public Subject
 		long get_sichtweite(const string&) const;
 };
 
-#endif // PARSER_TXT_H
+#endif // IMPORT_TXT_H
 

@@ -35,7 +35,9 @@ uvnav_SOURCES = rev.h rev.cpp \
 	si/font.h si/font.cpp \
 	si/fonthandler.h si/fonthandler.cpp \
 	pd/welt.h pd/welt.cpp \
-	dm/parser_txt.h dm/parser_txt.cpp \
+	dm/abstractimporter.h \
+	dm/import_txt.h dm/import_txt.cpp \
+	dm/importhandler.h dm/importhandler.cpp \
 	ui/map.h ui/map.cpp \
 	ui/gui.h ui/gui.cpp \
 	ui/progress.h ui/progress.cpp \

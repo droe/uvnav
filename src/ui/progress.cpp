@@ -22,7 +22,7 @@
 
 #include "../lib/exceptions.h"
 #include "../si/fonthandler.h"
-#include "../dm/parser_txt.h"
+#include "../dm/abstractimporter.h"
 
 /*
  * UVProgress - Implementiert einen lightweight Progress-Bar.
@@ -88,13 +88,13 @@ void UVProgress::init(unsigned long newtot)
  */
 void UVProgress::update(Subject* s)
 {
-	UVParserTXT* p = static_cast<UVParserTXT*>(s);
+	UVAbstractImporter* importer = static_cast<UVAbstractImporter*>(s);
 
 //cerr << "s=" << s << " p=" << p << endl;
 
-	unsigned long current = p->get_bytecount();
+	unsigned long current = importer->get_bytecount();
 	if(current == 0)
-		init(p->get_filesize());
+		init(importer->get_filesize());
 
 	// Events abklopfen - aber nur bei Programmabbruch handeln.
 	// Alle andern Events werden einfach ignoriert.

@@ -18,28 +18,40 @@
  * $Id$
  */
 
-#ifndef OBSERVER_H
-#define OBSERVER_H
+#include "importhandler.h"
+#include "import_txt.h"
 
-#include "stl.h"
+/*
+ * UVImportHandler - Verwaltet die Importer fuer Auswertungen
+ */
 
-class Subject;
 
-class Observer
+/*
+ * Konstruktor.
+ */
+UVImportHandler::UVImportHandler()
 {
-	public:
-		virtual void update(Subject*) = 0;
-};
+}
 
-class Subject
+
+/*
+ * Destruktor.
+ */
+/*
+UVImportTXT::~UVImportTXT()
 {
-	public:
-		void attach(Observer*);
-		void detach(Observer*);
-		void notify();
+}
+*/
 
-	private:
-		vector<Observer*> observers;
-};
 
-#endif // OBSERVER_H
+/*
+ * Gibt einen passenden Importer zurueck, der die Daten in file
+ * einlesen kann.
+ */
+UVAbstractImporter* UVImportHandler::get_importer(const string& file)
+{
+	// *** FIXME
+	return new UVImportTXT();
+}
+
+
