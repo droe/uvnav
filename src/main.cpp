@@ -366,7 +366,7 @@ void version()
 	cout << endl;
 
 	// Konfigurierte Pfade
-	cout << "Config Dir:    " << sysdep_confdir() << endl;
+	cout << "Conf Dir:      " << sysdep_confdir() << endl;
 	cout << "Data Dir:      " << sysdep_datadir() << endl;
 	cout << endl;
 }
