@@ -36,7 +36,7 @@ class UVNavigator
 		~UVNavigator();
 
 		void splash();
-		void load(const string&, bool = false);
+		void load(const string&, int = 0);
 		void wait();
 		void run();
 

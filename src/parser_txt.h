@@ -31,10 +31,9 @@
 class UVParserTXT
 {
 	public:
-		UVParserTXT(UVConf* c, UVWelt* = NULL);
+		UVParserTXT(UVConf* c, int = 0, UVWelt* = NULL);
 		~UVParserTXT();
 
-		void set_verbose();
 		void parse(const string& file, UVProgress* pro = NULL);
 		UVWelt* get_welt() const;
 
@@ -47,7 +46,7 @@ class UVParserTXT
 		string cur;
 		unsigned long line;
 		unsigned long bytecount;
-		bool verbose;
+		int verbosity;
 
 		long stats_schiffe;
 		long stats_planeten;

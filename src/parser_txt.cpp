@@ -45,12 +45,15 @@
 #undef EXCEPTION
 #define EXCEPTION(x) get_exception(x, __FILE__, __LINE__, __FUNCTION__)
 
+#define V_RE	verbosity >= 3
+#define V_DEBUG	verbosity >= 2
+#define V_INFO	verbosity >= 1
 
 /*
  * Konstruktor.
  */
-UVParserTXT::UVParserTXT(UVConf* c, UVWelt* w)
-: conf(c), welt(w), progress(NULL), verbose(false)
+UVParserTXT::UVParserTXT(UVConf* c, int v, UVWelt* w)
+: conf(c), welt(w), progress(NULL), verbosity(v)
 , stats_schiffe(0), stats_planeten(0)
 {
 	if(welt == NULL)
@@ -74,15 +77,6 @@ UVParserTXT::~UVParserTXT()
 UVWelt* UVParserTXT::get_welt() const
 {
 	return welt;
-}
-
-
-/*
- * Parser in Debug-Mode versetzen.
- */
-void UVParserTXT::set_verbose()
-{
-	verbose = true;
 }
 
 
@@ -111,7 +105,7 @@ string UVParserTXT::getline()
 	{
 		cur = cur.substr(0, cur.length() - 1);
 	}
-	if(verbose)
+	if(V_DEBUG)
 	{
 		cerr << line << ": " << cur << endl;
 	}
@@ -2619,6 +2613,11 @@ void UVParserTXT::parse_planet()
 		getline();
 	}
 
+	if(V_INFO)
+	{
+		cout << p->to_string_terse() << endl;
+	}
+
 	welt->set_planet(p);
 	stats_planeten++;
 
@@ -2885,6 +2884,11 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	if(abs((long int)(z->T - z->get_T())) > 0.11)
 	{
 		cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (T:" << z->T << "!=" << z->get_T() << ")" << endl;
+	}
+
+	if(V_INFO)
+	{
+		cout << z->to_string_terse() << endl;
 	}
 
 	// # Agrarfeld 1, 10 FUs
@@ -3454,7 +3458,7 @@ long UVParserTXT::get_sichtweite(const string& s) const
 #ifdef DEBUG
 void UVParserTXT::parse_debug(const string& s, UVRegExp* re) const
 {
-	if(verbose)
+	if(V_RE)
 	{
 		cerr << ">>> " << s;
 		if(re != NULL)

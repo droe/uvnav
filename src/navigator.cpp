@@ -287,17 +287,13 @@ void UVNavigator::splash_status(const string& text)
  *
  * FIXME: Momentan nur eine Auswertung aufs Mal unterstuetzt...
  */
-void UVNavigator::load(const string& file, bool v)
+void UVNavigator::load(const string& file, int v)
 {
 	if(welt == NULL)
 	{
 		splash_status("Lade Auswertung: " + file);
 
-		UVParserTXT* parser = new UVParserTXT(conf);
-		if(v)
-		{
-			parser->set_verbose();
-		}
+		UVParserTXT* parser = new UVParserTXT(conf, v);
 
 		SDL_Rect dest;
 		dest.x = screen->w / 16; dest.w = screen->w * 7 / 8;

@@ -230,6 +230,8 @@ class UVZone
 		string get_klimazone() const;
 		double get_T() const;
 		double get_N() const;
+
+		string to_string_terse() const;
 };
 
 class UVHandelsstation
@@ -310,6 +312,8 @@ class UVPlanet
 		void set_stadt(UVStadt*, UVZone*);
 		UVStadt* get_stadt(const long) const;
 		long max_stadt() const;
+
+		string to_string_terse() const;
 
 	private:
 		vector<UVZone*> zonen;

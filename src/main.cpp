@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 		bool S = false;
 		bool q = false;
 		bool Q = false;
-		bool v = false;
+		int v = 0;
 
 		while((ch = getopt_long(argc, argv, "w:h:rRfFdDsSqQvVH", longopts, NULL)) != -1)
 		{
@@ -163,7 +163,7 @@ int main(int argc, char* argv[])
 					Q = true;
 					break;
 				case 'v':
-					v = true;
+					v++;
 					break;
 				case 'V':
 					version();

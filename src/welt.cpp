@@ -536,6 +536,19 @@ double UVZone::get_N() const
 }
 
 
+/*
+ * Zone als Einzeiler ausgeben.
+ */
+string UVZone::to_string_terse() const
+{
+	return "Zone " + name + " ("
+	               + to_string(nummer) + ") ("
+	               + besitzer + ") ("
+	               + to_string(groesse) + " FUs) ("
+	               + get_klimazone() + ")";
+}
+
+
 //============================================================================
 
 
@@ -812,6 +825,21 @@ long UVPlanet::max_stadt() const
 {
 	return static_cast<long>(staedte.size());
 }
+
+
+/*
+ * Planet als Einzeiler ausgeben.
+ */
+string UVPlanet::to_string_terse() const
+{
+	return "Planet " + name + " ("
+	               + to_string(nummer) + ") ("
+	               + besitzer + ") ("
+	               + to_string(x) + ","
+	               + to_string(y) + ","
+	               + to_string(dim) + ")";
+}
+
 
 //============================================================================
 //============================================================================
