@@ -36,4 +36,6 @@
 #define TITLE			"Universum V Navigator"
 #define COPYRIGHT		"Copyright (C) 2004 Daniel Roethlisberger"
 
+#define PI 3.141592
+
 #endif // GLOBAL_H

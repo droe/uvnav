@@ -31,6 +31,8 @@ class UVDraw
 		UVDraw(const UVConf* conf);
 //		~UVDraw();
 
+		void line(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
+		void box(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 		void circle(SDL_Surface* surface, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 
 	private:

@@ -47,6 +47,31 @@ UVDraw::~UVDraw()
 
 
 /*
+ * Linie zeichnen.
+ */
+void UVDraw::line(SDL_Surface* surface, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+{
+	if(antialiasing)
+	{
+		aalineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+	}
+	else
+	{
+		lineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+	}
+}
+
+
+/*
+ * Box zeichnen.
+ */
+void UVDraw::box(SDL_Surface* surface, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+{
+	boxRGBA(surface, x1, y1, x2, y2, r, g, b, a);
+}
+
+
+/*
  * Kreis zeichnen.
  */
 void UVDraw::circle(SDL_Surface* surface, Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const

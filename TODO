@@ -1,12 +1,6 @@
 $Id$
 
 
-== DRINGENDE BLOCKER ==
-
-[0.0.1]
-  - schiff: richtungsvektor implementieren
-
-
 == HOHE PRIORITAET ==
 
 - Intelligentes auto-scaling / positioning

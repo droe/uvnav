@@ -224,8 +224,8 @@ void UVMap::scroll(long dx, long dy)
  * Minimalzoom ist 1.0 (1 Karteneinheit pro physikalischem Pixel).
  * Maximalzoom gibts keinen, herauszoomen darf man solange man will.
  *
- * FIXME: Dies sollte irgendwann mal abhängig der tatsächlich vorhandenen
- *        Objekte gemacht werden.
+ * FIXME: Dies sollte irgendwann mal abhaengig der tatsaechlich vorhandenen
+ *        Objekte gemacht werden. (zoom out)
  */
 void UVMap::zoom_out()
 {
@@ -452,23 +452,27 @@ void UVMap::draw_planet(UVPlanet* planet)
  */
 void UVMap::draw_schiff(UVSchiff* schiff)
 {
-	static const long size = 250;
+	static const long size = 50;
 
-	if(((virt_x - size < schiff->x) && (virt_x + virt_w + size >= schiff->x))
-	&& ((virt_y - size < schiff->y) && (virt_y + virt_h + size >= schiff->y)))
+	if(((virt_x - size - schiff->v * 100 < schiff->x) && (virt_x + virt_w + size + schiff->v * 100 >= schiff->x))
+	&& ((virt_y - size - schiff->v * 100 < schiff->y) && (virt_y + virt_h + size + schiff->v * 100 >= schiff->y)))
 	{
 		long h = long(rint(1.0 * size / zoom));
-		h = (h < 30) ? 30 : h;
-
-		// *** anstatt kreis: kleiner kreis mit geschwindigkeitsvektor
+		h = (h < 10) ? 10 : h;
 
 		double center_x = 1.0 * (schiff->x - offset_x) / zoom;
 		double center_y = 1.0 * (schiff->y - offset_y) / zoom;
 
+		double target_x = center_x - sin(PI * schiff->w / 180.0) * schiff->v * 100.0 / zoom;
+		double target_y = center_y - cos(PI * schiff->w / 180.0) * schiff->v * 100.0 / zoom;
+
 //		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 
-		draw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			              h / 2, 0xFF, 0xFF, 0xFF, 0xFF);
+		draw->circle(screen, long(rint(center_x)), long(rint(center_y)), h/2,
+		                     0xFF, 0xFF, 0xFF);
+		draw->line(screen, long(rint(center_x)), long(rint(center_y)),
+		                   long(rint(target_x)), long(rint(target_y)),
+		                   0xFF, 0xFF, 0xFF);
 	}
 }
 
@@ -484,23 +488,22 @@ void UVMap::draw_schiff(UVSchiff* schiff)
  */
 void UVMap::draw_container(UVContainer* container)
 {
-	static const long size = 50;
+	static const long size = 20;
 
 	if(((virt_x - size < container->x) && (virt_x + virt_w + size >= container->x))
 	&& ((virt_y - size < container->y) && (virt_y + virt_h + size >= container->y)))
 	{
 		long h = long(rint(1.0 * size / zoom));
-		h = (h < 10) ? 10 : h;
-
-		// *** anstatt kreis: kleines rechteck oder png
+		h = (h < 5) ? 5 : h;
 
 		double center_x = 1.0 * (container->x - offset_x) / zoom;
 		double center_y = 1.0 * (container->y - offset_y) / zoom;
 
 //		cout << "draw Container (" << center_x << "/" << center_y << ")" << endl;
 
-		draw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			              h / 2, 0xFF, 0xFF, 0xFF, 0xFF);
+		draw->box(screen, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
+		                  long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
+			              0xFF, 0xFF, 0xFF);
 	}
 }
 
@@ -513,7 +516,7 @@ void UVMap::draw_container(UVContainer* container)
  */
 void UVMap::draw_anomalie(UVAnomalie* anomalie)
 {
-	long size = anomalie->radius;
+	long size = anomalie->radius * 1000;
 
 	if(((virt_x - size < anomalie->x) && (virt_x + virt_w + size >= anomalie->x))
 	&& ((virt_y - size < anomalie->y) && (virt_y + virt_h + size >= anomalie->y)))
