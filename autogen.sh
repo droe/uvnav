@@ -66,16 +66,20 @@ if [ $? -eq 0 ]; then
 fi
 
 # Multiplatform autotools invocation
+AM_WARN="-Wportability"
+
 sysver=`uname -s`
 echo -n "Running autotools toolchain"
 case "$sysver" in
 *BSD)
 	echo ", BSD style..."
 	make=gmake
-	aclocal$am_suffix &&
+	aclocal$am_suffix 2>&1 \
+		| (grep -v 'aclocal.*warning.*underquoted definition of ' || true) \
+		| (grep -v 'Extending.*aclocal' || true) &&
 	autoheader$ac_suffix &&
 	autoconf$ac_suffix &&
-	automake$am_suffix --gnu -Wportability --add-missing
+	automake$am_suffix --gnu $AM_WARN --add-missing
 	;;
 *)
 	echo ", generic style..."
@@ -83,7 +87,7 @@ case "$sysver" in
 	aclocal &&
 	autoheader &&
 	autoconf &&
-	automake --gnu -Wportability --add-missing
+	automake --gnu $AM_WARN --add-missing
 	;;
 esac
 

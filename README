@@ -31,11 +31,17 @@ ToVU zu konkurrenzieren.  Trotzdem ist UVNav öffentlich.  Ihr seid
 eingeladen, auch selber an UVNav Verbesserungen anzubringen, und
 mir die in Form von Unified Diffs (diff -ruN) zu schicken.
 
+UV Navigator ist Open Source.  Aktuelle Version und Source Code
+gibts auf den Projektseiten:
+
+  https://projects.roe.ch/trac/uvnav/
+
 UV Navigator benutzt unter anderem im Parser fuer Text-Auswertungen
 eine interne, stark reduzierte Version der PCRE-Bibliothek von
 Philip Hazel, Copyright (C) University of Cambridge, England.
 
-Details zu diesem und anderem verwendetem Fremdcode siehe AUTHORS.
+Details zu diesem und anderem verwendetem Fremdcode siehe die Datei
+AUTHORS.
 
 
 
@@ -55,7 +61,7 @@ Imperatoren-Spielzeug wird zwar korrekt verarbeitet, aber noch
 grösstenteils ignoriert.  Für Imperatoren gibt UVNav demnach
 noch nicht viel her.
 
-Die Kartendarstellung ist noch sehr experimentell. Grafik und
+Die Kartendarstellung ist noch sehr experimentell.  Grafik und
 Benutzerführung stecken noch in den Kinderschuhen.  Viele
 Verbesserungen sind vorbereitet, aber noch nicht fertig
 implementiert.  Performance und Benutzbarkeit sind noch weit
@@ -74,11 +80,6 @@ Fazit: Momentan noch nicht für produktive Arbeiten geeignet!
 Bekannte Probleme
 -----------------
 
-Hardware-Surfaces funktionieren nicht oder nicht richtig.
-
-Der Parser kann noch optimiert werden was die Geschwindigkeit
-angeht.
-
 Bei vielen Objekten in der Darstellung ist die momentane
 Methode des herauszoomens zu langsam. Objekte sollen sich zu
 Gruppen oder farbigen Flächen formieren sobald sie eh zu klein
@@ -90,40 +91,38 @@ Die Karte wird bei vielen Objekten sehr unübersichtlich.
 Die momentane Art, wie Planeten und Schiffe dargestellt werden,
 muss gründlich überarbeitet werden.
 
+Der Parser kann noch optimiert werden was die Geschwindigkeit
+angeht.
+
+Hardware-Surfaces funktionieren nicht.
 
 
-Systemvoraussetzungen: Hardware
--------------------------------
+
+Performance
+-----------
 
 Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 
-Ich entwickle UVNav auf einem alten Thinkpad, 700 MHz CPU, 128 MB RAM,
-ATI Rage Mobility GPU, 16 MB VRAM, und absolut ultralahmer Harddisk.
-
-Der Parser verarbeitet hier ca 400 KB Text-Auswertung pro Sekunde.
+Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
+Workstation ca 1 MB/s, auf meinem alten 700 MHz Thinkpad ca 400 KB/s.
 Das dürfte noch etwas schneller sein.  Hier gibt es sicher noch
 Spielraum für Optimierungen.
+
+Die Anzeige ist sogar auf meinem Thinkpad mit grossen Auswertungen
+noch einigermassen flüssig.  Notfalls kann man das rechenintensive
+Anti-Aliasing und die Interpolation im Zoom-Code mit -Q deaktivieren,
+muss dafür aber mit hässlich verpixelter Anzeige leben.  Wie bei PoN,
+AMAP und ToVU halt :)
 
 UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigrösse der
 Auswertung an RAM.  Da lässt sich vermutlich nur wenig daran ändern;
 tendenziell wird der Speicherbedarf eher steigen als sinken, da mir
 gute Performance wichtiger ist als ein niedriger Speicherbedarf.
 
-Die Anzeige ist auch mit grossen Auswertungen einigermassen flüssig;
-und falls nicht, kann man das rechenintensive Anti-Aliasing und die
-Interpolation im Zoom-Code mit -Q deaktivieren -- muss dafür aber mit
-hässlich verpixelter Anzeige leben. Wie bei PoN, AMAP und ToVU halt :)
-
-Mit CPU auf 350 MHz gedrosselt, bewegen sich die Renderzeiten bei
-grösseren Datenmengen im schlimmsten Fall um die 250 ms = 4 fps,
-im weniger rechenintensiven Modus bei 125 = 8 fps.  Damit lässt sich
-immer noch arbeiten.  Auf schnelleren Maschinen dürfte die
-Geschwindigkeit bereits jetzt kaum zum Problem werden.
 
 
-
-Systemvoraussetzungen: Hardware Surfaces / Grafikbeschleunigung
----------------------------------------------------------------
+Hardware Surfaces / Grafikbeschleunigung
+----------------------------------------
 
 SDL kann die Grafikbeschleunigung einiger Karten nutzen.  Dies ist
 jedoch momentan von UV Navigator noch nicht sauber unterstützt.
@@ -134,6 +133,9 @@ beschleunigter DGA-Driver zu Verfügung steht, kann dann uvnav mit -S
 gestartet werden, z.B. so:
 
  $ SDL_VIDEODRIVER=dga sudo uvnav -S /pfad/zu/auswertung.txt
+
+Unter Windows können Hardware-Surfaces nur im Vollbildmodus
+genutzt werden.
 
 ACHTUNG: DIES IST MOMENTAN NOCH SEHR EXPERIMENTELL UND NICHT RICHTIG
          UNTERSTUETZT.  AUSPROBIEREN AUF EIGENE GEFAHR.
@@ -192,5 +194,28 @@ Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
 
 Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss ziemlich
 sicher `gmake' (GNU Make) statt `make' verwendet werden.
+
+
+
+Kompilieren mit MinGW32 Cross-Compiler
+--------------------------------------
+
+UVNav kann direkt unter Linux oder BSD für Windows kompiliert werden.
+Es wird eine MinGW32/GCC-Installation benötigt.
+
+Die benötigten DLLs stehen bereits vorkompiliert zu Verfügung, aber
+die eigentlichen SDL-Bibliotheken müssen zum Kompilieren in der
+MinGW32-Umgebung vorhanden sein.
+
+Um einen Cross-Compiler-Build ab Subversion Repo zu starten:
+
+ $ svn checkout svn://projects.roe.ch/repos/uvnav/trunk/ uvnav
+ $ cd uvnav
+ $ aux/build-cross-mingw32.sh
+ $ aux/make-binary-dist.sh
+
+Vorher sollte build-cross-mingw32.sh noch an die lokalen Gegebenheiten
+angepasst werden.  Der Default passt für eine FreeBSD Installation der
+devel/mingw32-* Ports.
 
 

@@ -16,10 +16,14 @@
 #
 # $Id$
 
-noinst_PROGRAMS = cdefs cppdefs
+noinst_PROGRAMS = cdefs cppdefs pcretest
 
 cdefs_SOURCES = cdefs.c
 cppdefs_SOURCES = cppdefs.cpp
+
+pcretest_SOURCES = pcretest.cpp
+pcretest_CFLAGS = @PCRE_CFLAGS@
+pcretest_LDADD = @PCRE_LIBS@
 
 MAINTAINERCLEANFILES = Makefile.in
 

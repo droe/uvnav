@@ -26,8 +26,7 @@ uvnav_SOURCES = rev.h rev.cpp global.h stl.h debug.h sysdep.h sysdep.cpp \
 	navigator.h navigator.cpp main.cpp
 
 uvnav_CXXFLAGS = @PCRE_CFLAGS@ @X_CFLAGS@ @SDL_CFLAGS@ @CXXFLAGS_WARNINGS@
-uvnav_LDFLAGS = @X_LIBS@ @SDL_LIBS@
-uvnav_LDADD = @PCRE_LDADD@
+uvnav_LDADD = @PCRE_LIBS@ @SDL_LIBS@ @X_LIBS@
 
 MAINTAINERCLEANFILES = rev.h .rev-str Makefile.in
 

@@ -39,8 +39,7 @@
 
 
 // System erkennen
-#if   ( defined(unix)  || defined(__unix__) \
-     || defined(_AIX)  || defined(__OpenBSD__) )
+#if   ( defined(unix) || defined(__unix__) )
 	#define SYSDEP_UNIX
 	#define SYSDEP_X11
 #elif ( defined(WIN32) || defined(__WIN32__) )
@@ -63,8 +62,10 @@
 #if defined(SYSDEP_UNIX)
 	#define PATH_SEP "/"
 #elif defined(SYSDEP_W32)
+	#undef DATADIR
 	#include <windows.h>
 	#include <io.h>
+	#include <shlwapi.h>	// PathRemoveFileSpec
 	#define PATH_SEP "\\"
 #endif
 
@@ -78,6 +79,7 @@ void sysdep_mkdir(const string& path, int mode)
 	mkdir(path.c_str(), mode);
 #elif defined(SYSDEP_W32)
 	mkdir(path.c_str());
+	mode++; mode--;
 #endif
 }
 
@@ -104,9 +106,9 @@ unsigned long sysdep_filesize(const string& file)
  */
 bool sysdep_file_exists(const string& file)
 {
-#if defined(SYSDEP_UNIX)
+#if defined(HAVE_EACCESS)
 	return !eaccess(file.c_str(), F_OK);
-#elif defined(SYSDEP_W32)
+#else
 	FILE *fp = fopen(file.c_str(), "r");
 	if(!fp)
 	{
@@ -163,23 +165,20 @@ void sysdep_screensize(SDL_Rect* rect)
  */
 string sysdep_homedir()
 {
-	string home = getenv("HOME");
+	char* p_home = getenv("HOME");
+	if((p_home == NULL) || (p_home[0] == '\0'))
+	{
 #if defined(SYSDEP_UNIX)
-	if(home == "")
-	{
 		throw EXCEPTION("Fehler: $HOME nicht gesetzt oder leer!");
-	}
 #elif defined(SYSDEP_W32)
-	if(home == "")
-	{
-		home = getenv("USERPROFILE");
-		if(home == "")
+		p_home = getenv("USERPROFILE");
+		if((p_home == NULL) || (p_home[0] == '\0'))
 		{
 			throw EXCEPTION("Fehler: Weder $HOME noch $USERPROFILE enthalten Heimverzeichnis!");
 		}
-	}
 #endif
-	return home + PATH_SEP;
+	}
+	return string(p_home) + PATH_SEP;
 }
 
 
@@ -215,13 +214,14 @@ string sysdep_datadir()
 	char buf[1024];
 	if(GetModuleFileName(NULL, buf, sizeof(buf) - 1) == 0)
 	{
-		throw EXCEPTION("GetModuleFileName schlug fehl!");
+		throw EXCEPTION("GetModuleFileName() schlug fehl!");
 	}
-	for(int i = sizeof(buf) - 1; (i > 0) && (buf[i] != '\\'); i--)
+	buf[sizeof(buf) - 1] = '\0';
+	if(PathRemoveFileSpec(buf) == 0)
 	{
-		buf[i] = '\0';
+		throw EXCEPTION("PathRemoveFileSpec() schlug fehl!");
 	}
-	return string(buf);
+	return string(buf) + PATH_SEP;
 #endif
 }
 

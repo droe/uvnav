@@ -87,6 +87,10 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 == MITTLERE PRIORITAET ==
 
+- Windows-Benutzbarkeit
+  - Sichtbare Fehlermeldung
+  - Auswertungs-Auswahl-Dialog
+
 - UVDraw
   - eigene Funktionen aus SDL_gfx klauen mit strikter rect unterstützung
 
@@ -158,7 +162,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 - Release Engineering
   - lib/pcre nur compilen falls keine System-Lib gefunden (konfigurierbar)
-  - SDL_* besser in autoconf einbauen
 
 - Web
   - LXR benutzen für cross-reference des codes zum protzen :)

@@ -1343,7 +1343,7 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	}
 	getline();
 
-	if(z->N != z->get_N())
+	if(abs(z->N - z->get_N()) > 0.11)
 	{
 		cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (N:" << z->N << "!=" << z->get_N() << ")" << endl;
 	}

@@ -45,14 +45,34 @@ AC_CXX_HAVE_STD_ITERATOR
 # AC_CXX_HAVE_FWD_ITERATOR
 
 # Checks for library functions.
-AC_CHECK_FUNCS([atexit])
+AC_CHECK_FUNCS([atexit], , [AC_MSG_ERROR([need the atexit function])])
+AC_CHECK_FUNCS([eaccess])
 
 # Check for X11
-AC_PATH_XTRA
-# defines X_CFLAGS X_LIBS X_EXTRA_LIBS X_PRE_LIBS
+case $host in
+	*mingw32)
+		X_CFLAGS=""
+		X_LIBS=""
+		X_EXTRA_LIBS=""
+		X_PRE_LIBS=""
+		;;
+	*)
+		AC_PATH_XTRA
+		# defines X_CFLAGS X_LIBS X_EXTRA_LIBS X_PRE_LIBS
+		X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS"
+		;;
+esac
 AC_SUBST(X_CFLAGS)
-X_LIBS="$X_PRE_LIBS $X_LIBS -lX11 $X_EXTRA_LIBS"
 AC_SUBST(X_LIBS)
+
+# Platform specific libraries
+case $host in
+	*mingw32)
+		AC_CHECK_LIB(shlwapi,main,,[AC_MSG_ERROR([libshlwapi missing!])])
+		;;
+	*)
+		;;
+esac
 
 # Check for SDL
 SDL_VERSION=1.2.0
@@ -60,14 +80,21 @@ AM_PATH_SDL($SDL_VERSION,
 			:,
 			[AC_MSG_ERROR([*** SDL version $SDL_VERSION not found!])]
 )
-AC_SUBST(SDL_CFLAGS)
+SAVED_LIBS="$LIBS"
+LIBS="$LIBS $SDL_LIBS"
+AC_CHECK_LIB(SDL_image,main,,[AC_MSG_ERROR([need SDL_image. See http://www.libsdl.org/])])
+AC_CHECK_LIB(SDL_ttf,main,,[AC_MSG_ERROR([need SDL_ttf. See http://www.libsdl.org/])])
+AC_CHECK_LIB(SDL_gfx,main,,[AC_MSG_ERROR([need SDL_gfx. See http://www.libsdl.org/])])
+LIBS="$SAVED_LIBS"
 SDL_LIBS="$SDL_LIBS -lSDL_image -lSDL_ttf -lSDL_gfx"
+AC_SUBST(SDL_CFLAGS)
 AC_SUBST(SDL_LIBS)
 
+# Static PCRE
 PCRE_CFLAGS="-I\$(top_srcdir)/lib/pcre/include"
-PCRE_LDADD="\$(top_builddir)/lib/pcre/libpcre.a"
+PCRE_LIBS="\$(top_builddir)/lib/pcre/libpcre.a"
 AC_SUBST(PCRE_CFLAGS)
-AC_SUBST(PCRE_LDADD)
+AC_SUBST(PCRE_LIBS)
 
 # Provide lots of optional compiler warnings
 CFLAGS_WARNINGS=" -W -Wall -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wformat -Wimplicit -Wimplicit-function-declaration -Wimplicit-int -Wlong-long -Wmain -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-import -Wno-parentheses -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wshadow -Wsign-compare -Wstrict-prototypes -Wswitch -Wtrigraphs -Wunused -Wwrite-strings"
@@ -101,8 +128,8 @@ if test "x$want_debug" == "xyes" ; then
 fi
 AC_MSG_RESULT([$want_debug])
 
-AC_MSG_CHECKING([which is current dimension])
-AC_MSG_RESULT([0 - Real World])
+AC_MSG_CHECKING([which dimension we are building in])
+AC_MSG_RESULT([0 - Real Life])
 
 AC_CONFIG_FILES([Makefile
                  aux/Makefile

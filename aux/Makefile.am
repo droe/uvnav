@@ -16,7 +16,9 @@
 #
 # $Id$
 
-EXTRA_DIST = svn2log.sh
+EXTRA_DIST = \
+    svn2log.sh \
+    build-cross-mingw32.sh \
+    make-binary-dist.sh
 
 MAINTAINERCLEANFILES = Makefile.in
-

@@ -1,3 +1,4 @@
+#!/bin/sh
 # UV Navigator - Auswertungsvisualisierung fuer Universum V
 # Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
 #
@@ -16,32 +17,42 @@
 #
 # $Id$
 
-if COND_TOOLS
-  MAYBE_TOOLS = tools
-endif
-SUBDIRS = aux share lib src $(MAYBE_TOOLS)
+#
+# build-cross-mingw32.sh - Kompiliert mit dem MinGW32 Cross Compiler.
+# Muss aus dem Top-Level-Verzeichnis heraus aufgerufen werden.
+#
 
-EXTRA_DIST = \
-    autogen.sh \
-    docs
+target=mingw32
+#build=i386-unknown-freebsd5.2.1
+prefix="/usr/local/$target"
 
-dist-hook:
-	rm -rf `find $(distdir)/docs -name .svn`
+test -d aux || exit 1
 
-# gehoert zu rev.h Hack, siehe src/Makefile.am
-distcleancheck_listfiles = \
-    find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
+sysver=`uname -s`
+case "$sysver" in
+*BSD)
+	make=gmake
+	;;
+*)
+	make=make
+	;;
+esac
 
-MAINTAINERCLEANFILES = \
-    Makefile.in configure aclocal.m4 config.h.in config.h.in~ ChangeLog \
-    INSTALL config.guess config.sub depcomp install-sh missing mkinstalldirs \
-    compile
+# Maintainer-Clean
+if [ -e Makefile ]; then
+	find . -name Makefile | xargs touch
+	$make maintainer-clean
+fi
 
-ChangeLog: FORCE
-	@if [ -d .svn -a -x aux/svn2log.sh ]; then \
-		touch ChangeLog ; \
-		aux/svn2log.sh ; \
-	fi
+export PATH="$prefix/bin:$PATH"
+export SDL_CONFIG="$prefix/bin/$target-sdl-config"
+if [ "x$build" != "x" ]; then
+	build_opt="--build=$build"
+fi
 
-FORCE:
-
+./autogen.sh &&
+./configure --target=$target --host=$target $build_opt "$@" &&
+$make &&
+$target-strip */*.exe &&
+echo "Win32 executable(s) ready:" &&
+ls -las */*.exe
