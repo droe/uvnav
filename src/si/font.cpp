@@ -60,9 +60,6 @@ UVFont::UVFont(const string& file, int size)
 
 /*
  * Destruktor.
- *
- * Achtung: Wird aus Singleton-Destruktor heraus aufgerufen; keine Singletons
- *          mehr verfuegbar.
  */
 UVFont::~UVFont()
 {

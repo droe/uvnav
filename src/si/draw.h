@@ -33,9 +33,11 @@ class UVDraw : public Singleton<UVDraw>
 		void box(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 		void circle(SDL_Surface* surface, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 
+		void dispose();
+
 	protected:
 		UVDraw();
-//		~UVDraw();
+		~UVDraw();
 
 	private:
 		bool antialiasing;

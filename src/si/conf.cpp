@@ -87,6 +87,15 @@ UVConf::UVConf()
  */
 UVConf::~UVConf()
 {
+	dispose(); // geht nur solange niemand von aussen dispose() aufruft...
+}
+
+
+/*
+ * Befreit alle Ressourcen.
+ */
+void UVConf::dispose()
+{
 	save();
 }
 

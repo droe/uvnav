@@ -102,21 +102,27 @@ UVImageHandler::UVImageHandler()
 
 /*
  * Destruktor.
- *
- * Entfernt alle Surfaces im Cache.
  */
 UVImageHandler::~UVImageHandler()
+{
+}
+
+
+/*
+ * Entfernt alle Surfaces im Cache.
+ */
+void UVImageHandler::dispose()
 {
 	for(int i = 0; i < NUM_IMG; i++)
 	{
 		if(images[i].original)
 		{
-			delete images[i].original;
+			SDL_FreeSurface(images[i].original);
 			images[i].original = NULL;
 		}
 		if(images[i].resultat)
 		{
-			delete images[i].resultat;
+			SDL_FreeSurface(images[i].resultat);
 			images[i].resultat = NULL;
 		}
 	}

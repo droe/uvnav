@@ -40,6 +40,7 @@ class Singleton
 {
 	public:
 		static T* get_instance();
+		virtual void dispose() = 0;
 
 	protected:
 		Singleton() {}

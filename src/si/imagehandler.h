@@ -53,6 +53,8 @@ class UVImageHandler : public Singleton<UVImageHandler>
 		SDL_Surface* get_surface(const long id, const double f = 1.0);
 		SDL_Surface* get_surface(const long id, const int w, const int h);
 
+		void dispose();
+
 	protected:
 		UVImageHandler();
 		~UVImageHandler();

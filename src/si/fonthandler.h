@@ -34,6 +34,8 @@ class UVFontHandler : public Singleton<UVFontHandler>
 	public:
 		UVFont* get_font(const string& file, int size);
 
+		void dispose();
+
 	protected:
 		UVFontHandler();
 		~UVFontHandler();

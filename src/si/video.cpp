@@ -20,9 +20,13 @@
 
 #include "video.h"
 
+#include "lib/version.h"
 #include "lib/sysdep.h"
 #include "lib/exceptions.h"
 #include "si/conf.h"
+#include "si/imagehandler.h"
+#include "si/fonthandler.h"
+#include "si/draw.h"
 
 /*
  * UVVideo - Verwaltet den SDL Bildschirm.
@@ -36,6 +40,28 @@ UVVideo::UVVideo()
 : screen(NULL)
 {
 	conf = UVConf::get_instance();
+
+	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	{
+		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
+	}
+
+	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableUNICODE(1);
+
+	if(conf->b_get("screen-quality"))
+	{
+		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
+		cout << "Dies wird auf lahmen Maschinen zu merklich langsamerer Grafik-Ausgabe fuehren." << endl;
+	}
+	else
+	{
+		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
+		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
+	}
+	cout << "------------------------------------------------------------------------------" << endl;
+
 	init();
 }
 
@@ -43,11 +69,21 @@ UVVideo::UVVideo()
 /*
  * Destruktor.
  */
-/*
 UVVideo::~UVVideo()
 {
 }
-*/
+
+
+/*
+ * Beendet alle SDL-Aktivitaeten und befreit entsprechende Ressourcen.
+ */
+void UVVideo::dispose()
+{
+	UVImageHandler::get_instance()->dispose();
+	UVFontHandler::get_instance()->dispose();
+	UVDraw::get_instance()->dispose();
+	SDL_Quit();
+}
 
 
 /*

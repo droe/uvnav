@@ -61,6 +61,8 @@ class UVConf : public Singleton<UVConf>
 		void load();
 		void save() const;
 
+		void dispose();
+
 	private:
 		string aw_besitzer;
 		long aw_sternzeit;

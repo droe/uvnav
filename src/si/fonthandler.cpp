@@ -35,7 +35,6 @@ UVFontHandler::UVFontHandler()
 {
 	if(TTF_Init() < 0)
 		throw EXCEPTION("TTF_Init: " + to_string(TTF_GetError()));
-	// TTF_Quit() wird von UVNavigator aufgerufen
 }
 
 
@@ -44,10 +43,20 @@ UVFontHandler::UVFontHandler()
  */
 UVFontHandler::~UVFontHandler()
 {
+}
+
+
+/*
+ * Befreit alle Ressourcen.
+ */
+void UVFontHandler::dispose()
+{
 	for(font_iterator iter = fonts.begin(); iter != fonts.end(); iter++)
 	{
 		delete (*iter).second;
 	}
+	if(TTF_WasInit())
+		TTF_Quit();
 }
 
 

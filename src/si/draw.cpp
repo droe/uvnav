@@ -41,11 +41,17 @@ UVDraw::UVDraw()
 /*
  * Destruktor.
  */
-/*
 UVDraw::~UVDraw()
 {
 }
-*/
+
+
+/*
+ * Befreit alle Ressourcen.
+ */
+void UVDraw::dispose()
+{
+}
 
 
 /*

@@ -34,6 +34,7 @@ UVRootWindow::UVRootWindow(UVWidget* wi, SDL_Surface* s)
 	resize();
 }
 
+
 /*
  * Destruktor.
  */

@@ -31,70 +31,29 @@
 
 /*
  * UVNavigator - Hauptklasse von UVNav
- *
- * - Initialisiert SDL
- * - Koordination SDL <-> Objekte
- * - SDL Beispielcode zu Flags, DblBuf etc: testsprite.c
- * - Chef des physikalischen Koordinatensystems
- * - Keyboard-Handling
- *
- * TODO:
- * - Maus-Handling
- * - Fenstermanagment
- *   vector<UVFenster> in Anzeigereihenfolge
- *   von hinten durchackern
  */
 
 
 /*
  * Konstruktor.
- *
- * Initialisiert automatisch die SDL Surface des Bildschirms.
  */
 UVNavigator::UVNavigator()
 : universum(NULL), map(NULL)
 {
 	conf = UVConf::get_instance();
-
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
-	}
-
-	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_EnableUNICODE(1);
-
-	UVVideo::get_instance()->init();
 	screen = UVVideo::get_instance()->get_screen();
-
-	if(conf->b_get("screen-quality"))
-	{
-		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
-		cout << "Dies wird auf lahmen Maschinen zu merklich langsamerer Grafik-Ausgabe fuehren." << endl;
-	}
-	else
-	{
-		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
-		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
-	}
-	cout << "------------------------------------------------------------------------------" << endl;
-
 	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
 }
 
 
 /*
  * Destruktor.
- *
- * Raeumt SDL mit allen Subsystemen auf.
  */
 UVNavigator::~UVNavigator()
 {
-	if(TTF_WasInit())
-		TTF_Quit();
-	SDL_Quit();
+	UVVideo::get_instance()->dispose();
 }
+
 
 
 /*

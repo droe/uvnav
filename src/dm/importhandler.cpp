@@ -38,11 +38,17 @@ UVImportHandler::UVImportHandler()
 /*
  * Destruktor.
  */
-/*
-UVImportTXT::~UVImportTXT()
+UVImportHandler::~UVImportHandler()
 {
 }
-*/
+
+
+/*
+ * Befreit alle Ressourcen.
+ */
+void UVImportHandler::dispose()
+{
+}
 
 
 /*

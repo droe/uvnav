@@ -32,10 +32,11 @@ class UVVideo : public Singleton<UVVideo>
 	public:
 		void init();
 		SDL_Surface* get_screen();
+		void dispose();
 
 	protected:
 		UVVideo();
-//		~UVVideo();
+		~UVVideo();
 
 	private:
 		SDL_Surface* screen;

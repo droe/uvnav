@@ -31,9 +31,11 @@ class UVImportHandler : public Singleton<UVImportHandler>
 	public:
 		UVAbstractImporter* get_importer(const string& file);
 
+		void dispose();
+
 	protected:
 		UVImportHandler();
-//		~UVImportHandler();
+		~UVImportHandler();
 };
 
 #endif // IMPORTHANDLER_H
