@@ -20,8 +20,8 @@
 
 #include "parser_txt.h"
 
-#include "../infra/images.h"
-#include "../util/sysdep.h"
+#include "../si/images.h"
+#include "../lib/sysdep.h"
 
 /*
  * UVParserTXT - Parser fuer Text-Auswertungen

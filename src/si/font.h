@@ -21,10 +21,10 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "../util/global.h"
+#include "../lib/global.h"
 
 #include "conf.h"
-#include "../util/sysdep.h"
+#include "../lib/sysdep.h"
 
 #define FNT_SANS "FreeSans.ttf"
 

@@ -21,10 +21,10 @@
 #ifndef IMAGES_H
 #define IMAGES_H
 
-#include "../util/global.h"
+#include "../lib/global.h"
 
 #include "conf.h"
-#include "../util/sysdep.h"
+#include "../lib/sysdep.h"
 
 #define IMG_UNIVERSUM	 0
 #define IMG_SDL_POWERED	 1

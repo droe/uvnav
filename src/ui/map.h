@@ -21,13 +21,13 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "../util/global.h"
+#include "../lib/global.h"
 
-#include "../infra/conf.h"
-#include "../infra/images.h"
-#include "../infra/font.h"
-#include "../infra/draw.h"
-#include "../model/welt.h"
+#include "../si/conf.h"
+#include "../si/images.h"
+#include "../si/font.h"
+#include "../si/draw.h"
+#include "../pd/welt.h"
 
 /*
 class UVMapSektor

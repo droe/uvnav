@@ -21,12 +21,12 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "../util/global.h"
+#include "../lib/global.h"
 
-#include "../infra/conf.h"
-#include "../model/welt.h"
-#include "../infra/font.h"
-#include "../infra/images.h"
+#include "../si/conf.h"
+#include "../pd/welt.h"
+#include "../si/font.h"
+#include "../si/images.h"
 #include "map.h"
 
 class UVNavigator

@@ -19,14 +19,14 @@
 bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp \
-	util/global.h util/stl.h util/debug.h util/sysdep.h util/sysdep.cpp \
-	util/regexp.h util/regexp.cpp \
-	infra/conf.h infra/conf.cpp infra/images.h infra/images.cpp \
-	infra/font.h infra/font.cpp infra/draw.h infra/draw.cpp \
-	model/welt.h model/welt.cpp \
-	inout/parser_txt.h inout/parser_txt.cpp \
-	gui/map.h gui/map.cpp gui/gui.h gui/gui.cpp gui/progress.h gui/progress.cpp \
-	gui/navigator.h gui/navigator.cpp \
+	lib/global.h lib/stl.h lib/debug.h lib/sysdep.h lib/sysdep.cpp \
+	lib/regexp.h lib/regexp.cpp \
+	si/conf.h si/conf.cpp si/images.h si/images.cpp \
+	si/font.h si/font.cpp si/draw.h si/draw.cpp \
+	pd/welt.h pd/welt.cpp \
+	dm/parser_txt.h dm/parser_txt.cpp \
+	ui/map.h ui/map.cpp ui/gui.h ui/gui.cpp ui/progress.h ui/progress.cpp \
+	ui/navigator.h ui/navigator.cpp \
 	main.cpp
 
 uvnav_CXXFLAGS = @PCRE_CFLAGS@ @X_CFLAGS@ @SDL_CFLAGS@ @CXXFLAGS_WARNINGS@

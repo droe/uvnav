@@ -20,7 +20,7 @@
 
 #include "conf.h"
 
-#include "../util/sysdep.h"
+#include "../lib/sysdep.h"
 
 /*
  * UVConf - Verwaltet die persistente Konfiguration.

@@ -21,12 +21,12 @@
 #ifndef PARSER_TXT_H
 #define PARSER_TXT_H
 
-#include "../util/global.h"
+#include "../lib/global.h"
 
-#include "../infra/conf.h"
-#include "../model/welt.h"
-#include "../gui/progress.h"
-#include "../util/regexp.h"
+#include "../si/conf.h"
+#include "../pd/welt.h"
+#include "../ui/progress.h"
+#include "../lib/regexp.h"
 
 class UVParserTXT
 {
