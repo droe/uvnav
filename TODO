@@ -41,11 +41,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     - API für abgekoppeltes zeichnen
       Liste aller zu zeichnenden Labels
     - evtl Quick'n'Dirty optimieren; überschneidende Labels -> "..."
-  - Objektgroessen ueberdenken von usability her
-    - nicht nur mindest, sondern auch maximalgroesse der objekte festlegen,
-      und zoom-code entsprechend anpassen
-    - von min/max objektgroessen auf schoene funktion umsteigen
-    - Planeten sind bei grossem Zoom relativ, bei kleinem Zoom fix gross
 
 - UVMap
   - Mehr Informationen zeichnen
