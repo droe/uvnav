@@ -5,15 +5,11 @@ $Id$
 
 [0.0.1]
   - schiff: richtungsvektor implementieren
+  - rev.h hack fix -- always rebuild ist scheisse
 
 
 
 == HOHE PRIORITAET ==
-
-- Subversion:
-  1. ALLES LOESCHEN WAS NICHT NIET UND NAGELFEST IST: make maintainer-clean
-  2. svn import . svn://projects.roe.ch/repos/uvnav/trunk/
-  3. svn2log.py suchen und ausprobieren
 
 - Intelligentes auto-scaling / positioning
   - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
@@ -101,6 +97,11 @@ $Id$
 
 == TIEFE PRIORITAET ==
 
+- Unterstützung für komprimierte Auswertungen
+  - ZIP à la Meng in allen Variationen (mühsam)
+  - gzip
+  - bzip2
+
 - Mehrere Auswertungen
   - 1 Spieler
     - a) alte daten erkennen und intelligent ersetzen
@@ -137,12 +138,10 @@ $Id$
   - iconv?
 
 - Hardware surfaces:
-  - kriege vermutlich gar keine hardware surface
-    - detecten ob hardware-surface oder nicht
-    - printen was wir wollten, und was wir kriegten
   - probleme wenn windowed:
     - in fremde windows zeichnen
-  - hardware unter unix nur als root (?!)
+  - hardware unter unix nur als root
+    - message ausgeben
   - hardware langsamer als software
     - timing einbauen und testen
   - nur so und so viel video-memory
@@ -150,5 +149,9 @@ $Id$
   - double-buf: verschiedene modi!
     - wie detecten?
     - wie handeln wenn detected?
+
+- Window Resizable
+  - testen
+  - flicken
 
 - Verbleibende verstreute TODOs und *** und FIXMEs abarbeiten

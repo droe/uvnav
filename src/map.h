@@ -60,6 +60,8 @@ class UVMap
 		void scroll(long, long);
 		void zoom_in();
 		void zoom_out();
+		void zoom_by(double);
+		void resize(SDL_Surface*);
 
 		void draw_welt(SDL_Rect*);
 
@@ -68,6 +70,7 @@ class UVMap
 		UVImages* images;
 		UVWelt* welt;
 		SDL_Surface* screen;
+		SDL_Rect screen_size;
 
 		SDL_Rect* phys;
 		long virt_x, virt_y, virt_w, virt_h;

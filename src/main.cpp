@@ -47,10 +47,10 @@ void usage()
 		 << "Persistente Optionen: (werden gespeichert)" << endl
 		 << "        -w --width  (int)     Fensterbreite" << endl
 		 << "        -h --height (int)     Fensterhoehe" << endl
-		 << "        -f --fullscreen       Vollbildschirmmodus              (impliziert -R)" << endl
-		 << "        -F --no-fullscreen    Kein Vollbildschirmmodus" << endl
 		 << "        -r --resizable        Fenstergroesse aenderbar         (impliziert -F)" << endl
 		 << "        -R --no-resizable     Fenstergroesse nicht aenderbar" << endl
+		 << "        -f --fullscreen       Vollbildschirmmodus              (impliziert -R)" << endl
+		 << "        -F --no-fullscreen    Kein Vollbildschirmmodus" << endl
 //		 << "        -d --double-buf       Double Buffering verwenden       (impliziert -S)" << endl
 //		 << "        -D --no-double-buf    Kein double Buffering verwenden" << endl
 //		 << "        -s --software         Software-Videomodus erzwingen    (impliziert -D)" << endl
@@ -81,10 +81,10 @@ int main(int argc, char* argv[])
 	static struct option longopts[] = {
 		{ "width",			required_argument,	0,	'w' },
 		{ "height",			required_argument,	0,	'h' },
-		{ "fullscreen",		no_argument,		0,	'f' },
-		{ "no-fullscreen",	no_argument,		0,	'F' },
 		{ "resizable",		no_argument,		0,	'r' },
 		{ "no-resizable",	no_argument,		0,	'R' },
+		{ "fullscreen",		no_argument,		0,	'f' },
+		{ "no-fullscreen",	no_argument,		0,	'F' },
 		{ "double-buf",		no_argument,		0,	'd' },
 		{ "no-double-buf",	no_argument,		0,	'D' },
 		{ "software",		no_argument,		0,	's' },
@@ -101,10 +101,10 @@ int main(int argc, char* argv[])
 	{
 		int w = 0;
 		int h = 0;
-		bool f = false;
-		bool F = false;
 		bool r = false;
 		bool R = false;
+		bool f = false;
+		bool F = false;
 		bool d = false;
 		bool D = false;
 		bool s = false;
@@ -113,7 +113,7 @@ int main(int argc, char* argv[])
 		bool Q = false;
 		bool v = false;
 
-		while((ch = getopt_long(argc, argv, "w:h:fFrRdDsSqQvVH", longopts, NULL)) != -1)
+		while((ch = getopt_long(argc, argv, "w:h:rRfFdDsSqQvVH", longopts, NULL)) != -1)
 		{
 			switch(ch)
 			{
@@ -123,19 +123,19 @@ int main(int argc, char* argv[])
 				case 'h':
 					h = atol(optarg);
 					break;
-				case 'r':
-					r = true;
-					F = true;
-					break;
-				case 'R':
-					R = true;
-					break;
 				case 'f':
 					f = true;
 					R = true;
 					break;
 				case 'F':
 					F = true;
+					break;
+				case 'r':
+					r = true;
+					F = true;
+					break;
+				case 'R':
+					R = true;
 					break;
 				case 'd':
 					d = true;
@@ -184,7 +184,7 @@ int main(int argc, char* argv[])
 		}
 
 		// widerspruechliche Argumente
-		if((f && F) || (r && R) || (d && D) || (s && S) || (q && Q))
+		if((r && R) || (f && F) || (d && D) || (s && S) || (q && Q))
 		{
 			cerr << " *** Fehler: Widerspruechliche Argumente!" << endl;
 			usage();
@@ -212,14 +212,6 @@ int main(int argc, char* argv[])
 		{
 			conf->l_set("screen-height", h);
 		}
-		if(f)
-		{
-			conf->b_set("screen-fullscreen", true);
-		}
-		if(F)
-		{
-			conf->b_set("screen-fullscreen", false);
-		}
 		if(r)
 		{
 			conf->b_set("screen-resizable", true);
@@ -227,6 +219,14 @@ int main(int argc, char* argv[])
 		if(R)
 		{
 			conf->b_set("screen-resizable", false);
+		}
+		if(f)
+		{
+			conf->b_set("screen-fullscreen", true);
+		}
+		if(F)
+		{
+			conf->b_set("screen-fullscreen", false);
 		}
 		if(d)
 		{

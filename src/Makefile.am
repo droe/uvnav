@@ -23,8 +23,8 @@ uvnav_SOURCES = rev.h global.h stl.h debug.h sysdep.h sysdep.cpp \
 	progress.h progress.cpp welt.h welt.cpp parser_txt.h parser_txt.cpp \
 	map.h map.cpp gui.h gui.cpp navigator.h navigator.cpp main.cpp
 
-uvnav_CXXFLAGS = @SDL_CFLAGS@ @PCREPP_CFLAGS@
-uvnav_LDFLAGS = @SDL_LIBS@ @PCREPP_LIBS@
+uvnav_CXXFLAGS = @X_CFLAGS@ @SDL_CFLAGS@ @PCREPP_CFLAGS@
+uvnav_LDFLAGS = @X_LIBS@ @SDL_LIBS@ @PCREPP_LIBS@
 
 MAINTAINERCLEANFILES = rev.h .rev .rev-str Makefile.in
 
@@ -66,7 +66,7 @@ MAINTAINERCLEANFILES = rev.h .rev .rev-str Makefile.in
 BUILT_SOURCES = .build-rev.h
 EXTRA_DIST = .rev .rev-str
 
-rev.h: .build-rev.h
+rev.h:
 
 .rev: .build-rev.h
 

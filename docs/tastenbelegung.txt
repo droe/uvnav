@@ -1,0 +1,13 @@
+$Id$
+
+Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
+
+ 1...5         Zur Dimension 1...5 springen
+
+ Pfeiltasten   Scrollen
+ PgUp          Hineinzoomen
+ PgDn          Hinauszoomen
+
+ f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
+ q             Beenden
+

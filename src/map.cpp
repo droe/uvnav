@@ -137,6 +137,9 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 : conf(c), images(i), welt(w), screen(s)
 , phys(NULL), virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 {
+	screen_size.w = s->w;
+	screen_size.h = s->h;
+
 	offset_x = conf->l_get("map-offset-x", true);
 	offset_y = conf->l_get("map-offset-y", true);
 	zoom = conf->f_get("map-zoom", true);
@@ -207,34 +210,57 @@ void UVMap::scroll(long dx, long dy)
 
 /*
  * Zoomt die Karte.
+ *
+ * Minimalzoom ist 1.0 (1 Karteneinheit pro physikalischem Pixel).
+ * Maximalzoom gibts keinen, herauszoomen darf man solange man will.
+ *
+ * FIXME: Dies sollte irgendwann mal abhängig der tatsächlich vorhandenen
+ *        Objekte gemacht werden.
  */
 void UVMap::zoom_out()
 {
-	static const double step = 0.2;
+	zoom_by(1.2);
+}
+void UVMap::zoom_in()
+{
+	zoom_by(1.0/1.2);
+}
+void UVMap::zoom_by(double f)
+{
+	if(1.0 * f * zoom < 1.0)
+	{
+		f = 1.0 / zoom;
+	}
 
-	offset_x -= long(rint(screen->w * zoom * step / 2));
-	offset_y -= long(rint(screen->h * zoom * step / 2));
-	zoom *= 1.0 + step;
+	offset_x -= long(rint(1.0 * screen->w * zoom * (f - 1.0) / 2.0));
+	offset_y -= long(rint(1.0 * screen->h * zoom * (f - 1.0) / 2.0));
+	zoom *= f;
 
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 	draw_welt(&rect);
 }
-void UVMap::zoom_in()
+
+
+/*
+ * Fuehrt einen Map Resize durch.
+ */
+void UVMap::resize(SDL_Surface* s)
 {
-	static const double step = 0.2;
+	screen = s;
 
-	// Extreme Zoomraten arten aus, bringen miserable
-	// Performance, und bringen nix. Alles was Skala 1:1
-	// uebersteigt wird hier abgefangen.
-	if(zoom >= 1.0 + step)
-	{
-		zoom /= 1.0 + step;
-		offset_x += long(rint(screen->w * zoom * step / 2));
-		offset_y += long(rint(screen->h * zoom * step / 2));
+//	cout << "resize from w=" << screen_size.w << " h=" << screen_size.h << endl;
+//	cout << "resize to w=" << screen->w << " h=" << screen->h << endl;
+	double wf = 1.0 * screen_size.w / screen->w;
+//	double hf = 1.0 * screen_size.h / screen->h;
+//	cout << "factors wf=" << wf << " hf=" << hf << endl;
 
-		SDL_Rect rect = { 0, 0, screen->w, screen->h };
-		draw_welt(&rect);
-	}
+	screen_size.w = screen->w;
+//	screen_size.h = screen->h;
+
+	zoom *= wf;
+
+	SDL_Rect rect = { 0, 0, screen->w, screen->h };
+	draw_welt(&rect);
 }
 
 

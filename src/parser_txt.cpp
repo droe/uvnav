@@ -1492,8 +1492,9 @@ void UVParserTXT::parse_leerzeile()
 /*
  * Findet die Bild-ID zu einer textuellen Klimabeschreibung.
  *
- * Basiert auf setKlima() in Planet.java 1.9 von ToVU (CVS)
- * Copyright (C) 1998-2004, Daniel Straessle <d@niel.ch>
+ * Basiert auf setKlima() aus Planet.java 1.9 von
+ * ToVU: http://www.duffy.ch/universum/tovu/
+ * Copyright (C) 1998-2004 Daniel Straessle <d@niel.ch>
  */
 long UVParserTXT::get_image_planet(const string& s) const
 {

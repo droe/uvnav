@@ -1,0 +1,17 @@
+$Id$
+
+src/parser_txt.cpp - UVParserTXT::get_image_planet():
+/*
+ * Basiert auf setKlima() aus Planet.java 1.9 von
+ * ToVU: http://www.duffy.ch/universum/tovu/
+ * Copyright (C) 1998-2004 Daniel Straessle <d@niel.ch>
+ */
+
+src/sysdep.cpp - sysdep_screensize():
+/*
+ * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11 von
+ * EGachine: http://egachine.berlios.de/
+ * Copyright (C) 2004 Jens Thiele <karme@berlios.de>
+ * Copyright (C) 2003 Stephan Ferraro <stephan@lazyfellow.com>
+ */
+

@@ -27,6 +27,8 @@ void sysdep_mkdir(const string& path, int mode = 0755);
 unsigned long sysdep_filesize(const string&);
 bool sysdep_file_exists(const string&);
 
+void sysdep_screensize(SDL_Rect*);
+
 string sysdep_homedir();
 string sysdep_confdir();
 string sysdep_datadir();

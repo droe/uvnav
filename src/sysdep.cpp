@@ -38,7 +38,20 @@
  */
 
 
-#if defined(__unix__)
+// System erkennen
+#if   ( defined(unix)  || defined(__unix__) \
+     || defined(_AIX)  || defined(__OpenBSD__) )
+	#define SYSDEP_UNIX
+	#define SYSDEP_X11
+#elif ( defined(WIN32) || defined(__WIN32__) )
+	#define SYSDEP_W32
+#else
+	#error Plattform nicht unterstuetzt! Bitte melden...
+#endif
+
+
+// Header, Definitionen
+#if defined(SYSDEP_UNIX)
 	#if defined(HAVE_SYS_TYPES_H)
 		#include <sys/types.h>	// mkdir(2)
 	#endif
@@ -46,11 +59,10 @@
 		#include <sys/stat.h>	// mkdir(2), stat(2)
 	#endif
 	#define PATH_SEP "/"
-#elif defined(WIN32)
+#elif defined(SYSDEP_W32)
+	#include <windows.h>
 	#define PATH_SEP "\\"
 	#error Plattform nicht vollstaendig unterstuetzt!
-#else
-	#error Plattform noch nicht unterstuetzt!
 #endif
 
 
@@ -59,12 +71,10 @@
  */
 void sysdep_mkdir(const string& path, int mode)
 {
-#if defined(__unix__)
+#if defined(SYSDEP_UNIX)
 	mkdir(path.c_str(), mode);
-#elif defined(WIN32)
+#elif defined(SYSDEP_W32)
 	mkdir(path.c_str());
-#else
-	#error Plattform noch nicht unterstuetzt!
 #endif
 }
 
@@ -74,7 +84,7 @@ void sysdep_mkdir(const string& path, int mode)
  */
 unsigned long sysdep_filesize(const string& file)
 {
-#if defined(__unix__)
+#if defined(SYSDEP_UNIX)
 	struct stat res;
 	if(!stat(file.c_str(), &res))
 	{
@@ -84,8 +94,8 @@ unsigned long sysdep_filesize(const string& file)
 	{
 		throw EXCEPTION("Kann Dateigroesse nicht bestimmen!");
 	}
-#else
-	#error Plattform noch nicht unterstuetzt!
+#elif defined(SYSDEP_W32)
+	#error Hier fehlt noch Code fuer Windows...
 #endif
 }
 
@@ -95,10 +105,48 @@ unsigned long sysdep_filesize(const string& file)
  */
 bool sysdep_file_exists(const string& file)
 {
-#if defined(__unix__)
+#if defined(SYSDEP_UNIX)
 	return !eaccess(file.c_str(), F_OK);
-#else
-	#error Plattform noch nicht unterstuetzt!
+#elif defined(SYSDEP_W32)
+	#error Hier fehlt noch Code fuer Windows...
+#endif
+}
+
+
+/*
+ * Bildschirmgroesse ermitteln.
+ *
+ * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11 von
+ * EGachine: http://egachine.berlios.de/
+ * Copyright (C) 2004 Jens Thiele <karme@berlios.de>
+ * Copyright (C) 2003 Stephan Ferraro <stephan@lazyfellow.com>
+ */
+void sysdep_screensize(SDL_Rect* rect)
+{
+	rect->x = 0;
+	rect->y = 0;
+#if defined(SYSDEP_X11)
+	SDL_SysWMinfo wmi;
+	SDL_VERSION(&wmi.version);
+	if(SDL_GetWMInfo(&wmi))
+	{
+		if(wmi.subsystem == SDL_SYSWM_X11)
+		{
+			rect->w = DisplayWidth(wmi.info.x11.display, 0);
+			rect->h = DisplayHeight(wmi.info.x11.display, 0);
+		}
+		else
+		{
+			throw EXCEPTION("Unbekanntes Grafik-Subsystem." << wmi.subsystem);
+		}
+	}
+	else
+	{
+		throw EXCEPTION("Kann Bildschirmgroesse nicht ermitteln.");
+	}
+#elif defined(SYSDEP_W32)
+	rect->w = GetSystemMetrics(SM_CXSCREEN);
+	rect->h = GetSystemMetrics(SM_CYSCREEN);
 #endif
 }
 
@@ -138,7 +186,7 @@ string sysdep_confdir()
  * Liefert Pfad mit abschliessendem Slash.
  * DATADIR wird via Autotools definiert.
  *
- * ACHTUNG WIN32: ueberpruefen ob DATADIR via Autotools korrekt gesetzt
+ * ACHTUNG Win32: ueberpruefen ob DATADIR via Autotools korrekt gesetzt
  *                werden kann!
  */
 string sysdep_datadir()
