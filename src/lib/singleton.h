@@ -45,7 +45,7 @@ class Singleton
 		Singleton() {}
 
 	private:
-		Singleton( const Singleton& );
+		Singleton(const Singleton&);
 		Singleton& operator=(Singleton const&);
 };
 
