@@ -1,6 +1,16 @@
 $Id$
 
 - PRI 1: OO-Architecture Redesign: Observer-Pattern, Objekthierarchie
+  - util/global.h -> gui/sdl.h ...
+  - util/debug.h -> infra/log.{h,cpp} util/exceptions.h
+  - gui/progress.{h,cpp} von inout/parser_txt.{h,cpp} trennen
+    - observer pattern oder callback
+  - gui/navigator.{h,cpp} -> gui/splash.{h,cpp} gui/abstractwidget.{h,cpp}
+                             gui/root.{h,cpp}
+  - infra/* -> Singletons
+  - nur includen was nötig
+  - Observer
+  - OS/SysDep: what to do?
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)

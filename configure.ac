@@ -21,7 +21,7 @@ AC_INIT([UV Navigator], [0.0.2-current], [uvnav-bugs@projects.roe.ch], [uvnav])
 AC_REVISION([[$Rev$]])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([gnu std-options check-news dist-bzip2 dist-zip])
-AC_CONFIG_SRCDIR([src/global.h])
+AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADER([config.h])
 
 # Checks for programs.

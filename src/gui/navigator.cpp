@@ -20,8 +20,8 @@
 
 #include "navigator.h"
 
-#include "sysdep.h"
-#include "parser_txt.h"
+#include "../util/sysdep.h"
+#include "../inout/parser_txt.h"
 #include "progress.h"
 
 /*

@@ -18,37 +18,26 @@
  * $Id$
  */
 
-#ifndef GUI_H
-#define GUI_H
+#ifndef DRAW_H
+#define DRAW_H
 
-#include "global.h"
+#include "../util/global.h"
 
-/*
-class UVGUIWidget
+#include "conf.h"
+
+class UVDraw
 {
 	public:
-		UVGUIWidget();
-		~UVGUIWidget();
+		UVDraw(const UVConf* conf);
+//		~UVDraw();
+
+		void line(SDL_Surface* surface, long, long, long, long, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
+		void box(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
+		void circle(SDL_Surface* surface, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 
 	private:
+		bool antialiasing;
 };
 
-class UVGUIWindow
-{
-	public:
-		UVGUIWindow();
-		~UVGUIWindow();
+#endif // DRAW_H
 
-	private:
-};
-
-class UVGUIButton
-{
-	public:
-		UVGUIButton();
-		~UVGUIButton();
-
-	private:
-};
-*/
-#endif // GUI_H

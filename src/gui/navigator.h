@@ -18,49 +18,43 @@
  * $Id$
  */
 
-#ifndef IMAGES_H
-#define IMAGES_H
+#ifndef NAVIGATOR_H
+#define NAVIGATOR_H
 
-#include "global.h"
+#include "../util/global.h"
 
-#include "conf.h"
-#include "sysdep.h"
+#include "../infra/conf.h"
+#include "../model/welt.h"
+#include "../infra/font.h"
+#include "../infra/images.h"
+#include "map.h"
 
-#define IMG_UNIVERSUM	 0
-#define IMG_SDL_POWERED	 1
-#define IMG_PLANET_01	 2
-#define IMG_PLANET_02	 3
-#define IMG_PLANET_03	 4
-#define IMG_PLANET_04	 5
-#define IMG_PLANET_05	 6
-#define IMG_PLANET_06	 7
-#define IMG_PLANET_07	 8
-#define IMG_PLANET_08	 9
-#define IMG_PLANET_09	10
-#define IMG_PLANET_10	11
-#define NUM_IMG			12
-
-struct uv_img
-{
-	SDL_Surface* original;
-	SDL_Surface* resultat;
-	double faktor;
-};
-
-class UVImages
+class UVNavigator
 {
 	public:
-		UVImages(const UVConf* conf);
-		~UVImages();
+		UVNavigator(UVConf*);
+		~UVNavigator();
 
-		SDL_Surface* get_surface(const long id, const double f = 1.0);
-		SDL_Surface* get_surface(const long id, const int w, const int h);
+		void splash();
+		void load(const string&, int = 0);
+		void wait();
+		void run();
 
 	private:
-		uv_img images[NUM_IMG];
+		UVWelt* welt;
+		UVMap* map;
+		// *** GUI
+		UVConf* conf;
+		UVImages* images;
+		UVFont* font_splash;
 
-		int smoothing;
+		SDL_Surface* screen;
+
+		long status_y;
+		void splash_status(const string&);
+
+		void init_video();
 };
 
-#endif // IMAGES_H
+#endif // NAVIGATOR_H
 

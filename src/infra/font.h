@@ -18,43 +18,31 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef FONT_H
+#define FONT_H
 
-#include "global.h"
+#include "../util/global.h"
 
 #include "conf.h"
-#include "welt.h"
-#include "font.h"
-#include "images.h"
-#include "map.h"
+#include "../util/sysdep.h"
 
-class UVNavigator
+#define FNT_SANS "FreeSans.ttf"
+
+class UVFont
 {
 	public:
-		UVNavigator(UVConf*);
-		~UVNavigator();
+		UVFont(const UVConf* conf, const string& file, int size);
+		~UVFont();
 
-		void splash();
-		void load(const string&, int = 0);
-		void wait();
-		void run();
+		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
+		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
+		SDL_Surface* get_surface(const string& text) const;
 
 	private:
-		UVWelt* welt;
-		UVMap* map;
-		// *** GUI
-		UVConf* conf;
-		UVImages* images;
-		UVFont* font_splash;
+		TTF_Font* font;
 
-		SDL_Surface* screen;
-
-		long status_y;
-		void splash_status(const string&);
-
-		void init_video();
+		bool antialiasing;
 };
 
-#endif // NAVIGATOR_H
+#endif // FONT_H
 

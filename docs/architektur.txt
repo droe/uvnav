@@ -1,0 +1,23 @@
+$Id$
+
+     main(), Application
+ui   User Interface Layer: Window, Map, Widgets, SDL
+pd   Problem Domain Layer: Planet, Planeten, Schiff, ...
+dm   Data Management Layer: ParserTXT, ...
+si   System Interface Layer: Config, Image, Font, Log (als Singletons)
+
+lib  Observer, STL, Exceptions
+
+OS/SysDep: Singleton oder static? si oder lib?
+
+      app
+       |
+       V
+     __ui_
+    /  |  \
+   V   |   V
+  pd <---- dm
+    \_ | _/
+      VVV
+      si
+

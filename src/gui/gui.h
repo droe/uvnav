@@ -18,31 +18,37 @@
  * $Id$
  */
 
-#ifndef FONT_H
-#define FONT_H
+#ifndef GUI_H
+#define GUI_H
 
-#include "global.h"
+#include "../util/global.h"
 
-#include "conf.h"
-#include "sysdep.h"
-
-#define FNT_SANS "FreeSans.ttf"
-
-class UVFont
+/*
+class UVGUIWidget
 {
 	public:
-		UVFont(const UVConf* conf, const string& file, int size);
-		~UVFont();
-
-		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
-		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
-		SDL_Surface* get_surface(const string& text) const;
+		UVGUIWidget();
+		~UVGUIWidget();
 
 	private:
-		TTF_Font* font;
-
-		bool antialiasing;
 };
 
-#endif // FONT_H
+class UVGUIWindow
+{
+	public:
+		UVGUIWindow();
+		~UVGUIWindow();
 
+	private:
+};
+
+class UVGUIButton
+{
+	public:
+		UVGUIButton();
+		~UVGUIButton();
+
+	private:
+};
+*/
+#endif // GUI_H

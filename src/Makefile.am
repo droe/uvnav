@@ -18,12 +18,16 @@
 
 bin_PROGRAMS = uvnav
 
-uvnav_SOURCES = rev.h rev.cpp global.h stl.h debug.h sysdep.h sysdep.cpp \
-	conf.h conf.cpp regexp.h regexp.cpp \
-	images.h images.cpp font.h font.cpp draw.h draw.cpp \
-	welt.h welt.cpp parser_txt.h parser_txt.cpp \
-	map.h map.cpp gui.h gui.cpp progress.h progress.cpp \
-	navigator.h navigator.cpp main.cpp
+uvnav_SOURCES = rev.h rev.cpp \
+	util/global.h util/stl.h util/debug.h util/sysdep.h util/sysdep.cpp \
+	util/regexp.h util/regexp.cpp \
+	infra/conf.h infra/conf.cpp infra/images.h infra/images.cpp \
+	infra/font.h infra/font.cpp infra/draw.h infra/draw.cpp \
+	model/welt.h model/welt.cpp \
+	inout/parser_txt.h inout/parser_txt.cpp \
+	gui/map.h gui/map.cpp gui/gui.h gui/gui.cpp gui/progress.h gui/progress.cpp \
+	gui/navigator.h gui/navigator.cpp \
+	main.cpp
 
 uvnav_CXXFLAGS = @PCRE_CFLAGS@ @X_CFLAGS@ @SDL_CFLAGS@ @CXXFLAGS_WARNINGS@
 uvnav_LDADD = @PCRE_LIBS@ @SDL_LIBS@ @X_LIBS@

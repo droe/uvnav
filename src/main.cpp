@@ -18,10 +18,10 @@
  * $Id$
  */
 
-#include "global.h"
+#include "util/global.h"
 
-#include "conf.h"
-#include "navigator.h"
+#include "infra/conf.h"
+#include "gui/navigator.h"
 
 #include <getopt.h>
 #include <pcre.h>

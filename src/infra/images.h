@@ -18,26 +18,49 @@
  * $Id$
  */
 
-#ifndef DRAW_H
-#define DRAW_H
+#ifndef IMAGES_H
+#define IMAGES_H
 
-#include "global.h"
+#include "../util/global.h"
 
 #include "conf.h"
+#include "../util/sysdep.h"
 
-class UVDraw
+#define IMG_UNIVERSUM	 0
+#define IMG_SDL_POWERED	 1
+#define IMG_PLANET_01	 2
+#define IMG_PLANET_02	 3
+#define IMG_PLANET_03	 4
+#define IMG_PLANET_04	 5
+#define IMG_PLANET_05	 6
+#define IMG_PLANET_06	 7
+#define IMG_PLANET_07	 8
+#define IMG_PLANET_08	 9
+#define IMG_PLANET_09	10
+#define IMG_PLANET_10	11
+#define NUM_IMG			12
+
+struct uv_img
 {
-	public:
-		UVDraw(const UVConf* conf);
-//		~UVDraw();
-
-		void line(SDL_Surface* surface, long, long, long, long, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
-		void box(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
-		void circle(SDL_Surface* surface, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
-
-	private:
-		bool antialiasing;
+	SDL_Surface* original;
+	SDL_Surface* resultat;
+	double faktor;
 };
 
-#endif // DRAW_H
+class UVImages
+{
+	public:
+		UVImages(const UVConf* conf);
+		~UVImages();
+
+		SDL_Surface* get_surface(const long id, const double f = 1.0);
+		SDL_Surface* get_surface(const long id, const int w, const int h);
+
+	private:
+		uv_img images[NUM_IMG];
+
+		int smoothing;
+};
+
+#endif // IMAGES_H
 
