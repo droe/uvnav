@@ -103,7 +103,7 @@ CFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wfo
 AC_SUBST(CFLAGS_PEDANTIC)
 CXXFLAGS_WARNINGS=" -W -Wall -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wformat -Wimplicit -Wlong-long -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wshadow -Wsign-compare -Wswitch -Wtrigraphs -Wunused -Wwrite-strings"
 AC_SUBST(CXXFLAGS_WARNINGS)
-CXXFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2"
+CXXFLAGS_PEDANTIC=" -Weffc++ -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2"
 AC_SUBST(CXXFLAGS_PEDANTIC)
 
 # Additional compiler flags
