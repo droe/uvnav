@@ -8,10 +8,6 @@ $Id$
   und Längenangaben (1 LJ = 1000 KE)
 - Wichtigste Dinge anschreiben (?)
 - Dirty Rect Verhalten der Objekte verbessern
-  - Dirty Rect Correctness wo immer möglich
-    - Linien: möglich
-    - Kreise: schwierig
-    - Bitmaps: schwierig
 
 == 0.0.2 ==
 

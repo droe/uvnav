@@ -48,59 +48,57 @@ UVDraw::~UVDraw()
 
 /*
  * Linie zeichnen.
+ *
+ * Rechnet extrem grosse oder kleine Koordinaten runter in den
+ * Bereich von +/- 2^14 - 1.
  */
-#define MAX_PHYS 32000
+#define MAX_PHYS 16383
 #define MIN_PHYS -MAX_PHYS
 void UVDraw::line(SDL_Surface* surface, long x1, long y1, long x2, long y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
 {
-// WORKAROUND bis UVMap sich besser an die Regeln hält und Linien selber
-// runterrechnen kann.
-
-//cout << "DEBUG1 line (" << x1 << "," << y1 << ")-(" << x2 << "," << y2 << ")" << endl;
-
-	double m = (double(y2) - double(y1)) / (double(x2) - double(x1));
+	// y = mx + q
+	double m = double(y2 - y1) / double(x2 - x1);
+	double q = double(y1) - m * double(x1);
 	if(x1 > MAX_PHYS)
 	{
-		y1 = long(rint(double(MAX_PHYS) * m));
+		y1 = long(rint(double(MAX_PHYS) * m + q));
 		x1 = MAX_PHYS;
 	}
 	if(x1 < MIN_PHYS)
 	{
-		y1 = long(rint(double(MIN_PHYS) * m));
+		y1 = long(rint(double(MIN_PHYS) * m + q));
 		x1 = MIN_PHYS;
 	}
 	if(y1 > MAX_PHYS)
 	{
-		x1 = long(rint(double(MAX_PHYS) / m));
+		x1 = long(rint((double(MAX_PHYS) - q) / m));
 		y1 = MAX_PHYS;
 	}
 	if(y1 < MIN_PHYS)
 	{
-		x1 = long(rint(double(MIN_PHYS) / m));
+		x1 = long(rint((double(MIN_PHYS) - q) / m));
 		y1 = MIN_PHYS;
 	}
 	if(x2 > MAX_PHYS)
 	{
-		y2 = long(rint(double(MAX_PHYS) * m));
+		y2 = long(rint(double(MAX_PHYS) * m + q));
 		x2 = MAX_PHYS;
 	}
 	if(x2 < MIN_PHYS)
 	{
-		y2 = long(rint(double(MIN_PHYS) * m));
+		y2 = long(rint(double(MIN_PHYS) * m + q));
 		x2 = MIN_PHYS;
 	}
 	if(y2 > MAX_PHYS)
 	{
-		x2 = long(rint(double(MAX_PHYS) / m));
+		x2 = long(rint((double(MAX_PHYS) - q) / m));
 		y2 = MAX_PHYS;
 	}
 	if(y2 < MIN_PHYS)
 	{
-		x2 = long(rint(double(MIN_PHYS) / m));
+		x2 = long(rint((double(MIN_PHYS) - q) / m));
 		y2 = MIN_PHYS;
 	}
-
-//cout << "DEBUG2 line (" << x1 << "," << y1 << ")-(" << x2 << "," << y2 << ")" << endl;
 
 	if(antialiasing)
 	{
@@ -111,6 +109,8 @@ void UVDraw::line(SDL_Surface* surface, long x1, long y1, long x2, long y2, Uint
 		lineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
 	}
 }
+#undef MAX_PHYS
+#undef MIN_PHYS
 
 
 /*
