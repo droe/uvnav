@@ -72,6 +72,8 @@ UVConf::UVConf()
 	b_set("screen-quality", true);
 
 	// Optionen der Kartenanzeige
+	b_set("map-kaufradien", false);
+	b_set("map-sichtradien", false);
 	l_set("map-offset-x", 0);
 	l_set("map-offset-y", 0);
 	f_set("map-zoom", 200.0);

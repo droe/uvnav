@@ -143,6 +143,9 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 
 	spieler = welt->get_spieler();
 
+	opt_sichtradien = conf->b_get("map-sichtradien", true);
+	opt_kaufradien = conf->b_get("map-kaufradien", true);
+
 	bool have_conf_data = conf->have_data();
 	offset_x = conf->l_get("map-offset-x", true);
 	offset_y = conf->l_get("map-offset-y", true);
@@ -196,6 +199,8 @@ UVMap::~UVMap()
 	conf->l_set("map-offset-y", offset_y, true);
 	conf->f_set("map-zoom", zoom, true);
 	conf->l_set("map-dim", dim, true);
+	conf->b_set("map-sichtradien", opt_sichtradien, true);
+	conf->b_set("map-kaufradien", opt_kaufradien, true);
 
 	delete drw;
 	delete debug_font;
@@ -421,8 +426,7 @@ void UVMap::jump_alle()
 	offset_y = alle_y1 - (long(rint(double(screen_size.h) * zoom))
 	                      - (alle_y2 - alle_y1)) / 2;
 
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
-	draw(&rect);
+	redraw();
 }
 
 
@@ -438,8 +442,7 @@ void UVMap::jump_eigene()
 	offset_y = eigene_y1 - (long(rint(double(screen_size.h) * zoom))
 	                        - (eigene_y2 - eigene_y1)) / 2;
 
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
-	draw(&rect);
+	redraw();
 }
 
 
@@ -468,8 +471,7 @@ void UVMap::scroll(long dx, long dy)
 	offset_x += long(rint(dx * zoom));
 	offset_y += long(rint(dy * zoom));
 
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
-	draw(&rect);
+	redraw();
 }
 
 
@@ -508,8 +510,7 @@ void UVMap::zoom_by(double f)
 	offset_y -= long(rint(double(screen->h) * zoom * (f - 1.0) / 2.0));
 	zoom *= f;
 
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
-	draw(&rect);
+	redraw();
 }
 
 
@@ -531,7 +532,54 @@ void UVMap::resize(SDL_Surface* s)
 
 	zoom *= wf;
 
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
+	redraw();
+}
+
+
+/*
+ * Sichtradien set/get/toggle.
+ */
+bool UVMap::get_sichtradien() const
+{
+	return opt_sichtradien;
+}
+void UVMap::set_sichtradien(const bool s)
+{
+	opt_sichtradien = s;
+	redraw();
+}
+void UVMap::toggle_sichtradien()
+{
+	opt_sichtradien = !opt_sichtradien;
+	redraw();
+}
+
+
+/*
+ * Kaufradien set/get/toggle.
+ */
+bool UVMap::get_kaufradien() const
+{
+	return opt_kaufradien;
+}
+void UVMap::set_kaufradien(const bool k)
+{
+	opt_kaufradien = k;
+	redraw();
+}
+void UVMap::toggle_kaufradien()
+{
+	opt_kaufradien = !opt_kaufradien;
+	redraw();
+}
+
+
+/*
+ * Zeichnet alles neu.
+ */
+void UVMap::redraw()
+{
+	SDL_Rect rect = { 0, 0, screen_size.w, screen_size.h };
 	draw(&rect);
 }
 
@@ -985,25 +1033,31 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 	if(schiff->besitzer == spieler->name)
 	{
 		// Sensoren
-		long sensor_rad = schiff->sichtweite;
-		if(((virt_x - sensor_rad < schiff->x) && (virt_x + virt_w + sensor_rad >= schiff->x))
-		&& ((virt_y - sensor_rad < schiff->y) && (virt_y + virt_h + sensor_rad >= schiff->y)))
+		if(opt_sichtradien)
 		{
-			// Kreis
-			long r = long(rint(double(sensor_rad) / zoom));
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			                    r, 0x00, 0xFF, 0x00, 0xFF);
+			long sensor_rad = schiff->sichtweite;
+			if(((virt_x - sensor_rad < schiff->x) && (virt_x + virt_w + sensor_rad >= schiff->x))
+			&& ((virt_y - sensor_rad < schiff->y) && (virt_y + virt_h + sensor_rad >= schiff->y)))
+			{
+				// Kreis
+				long r = long(rint(double(sensor_rad) / zoom));
+				drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+				                    r, 0x00, 0xFF, 0x00, 0xFF);
+			}
 		}
 
 		// Kaufradius
-		static const long kauf_rad = 5000;
-		if(((virt_x - kauf_rad < schiff->x) && (virt_x + virt_w + kauf_rad >= schiff->x))
-		&& ((virt_y - kauf_rad < schiff->y) && (virt_y + virt_h + kauf_rad >= schiff->y)))
+		if(opt_kaufradien)
 		{
-			// Kreis
-			long r = long(rint(double(kauf_rad) / zoom));
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			                    r, 0xFF, 0xFF, 0x00, 0xFF);
+			static const long kauf_rad = 5000;
+			if(((virt_x - kauf_rad < schiff->x) && (virt_x + virt_w + kauf_rad >= schiff->x))
+			&& ((virt_y - kauf_rad < schiff->y) && (virt_y + virt_h + kauf_rad >= schiff->y)))
+			{
+				// Kreis
+				long r = long(rint(double(kauf_rad) / zoom));
+				drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+				                    r, 0xFF, 0xFF, 0x00, 0xFF);
+			}
 		}
 	}
 

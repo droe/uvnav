@@ -10,6 +10,9 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  Home          Alle eigenen Objekte in sichtbarem Kartenausschnitt
  End           Alle existierenden Objekte in sichtbarem Kartenausschitt
 
+ s             Sichtradien eigener Schiffe ein- / ausschalten
+ k             Kaufradien eigener Schiffe ein- / ausschalten
+
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
  q, ESC        Beenden
 

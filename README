@@ -24,12 +24,12 @@ Allgemeines
 UV Navigator ist ein weiteres Tool für Universum V.  ToVU passte
 mir aus technischen Gründen nicht so wirklich, und AMAP / PoN
 laufen nur unter Windows und sind nicht Open Source, womit die
-Möglichkeit für Bugfixes und Erweiterungen nicht gegeben ist.
-Ergo musste was richtiges her, und das hier ist das vorläufige
-Resultat.  Ich habe UVNav primär für mich selber entwickelt, und
+Moeglichkeit für Bugfixes und Erweiterungen nicht gegeben ist.
+Ergo musste was richtiges her, und das hier ist das vorlaeufige
+Resultat.  Ich habe UVNav primaer für mich selber entwickelt, und
 momentan gibt UVNav wohl auch noch nicht genug Features her, um
 AMAP, PoN und ToVU zu konkurrenzieren.  Trotzdem ist UVNav
-öffentlich.  Ihr seid eingeladen, auch selber an UVNav
+oeffentlich.  Ihr seid eingeladen, auch selber an UVNav
 Verbesserungen anzubringen, und mir die in Form von Unified
 Diffs (diff -ruN) zu schicken.
 
@@ -42,8 +42,27 @@ UV Navigator benutzt eine interne, stark reduzierte Version der
 genialen Library Perl Compatible Regular Expressions (PCRE) von
 Philip Hazel, Copyright (C) University of Cambridge, England.
 
-Details zu diesem und anderem verwendetem Fremdcode siehe die Datei
-AUTHORS.
+Details zu diesem und anderem verwendetem Fremdcode siehe die
+Datei AUTHORS.
+
+
+
+Bedienungshinweise
+------------------
+
+Momentan kann UVNav erst eine einzige Auswertung aufs mal
+darstellen.  UVNav erwartet als ersten Parameter den Pfad
+einer Auswertung.  Wenn UVNav ohne Parameter aufgerufen
+wird, so wird eine kurze Bedienungsanleitung (--help) in die
+Standardfehlerausgabe geschrieben, was fuer Windows-User
+vielleicht etwas ungewohnt ist.  Der Windows-Port von SDL
+leitet die Standardausgabe / Standardfehlerausgabe aber in
+Textfiles um, wo die Ausgabe bequem nachgelesen werden kann,
+auch wenn UVNav per Doppelklick im Explorer gestartet wurde.
+
+UVMap hat noch keine Mausunterstuetzung!  Wie die Bedienung
+ueber die Tastatur derzeit funktioniert, kann in der Datei
+docs/tastenbelegung.txt nachgelesen werden.
 
 
 
@@ -60,7 +79,7 @@ Was hier noch fehlt ist das Parsen der Nachrichten, speziell
 der Resultate von Zonendaten-Abfragen.
 
 Imperatoren-Spielzeug wird zwar korrekt verarbeitet, aber noch
-grösstenteils ignoriert.  Für Imperatoren gibt UVNav demnach
+groesstenteils ignoriert.  Für Imperatoren gibt UVNav demnach
 noch nicht viel her.
 
 Die Kartendarstellung ist noch sehr experimentell.  Grafik und
@@ -71,7 +90,7 @@ vom Ziel entfernt!
 
 Diverse Hilfsmodule für Konfiguration, Image-Caching, Font-
 Renderer, Zeichenhilfen etc sind stabil und funktionieren
-zuverlässig.  Was da noch fehlt ist ein Datenbankmodul für
+zuverlaessig.  Was da noch fehlt ist ein Datenbankmodul für
 die Ablage von persistenten Daten.  Momentan kann daher auch
 nur eine Auswertung aufs Mal eingelesen und angeschaut werden.
 
@@ -84,7 +103,7 @@ Bekannte Probleme
 
 Bei vielen Objekten in der Darstellung ist die momentane
 Methode des herauszoomens zu langsam. Objekte sollen sich zu
-Gruppen oder farbigen Flächen formieren sobald sie eh zu klein
+Gruppen oder farbigen Flaechen formieren sobald sie eh zu klein
 sind um einzeln erkannt zu werden. Das bedingt eine baumartige
 Strukturierung dieser Objekte, und ist daher nicht ganz einfach
 zu implementieren.
@@ -104,7 +123,7 @@ Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 
 Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
 Workstation 2-3 MB/s, auf meinem alten 700 MHz Thinkpad 700-800 KB/s,
-je nach Komplexität der Auswertungsdaten.
+je nach Komplexitaet der Auswertungsdaten.
 
 Zum Vergleich:  ToVU 4.13 ist ca um einen Faktor von 20 langsamer,
 AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
@@ -112,11 +131,11 @@ AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
 Die Anzeige ist sogar auf meinem Thinkpad mit grossen Auswertungen
 noch einigermassen flüssig.  Notfalls kann man das rechenintensive
 Anti-Aliasing und die Interpolation im Zoom-Code mit -Q deaktivieren,
-muss dafür aber mit hässlich verpixelter Anzeige leben.  Wie bei PoN,
+muss dafür aber mit haesslich verpixelter Anzeige leben.  Wie bei PoN,
 AMAP und ToVU halt :)
 
-UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigrösse der
-Auswertung an RAM.  Da lässt sich vermutlich nur wenig daran ändern;
+UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigroesse der
+Auswertung an RAM.  Da laesst sich vermutlich nur wenig daran aendern;
 tendenziell wird der Speicherbedarf eher steigen als sinken, da mir
 gute Performance wichtiger ist als ein niedriger Speicherbedarf.
 
@@ -135,7 +154,7 @@ gestartet werden, z.B. so:
 
  $ SDL_VIDEODRIVER=dga sudo uvnav -S /pfad/zu/auswertung.txt
 
-Unter Windows können Hardware-Surfaces nur im Vollbildmodus
+Unter Windows koennen Hardware-Surfaces nur im Vollbildmodus
 genutzt werden.
 
 ACHTUNG: DIES IST MOMENTAN NOCH SEHR EXPERIMENTELL UND NICHT RICHTIG
@@ -149,11 +168,11 @@ Kompilieren und Installieren
 
 UVNav wird mit GCC 3.3.x und den C/C++-Libs von FreeBSD entwickelt,
 sollte aber auch mit anderen Compilern und Libs kompilieren.
-Probleme in diesem Zusammenhang bitte melden; es ist gut möglich,
-dass es noch kleine Veränderungen an configure.ac und den relevanten
+Probleme in diesem Zusammenhang bitte melden; es ist gut moeglich,
+dass es noch kleine Veraenderungen an configure.ac und den relevanten
 Header-Files braucht, um andere Systeme zu unterstützen.
 
-Folgende Bibliotheken werden benötigt:
+Folgende Bibliotheken werden benoetigt:
  - SDL        Simple Directmedia Layer
               http://www.libsdl.org/
  - SDL_ttf    TrueType Font Library für SDL
@@ -180,8 +199,8 @@ Kompilieren und Installieren ab Subversion Repository
 -----------------------------------------------------
 
 Um UVNav direkt ab Repository zu kompilieren, wird ein Subversion
-Client sowie zusätzlich GNU Autoconf 2.59 und Automake 1.8 benötigt
-(2.57 und 1.7 sollten auch funktionieren, alles was älter ist aber
+Client sowie zusaetzlich GNU Autoconf 2.59 und Automake 1.8 benoetigt
+(2.57 und 1.7 sollten auch funktionieren, alles was aelter ist aber
 nicht).
 
 Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
@@ -202,9 +221,9 @@ Kompilieren mit MinGW32 Cross-Compiler
 --------------------------------------
 
 UVNav kann direkt unter Linux oder BSD für Windows kompiliert werden.
-Es wird eine MinGW32/GCC-Installation benötigt.
+Es wird eine MinGW32/GCC-Installation benoetigt.
 
-Die benötigten DLLs stehen bereits vorkompiliert zu Verfügung, aber
+Die benoetigten DLLs stehen bereits vorkompiliert zu Verfügung, aber
 die eigentlichen SDL-Bibliotheken müssen zum Kompilieren in der
 MinGW32-Umgebung vorhanden sein.
 

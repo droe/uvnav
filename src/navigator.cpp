@@ -377,6 +377,13 @@ void UVNavigator::run()
 						map->resize(screen);
 						break;
 
+					case SDLK_s:
+						map->toggle_sichtradien();
+						break;
+					case SDLK_k:
+						map->toggle_kaufradien();
+						break;
+
 					case SDLK_LEFT:
 						map->scroll(-screen->w / 16, 0);
 						break;

@@ -57,15 +57,28 @@ class UVMap
 
 		void set_dim(long);
 		long get_dim() const;
+
 		void scroll(long, long);
+
 		void zoom_in();
 		void zoom_out();
 		void zoom_by(double);
+
 		void resize(SDL_Surface*);
+
 		void jump_init();
 		void jump_alle();
 		void jump_eigene();
 
+		bool get_sichtradien() const;
+		void set_sichtradien(const bool);
+		void toggle_sichtradien();
+
+		bool get_kaufradien() const;
+		void set_kaufradien(const bool);
+		void toggle_kaufradien();
+
+		void redraw();
 		void draw(SDL_Rect*);
 
 	private:
@@ -98,6 +111,9 @@ class UVMap
 		void draw_anomalie(UVAnomalie*);
 		void draw_sensorsonde(UVSensorsonde*);
 		void draw_infosonde(UVInfosonde*);
+
+		bool opt_sichtradien;
+		bool opt_kaufradien;
 };
 
 #endif // MAP_H
