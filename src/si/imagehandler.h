@@ -21,8 +21,8 @@
 #ifndef IMAGEHANDLER_H
 #define IMAGEHANDLER_H
 
-#include "../lib/sdl.h"
-#include "../lib/singleton.h"
+#include "lib/singleton.h"
+#include "lib/sdl.h"
 
 #define IMG_UNIVERSUM	 0
 #define IMG_SDL_POWERED	 1

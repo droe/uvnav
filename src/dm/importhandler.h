@@ -21,8 +21,8 @@
 #ifndef IMPORTHANDLER_H
 #define IMPORTHANDLER_H
 
-#include "../lib/singleton.h"
-#include "abstractimporter.h"
+#include "lib/singleton.h"
+#include "dm/abstractimporter.h"
 
 class UVImportHandler : public Singleton<UVImportHandler>
 {

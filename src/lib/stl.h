@@ -29,7 +29,7 @@
  * praktische Helfer.
  */
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 //#include <cstdlib>
 #include <vector>

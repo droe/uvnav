@@ -20,9 +20,9 @@
 
 #include "progress.h"
 
-#include "../lib/exceptions.h"
-#include "../si/fonthandler.h"
-#include "../dm/abstractimporter.h"
+#include "lib/exceptions.h"
+#include "si/fonthandler.h"
+#include "dm/abstractimporter.h"
 
 /*
  * UVProgress - Implementiert einen lightweight Progress-Bar.

@@ -21,8 +21,8 @@
 #ifndef ABSTRACTIMPORTER_H
 #define ABSTRACTIMPORTER_H
 
-#include "../lib/observer.h"
-#include "../pd/universum.h"
+#include "lib/observer.h"
+#include "pd/universum.h"
 
 class UVAbstractImporter : public Subject
 {

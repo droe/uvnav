@@ -20,10 +20,10 @@
 
 #include "map.h"
 
-#include "../lib/version.h"
-#include "../lib/exceptions.h"
-#include "../si/conf.h"
-#include "../si/fonthandler.h"
+#include "lib/version.h"
+#include "lib/exceptions.h"
+#include "si/conf.h"
+#include "si/fonthandler.h"
 
 #define PI 3.14159265358979323846
 

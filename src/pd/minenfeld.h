@@ -21,7 +21,7 @@
 #ifndef MINENFELD_H
 #define MINENFELD_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVMinenfeld
 {

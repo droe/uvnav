@@ -21,9 +21,9 @@
 #ifndef SCHIFF_H
 #define SCHIFF_H
 
-#include "../lib/stl.h"
-#include "ladung.h"
-#include "komponente.h"
+#include "lib/stl.h"
+#include "pd/ladung.h"
+#include "pd/komponente.h"
 
 typedef vector<UVKomponente*>::iterator komponenten_iterator;
 typedef vector<UVLadung*>::iterator ladung_iterator;

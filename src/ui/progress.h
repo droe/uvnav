@@ -21,10 +21,10 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include "../si/font.h"
-#include "../lib/sdl.h"
-#include "../lib/stlstring.h"
-#include "../lib/observer.h"
+#include "lib/observer.h"
+#include "lib/sdl.h"
+#include "lib/stlstring.h"
+#include "si/font.h"
 
 class UVProgress : public Observer
 {

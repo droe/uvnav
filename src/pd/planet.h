@@ -21,9 +21,9 @@
 #ifndef PLANET_H
 #define PLANET_H
 
-#include "../lib/stl.h"
-#include "zone.h"
-#include "handelsstation.h"
+#include "lib/stl.h"
+#include "pd/zone.h"
+#include "pd/handelsstation.h"
 
 class UVPlanet
 {

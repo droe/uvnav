@@ -21,7 +21,7 @@
 #ifndef AGRARFELD_H
 #define AGRARFELD_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVAgrarfeld
 {

@@ -21,7 +21,7 @@
 #ifndef WERFT_H
 #define WERFT_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVWerft
 {

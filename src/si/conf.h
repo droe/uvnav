@@ -21,8 +21,8 @@
 #ifndef CONF_H
 #define CONF_H
 
-#include "../lib/singleton.h"
-#include "../lib/stl.h"
+#include "lib/singleton.h"
+#include "lib/stl.h"
 
 /*
  * Version der Konfigurationsdatenbank.

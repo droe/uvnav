@@ -21,10 +21,10 @@
 #ifndef IMPORT_TXT_H
 #define IMPORT_TXT_H
 
-#include "../lib/observer.h"
-#include "../lib/regexp.h"
-#include "../pd/universum.h"
-#include "abstractimporter.h"
+#include "lib/observer.h"
+#include "lib/regexp.h"
+#include "pd/universum.h"
+#include "dm/abstractimporter.h"
 
 class UVImportTXT : public UVAbstractImporter
 {

@@ -21,7 +21,7 @@
 #ifndef INFOSONDE_H
 #define INFOSONDE_H
 
-//#include "../lib/stlstring.h"
+//#include "lib/stlstring.h"
 
 class UVInfosonde
 {

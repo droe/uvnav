@@ -21,7 +21,7 @@
 #ifndef ANOMALIE_H
 #define ANOMALIE_H
 
-//#include "../lib/stlstring.h"
+//#include "lib/stlstring.h"
 
 class UVAnomalie
 {

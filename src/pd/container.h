@@ -21,7 +21,7 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
-//#include "../lib/stlstring.h"
+//#include "lib/stlstring.h"
 
 class UVContainer
 {

@@ -21,8 +21,8 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include "../lib/sdl.h"
-#include "../lib/singleton.h"
+#include "lib/sdl.h"
+#include "lib/singleton.h"
 
 class UVDraw : public Singleton<UVDraw>
 {

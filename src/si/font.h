@@ -21,9 +21,8 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "../lib/stlstring.h"
-#include "../lib/sdl.h"
-//#include "fonthandler.h"
+#include "lib/stlstring.h"
+#include "lib/sdl.h"
 
 class UVFont
 {

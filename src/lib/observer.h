@@ -21,7 +21,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 
-#include "stl.h"
+#include "lib/stl.h"
 
 class Subject;
 

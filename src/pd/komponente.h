@@ -21,7 +21,7 @@
 #ifndef KOMPONENTE_H
 #define KOMPONENTE_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVKomponente
 {

@@ -21,10 +21,10 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "../si/imagehandler.h"
-#include "../si/font.h"
-#include "../si/draw.h"
-#include "../pd/universum.h"
+#include "si/imagehandler.h"
+#include "si/font.h"
+#include "si/draw.h"
+#include "pd/universum.h"
 
 /*
 class UVMapSektor

@@ -21,14 +21,14 @@
 #ifndef UNIVERSUM_H
 #define UNIVERSUM_H
 
-#include "../lib/stl.h"
-#include "spieler.h"
-#include "anomalie.h"
-#include "container.h"
-#include "infosonde.h"
-#include "sensorsonde.h"
-#include "planet.h"
-#include "schiff.h"
+#include "lib/stl.h"
+#include "pd/spieler.h"
+#include "pd/anomalie.h"
+#include "pd/container.h"
+#include "pd/infosonde.h"
+#include "pd/sensorsonde.h"
+#include "pd/planet.h"
+#include "pd/schiff.h"
 
 typedef ext::hash_map<long, string>::iterator dim_iterator;
 typedef ext::hash_map<string, UVSchiff*>::iterator schiffe_iterator;

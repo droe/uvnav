@@ -21,7 +21,7 @@
 #ifndef HANDELSSTATION_H
 #define HANDELSSTATION_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVHandelsstation
 {

@@ -20,8 +20,8 @@
 
 #include "import_txt.h"
 
-#include "../si/imagehandler.h"
-#include "../lib/sysdep.h"
+#include "lib/sysdep.h"
+#include "si/imagehandler.h"
 
 /*
  * UVImportTXT - Importer fuer Text-Auswertungen

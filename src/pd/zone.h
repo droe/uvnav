@@ -21,13 +21,13 @@
 #ifndef ZONE_H
 #define ZONE_H
 
-#include "../lib/stl.h"
-#include "agrarfeld.h"
-#include "speicherfeld.h"
-#include "minenfeld.h"
-#include "werft.h"
-#include "forschungsstation.h"
-#include "stadt.h"
+#include "lib/stl.h"
+#include "pd/agrarfeld.h"
+#include "pd/speicherfeld.h"
+#include "pd/minenfeld.h"
+#include "pd/werft.h"
+#include "pd/forschungsstation.h"
+#include "pd/stadt.h"
 
 class UVZone
 {

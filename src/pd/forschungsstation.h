@@ -21,7 +21,7 @@
 #ifndef FORSCHUNGSSTATION_H
 #define FORSCHUNGSSTATION_H
 
-#include "../lib/stlstring.h"
+#include "lib/stlstring.h"
 
 class UVForschungsstation
 {

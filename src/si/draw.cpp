@@ -20,7 +20,7 @@
 
 #include "draw.h"
 
-#include "conf.h"
+#include "si/conf.h"
 
 /*
  * UVDraw - Grafische Formen zeichnen.

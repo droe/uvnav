@@ -20,9 +20,9 @@
 
 #include "imagehandler.h"
 
-#include "../lib/exceptions.h"
-#include "../lib/sysdep.h"
-#include "../si/conf.h"
+#include "lib/exceptions.h"
+#include "lib/sysdep.h"
+#include "si/conf.h"
 
 /*
  * UVImageHandler - Bilder effizient laden, skalieren und verwalten.
