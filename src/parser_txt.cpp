@@ -269,12 +269,13 @@ void UVParserTXT::parse_oldschool_header()
 	UVSpieler* s = new UVSpieler();
 
 	// Busy Eagle der Kämpfer
-	static UVRegExp name_re("^Name: +(.*)$");
+	static UVRegExp name_re("^Name: +(.*) der (.*)$");
 	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
 	}
 	s->name = name_re.sub(1);
+	s->imp_typ = name_re.sub(2);
 	getline();
 
 	// Spieler: Daniel Röthlisberger
@@ -393,12 +394,17 @@ void UVParserTXT::parse_spielerinfos()
 	UVSpieler* s = new UVSpieler();
 
 	// Name: Doctor Who
-	static UVRegExp name_re("^Name: +(.*)$");
+	// Name: Doctor Who der Erzkönig
+	static UVRegExp name_re("^Name: +(.*?)(?: der (.*))?$");
 	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
 	}
 	s->name = name_re.sub(1);
+	if(name_re.subs() > 1)
+	{
+		s->imp_typ = name_re.sub(2);
+	}
 	getline();
 
 	// Spieler: Daniel Röthlisberger
