@@ -429,11 +429,11 @@ void UVMap::draw_grid()
 {
 	static const long tick = conf->l_get("map-grid-font-size") / 2;
 
-	// Maschengroesse = groesste Zweierpotenz in Lichtjahren kleiner als 100px
-	long d = long(rint(zoom / 10.0));
+	// Maschengroesse = groesste Zweierpotenz von 125 KE kleiner als 100px
+	long d = long(rint(zoom * 125.0 / 100.0));
 	long i = 1;
 	while(i < d) { i *= 2; }
-	d = 1000 * i;
+	d = 125 * i;
 
 //	cout << "gridsize=" << d << endl;
 
