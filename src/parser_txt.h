@@ -94,6 +94,7 @@ class UVParserTXT
 		void parse_leerzeile();
 
 		long get_image_planet(const string&) const;
+		long get_sichtweite(const string&) const;
 };
 
 #endif // PARSER_TXT_H

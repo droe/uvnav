@@ -133,13 +133,15 @@ UVMapQuadrant::~UVMapQuadrant()
  * d.h. wenn keine Daten sichtbar waeren.
  */
 UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
-: conf(c), images(i), welt(w), screen(s), phys(NULL)
+: conf(c), images(i), welt(w), spieler(NULL), screen(s), phys(NULL)
 , virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
 	screen_size.w = s->w;
 	screen_size.h = s->h;
+
+	spieler = welt->get_spieler();
 
 	bool have_conf_data = conf->have_data();
 	offset_x = conf->l_get("map-offset-x", true);
@@ -209,7 +211,6 @@ void UVMap::jump_init()
 {
 	bool first_alle = true;
 	bool first_eigene = true;
-	string spieler = welt->get_spieler()->name;
 
 	// Ueber alle Objekte loopen.
 	for(planeten_iterator iter = welt->first_planet(); iter != welt->last_planet(); iter++)
@@ -218,7 +219,7 @@ void UVMap::jump_init()
 		if(p->dim == dim)
 		{
 			bool ist_eigener = false;
-			if(p->besitzer == spieler)
+			if(p->besitzer == spieler->name)
 			{
 				ist_eigener = true;
 			}
@@ -226,7 +227,7 @@ void UVMap::jump_init()
 			{
 				for(int i = 1; (i < p->max_zone()) && (!ist_eigener); i++)
 				{
-					if(p->get_zone(i) && (p->get_zone(i)->besitzer == spieler))
+					if(p->get_zone(i) && (p->get_zone(i)->besitzer == spieler->name))
 					{
 						ist_eigener = true;
 					}
@@ -272,7 +273,7 @@ void UVMap::jump_init()
 		UVSchiff* s = (*iter).second;
 		if(s->dim == dim)
 		{
-			if(s->besitzer == spieler)
+			if(s->besitzer == spieler->name)
 			{
 				if(first_eigene)
 				{
@@ -612,7 +613,6 @@ void UVMap::draw(SDL_Rect* rect)
 	SDL_Rect dst;
 
 	// Status-Overlay
-	static UVSpieler* spieler = welt->get_spieler();
 	SDL_Surface* status = debug_font->get_surface(
 		str_stream() << dim << " - " << welt->get_dim(dim) << ", "
 		             << spieler->name
@@ -834,8 +834,9 @@ void UVMap::draw_planet(UVPlanet* planet)
 	}
 
 	// *** details zeichnen falls selektiert
-	if(((virt_x - size < planet->x) && (virt_x + virt_w + size >= planet->x))
-	&& ((virt_y - size < planet->y) && (virt_y + virt_h + size >= planet->y)))
+	static const long dist = size/2;
+	if(((virt_x - dist < planet->x) && (virt_x + virt_w + dist >= planet->x))
+	&& ((virt_y - dist < planet->y) && (virt_y + virt_h + dist >= planet->y)))
 	{
 		// Planetenbild
 		// *** konfigurierbar: groesse des planeten beruecksichtigen
@@ -921,15 +922,16 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 {
 	static const long size = 75;
 
+	double center_x = double(schiff->x - offset_x) / zoom;
+	double center_y = double(schiff->y - offset_y) / zoom;
+
 	// *** Vektor nur fuer selektiertes Schiff zeichnen
-	if(((virt_x - size - schiff->v * 100 < schiff->x) && (virt_x + virt_w + size + schiff->v * 100 >= schiff->x))
-	&& ((virt_y - size - schiff->v * 100 < schiff->y) && (virt_y + virt_h + size + schiff->v * 100 >= schiff->y)))
+	long dist = max(size/2, long(rint(schiff->v * 100.0)));
+	if(((virt_x - dist < schiff->x) && (virt_x + virt_w + dist >= schiff->x))
+	&& ((virt_y - dist < schiff->y) && (virt_y + virt_h + dist >= schiff->y)))
 	{
 		long h = long(rint(double(size) / zoom));
 		h = (h < 10) ? 10 : h;
-
-		double center_x = double(schiff->x - offset_x) / zoom;
-		double center_y = double(schiff->y - offset_y) / zoom;
 
 		/*
 		 *         dx
@@ -977,9 +979,35 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			SDL_BlitSurface(label, 0, screen, &dst);
 			SDL_FreeSurface(label);
 		}
-
-//		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 	}
+
+	// Reichweiten fuer eigene Schiffe
+	if(schiff->besitzer == spieler->name)
+	{
+		// Sensoren
+		long sensor_rad = schiff->sichtweite;
+		if(((virt_x - sensor_rad < schiff->x) && (virt_x + virt_w + sensor_rad >= schiff->x))
+		&& ((virt_y - sensor_rad < schiff->y) && (virt_y + virt_h + sensor_rad >= schiff->y)))
+		{
+			// Kreis
+			long r = long(rint(double(sensor_rad) / zoom));
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    r, 0x00, 0xFF, 0x00, 0xFF);
+		}
+
+		// Kaufradius
+		static const long kauf_rad = 5000;
+		if(((virt_x - kauf_rad < schiff->x) && (virt_x + virt_w + kauf_rad >= schiff->x))
+		&& ((virt_y - kauf_rad < schiff->y) && (virt_y + virt_h + kauf_rad >= schiff->y)))
+		{
+			// Kreis
+			long r = long(rint(double(kauf_rad) / zoom));
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    r, 0xFF, 0xFF, 0x00, 0xFF);
+		}
+	}
+
+//	cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 }
 
 

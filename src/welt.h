@@ -385,6 +385,8 @@ class UVSchiff
 		long lagerraum;
 		long lagerraum_frei;
 
+		long sichtweite;
+
 		UVKomponente* bordcomputer;
 		UVKomponente* energiegenerator;
 		UVKomponente* sensoren;

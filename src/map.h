@@ -72,6 +72,7 @@ class UVMap
 		UVConf* conf;
 		UVImages* images;
 		UVWelt* welt;
+		UVSpieler* spieler;
 		SDL_Surface* screen;
 		SDL_Rect screen_size;
 

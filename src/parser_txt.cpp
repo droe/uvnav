@@ -875,30 +875,31 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 
 	//?  Pray CX (40/40) 4000 BRT, Argongenerator (40/40) 4000 BRT, SensoStar II (20/20) 3000 BRT
 	//?  Kein Bordcomputer, Kein Energiegenerator
-	static UVRegExp cpu_re("^  (?!<[0-9]+\\. )(?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (B)(o)(r)dcomputer), (?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (E)(n)(e)rgiegenerator)(?:, (.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT)?$");
+	static UVRegExp cpu_re("^  (?!<[0-9]+\\. )(?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein Bordcomputer)), (?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein Energiegenerator))(?:, (.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT)?$");
 	if(cpu_re.match(cur))
 	{
 		debug("schiff-bordcomputer", &cpu_re);
-		if(cpu_re.sub(1) != "Kein")
+		if(cpu_re.sub(5) != "Kein Bordcomputer")
 		{
 			s->bordcomputer = new UVKomponente(cpu_re.sub(1),
 							cpu_re.subtol(2),
 							cpu_re.subtol(3),
 							cpu_re.subtol(4));
 		}
-		if(cpu_re.sub(5) != "Kein")
+		if(cpu_re.sub(10) != "Kein Energiegenerator")
 		{
-			s->energiegenerator = new UVKomponente(cpu_re.sub(5),
-							cpu_re.subtol(6),
+			s->energiegenerator = new UVKomponente(cpu_re.sub(6),
 							cpu_re.subtol(7),
-							cpu_re.subtol(8));
+							cpu_re.subtol(8),
+							cpu_re.subtol(9));
 		}
-		if(cpu_re.subs() > 8)
+		if((cpu_re.subs() > 10) && (cpu_re.sub(11) != ""))
 		{
-			s->sensoren = new UVKomponente(cpu_re.sub(9),
-							cpu_re.subtol(10),
-							cpu_re.subtol(11),
-							cpu_re.subtol(12));
+			s->sensoren = new UVKomponente(cpu_re.sub(11),
+							cpu_re.subtol(12),
+							cpu_re.subtol(13),
+							cpu_re.subtol(14));
+			s->sichtweite = get_sichtweite(s->sensoren->name);
 		}
 		getline();
 	}
@@ -1901,6 +1902,66 @@ long UVParserTXT::get_image_planet(const string& s) const
 	else
 	{
 		throw EXCEPTION("Unbekannte Klimabeschreibung!");
+	}
+}
+
+
+/*
+ * Findet die Sichtweite zu einem Sensorentyp.
+ */
+long UVParserTXT::get_sichtweite(const string& s) const
+{
+	if(s == "ScanCipher 1a")
+	{
+		return 1000;
+	}
+	else if(s == "ScanCipher 3e")
+	{
+		return 2000;
+	}
+	else if(s == "SensoStar II")
+	{
+		return 4000;
+	}
+	else if(s == "InfoReceiver 3D")
+	{
+		return 6000;
+	}
+	else if(s == "Starvision II")
+	{
+		return 9000;
+	}
+	else if(s == "Starvision III")
+	{
+		return 12000;
+	}
+	else if(s == "Detector 32cI")
+	{
+		return 15000;
+	}
+	else if(s == "Detector Ultimate")
+	{
+		return 20000;
+	}
+	else if(s == "DigitalScan 2")
+	{
+		return 30000;
+	}
+	else if(s == "Anti-Disguise EL")
+	{
+		return 50000;
+	}
+	else if(s == "LeechSpector")
+	{
+		return 100000;
+	}
+	else if(s == "CQ-Doomsday Ed.")
+	{
+		return 200000;
+	}
+	else
+	{
+		throw EXCEPTION("Unbekannter Sensorentyp!");
 	}
 }
 

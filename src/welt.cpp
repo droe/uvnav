@@ -882,7 +882,7 @@ UVSchiff::UVSchiff(string na, string be, long gr)
 , beschreibung(""), v(0.0), w(0)
 , waffenstatus(0), offensivbereich(0), fluchtwert(0), hitpoints(0)
 , traktorstrahl(false), treibstoff(0.0), treibstofftanks(0)
-, lagerraum(0), lagerraum_frei(0)
+, lagerraum(0), lagerraum_frei(0), sichtweite(0)
 , bordcomputer(NULL), energiegenerator(NULL), sensoren(NULL)
 , mannschaftsraum(NULL), schild(NULL), panzerung(NULL)
 {
