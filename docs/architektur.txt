@@ -1,14 +1,24 @@
 $Id$
 
-     main(), Application
-ui   User Interface Layer: Window, Map, Widgets, SDL
+
+
+Architektur
+-----------
+
+UV Navigator ist in einer klassischen Vierschichtenarchitektur strukturiert:
+User Interface (UI), Data Management (DM), Problem Domain (PD), und System
+Interface (SI).  Zusaetzlich existiert eine Library-Pseudoschicht.
+
+
+
+Die Schichten
+-------------
+
+ui   User Interface Layer: Window, Map, Widgets
+dm   Data Management Layer: Import/Export
 pd   Problem Domain Layer: Planet, Planeten, Schiff, ...
-dm   Data Management Layer: ParserTXT, ...
-si   System Interface Layer: Config, Image, Font, Log (als Singletons)
-
-lib  Observer, STL, Exceptions
-
-OS/SysDep: Singleton oder static? si oder lib?
+si   System Interface Layer: Config, Image, Font, Log
+lib  Pattern-ABC's, Library-Wrapper, SysDep
 
      main()
        |
@@ -16,8 +26,60 @@ OS/SysDep: Singleton oder static? si oder lib?
      __ui_
     /  |  \
    V   |   V
-  pd <---- dm
-    \_ | _/
-      VVV
-      si
+  dm ----> pd
+    \__|__/
+       V
+       si
+
+
+
+UI: User Interface
+------------------
+
+Diese Schicht umfasst saemtliche Klassen fuer die grafische
+Benutzeroberflaeche.  Fenster, Bedienelemente, alles was der Benutzer sieht,
+ist hier zuhause.
+
+
+
+PD: Problem Domain
+------------------
+
+In der Problem Domain sind die Klassen des eigentlichen Problems zu finden:
+alles was in Universum V existiert, wird in der PD irgendwie abgebildet.
+
+Die Beziehung zur UI-Schicht geschieht ueber das Observer-Pattern.
+
+
+
+DM: Data Management
+-------------------
+
+In der Datenhaltungsschicht sind Import-/Exportmethoden enthalten, welche
+wir benoetigen, um die Datenstrukturen der PD zu internalisieren resp.
+externalisieren.
+
+
+
+SI: System Interface
+--------------------
+
+Die SI-Schicht besteht aus einer Sammlung von Singletons, welche die zu
+Verfuegung stehende Infrastruktur abbildet.  Bilddateien und Fonts einlesen,
+Konfigurationsverwaltung, Logging etc.
+
+
+
+Lib: Library
+------------
+
+Dies ist keine Schicht, sondern die Sammlung aller allgemeinen Hilfsheader
+und Klassen.  Dinge wie abstrakte Basisklassen fuer wichtige Patterns
+(Singleton, Observer), oder Hilfskonstruktionen fuer Bibliotheken
+(STL, SDL, PCRE) sind hier zu finden.
+
+Diese sind allesamt allgemein gehalten, sodass der betreffende Code ohne
+Modifikation auch in anderen Projekten wiederverwendet werden koennte.
+
+
 
