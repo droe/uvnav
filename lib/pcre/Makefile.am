@@ -16,34 +16,13 @@
 #
 # $Id$
 
-if COND_TOOLS
-  MAYBE_TOOLS = tools
-endif
-SUBDIRS = aux share lib src $(MAYBE_TOOLS)
+SUBDIRS = include
 
-EXTRA_DIST = \
-    autogen.sh \
-    docs
+MAINTAINERCLEANFILES = Makefile.in
 
-# entfernt .svn/ aus docs/ - noetig weil EXTRA_DIST rekursiv docs durchsucht
-dist-hook:
-	rm -rf `find $(distdir)/docs -name .svn`
+noinst_LIBRARIES = libpcre.a
 
-# gehoert zu rev.h Hack, siehe src/Makefile.am
-distcleancheck_listfiles = \
-    find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
+libpcre_a_CFLAGS = @PCRE_CFLAGS@
 
-# maintainer-clean etwas erweitern ... verhindert bugs
-MAINTAINERCLEANFILES = \
-    Makefile.in configure aclocal.m4 config.h.in config.h.in~ ChangeLog \
-    INSTALL config.guess config.sub depcomp install-sh missing mkinstalldirs \
-    compile
-
-ChangeLog: FORCE
-	@if [ -d .svn -a -x aux/svn2log.sh ]; then \
-		touch ChangeLog ; \
-		aux/svn2log.sh ; \
-	fi
-
-FORCE:
-
+libpcre_a_SOURCES = config.h internal.h chartables.h \
+                    maketables.c get.c study.c pcre.c

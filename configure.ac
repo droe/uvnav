@@ -28,6 +28,7 @@ AC_CONFIG_HEADER([config.h])
 AC_PROG_CC
 AC_PROG_CXX
 AC_PROG_INSTALL
+AC_PROG_RANLIB
 AC_PATH_PROG([SVNVERSION], [svnversion], [], [$PATH:/bin:/usr/bin:/usr/local/bin])
 
 # Checks for libraries.
@@ -63,38 +64,52 @@ AC_SUBST(SDL_CFLAGS)
 SDL_LIBS="$SDL_LIBS -lSDL_image -lSDL_ttf -lSDL_gfx"
 AC_SUBST(SDL_LIBS)
 
-# Check for PCRE++
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
-AC_PATH_LIB_LIBCONFIG
-AC_PATH_LIB([pcrepp], , [pcre++.h], [pcre++-config])
-AC_LANG_RESTORE
-AC_SUBST(PCREPP_CFLAGS)
-AC_SUBST(PCREPP_LIBS)
+PCRE_CFLAGS="-I\$(top_srcdir)/lib/pcre/include"
+PCRE_LDADD="\$(top_builddir)/lib/pcre/libpcre.a"
+AC_SUBST(PCRE_CFLAGS)
+AC_SUBST(PCRE_LDADD)
 
-# Enable lots of compiler warnings
+# Provide lots of optional compiler warnings
 CFLAGS_WARNINGS=" -W -Wall -Wbad-function-cast -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wformat -Wimplicit -Wimplicit-function-declaration -Wimplicit-int -Wlong-long -Wmain -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wno-import -Wno-parentheses -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wshadow -Wsign-compare -Wstrict-prototypes -Wswitch -Wtrigraphs -Wunused -Wwrite-strings"
-CFLAGS="$CFLAGS $CFLAGS_WARNINGS"
-#CFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2 -std=gnu99"
-#CFLAGS="$CFLAGS $CFLAGS_PEDANTIC"
+AC_SUBST(CFLAGS_WARNINGS)
+CFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2 -std=gnu99"
+AC_SUBST(CFLAGS_PEDANTIC)
 CXXFLAGS_WARNINGS=" -W -Wall -Wcast-align -Wcast-qual -Wchar-subscripts -Wcomment -Wconversion -Wformat -Wimplicit -Wlong-long -Wmissing-prototypes -Wno-import -Wno-parentheses -Wparentheses -Wpointer-arith -Wredundant-decls -Wreturn-type -Wshadow -Wsign-compare -Wstrict-prototypes -Wswitch -Wtrigraphs -Wunused -Wwrite-strings"
-CXXFLAGS="$CXXFLAGS $CXXFLAGS_WARNINGS"
-#CXXFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2"
-#CXXFLAGS="$CXXFLAGS $CXXFLAGS_PEDANTIC"
+AC_SUBST(CXXFLAGS_WARNINGS)
+CXXFLAGS_PEDANTIC=" -Waggregate-return -Winline -pedantic -Wformat-nonliteral -Wformat-security -Wformat-extra-args -Wformat=2"
+AC_SUBST(CXXFLAGS_PEDANTIC)
 
 # Additional compiler flags
 CXXFLAGS="$CXXFLAGS -fno-rtti -DDATADIR=\\\"\$(datadir)\\\""
 CFLAGS="$CFLAGS -DDATADIR=\\\"\$(datadir)\\\""
 
-# Options
+# Option: Tools
+AC_MSG_CHECKING([whether to build developer tools])
 AC_ARG_ENABLE([tools],
               AC_HELP_STRING([--enable-tools], [Also build (but not install) useful tools for developers or porters]),
-              [ want_tools="yes" ])
+              [ want_tools="yes" ], [ want_tools="no" ])
 AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
+AC_MSG_RESULT([$want_tools])
+
+# Option: Debug
+AC_MSG_CHECKING([whether to use debug code])
+AC_ARG_ENABLE([debug],
+              AC_HELP_STRING([--enable-debug], [Enable debugging code]),
+              [ want_debug="yes" ], [ want_debug="no" ])
+if test "x$want_debug" == "xyes" ; then
+	AC_DEFINE(DEBUG, , [define if you want debugging code to be compiled])
+fi
+AC_MSG_RESULT([$want_debug])
+
+AC_MSG_CHECKING([which is current dimension])
+AC_MSG_RESULT([0 - Real World])
 
 AC_CONFIG_FILES([Makefile
                  aux/Makefile
                  share/Makefile
+                 lib/Makefile
+                 lib/pcre/Makefile
+                 lib/pcre/include/Makefile
                  src/Makefile
                  tools/Makefile])
 AC_OUTPUT

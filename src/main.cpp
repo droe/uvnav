@@ -24,6 +24,7 @@
 #include "navigator.h"
 
 #include <getopt.h>
+#include <pcre.h>
 
 /*
  * Hauptroutine.
@@ -322,50 +323,54 @@ void version()
 	cout << PACKAGE_STRING << " (" << revision << ")" << endl;
 	cout << COPYRIGHT << endl;
 	cout << "https://projects.roe.ch/trac/uvnav/" << endl;
+#ifdef DEBUG
+	cout << "Achtung: DEBUG-Code aktiviert!" << endl;
+#endif // DEBUG
 	cout << endl;
 
 	// SDL
 	const SDL_version* sdl_link = SDL_Linked_Version();
 	cout << "SDL:           "
-		 << long(sdl_link->major) << "."
-		 << long(sdl_link->minor) << "."
-		 << long(sdl_link->patch)
-		 << " (built/w "
-		 << SDL_MAJOR_VERSION << "."
-		 << SDL_MINOR_VERSION << "."
-		 << SDL_PATCHLEVEL
-		 << ")" << endl;
+	     << long(sdl_link->major) << "."
+	     << long(sdl_link->minor) << "."
+	     << long(sdl_link->patch)
+	     << " (built/w "
+	     << SDL_MAJOR_VERSION << "."
+	     << SDL_MINOR_VERSION << "."
+	     << SDL_PATCHLEVEL
+	     << ")" << endl;
 
 	// SDL_ttf
 	SDL_version ttf_build;
 	TTF_VERSION(&ttf_build);
 	const SDL_version* ttf_link = TTF_Linked_Version();
 	cout << "SDL_ttf:       "
-		 << long(ttf_link->major) << "."
-		 << long(ttf_link->minor) << "."
-		 << long(ttf_link->patch)
-		 << " (built/w "
-		 << long(ttf_build.major) << "."
-		 << long(ttf_build.minor) << "."
-		 << long(ttf_build.patch)
-		 << ")" << endl;
+	     << long(ttf_link->major) << "."
+	     << long(ttf_link->minor) << "."
+	     << long(ttf_link->patch)
+	     << " (built/w "
+	     << long(ttf_build.major) << "."
+	     << long(ttf_build.minor) << "."
+	     << long(ttf_build.patch)
+	     << ")" << endl;
 
 	// SDL_image
-//	cout << "SDL_image:     yes" << endl;
+	cout << "SDL_image:     yes" << endl;
 
 	// SDL_gfx
-//	cout << "SDL_gfx:       yes" << endl;
+	cout << "SDL_gfx:       yes" << endl;
 
-	// PCRE++
-//	cout << "PCRE++:        yes" << endl;
+	// PCRE
+	cout << "PCRE:          "
+	     << PCRE_MAJOR << "."
+	     << PCRE_MINOR << " / "
+	     << XSTRING(PCRE_DATE)
+	     << " (static)" << endl;
 
 	cout << endl;
 
-	// Version der Konfigurationsdateien
+	// Konfiguration
 	cout << "Conf Version:  " << CONF_VERSION << endl;
-	cout << endl;
-
-	// Konfigurierte Pfade
 	cout << "Conf Dir:      " << sysdep_confdir() << endl;
 	cout << "Data Dir:      " << sysdep_datadir() << endl;
 	cout << endl;

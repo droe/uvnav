@@ -18,31 +18,36 @@
  * $Id$
  */
 
-#ifndef PROGRESS_H
-#define PROGRESS_H
+#ifndef REGEXP_H
+#define REGEXP_H
 
 #include "global.h"
+#include <pcre.h>
 
-#include "conf.h"
-#include "font.h"
-
-class UVProgress
+class UVRegExp
 {
 	public:
-		UVProgress(const UVConf*, SDL_Surface*, SDL_Rect*);
-		~UVProgress();
+		UVRegExp(const string&);
+		~UVRegExp();
 
-		void init(unsigned long);
-		void update(unsigned long);
+		bool match(const string&);
+		int subs();
+		string sub(int = 0);
+		long subtol(int = 0);
+		long long subtoll(int = 0);
+		double subtof(int = 0);
+		int get_match_end();
 
 	private:
-		UVFont* font;
-		SDL_Surface* screen;
-		SDL_Rect rect;
-		string message;
-		unsigned long total;
-		long ticks;
+		pcre* re;
+		int sub_count;
+		int* sub_vector;
+		const char** sub_list;
+		const char* last_subject;
+
+		inline const char* sub_c_str(int = 0);
+		inline void free_sub_list();
 };
 
-#endif // PROGRESS_H
+#endif // REGEXP_H
 

@@ -19,12 +19,15 @@
 bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp global.h stl.h debug.h sysdep.h sysdep.cpp \
-	conf.h conf.cpp images.h images.cpp font.h font.cpp draw.h draw.cpp \
-	progress.h progress.cpp welt.h welt.cpp parser_txt.h parser_txt.cpp \
-	map.h map.cpp gui.h gui.cpp navigator.h navigator.cpp main.cpp
+	conf.h conf.cpp regexp.h regexp.cpp \
+	images.h images.cpp font.h font.cpp draw.h draw.cpp \
+	welt.h welt.cpp parser_txt.h parser_txt.cpp \
+	map.h map.cpp gui.h gui.cpp progress.h progress.cpp \
+	navigator.h navigator.cpp main.cpp
 
-uvnav_CXXFLAGS = @X_CFLAGS@ @SDL_CFLAGS@ @PCREPP_CFLAGS@
-uvnav_LDFLAGS = @X_LIBS@ @SDL_LIBS@ @PCREPP_LIBS@
+uvnav_CXXFLAGS = @PCRE_CFLAGS@ @X_CFLAGS@ @SDL_CFLAGS@ @CXXFLAGS_WARNINGS@
+uvnav_LDFLAGS = @X_LIBS@ @SDL_LIBS@
+uvnav_LDADD = @PCRE_LDADD@
 
 MAINTAINERCLEANFILES = rev.h .rev-str Makefile.in
 

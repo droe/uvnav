@@ -157,10 +157,10 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Set Keys Window
 
 - Release Engineering
-  - PCRE++ korrekt in autoconf einbauen
-  - SDL_* korrekt in autoconf einbauen
-  - Debug code in autoconf einbinden
-  - MingW32 crosscompiling (yeeha!)
+  - lib/pcre nur compilen falls keine System-Lib gefunden (konfigurierbar)
+  - SDL_* besser in autoconf einbauen
+
+- Web
   - LXR benutzen für cross-reference des codes zum protzen :)
     http://lxr.linux.no/
 

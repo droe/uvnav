@@ -27,10 +27,11 @@
  * Dieser Header definiert diverse Dinge im Zusammenhang mit
  * Debugging und Fehlerhandling.
  *
+ * DEBUG wird von config.h definiert, falls Debug-Code benutzt
+ * werden soll.
+ *
  * Dieser Header muss nach config.h und stl.h eingebunden werden.
  */
-
-#define DEBUG
 
 // *** DEBUG_PRINT
 

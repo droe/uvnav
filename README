@@ -31,6 +31,12 @@ ToVU zu konkurrenzieren.  Trotzdem ist UVNav öffentlich.  Ihr seid
 eingeladen, auch selber an UVNav Verbesserungen anzubringen, und
 mir die in Form von Unified Diffs (diff -ruN) zu schicken.
 
+UV Navigator benutzt unter anderem im Parser fuer Text-Auswertungen
+eine interne, stark reduzierte Version der PCRE-Bibliothek von
+Philip Hazel, Copyright (C) University of Cambridge, England.
+
+Details zu diesem und anderem verwendetem Fremdcode siehe AUTHORS.
+
 
 
 Stand der Entwicklung
@@ -94,9 +100,9 @@ Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 Ich entwickle UVNav auf einem alten Thinkpad, 700 MHz CPU, 128 MB RAM,
 ATI Rage Mobility GPU, 16 MB VRAM, und absolut ultralahmer Harddisk.
 
-Der Parser verarbeitet hier ca 500 KB Text-Auswertung pro Sekunde.
-Das reicht, dürfte aber noch etwas schneller sein. Hier gibt es sicher
-noch Spielraum für Optimierungen.
+Der Parser verarbeitet hier ca 400 KB Text-Auswertung pro Sekunde.
+Das dürfte noch etwas schneller sein.  Hier gibt es sicher noch
+Spielraum für Optimierungen.
 
 UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigrösse der
 Auswertung an RAM.  Da lässt sich vermutlich nur wenig daran ändern;
@@ -153,10 +159,6 @@ Folgende Bibliotheken werden benötigt:
               http://www.libsdl.org/projects/SDL_image/
  - SDL_gfx    Erweiterte Grafiklibrary für SDL
               http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/
- - PCRE       Perl Compatible Regular Expressions
-              http://www.pcre.org/
- - PCRE++     C++ Wrapper für PCRE
-              http://www.daemon.de/PCRE
 
 UVNav kann auf allem was sich POSIX-kompatibel schimpft mit der
 üblichen ``magischen Dreifaltigkeit'' kompiliert und installiert

@@ -26,8 +26,7 @@
 #include "conf.h"
 #include "welt.h"
 #include "progress.h"
-
-#include <pcre++.h>
+#include "regexp.h"
 
 class UVParserTXT
 {
@@ -43,10 +42,10 @@ class UVParserTXT
 		UVConf* conf;
 		UVWelt* welt;
 		UVProgress* progress;
+		UVRegExp* re;
 
 		ifstream stream;
 		string cur;
-		pcrepp::Pcre* re;
 		unsigned long line;
 		unsigned long bytecount;
 		bool verbose;

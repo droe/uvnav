@@ -27,14 +27,17 @@
 #include "debug.h"
 
 #include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
 #include "SDL_syswm.h"
+#include "SDL_image.h"			// SDL_image
+#include "SDL_ttf.h"			// SDL_ttf
 #include "SDL_rotozoom.h"		// SDL_gfx
 #include "SDL_gfxPrimitives.h"	// SDL_gfx
 
 #define TITLE			"Universum V Navigator"
 #define COPYRIGHT		"Copyright (C) 2004 Daniel Roethlisberger"
+
+#define STRING(x)	# x
+#define XSTRING(x)	STRING(x)
 
 extern const char* revision;
 

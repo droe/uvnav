@@ -32,7 +32,7 @@
  * Konstruktor.
  */
 UVProgress::UVProgress(const UVConf* conf, SDL_Surface* s, SDL_Rect* r)
-: screen(s), rect(*r)
+: screen(s), rect(*r), ticks(0)
 {
 	font = new UVFont(conf, FNT_SANS, screen->h / 32);
 }
@@ -54,6 +54,7 @@ UVProgress::~UVProgress()
 void UVProgress::init(unsigned long newtot)
 {
 	total = newtot;
+	ticks = SDL_GetTicks();
 	update(0);
 //*** DEBUG
 //	cerr << "progress init total=" << total << endl;
@@ -101,7 +102,7 @@ void UVProgress::update(unsigned long current)
 		}
 	}
 
-	double progress = 1.0 * current / total;
+	double progress = double(current) / double(total);
 
 //*** DEBUG
 //	cerr << "progress update current=" << current << " total=" << total << " progress=" << progress << endl;
@@ -121,7 +122,7 @@ void UVProgress::update(unsigned long current)
 	inner.y = rect.y + 2;	inner.h = rect.h - 4;
 	SDL_FillRect(screen, &inner, SDL_MapRGB(screen->format, 0, 0, 0xFF));
 
-	SDL_Surface* percent = font->get_surface(str_stream() << (current * 100 / total) << "%");
+	SDL_Surface* percent = font->get_surface(str_stream() << long(progress * 100) << "% (" << long(double(current) / (double(SDL_GetTicks() - ticks + 1) / 1000.0) / 1024.0) << " kb/s)");
 	inner.x = rect.x + 2 + rect.w / 2 - percent->w / 2;	inner.w = percent->w;
 	inner.y = rect.y + 2 + rect.h / 2 - percent->h / 2;	inner.h = percent->h;
 	SDL_BlitSurface(percent, 0, screen, &inner);
