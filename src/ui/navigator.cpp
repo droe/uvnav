@@ -59,15 +59,12 @@ UVNavigator::UVNavigator()
 	{
 		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
 	}
-	atexit(SDL_Quit);
 
 	init_video();
 
 	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
-
-	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
 
 	if(conf->b_get("screen-quality"))
 	{
@@ -80,17 +77,22 @@ UVNavigator::UVNavigator()
 		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
 	}
 	cout << "------------------------------------------------------------------------------" << endl;
+
+	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
 }
 
 
 /*
  * Destruktor.
+ *
+ * Raeumt SDL mit allen Subsystemen auf.
  */
-/*
 UVNavigator::~UVNavigator()
 {
+	if(TTF_WasInit())
+		TTF_Quit();
+	SDL_Quit();
 }
-*/
 
 
 /*

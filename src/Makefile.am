@@ -19,17 +19,26 @@
 bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp \
-	lib/version.h lib/minmax.h lib/stl.h lib/stlstring.h lib/sdl.h \
+	lib/version.h \
+	lib/stl.h lib/stlstring.h \
 	lib/exceptions.h \
-	lib/sysexits.h lib/sysdep.h lib/sysdep.cpp \
-	lib/observer.h lib/observer.cpp lib/singleton.h \
+	lib/sysexits.h \
+	lib/sysdep.h lib/sysdep.cpp \
+	lib/observer.h lib/observer.cpp \
+	lib/singleton.h \
+	lib/minmax.h \
 	lib/regexp.h lib/regexp.cpp \
-	si/conf.h si/conf.cpp si/draw.h si/draw.cpp \
+	lib/sdl.h \
+	si/conf.h si/conf.cpp \
+	si/draw.h si/draw.cpp \
 	si/imagehandler.h si/imagehandler.cpp \
-	si/font.h si/font.cpp si/fonthandler.h si/fonthandler.cpp \
+	si/font.h si/font.cpp \
+	si/fonthandler.h si/fonthandler.cpp \
 	pd/welt.h pd/welt.cpp \
 	dm/parser_txt.h dm/parser_txt.cpp \
-	ui/map.h ui/map.cpp ui/gui.h ui/gui.cpp ui/progress.h ui/progress.cpp \
+	ui/map.h ui/map.cpp \
+	ui/gui.h ui/gui.cpp \
+	ui/progress.h ui/progress.cpp \
 	ui/navigator.h ui/navigator.cpp \
 	main.cpp
 

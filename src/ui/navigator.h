@@ -30,7 +30,7 @@ class UVNavigator
 {
 	public:
 		UVNavigator();
-//		~UVNavigator();
+		~UVNavigator();
 
 		void splash();
 		void load(const string&, int = 0);

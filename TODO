@@ -1,7 +1,6 @@
 $Id$
 
 - OO-Architecture Redesign
-  - SDL-Funktionalität kapseln in SDL Screen Singleton
   - parser_txt.* refactoren:
     - abstractimporter.*
     - txtimporter.*/xmlimporter.*/htmimporter.*

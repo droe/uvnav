@@ -23,16 +23,20 @@
 
 #include "../lib/stlstring.h"
 #include "../lib/sdl.h"
+//#include "fonthandler.h"
 
 class UVFont
 {
-	public:
-		UVFont(const string& file, int size);
-		~UVFont();
+	friend class UVFontHandler;
 
+	public:
 		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
 		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
 		SDL_Surface* get_surface(const string& text) const;
+
+	protected:
+		UVFont(const string& file, int size);
+		~UVFont();
 
 	private:
 		TTF_Font* font;

@@ -35,8 +35,7 @@ UVFontHandler::UVFontHandler()
 {
 	if(TTF_Init() < 0)
 		throw EXCEPTION("TTF_Init: " + to_string(TTF_GetError()));
-	else
-		atexit(TTF_Quit);
+	// TTF_Quit() wird von UVNavigator aufgerufen
 }
 
 
