@@ -18,22 +18,28 @@
  * $Id$
  */
 
-#ifndef ANOMALIE_H
-#define ANOMALIE_H
+#include "sensorsonde.h"
 
-//#include "../lib/stl.h"
+/*
+ * UVSensorsonde - Stellt eine Sensorsonde dar.
+ */
 
-class UVAnomalie
+
+/*
+ * Konstruktor.
+ */
+UVSensorsonde::UVSensorsonde(long n) : lebensdauer(0), x(0), y(0), dim(0)
 {
-	public:
-		UVAnomalie();
-//		~UVAnomalie();
+	nummer = n;
+}
 
-		long radius;
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // ANOMALIE_H
+/*
+ * Destruktor.
+ */
+/*
+UVSensorsonde::~UVSensorsonde()
+{
+}
+*/
 

@@ -20,8 +20,6 @@
 
 #include "anomalie.h"
 
-//============================================================================
-
 /*
  * UVAnomalie - Stellt eine Anomalie dar.
  */
@@ -44,79 +42,4 @@ UVAnomalie::~UVAnomalie()
 }
 */
 
-
-//============================================================================
-
-/*
- * UVContainer - Stellt einen Container dar.
- */
-
-/*
- * Konstruktor.
- */
-UVContainer::UVContainer() : groesse(0), x(0), y(0), dim(0)
-{
-}
-
-
-/*
- * Destruktor.
- */
-/*
-UVContainer::~UVContainer()
-{
-}
-*/
-
-
-//============================================================================
-
-/*
- * UVInfosonde - Stellt eine Infosonde dar.
- */
-
-
-/*
- * Konstruktor.
- */
-UVInfosonde::UVInfosonde(long n) : lebensdauer(0), x(0), y(0), dim(0)
-{
-	nummer = n;
-}
-
-
-/*
- * Destruktor.
- */
-/*
-UVInfosonde::~UVInfosonde()
-{
-}
-*/
-
-
-//============================================================================
-
-/*
- * UVSensorsonde - Stellt eine Sensorsonde dar.
- */
-
-
-/*
- * Konstruktor.
- */
-UVSensorsonde::UVSensorsonde(long n) : lebensdauer(0), x(0), y(0), dim(0)
-{
-	nummer = n;
-}
-
-
-/*
- * Destruktor.
- */
-/*
-UVSensorsonde::~UVSensorsonde()
-{
-}
-*/
 

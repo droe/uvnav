@@ -18,22 +18,22 @@
  * $Id$
  */
 
-#ifndef ANOMALIE_H
-#define ANOMALIE_H
+#ifndef CONTAINER_H
+#define CONTAINER_H
 
 //#include "../lib/stl.h"
 
-class UVAnomalie
+class UVContainer
 {
 	public:
-		UVAnomalie();
-//		~UVAnomalie();
+		UVContainer();
+//		~UVContainer();
 
-		long radius;
+		long groesse;			// in BRT
 		long x;
 		long y;
 		long dim;
 };
 
-#endif // ANOMALIE_H
+#endif // CONTAINER_H
 

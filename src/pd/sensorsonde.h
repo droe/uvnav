@@ -18,22 +18,24 @@
  * $Id$
  */
 
-#ifndef ANOMALIE_H
-#define ANOMALIE_H
+#ifndef SENSORSONDE_H
+#define SENSORSONDE_H
 
 //#include "../lib/stl.h"
 
-class UVAnomalie
+class UVSensorsonde
 {
 	public:
-		UVAnomalie();
-//		~UVAnomalie();
+		UVSensorsonde(long);
+//		~UVSensorsonde();
 
-		long radius;
+		long nummer;			// key in UVWelt
+
+		long lebensdauer;		// in Runden
 		long x;
 		long y;
 		long dim;
 };
 
-#endif // ANOMALIE_H
+#endif // SENSORSONDE_H
 

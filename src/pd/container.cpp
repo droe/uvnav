@@ -18,22 +18,27 @@
  * $Id$
  */
 
-#ifndef ANOMALIE_H
-#define ANOMALIE_H
+#include "container.h"
 
-//#include "../lib/stl.h"
+/*
+ * UVContainer - Stellt einen Container dar.
+ */
 
-class UVAnomalie
+/*
+ * Konstruktor.
+ */
+UVContainer::UVContainer() : groesse(0), x(0), y(0), dim(0)
 {
-	public:
-		UVAnomalie();
-//		~UVAnomalie();
+}
 
-		long radius;
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // ANOMALIE_H
+/*
+ * Destruktor.
+ */
+/*
+UVContainer::~UVContainer()
+{
+}
+*/
+
 

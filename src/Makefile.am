@@ -36,6 +36,9 @@ uvnav_SOURCES = rev.h rev.cpp \
 	si/fonthandler.h si/fonthandler.cpp \
 	pd/spieler.h pd/spieler.cpp \
 	pd/anomalie.h pd/anomalie.cpp \
+	pd/container.h pd/container.cpp \
+	pd/infosonde.h pd/infosonde.cpp \
+	pd/sensorsonde.h pd/sensorsonde.cpp \
 	pd/planet.h pd/planet.cpp \
 	pd/schiff.h pd/schiff.cpp \
 	pd/universum.h pd/universum.cpp \

@@ -24,6 +24,9 @@
 #include "../lib/stl.h"
 #include "spieler.h"
 #include "anomalie.h"
+#include "container.h"
+#include "infosonde.h"
+#include "sensorsonde.h"
 #include "planet.h"
 #include "schiff.h"
 
