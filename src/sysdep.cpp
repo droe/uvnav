@@ -50,19 +50,22 @@
 #endif
 
 
-// Header, Definitionen
+// Header
+#if defined(HAVE_SYS_TYPES_H)
+	#include <sys/types.h>	// mkdir(2)
+#endif
+#if defined(HAVE_SYS_STAT_H)
+	#include <sys/stat.h>	// mkdir(2), stat(2)
+#endif
+
+
+// Plattformabhengige Definitionen
 #if defined(SYSDEP_UNIX)
-	#if defined(HAVE_SYS_TYPES_H)
-		#include <sys/types.h>	// mkdir(2)
-	#endif
-	#if defined(HAVE_SYS_STAT_H)
-		#include <sys/stat.h>	// mkdir(2), stat(2)
-	#endif
 	#define PATH_SEP "/"
 #elif defined(SYSDEP_W32)
 	#include <windows.h>
+	#include <io.h>
 	#define PATH_SEP "\\"
-	#error Plattform nicht vollstaendig unterstuetzt!
 #endif
 
 
@@ -84,7 +87,6 @@ void sysdep_mkdir(const string& path, int mode)
  */
 unsigned long sysdep_filesize(const string& file)
 {
-#if defined(SYSDEP_UNIX)
 	struct stat res;
 	if(!stat(file.c_str(), &res))
 	{
@@ -94,17 +96,6 @@ unsigned long sysdep_filesize(const string& file)
 	{
 		throw EXCEPTION("Kann Dateigroesse nicht bestimmen!");
 	}
-#elif defined(SYSDEP_W32)
-	struct _stat res;
-	if(!_stat(file.c_str(), &res))
-	{
-		return res.st_size;
-	}
-	else
-	{
-		throw EXCEPTION("Kann Dateigroesse nicht bestimmen!");
-	}
-#endif
 }
 
 
@@ -116,7 +107,7 @@ bool sysdep_file_exists(const string& file)
 #if defined(SYSDEP_UNIX)
 	return !eaccess(file.c_str(), F_OK);
 #elif defined(SYSDEP_W32)
-	FILE *fp = fopen(path, "r");
+	FILE *fp = fopen(file.c_str(), "r");
 	if(!fp)
 	{
 		return false;
@@ -172,16 +163,23 @@ void sysdep_screensize(SDL_Rect* rect)
  */
 string sysdep_homedir()
 {
-#if defined(SYSDEP_UNIX)
 	string home = getenv("HOME");
+#if defined(SYSDEP_UNIX)
 	if(home == "")
 	{
 		throw EXCEPTION("Fehler: $HOME nicht gesetzt oder leer!");
 	}
-	return home + PATH_SEP;
-#else
-	#error Plattform noch nicht unterstuetzt!
+#elif defined(SYSDEP_W32)
+	if(home == "")
+	{
+		home = getenv("USERPROFILE");
+		if(home == "")
+		{
+			throw EXCEPTION("Fehler: Weder $HOME noch $USERPROFILE enthalten Heimverzeichnis!");
+		}
+	}
 #endif
+	return home + PATH_SEP;
 }
 
 
@@ -201,9 +199,6 @@ string sysdep_confdir()
  *
  * Liefert Pfad mit abschliessendem Slash.
  * DATADIR wird via Autotools definiert.
- *
- * ACHTUNG Win32: ueberpruefen ob DATADIR via Autotools korrekt gesetzt
- *                werden kann!
  */
 string sysdep_datadir()
 {
@@ -215,8 +210,19 @@ string sysdep_datadir()
 	{
 		return d;
 	}
-#endif
 	return string(DATADIR) + PATH_SEP + PACKAGE_TARNAME + PATH_SEP;
+#elif defined(SYSDEP_W32)
+	char buf[1024];
+	if(GetModuleFileName(NULL, buf, sizeof(buf) - 1) == 0)
+	{
+		throw EXCEPTION("GetModuleFileName schlug fehl!");
+	}
+	for(int i = sizeof(buf) - 1; (i > 0) && (buf[i] != '\\'); i--)
+	{
+		buf[i] = '\0';
+	}
+	return string(buf);
+#endif
 }
 
 
