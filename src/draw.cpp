@@ -49,8 +49,59 @@ UVDraw::~UVDraw()
 /*
  * Linie zeichnen.
  */
-void UVDraw::line(SDL_Surface* surface, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
+#define MAX_PHYS 32000
+#define MIN_PHYS -MAX_PHYS
+void UVDraw::line(SDL_Surface* surface, long x1, long y1, long x2, long y2, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
 {
+// WORKAROUND bis UVMap sich besser an die Regeln hält und Linien selber
+// runterrechnen kann.
+
+//cout << "DEBUG1 line (" << x1 << "," << y1 << ")-(" << x2 << "," << y2 << ")" << endl;
+
+	double m = (double(y2) - double(y1)) / (double(x2) - double(x1));
+	if(x1 > MAX_PHYS)
+	{
+		y1 = long(rint(double(MAX_PHYS) * m));
+		x1 = MAX_PHYS;
+	}
+	if(x1 < MIN_PHYS)
+	{
+		y1 = long(rint(double(MIN_PHYS) * m));
+		x1 = MIN_PHYS;
+	}
+	if(y1 > MAX_PHYS)
+	{
+		x1 = long(rint(double(MAX_PHYS) / m));
+		y1 = MAX_PHYS;
+	}
+	if(y1 < MIN_PHYS)
+	{
+		x1 = long(rint(double(MIN_PHYS) / m));
+		y1 = MIN_PHYS;
+	}
+	if(x2 > MAX_PHYS)
+	{
+		y2 = long(rint(double(MAX_PHYS) * m));
+		x2 = MAX_PHYS;
+	}
+	if(x2 < MIN_PHYS)
+	{
+		y2 = long(rint(double(MIN_PHYS) * m));
+		x2 = MIN_PHYS;
+	}
+	if(y2 > MAX_PHYS)
+	{
+		x2 = long(rint(double(MAX_PHYS) / m));
+		y2 = MAX_PHYS;
+	}
+	if(y2 < MIN_PHYS)
+	{
+		x2 = long(rint(double(MIN_PHYS) / m));
+		y2 = MIN_PHYS;
+	}
+
+//cout << "DEBUG2 line (" << x1 << "," << y1 << ")-(" << x2 << "," << y2 << ")" << endl;
+
 	if(antialiasing)
 	{
 		aalineRGBA(surface, x1, y1, x2, y2, r, g, b, a);
@@ -76,9 +127,18 @@ void UVDraw::box(SDL_Surface* surface, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y
  */
 void UVDraw::circle(SDL_Surface* surface, Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
 {
+	// cout << "DEBUG: circle x=" << long(x) << " y=" << long(y) << " r=" << long(rad) << endl;
 	if(antialiasing)
 	{
-		aacircleRGBA(surface, x, y, rad, r, g, b, a);
+		if(rad > 1000)
+		{
+			cerr << "Interne Warnung in UVDraw: Kreis zu gross fuer aacircle(), verwende circle()!" << endl;
+			circleRGBA(surface, x, y, rad, r, g, b, a);
+		}
+		else
+		{
+			aacircleRGBA(surface, x, y, rad, r, g, b, a);
+		}
 	}
 	else
 	{

@@ -7,9 +7,11 @@ $Id$
 - Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
   und Längenangaben (1 LJ = 1000 KE)
 - Wichtigste Dinge anschreiben (?)
-- Kreisbug Workaround
-- Dirty Rect erkennung der Objekte verbessern
-
+- Dirty Rect Verhalten der Objekte verbessern
+  - Dirty Rect Correctness wo immer möglich
+    - Linien: möglich
+    - Kreise: schwierig
+    - Bitmaps: schwierig
 
 == 0.0.2 ==
 
@@ -22,8 +24,10 @@ $Id$
 
 - BUG: gfxPrimitives zeichnen daneben für sehr kleine Zoomfaktoren
   - AA-Ellipse
-  - AA-Line
     - Eigene Routinen mit 32bit Arithmetik implementieren
+  - Linien mit Koords > 16 bit
+    - Eigene Routinen mit 32bit Arithmetik implementieren
+    - oder allen Linien zeichnenden Code mit "dirty Rect"-Correctness versehen
 
 - Intelligentes auto-scaling / positioning
   - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
@@ -142,6 +146,8 @@ $Id$
 - billigen demo-effekt nach splash screen als übergang zum navigator
   (warp-effekt wäre ultra-cool)
 
+- Splash-Screen beim Laden mit Zeichenerklärung für die verwendeten Signaturen
+
 - Keyboard Belegung konfigurierbar machen
   - Set Keys Window
 
@@ -181,6 +187,9 @@ $Id$
   - eigene Klassenhierarchie
   - Fehlertypen erlauben
   - graceful Exit ermöglichen
+
+- Warnings "richtig" implementieren
+  - zentrale WARN(); Facility
 
 - Historische Auswertungen einlesen
 
