@@ -162,13 +162,15 @@ int main(int argc, char* argv[])
 					break;
 				case 'V':
 					version();
-					exit(0);
+					exit(EX_OK);
 					break;
 				case 'H':
-				case '?':
+					usage();
+					exit(EX_OK);
+					break;
 				default:
 					usage();
-					exit(0);
+					exit(EX_USAGE);
 			}
 		}
 		argc -= optind;
@@ -178,7 +180,7 @@ int main(int argc, char* argv[])
 		if(argc == 0)
 		{
 			usage();
-			exit(1);
+			exit(EX_USAGE);
 		}
 
 		// widerspruechliche Argumente
@@ -186,13 +188,13 @@ int main(int argc, char* argv[])
 		{
 			cerr << " *** Fehler: Widerspruechliche Argumente!" << endl;
 			usage();
-			exit(1);
+			exit(EX_USAGE);
 		}
 
 		if(!sysdep_file_exists(argv[0]))
 		{
 			cerr << " *** Fehler: Auswertungsdatei existiert nicht!" << endl;
-			exit(1);
+			exit(EX_NOINPUT);
 		}
 
 		if(S)
@@ -259,47 +261,55 @@ int main(int argc, char* argv[])
 
 		delete nav;
 		delete conf;
-		exit(0);
+		exit(EX_OK);
 	}
 	catch(bad_alloc e)
 	{
 		cerr << "*** STL Bad Allocation:" << endl;
 		cerr << e.what() << endl;
+		exit(EX_OSERR);
 	}
 	catch(invalid_argument e)
 	{
 		cerr << "*** STL Invalid Argument:" << endl;
 		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
 	}
 	catch(logic_error e)
 	{
 		cerr << "*** STL Logic Error:" << endl;
 		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
 	}
 	catch(runtime_error e)
 	{
 		cerr << "*** STL Runtime Error:" << endl;
 		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
 	}
 	catch(string e)
 	{
 		cerr << "*** Exception:" << endl;
 		cerr << e << endl;
+		exit(EX_DATAERR); // FIXME
 	}
 	catch(char* e)
 	{
 		cerr << "*** Exception [char*]:" << endl;
 		cerr << e << endl;
+		exit(EX_SOFTWARE); // FIXME
 	}
 	catch(const char* e)
 	{
 		cerr << "*** Exception [const char*]:" << endl;
 		cerr << e << endl;
+		exit(EX_SOFTWARE); // FIXME
 	}
 	catch(...)
 	{
 		cerr << "*** Exception:" << endl;
 		cerr << "Unbekannter Exception-Typ!" << endl;
+		exit(EX_SOFTWARE);
 	}
 	exit(1);
 }

@@ -39,8 +39,12 @@
 
 
 #if defined(__unix__)
-	#include <sys/types.h>	// mkdir(2)
-	#include <sys/stat.h>	// mkdir(2), stat(2)
+	#if defined(HAVE_SYS_TYPES_H)
+		#include <sys/types.h>	// mkdir(2)
+	#endif
+	#if defined(HAVE_SYS_STAT_H)
+		#include <sys/stat.h>	// mkdir(2), stat(2)
+	#endif
 	#define PATH_SEP "/"
 #elif defined(WIN32)
 	#define PATH_SEP "\\"

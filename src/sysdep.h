@@ -33,4 +33,43 @@ string sysdep_datadir();
 string sysdep_fontfile(const string&);
 string sysdep_imagefile(const string&);
 
+#if defined(HAVE_SYSEXITS_H)
+	#include <sysexits.h>
+#endif
+
+// successful termination
+#if !defined(EX_OK)
+	#define EX_OK       0
+#endif
+
+// command line usage error
+#if !defined(EX_USAGE)
+	#define EX_USAGE    64
+#endif
+
+// data format error
+#if !defined(EX_DATAERR)
+	#define EX_DATAERR  65
+#endif
+
+// cannot open input
+#if !defined(EX_NOINPUT)
+	#define EX_NOINPUT  66
+#endif
+
+// internal software error
+#if !defined(EX_SOFTWARE)
+	#define EX_SOFTWARE 70
+#endif
+
+// system error (e.g., can't fork)
+#if !defined(EX_OSERR)
+	#define EX_OSERR    71
+#endif
+
+// can't create (user) output file
+#if !defined(EX_CANTCREAT)
+	#define EX_CANTCREAT    73
+#endif
+
 #endif // SYSDEP_H
