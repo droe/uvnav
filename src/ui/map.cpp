@@ -685,7 +685,9 @@ void UVMap::draw(SDL_Rect* rect)
 	dst.y = status->h;
 	drw->box(screen, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
 	SDL_BlitSurface(status, 0, screen, &dst);
+	SDL_FreeSurface(status);
 
+#ifdef DEBUG
 	// Debug-Overlay
 	long dticks = SDL_GetTicks() - ticks;
 	SDL_Surface* debug = debug_font->get_surface(
@@ -700,6 +702,8 @@ void UVMap::draw(SDL_Rect* rect)
 	dst.y = screen->h - debug->h * 2;
 	drw->box(screen, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
 	SDL_BlitSurface(debug, 0, screen, &dst);
+	SDL_FreeSurface(debug);
+#endif
 
 	/*
 	 * DEBUG Code fuer Widgets
@@ -733,8 +737,6 @@ void UVMap::draw(SDL_Rect* rect)
 	{
 		SDL_UnlockSurface(screen);
 	}
-
-	SDL_FreeSurface(status);
 }
 
 
@@ -928,6 +930,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 		dst.x = long(rint(center_x - h / 2));
 		dst.y = long(rint(center_y - h / 2));
 		SDL_BlitSurface(surface, 0, screen, &dst);
+		// Kein SDL_FreeSurface!
 
 		long tl = planet->techlevel;
 

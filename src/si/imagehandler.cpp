@@ -89,6 +89,7 @@ UVImageHandler::UVImageHandler()
 
 		// Surface in Bildschirmformat konvertieren
 		images[i].original = SDL_DisplayFormatAlpha(surface);
+		SDL_FreeSurface(surface);
 		if(!images[i].original)
 		{
 			throw EXCEPTION(string("SDL_DisplayFormatAlpha Error: ") + SDL_GetError());
