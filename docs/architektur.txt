@@ -20,16 +20,24 @@ pd   Problem Domain Layer: Planet, Planeten, Schiff, ...
 si   System Interface Layer: Config, Image, Font, Log
 lib  Pattern-ABC's, Library-Wrapper, SysDep
 
-     main()
-       |
-       V
-     __ui_
-    /  |  \
-   V   |   V
-  dm ----> pd
-    \__|__/
-       V
-       si
+     +-----------------------------+     +---+
+     | UI - User Interface Layer   |---->|   |
+     +-----------------------------+     | L |
+         |        |           |          | i |
+         V        |           |          | b |
+     +-----------------------------+     | r |
+     | DM - Data Management Layer  |---->| a |
+     +-----------------------------+     | r |
+                | |         | |          | y |
+                V V         | |          |   |
+     +-----------------------------+     |   |
+     | PD - Problem Domain Layer   |---->| L |
+     +-----------------------------+     | a |
+                          | | |          | y |
+                          V V V          | e |
+     +-----------------------------+     | r |
+     | SI - System Interface Layer |---->|   |
+     +-----------------------------+     +---+
 
 
 
@@ -65,18 +73,18 @@ SI: System Interface
 --------------------
 
 Die SI-Schicht besteht aus einer Sammlung von Singletons, welche die zu
-Verfuegung stehende Infrastruktur abbildet.  Bilddateien und Fonts einlesen,
-Konfigurationsverwaltung, Logging etc.
+Verfuegung stehende Infrastruktur abbildet.  Bilddateien und Fonts
+einlesen, Konfigurationsverwaltung, Logging etc.
 
 
 
 Lib: Library
 ------------
 
-Dies ist keine Schicht, sondern die Sammlung aller allgemeinen Hilfsheader
-und Klassen.  Dinge wie abstrakte Basisklassen fuer wichtige Patterns
-(Singleton, Observer), oder Hilfskonstruktionen fuer Bibliotheken
-(STL, SDL, PCRE) sind hier zu finden.
+Dies ist eigentlich keine richtige Schicht, sondern die Sammlung aller
+allgemeinen Hilfsheader und Klassen.  Dinge wie abstrakte Basisklassen
+fuer wichtige Patterns (Singleton, Observer), oder Hilfskonstruktionen
+fuer Bibliotheken (STL, SDL, PCRE) sind hier zu finden.
 
 Diese sind allesamt allgemein gehalten, sodass der betreffende Code ohne
 Modifikation auch in anderen Projekten wiederverwendet werden koennte.
