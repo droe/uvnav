@@ -2615,7 +2615,7 @@ void UVParserTXT::parse_planet()
 
 	if(V_INFO)
 	{
-		cout << p->to_string_terse() << endl;
+		cout << "  " << p->to_string_terse() << endl;
 	}
 
 	welt->set_planet(p);
@@ -2888,7 +2888,7 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 
 	if(V_INFO)
 	{
-		cout << z->to_string_terse() << endl;
+		cout << "    " << z->to_string_terse() << endl;
 	}
 
 	// # Agrarfeld 1, 10 FUs
