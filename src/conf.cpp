@@ -66,7 +66,7 @@ UVConf::UVConf()
 	l_set("screen-width", 1024);
 	l_set("screen-height", 768);
 	b_set("screen-fullscreen", false);
-	b_set("screen-resizable", false);
+	b_set("screen-resizable", true);
 	b_set("screen-double-buf", false);
 	b_set("screen-software", true);
 	b_set("screen-quality", true);
