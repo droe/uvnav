@@ -18,13 +18,8 @@
  * $Id$
  */
 
-#ifndef GLOBAL_H
-#define GLOBAL_H
-
-#include "config.h"
-
-#include "stl.h"
-#include "debug.h"
+#ifndef SDL_H
+#define SDL_H
 
 #include "SDL.h"
 #include "SDL_syswm.h"
@@ -33,17 +28,4 @@
 #include "SDL_rotozoom.h"		// SDL_gfx
 #include "SDL_gfxPrimitives.h"	// SDL_gfx
 
-#define TITLE			"Universum V Navigator"
-#define COPYRIGHT		"Copyright (C) 2004-2005 Daniel Roethlisberger"
-
-#define STRING(x)	# x
-#define XSTRING(x)	STRING(x)
-
-extern const char* revision;
-
-#define PI 3.141592
-
-#define min(x,y) (((x) < (y)) ? (x) : (y))
-#define max(x,y) (((x) > (y)) ? (x) : (y))
-
-#endif // GLOBAL_H
+#endif // SDL_H

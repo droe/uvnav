@@ -20,6 +20,12 @@
 
 #include "map.h"
 
+#include "../lib/version.h"
+
+#include "../lib/exceptions.h"
+
+#define PI 3.141592
+
 //============================================================================
 
 /*

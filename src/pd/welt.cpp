@@ -20,6 +20,8 @@
 
 #include "welt.h"
 
+#include <math.h>
+
 /*
  * Diese Klassen stellen die im Spiel vorhandenen Dinge dar.
  * Die Klassen sollen als von aussen manipulierbare Datenobjekte

@@ -18,7 +18,8 @@
  * $Id$
  */
 
-#include "lib/global.h"
+#include "lib/version.h"
+#include "lib/sysexits.h"
 
 #include "si/conf.h"
 #include "ui/navigator.h"

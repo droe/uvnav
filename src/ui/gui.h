@@ -21,8 +21,6 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include "../lib/global.h"
-
 /*
 class UVGUIWidget
 {

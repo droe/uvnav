@@ -20,6 +20,8 @@
 
 #include "progress.h"
 
+#include "../lib/exceptions.h"
+
 /*
  * UVProgress - Implementiert einen lightweight Progress-Bar.
  *

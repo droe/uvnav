@@ -21,8 +21,6 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "../lib/global.h"
-
 #include "../si/conf.h"
 #include "../pd/welt.h"
 #include "../si/font.h"

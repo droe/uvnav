@@ -21,7 +21,7 @@
 #ifndef CONF_H
 #define CONF_H
 
-#include "../lib/global.h"
+#include "../lib/stl.h"
 
 /*
  * Version der Konfigurationsdatenbank.

@@ -20,6 +20,8 @@
 
 #include "images.h"
 
+#include "../lib/exceptions.h"
+
 /*
  * UVImages - Bilder effizient laden, skalieren und verwalten.
  *

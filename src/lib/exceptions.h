@@ -18,29 +18,13 @@
  * $Id$
  */
 
-#ifndef FONT_H
-#define FONT_H
+#ifndef EXCEPTIONS_H
+#define EXCEPTIONS_H
 
-#include "conf.h"
-#include "../lib/sysdep.h"
+/*
+ * Exceptions.
+ */
 
-#define FNT_SANS "FreeSans.ttf"
+#define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
 
-class UVFont
-{
-	public:
-		UVFont(const UVConf* conf, const string& file, int size);
-		~UVFont();
-
-		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
-		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
-		SDL_Surface* get_surface(const string& text) const;
-
-	private:
-		TTF_Font* font;
-
-		bool antialiasing;
-};
-
-#endif // FONT_H
-
+#endif // EXCEPTIONS_H

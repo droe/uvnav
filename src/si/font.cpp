@@ -20,6 +20,8 @@
 
 #include "font.h"
 
+#include "../lib/exceptions.h"
+
 /*
  * UVFont - Eine TTF-Schriftart laden und Strings rendern.
  *

@@ -21,10 +21,10 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include "../lib/global.h"
-
 #include "../si/conf.h"
 #include "../si/font.h"
+#include "../lib/sdl.h"
+#include "../lib/stl.h"
 
 class UVProgress
 {

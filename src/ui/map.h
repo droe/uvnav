@@ -21,8 +21,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "../lib/global.h"
-
 #include "../si/conf.h"
 #include "../si/images.h"
 #include "../si/font.h"

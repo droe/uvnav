@@ -20,6 +20,9 @@
 
 #include "sysdep.h"
 
+#include "config.h"
+#include "exceptions.h"
+
 /*
  * Globale betriebssystemabhaengige Hilfsroutinen.
  *

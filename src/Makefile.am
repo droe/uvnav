@@ -19,7 +19,8 @@
 bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp \
-	lib/global.h lib/stl.h lib/debug.h lib/sysdep.h lib/sysdep.cpp \
+	lib/version.h lib/minmax.h lib/stl.h lib/sdl.h lib/exceptions.h \
+	lib/sysexits.h lib/sysdep.h lib/sysdep.cpp \
 	lib/regexp.h lib/regexp.cpp \
 	si/conf.h si/conf.cpp si/images.h si/images.cpp \
 	si/font.h si/font.cpp si/draw.h si/draw.cpp \

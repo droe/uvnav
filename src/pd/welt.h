@@ -21,7 +21,7 @@
 #ifndef WELT_H
 #define WELT_H
 
-#include "../lib/global.h"
+#include "../lib/stl.h"
 
 class UVZone;
 class UVPlanet;

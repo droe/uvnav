@@ -18,24 +18,10 @@
  * $Id$
  */
 
-#ifndef DEBUG_H
-#define DEBUG_H
+#ifndef MINMAX_H
+#define MINMAX_H
 
-/*
- * Debugging und Exceptions.
- *
- * Dieser Header definiert diverse Dinge im Zusammenhang mit
- * Debugging und Fehlerhandling.
- *
- * DEBUG wird von config.h definiert, falls Debug-Code benutzt
- * werden soll.
- *
- * Dieser Header muss nach config.h und stl.h eingebunden werden.
- */
+#define min(x,y) (((x) < (y)) ? (x) : (y))
+#define max(x,y) (((x) > (y)) ? (x) : (y))
 
-// *** DEBUG_PRINT
-
-//#define EXCEPTION(x) string(str_stream() << x << " in " << __FUNCTION__ << "() at " << __FILE__ << ":" << __LINE__)
-#define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
-
-#endif // DEBUG_H
+#endif // MINMAX_H

@@ -20,6 +20,8 @@
 
 #include "navigator.h"
 
+#include "../lib/version.h"
+#include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
 #include "../dm/parser_txt.h"
 #include "progress.h"

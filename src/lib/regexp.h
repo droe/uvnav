@@ -21,7 +21,8 @@
 #ifndef REGEXP_H
 #define REGEXP_H
 
-#include "global.h"
+#include "../lib/stl.h"
+
 #include <pcre.h>
 
 class UVRegExp

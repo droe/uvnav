@@ -21,6 +21,7 @@
 #include "conf.h"
 
 #include "../lib/sysdep.h"
+#include "../lib/exceptions.h"
 
 /*
  * UVConf - Verwaltet die persistente Konfiguration.

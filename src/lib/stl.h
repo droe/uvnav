@@ -40,6 +40,8 @@
 #include <exception>
 #include <stdexcept>
 
+#include "config.h"
+
 #if !defined(HAVE_NAMESPACES)
   #error Require namespaces. Sorry.
 #endif

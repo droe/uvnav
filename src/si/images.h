@@ -21,8 +21,6 @@
 #ifndef IMAGES_H
 #define IMAGES_H
 
-#include "../lib/global.h"
-
 #include "conf.h"
 #include "../lib/sysdep.h"
 

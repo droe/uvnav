@@ -21,7 +21,7 @@
 #ifndef DRAW_H
 #define DRAW_H
 
-#include "../lib/global.h"
+#include "../lib/sdl.h"
 
 #include "conf.h"
 

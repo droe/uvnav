@@ -21,8 +21,6 @@
 #ifndef PARSER_TXT_H
 #define PARSER_TXT_H
 
-#include "../lib/global.h"
-
 #include "../si/conf.h"
 #include "../pd/welt.h"
 #include "../ui/progress.h"

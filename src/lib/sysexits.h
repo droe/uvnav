@@ -18,29 +18,46 @@
  * $Id$
  */
 
-#ifndef FONT_H
-#define FONT_H
+#ifndef SYSEXITS_H
+#define SYSEXITS_H
 
-#include "conf.h"
-#include "../lib/sysdep.h"
+#if defined(HAVE_SYSEXITS_H)
+	#include <sysexits.h>
+#endif
 
-#define FNT_SANS "FreeSans.ttf"
+// successful termination
+#if !defined(EX_OK)
+	#define EX_OK       0
+#endif
 
-class UVFont
-{
-	public:
-		UVFont(const UVConf* conf, const string& file, int size);
-		~UVFont();
+// command line usage error
+#if !defined(EX_USAGE)
+	#define EX_USAGE    64
+#endif
 
-		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
-		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
-		SDL_Surface* get_surface(const string& text) const;
+// data format error
+#if !defined(EX_DATAERR)
+	#define EX_DATAERR  65
+#endif
 
-	private:
-		TTF_Font* font;
+// cannot open input
+#if !defined(EX_NOINPUT)
+	#define EX_NOINPUT  66
+#endif
 
-		bool antialiasing;
-};
+// internal software error
+#if !defined(EX_SOFTWARE)
+	#define EX_SOFTWARE 70
+#endif
 
-#endif // FONT_H
+// system error (e.g., can't fork)
+#if !defined(EX_OSERR)
+	#define EX_OSERR    71
+#endif
 
+// can't create (user) output file
+#if !defined(EX_CANTCREAT)
+	#define EX_CANTCREAT    73
+#endif
+
+#endif // SYSEXITS_H
