@@ -17,7 +17,8 @@
 #
 # $Id$
 
-echo "Updating ChangeLog..."
-svn -v log > ChangeLog
-echo "Done."
-
+if [ -d .svn ]; then
+	echo "Updating ChangeLog..."
+	svn -v log > ChangeLog
+	echo "Done."
+fi
