@@ -33,9 +33,9 @@ distcleancheck_listfiles = \
     find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
 
 MAINTAINERCLEANFILES = \
-    Makefile.in configure aclocal.m4 config.h.in config.h.in~ ChangeLog \
-    INSTALL config.guess config.sub depcomp install-sh missing mkinstalldirs \
-    compile
+    Makefile.in configure configure.lineno aclocal.m4 config.h.in \
+    config.h.in~ ChangeLog INSTALL config.guess config.sub depcomp \
+    install-sh missing mkinstalldirs compile
 
 ChangeLog: FORCE
 	@if [ -d .svn -a -x aux/svn2log.sh ]; then \

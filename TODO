@@ -1,8 +1,7 @@
 $Id$
 
-- PRI 1: OO-Architecture Redesign
+- PRI 1: OO-Architecture Redesign: Observer-Pattern, Objekthierarchie
 
-- ccache ausprobieren (symlink oder ccache g++)
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)
   - Parsing relevanter Daten als nächstes
@@ -16,6 +15,11 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 ------------------------------------------------------------------------------
 
 == UNSORTED ==
+
+- sidebar mit objektliste als einfaches mittel gegen die unübersichtlichkeit
+  - deaktiviertbar
+  - evtl zoom-minimap
+  - wie mit übersichts-minimap koppeln?
 
 == HOHE PRIORITAET ==
 
