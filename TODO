@@ -1,8 +1,6 @@
 $Id$
 
 - OO-Architecture Redesign
-  - distcheck
-  - ui/widgets/GUI* -> ui/core/UV*, commit
   - si/UVKeyboard als Singleton implementieren
     - interface base class UVKeydownListener mit ::handle_keydown()
     - multiplext keypresses an alle interessierten objekte

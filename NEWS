@@ -1,20 +1,25 @@
 $Id$
 
-                   Grosses Architektur-Refactoring.
-                   Der Parser wurde um rudimentaeres Handling der Messages
-                   erweitert.
-                   Bugfix: Vollbildschirm-Toggle vergroessert Screen nun
-                   auch in der Vertikalen wieder.
+                         * Grosses OO-Architektur-Refactoring; UV Navigator
+                           ist nun in einer Vierschichtenarchitektur
+                           strukturiert, und benutzt diverse bekannte
+                           Standard-Patterns (MVC, Observer, Singleton,
+                           Composite, ...)
+                         * Eigene Widget-Klassenhierarchie implementiert
+                         * Der Parser wurde um rudimentaeres Handling der
+                           Messages erweitert
+                         * Bugfix: Vollbildschirm-Toggle vergroessert Screen
+                           nun auch in der Vertikalen wieder
 
-2004-08-19  0.0.2  Windows ist nun unterstuetzt, getestet mit MinGW32,
-                   und die Bibliothek PCRE++ wird nicht mehr benoetigt.
-                   Der Parser wurde deutlich verbessert und ist nun in
-                   der Lage, auch alte und uralte Auswertungen zu parsen,
-                   ausserdem wurde die Performance um 50%-100% gesteigert.
-                   Die grafische Darstellung wurde verbessert, steckt aber
-                   noch immer in den Kinderschuhen.
+2004-08-19  0.0.2  r62   * Windows ist nun unterstuetzt, getestet mit MinGW32,
+                           und die Bibliothek PCRE++ wird nicht mehr benoetigt
+                         * Der Parser wurde deutlich verbessert und ist nun in
+                           der Lage, auch alte Auswertungen zu parsen
+                         * Die grafische Darstellung wurde verbessert, steckt
+                           aber noch immer in den Kinderschuhen
 
-2004-07-21  0.0.1  Erster Release.  Alles noch sehr provisorisch, aber die
-                   Grundfunktionalität ist mal in den Ansätzen vorhanden.
+2004-07-21  0.0.1  r35   * Erster Release - alles noch sehr provisorisch, aber
+                           die Grundfunktionalitaet ist mal in den Ansaetzen
+                           vorhanden
 
-2004-06-29  0.0.0  Erster Import ins Subversion Repository.
+2004-06-29  0.0.0  r1    * Erster Import ins Subversion Repository

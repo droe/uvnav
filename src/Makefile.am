@@ -56,6 +56,7 @@ uvnav_SOURCES = rev.h rev.cpp \
 	dm/abstractimporter.h \
 	dm/import_txt.h dm/import_txt.cpp \
 	dm/importhandler.h dm/importhandler.cpp \
+	ui/core/orientation.h \
 	ui/core/size.h ui/core/size.cpp \
 	ui/core/rect.h ui/core/rect.cpp \
 	ui/core/widget.h ui/core/widget.cpp \
