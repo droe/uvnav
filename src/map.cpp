@@ -169,7 +169,7 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 	// *** gleichzeitig muss aber der Default in conf.cpp geaendert werden
 
 	draw = new UVDraw(conf);
-	overlay_font = new UVFont(conf, FNT_SANS, screen->h / 64);
+	overlay_font = new UVFont(conf, FNT_SANS, screen->h / 48);
 }
 
 
@@ -349,7 +349,7 @@ void UVMap::draw_welt(SDL_Rect* rect)
 		             << " dim="  << dim);
 
 	SDL_Rect dst;
-	dst.x = screen->h - status->h;
+	dst.x = screen->w - status->w;
 	dst.y = 0;
 	// evtl noch rechteck davor-blitten
 	SDL_BlitSurface(status, 0, screen, &dst);
