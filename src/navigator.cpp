@@ -331,7 +331,7 @@ void UVNavigator::run()
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 
 	map = new UVMap(conf, images, welt, screen);
-	map->draw_welt(&rect);
+	map->draw(&rect);
 
 	SDL_Event event;
 	bool running = true;

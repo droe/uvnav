@@ -63,7 +63,7 @@ class UVMap
 		void zoom_by(double);
 		void resize(SDL_Surface*);
 
-		void draw_welt(SDL_Rect*);
+		void draw(SDL_Rect*);
 
 	private:
 		UVConf* conf;
@@ -78,8 +78,11 @@ class UVMap
 		double zoom;
 		long dim;
 
-		UVDraw* draw;
+		UVDraw* drw;
 		UVFont* overlay_font;
+		UVFont* grid_font;
+
+		void draw_grid();
 
 		void draw_planet(UVPlanet*);
 		void draw_schiff(UVSchiff*);

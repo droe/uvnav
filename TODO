@@ -3,20 +3,16 @@ $Id$
 
 == 0.0.1 ==
 
-- Map Eye-Candy
-  - Grid
-    - Linien mit Maschengrösse in Abhängigkeit vom Zoomfaktor
-    - Coole Windrose
-    - Grob-Koordinaten am Bildschirmrand
-  - Sonden mit unbekanntem Radius entsprechend markieren
-    - Sonde mit Zentrum versehen
-    - Radius nur zeichnen falls notwendig und 
-  - Dirty Rect erkennung der Objekte verbessern
+- Sonden mit unbekanntem Radius entsprechend markieren
+  - Sonde mit Zentrum versehen (quadrat wie bei container)
+  - Radius nur zeichnen falls bekannt
+  - Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
+- Dirty Rect erkennung der Objekte verbessern
 
 
 == 0.2.0 ==
 
-- Alles andere.
+- Gemäss Roadmap
 
 
 ------------------------------------------------------------------------------
@@ -56,12 +52,14 @@ $Id$
     - nicht nur mindest, sondern auch maximalgroesse der objekte festlegen,
       und zoom-code entsprechend anpassen
     - von min/max objektgroessen auf schoene funktion umsteigen
+    - Planeten sind bei grossem Zoom relativ, bei kleinem Zoom fix gross
 
 - UVMap
-  - Statusinformationen in ein Konzept überführen
   - Mehr Informationen zeichnen
   - Schlaues System um die gezeichneten Infos individuell zu kontrollieren
   - Minimap
+  - Windrose & Massstab Overlay
+  - Statusinformationen in ein sauberes Info-Overlay überführen.
   - Maushandling einführen
 
 - Fonts cachen und blitten anstatt immer neu rendern und blitten
