@@ -21,6 +21,7 @@
 #include "progress.h"
 
 #include "../lib/exceptions.h"
+#include "../si/fonthandler.h"
 #include "../dm/parser_txt.h"
 
 /*
@@ -37,17 +38,18 @@
 UVProgress::UVProgress(SDL_Surface* s, SDL_Rect* r)
 : screen(s), rect(*r), ticks(0)
 {
-	font = new UVFont(FNT_SANS, screen->h / 32);
+	font = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
 }
 
 
 /*
  * Destruktor.
  */
+/*
 UVProgress::~UVProgress()
 {
-	delete font;
 }
+*/
 
 
 /*

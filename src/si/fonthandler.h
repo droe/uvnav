@@ -18,39 +18,29 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef FONTHANDLER_H
+#define FONTHANDLER_H
 
-#include "../pd/welt.h"
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "map.h"
+#include "../lib/singleton.h"
+#include "../lib/stl.h"
+#include "font.h"
 
-class UVNavigator
+#define FNT_SANS "FreeSans.ttf"
+
+class UVFontHandler : public Singleton<UVFontHandler>
 {
-	public:
-		UVNavigator();
-//		~UVNavigator();
+	friend class Singleton<UVFontHandler>;
 
-		void splash();
-		void load(const string&, int = 0);
-		void wait();
-		void run();
+	public:
+		UVFont* get_font(const string& file, int size);
+
+	protected:
+		UVFontHandler();
+		~UVFontHandler();
 
 	private:
-		UVWelt* welt;
-		UVMap* map;
-		// *** GUI
-		UVConf* conf;
-		UVFont* font_splash;
-
-		SDL_Surface* screen;
-
-		long status_y;
-		void splash_status(const string&);
-
-		void init_video();
+		ext::hash_map<string, UVFont*> fonts;
 };
 
-#endif // NAVIGATOR_H
+#endif // FONT_H
 

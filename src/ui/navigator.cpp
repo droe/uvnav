@@ -25,6 +25,7 @@
 #include "../lib/sysdep.h"
 #include "../dm/parser_txt.h"
 #include "../si/imagehandler.h"
+#include "../si/fonthandler.h"
 #include "progress.h"
 
 /*
@@ -66,7 +67,7 @@ UVNavigator::UVNavigator()
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
-	font_splash = new UVFont(FNT_SANS, screen->h / 32);
+	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
 
 	if(conf->b_get("screen-quality"))
 	{
@@ -85,10 +86,11 @@ UVNavigator::UVNavigator()
 /*
  * Destruktor.
  */
+/*
 UVNavigator::~UVNavigator()
 {
-	delete font_splash;
 }
+*/
 
 
 /*

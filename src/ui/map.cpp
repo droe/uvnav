@@ -23,6 +23,7 @@
 #include "../lib/version.h"
 #include "../lib/exceptions.h"
 #include "../si/conf.h"
+#include "../si/fonthandler.h"
 
 #define PI 3.14159265358979323846
 
@@ -194,9 +195,12 @@ UVMap::UVMap(UVWelt* w, SDL_Surface* s)
 	}
 
 	drw = UVDraw::get_instance();
-	debug_font = new UVFont(FNT_SANS, conf->l_get("map-debug-font-size"));
-	grid_font = new UVFont(FNT_SANS, conf->l_get("map-grid-font-size"));
-	label_font = new UVFont(FNT_SANS, conf->l_get("map-label-font-size"));
+	debug_font = UVFontHandler::get_instance()->get_font(FNT_SANS,
+			conf->l_get("map-debug-font-size"));
+	grid_font  = UVFontHandler::get_instance()->get_font(FNT_SANS,
+			conf->l_get("map-grid-font-size"));
+	label_font = UVFontHandler::get_instance()->get_font(FNT_SANS,
+			conf->l_get("map-label-font-size"));
 }
 
 
@@ -212,10 +216,6 @@ UVMap::~UVMap()
 	conf->l_set("map-dim", dim, true);
 	conf->b_set("map-sichtradien", opt_sichtradien, true);
 	conf->b_set("map-kaufradien", opt_kaufradien, true);
-
-	delete debug_font;
-	delete grid_font;
-	delete label_font;
 }
 
 

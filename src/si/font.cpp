@@ -50,8 +50,6 @@ UVFont::UVFont(const string& file, int size)
 
 	antialiasing = UVConf::get_instance()->b_get("screen-quality");
 
-	TTF_Init();
-
 	font = TTF_OpenFont(ff.c_str(), size);
 	if(font == NULL)
 	{
@@ -62,11 +60,13 @@ UVFont::UVFont(const string& file, int size)
 
 /*
  * Destruktor.
+ *
+ * Achtung: Wird aus Singleton-Destruktor heraus aufgerufen; keine Singletons
+ *          mehr verfuegbar.
  */
 UVFont::~UVFont()
 {
 	TTF_CloseFont(font);
-	TTF_Quit();
 }
 
 

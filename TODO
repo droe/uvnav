@@ -1,14 +1,16 @@
 $Id$
 
-- PRI 1: OO-Architecture Redesign
-  - si/font.* -> Singleton<UVFont> mit HashMap of Font Objs
-  - lib/observer.* benutzen, um ui von pd und dm zu separieren
-  - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
-    - model interface (virtual class)
+- OO-Architecture Redesign
+  - SDL-Funktionalität kapseln in SDL Screen Singleton
   - parser_txt.* refactoren:
-    - abstractparser.*, txtparser.*/xmlparser.*/htmparser.*, parserhandler.*
+    - abstractimporter.*
+    - txtimporter.*/xmlimporter.*/htmimporter.*
+    - importhandler.*
   - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
                             ui/rootpane.{h,cpp}
+  - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
+    - model interface (virtual class)
+  - lib/observer.* benutzen, um ui von pd und dm zu separieren
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)

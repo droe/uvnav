@@ -24,8 +24,6 @@
 #include "../lib/stlstring.h"
 #include "../lib/sdl.h"
 
-#define FNT_SANS "FreeSans.ttf"
-
 class UVFont
 {
 	public:
