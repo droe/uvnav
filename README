@@ -40,7 +40,8 @@ UV Navigator befindet sich in der Frühphase der Entwicklung.
 
 Der Parser ist mittlerwile stabil und kann die allermeisten
 Auswertungen korrekt einlesen, inklusive alte und uralte
-Auswertungen (getestet wurden Sternzeit 55, 145-147, 211-).
+Auswertungen (getestet wurden derzeit Sternzeit 55, 128,
+144-152, 154-162, 211-218).
 Was hier noch fehlt ist das Parsen der Nachrichten, speziell
 der Resultate von Zonendaten-Abfragen.
 
@@ -107,11 +108,11 @@ und falls nicht, kann man das rechenintensive Anti-Aliasing und die
 Interpolation im Zoom-Code mit -Q deaktivieren -- muss dafür aber mit
 hässlich verpixelter Anzeige leben. Wie bei PoN, AMAP und ToVU halt :)
 
-Mit CPU auf 350 MHz gedrosselt, bewegen sich die Renderzeiten mit
-übel grossen Datenmengen im schlimmsten Fall um die 250 ms = 4 fps,
-im weniger Rechenintensiven Modus bei 125 = 8 fps.  Damit lässt sich
-bereits gut arbeiten.  Auf schnelleren Maschinen dürfe die
-Geschwindigkeit also nicht zum Problem werden.
+Mit CPU auf 350 MHz gedrosselt, bewegen sich die Renderzeiten bei
+grösseren Datenmengen im schlimmsten Fall um die 250 ms = 4 fps,
+im weniger rechenintensiven Modus bei 125 = 8 fps.  Damit lässt sich
+immer noch arbeiten.  Auf schnelleren Maschinen dürfe die
+Geschwindigkeit bereits jetzt kaum zum Problem werden.
 
 
 
@@ -129,9 +130,6 @@ diesem File für dein Betriebssystem hinzugefügt werden.
 
 Die Autotools-Toolchain ist noch etwas lückenhaft.  Korrekturen,
 zusätzliche oder bessere Tests sind natürlich willkommen.
-
-UVNav wird ganz sicher unter BSD, Linux und Windows sauber laufen,
-wenns dann mal fertig ist.  Patches sind jederzeit willkommen.
 
 
 

@@ -1,17 +1,51 @@
 $Id$
 
+
+Besonderer Dank geht an:
+
+ * Daniel Straessle / Void <d@niel.ch>
+   - Auswertungen Sternzeit 128, 144-152, 154-162 fuer Testzwecke
+
+
+share/fonts/FreeSans.tty:
+/*
+ * Aus Freefont, der Sammlung freier Universal Character Set Outline Fonts
+ * Copyright (C) 2002 Free Software Foundation
+ * Lizenziert unter der GNU GPL
+ * http://www.nongnu.org/freefont/
+ */
+
+share/images/sdl_powered.png:
+/*
+ * Basiert auf offiziellem Bildmaterial zu SDL
+ * Copyright unbekannt
+ * Zur freien Verwendung in SDL benutzenden Applikationen freigegeben
+ * http://www.libsdl.org/
+ */
+
+share/images/{planet??.png,universum.png}:
+/*
+ * Basieren auf offiziellem Bildmaterial zu Universum V
+ * Copyright (C) 1994-2004 Roman Meng <roman@chronator.ch>
+ * Zur freien Verwendung in Tools zu Universum V freigegeben
+ * http://www.chronator.ch/pbem/universum/
+ */
+
 src/parser_txt.cpp - UVParserTXT::get_image_planet():
 /*
- * Basiert auf setKlima() aus Planet.java 1.9 von
- * ToVU: http://www.duffy.ch/universum/tovu/
+ * Basiert auf setKlima() aus Planet.java 1.9 von ToVU
  * Copyright (C) 1998-2004 Daniel Straessle <d@niel.ch>
+ * Lizenziert unter der GNU GPL
+ * http://www.duffy.ch/universum/tovu/
  */
 
 src/sysdep.cpp - sysdep_screensize():
 /*
- * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11 von
- * EGachine: http://egachine.berlios.de/
+ * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11
+ * von EGachine
  * Copyright (C) 2004 Jens Thiele <karme@berlios.de>
  * Copyright (C) 2003 Stephan Ferraro <stephan@lazyfellow.com>
+ * Lizenziert unter der GNU GPL
+ * http://egachine.berlios.de/
  */
 

@@ -18,17 +18,16 @@
 
 nobase_dist_pkgdata_DATA = \
 	fonts/FreeSans.ttf \
-	images/planet00.jpg \
-	images/planet01.jpg \
-	images/planet02.jpg \
-	images/planet03.jpg \
-	images/planet04.jpg \
-	images/planet05.jpg \
-	images/planet06.jpg \
-	images/planet07.jpg \
-	images/planet08.jpg \
-	images/planet09.jpg \
-	images/planet10.jpg \
+	images/planet01.png \
+	images/planet02.png \
+	images/planet03.png \
+	images/planet04.png \
+	images/planet05.png \
+	images/planet06.png \
+	images/planet07.png \
+	images/planet08.png \
+	images/planet09.png \
+	images/planet10.png \
 	images/universum.png \
 	images/sdl_powered.png
 

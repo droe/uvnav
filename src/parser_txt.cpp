@@ -547,7 +547,8 @@ void UVParserTXT::parse_allianzen()
 	}
 
 	// Allianz mit Spieler: Zsakash (2), Xantes hocar (1), Kynar (2)
-	if(!match("^Allianz mit Spieler: +(.*)$"))
+	// Allianz mit: Tass (1), Knorrly Intergalaktisch (1), Aiwendil (2)
+	if(!match("^Allianz mit(?: Spieler)?: +(.*)$"))
 	{
 		throw EXCEPTION("Allianzen mit Spieler fehlen!");
 	}
@@ -556,7 +557,8 @@ void UVParserTXT::parse_allianzen()
 
 	// Sie haben diesen Spielern den Krieg erklärt: 
 	// Krieg mit Spieler: 
-	if(!match("^(?:Sie haben diesen Spielern den Krieg erkl.rt|Krieg mit Spieler): +(.*)$"))
+	// Krieg mit: Minion Zork, Great Zork, Drjakard Ceptor, Drjakard I
+	if(!match("^(?:Sie haben diesen Spielern den Krieg erkl.rt|Krieg mit(?: Spieler)?): +(.*)$"))
 	{
 		throw EXCEPTION("Kriegserklärungen an Spieler fehlen!");
 	}
@@ -570,14 +572,13 @@ void UVParserTXT::parse_allianzen()
 		getline();
 	}
 
-	// Sie haben diesen Gesellschaften den Krieg erklärt: 
-	// Krieg mit Gesellschaft: 
-	if(!match("^(?:Sie haben diesen Gesellschaften den Krieg erkl.rt|Krieg mit Gesellschaft): +(.*)$"))
+	//?Sie haben diesen Gesellschaften den Krieg erklärt: 
+	//?Krieg mit Gesellschaft: 
+	if(match("^(?:Sie haben diesen Gesellschaften den Krieg erkl.rt|Krieg mit Gesellschaft): +(.*)$"))
 	{
-		throw EXCEPTION("Kriegserklärungen an Gesellschaften fehlen!");
+//		cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
+		getline();
 	}
-//	cerr << "IGNORED: [" << (*re)[0] << "]" << endl;
-	getline();
 
 	//?Diese Spieler haben Ihrer Gesellschaft den Krieg erklärt: 
 	if(match("^Diese Spieler haben Ihrer Gesellschaft den Krieg erkl.rt: +(.*)$"))
@@ -1785,9 +1786,10 @@ void UVParserTXT::parse_leerzeile()
 /*
  * Findet die Bild-ID zu einer textuellen Klimabeschreibung.
  *
- * Basiert auf setKlima() aus Planet.java 1.9 von
- * ToVU: http://www.duffy.ch/universum/tovu/
+ * Basiert auf setKlima() aus Planet.java 1.9 von ToVU
  * Copyright (C) 1998-2004 Daniel Straessle <d@niel.ch>
+ * Lizenziert unter der GNU GPL
+ * http://www.duffy.ch/universum/tovu/
  */
 long UVParserTXT::get_image_planet(const string& s) const
 {
@@ -1833,7 +1835,7 @@ long UVParserTXT::get_image_planet(const string& s) const
 	}
 	else
 	{
-		return IMG_PLANET_00;
+		throw EXCEPTION("Unbekannte Klimabeschreibung!");
 	}
 }
 

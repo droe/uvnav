@@ -40,17 +40,16 @@
 const string img_files[NUM_IMG] = {
 	"universum.png",
 	"sdl_powered.png",
-	"planet00.jpg",
-	"planet01.jpg",
-	"planet02.jpg",
-	"planet03.jpg",
-	"planet04.jpg",
-	"planet05.jpg",
-	"planet06.jpg",
-	"planet07.jpg",
-	"planet08.jpg",
-	"planet09.jpg",
-	"planet10.jpg",
+	"planet01.png",
+	"planet02.png",
+	"planet03.png",
+	"planet04.png",
+	"planet05.png",
+	"planet06.png",
+	"planet07.png",
+	"planet08.png",
+	"planet09.png",
+	"planet10.png",
 };
 
 
@@ -81,10 +80,6 @@ UVImages::UVImages(const UVConf* conf)
 		{
 			throw EXCEPTION(string("SDL_image Error: ") + IMG_GetError());
 		}
-
-		// Schwarz ist transparent (ACHTUNG!!!)
-		// *** DRINGEND SOURCE-IMAGES IN TRANSPARENTE PNGS KONVERTIEREN! ***
-		SDL_SetColorKey(surface, SDL_SRCCOLORKEY|SDL_RLEACCEL, SDL_MapRGB(surface->format, 0, 0, 0));
 
 		// Surface in Bildschirmformat konvertieren
 		images[i].original = SDL_DisplayFormatAlpha(surface);

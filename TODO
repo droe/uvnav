@@ -2,13 +2,17 @@ $Id$
 
 == 0.0.2 ==
 
-- Lizenzrechtliche Abklärungen zum Bildmaterial und Fonts
-- Transparente PNGs einlesen statt Würg-PNGs
-- Rest der RoadMap
+- Mehr Details in die Karte zeichnen.
+- Grafik optisch verschönern.
+- Konfigurierbare Detailstufen.
+- Karte auch bei kleinen Zoomfaktoren und sehr vielen Objekten effizient
+  und übersichtlich zeichnen: Objekte zusammenfassen, dirty Rectangles
+  strikter handhaben.
+- Uebersichtskarte.
+- Primitives Maushandling für Navigation.
 
 Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
-
 
 ------------------------------------------------------------------------------
 

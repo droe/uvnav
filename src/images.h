@@ -28,18 +28,17 @@
 
 #define IMG_UNIVERSUM	 0
 #define IMG_SDL_POWERED	 1
-#define IMG_PLANET_00	 2
-#define IMG_PLANET_01	 3
-#define IMG_PLANET_02	 4
-#define IMG_PLANET_03	 5
-#define IMG_PLANET_04	 6
-#define IMG_PLANET_05	 7
-#define IMG_PLANET_06	 8
-#define IMG_PLANET_07	 9
-#define IMG_PLANET_08	10
-#define IMG_PLANET_09	11
-#define IMG_PLANET_10	12
-#define NUM_IMG			13
+#define IMG_PLANET_01	 2
+#define IMG_PLANET_02	 3
+#define IMG_PLANET_03	 4
+#define IMG_PLANET_04	 5
+#define IMG_PLANET_05	 6
+#define IMG_PLANET_06	 7
+#define IMG_PLANET_07	 8
+#define IMG_PLANET_08	 9
+#define IMG_PLANET_09	10
+#define IMG_PLANET_10	11
+#define NUM_IMG			12
 
 struct uv_img
 {

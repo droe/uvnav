@@ -27,7 +27,7 @@
  * fest im Binary codiert, und ueber globale Funktionen bereitgestellt.
  *
  * Unix     - defined(__unix__)
- *          - getestet unter FreeBSD 5.2.1-p8, GCC 3.3.2
+ *          - getestet unter FreeBSD 5.2.1-p9, GCC 3.3.2
  *          - voll implementiert und unterstuetzt
  *          - koennte noch besser mit Autotools-Resultaten aus
  *            config.h verknuepft werden, um auch exotische
@@ -130,10 +130,12 @@ bool sysdep_file_exists(const string& file)
 /*
  * Bildschirmgroesse ermitteln.
  *
- * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11 von
- * EGachine: http://egachine.berlios.de/
+ * Basiert auf Video::init() aus src/client/video/sdlopengl/video.cpp 1.11
+ * von EGachine
  * Copyright (C) 2004 Jens Thiele <karme@berlios.de>
  * Copyright (C) 2003 Stephan Ferraro <stephan@lazyfellow.com>
+ * Lizenziert unter der GNU GPL
+ * http://egachine.berlios.de/
  */
 void sysdep_screensize(SDL_Rect* rect)
 {
