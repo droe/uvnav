@@ -4,11 +4,19 @@ $Id$
 
 - Mehr Details in die Karte zeichnen.
 - Grafik optisch verschönern.
-- Konfigurierbare Detailstufen.
 - Karte auch bei kleinen Zoomfaktoren und sehr vielen Objekten effizient
   und übersichtlich zeichnen: Objekte zusammenfassen, dirty Rectangles
   strikter handhaben.
+  -> Tree?
+  -> Grid & Tree?
+  -> Grid?
+  Sicher Sektoren mit Minimalgrösse um zusammenzufassen.
+  Tree bringt nicht viel.
+
+== 0.0.3 ==
+
 - Uebersichtskarte.
+- Konfigurierbare Detailstufen.
 - Primitives Maushandling für Navigation.
 
 Weiter gemäss RoadMap im Wiki:
@@ -114,10 +122,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 - UVGUIWidgets
   - ...
-
-- Parser
-  - Parser optimieren
-    - regexps zentralisieren
 
 - UVWelt
   - Spieler ausbauen. Für jeden Spieler möglichst viele Informationen

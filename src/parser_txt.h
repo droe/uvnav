@@ -42,7 +42,6 @@ class UVParserTXT
 		UVConf* conf;
 		UVWelt* welt;
 		UVProgress* progress;
-		UVRegExp* re;
 
 		ifstream stream;
 		string cur;
@@ -53,16 +52,13 @@ class UVParserTXT
 		bool good() const;
 		string getline();
 
-		void set_re(const string&);
-		bool match() const;
-		bool match(const string&);
-		void shiftline();
+		void shiftline(UVRegExp*);
 
 		string strip(string&) const;
 
 		string get_exception(const string&, const string&, const int, const string&) const;
 #ifdef DEBUG
-		void parse_debug(const string&) const;
+		void parse_debug(const string&, UVRegExp*) const;
 #endif
 
 		void parse_auswertung();

@@ -37,9 +37,9 @@
 
 
 #ifdef DEBUG
-#define debug(x) parse_debug(x)
+#define debug(x,y) parse_debug(x,y)
 #else
-#define debug(x) 
+#define debug(x,y) 
 #endif
 
 #undef EXCEPTION
@@ -50,7 +50,7 @@
  * Konstruktor.
  */
 UVParserTXT::UVParserTXT(UVConf* c, UVWelt* w)
-: conf(c), welt(w), progress(NULL), re(NULL), verbose(false)
+: conf(c), welt(w), progress(NULL), verbose(false)
 {
 	if(welt == NULL)
 	{
@@ -123,43 +123,10 @@ string UVParserTXT::getline()
 
 
 /*
- * Regexp setzen.
- */
-void UVParserTXT::set_re(const string& expression)
-{
-	if(re != NULL)
-	{
-		delete re;
-		re = NULL;
-	}
-	re = new UVRegExp(expression);
-}
-
-
-/*
- * Regexp matchen.
- */
-bool UVParserTXT::match() const
-{
-	return re->match(cur);
-}
-
-
-/*
- * Regexp setzen und matchen.
- */
-bool UVParserTXT::match(const string& expression)
-{
-	set_re(expression);
-	return match();
-}
-
-
-/*
  * Gematchten Bereich aus der aktuellen Zeile entfernen.
  * Falls ganze Zeile gematcht hat, neue Zeile einlesen.
  */
-void UVParserTXT::shiftline()
+void UVParserTXT::shiftline(UVRegExp* re)
 {
 	cur = cur.substr(re->get_match_end(), cur.length() - re->get_match_end());
 	if(cur == "")
@@ -243,8 +210,9 @@ void UVParserTXT::parse_auswertung()
 	{
 		parse_spielerinfos();
 		parse_spielstand();
-	
-		if(match("^Spionageabwehr:"))
+
+		static UVRegExp sp_re("^Spionageabwehr:");
+		if(sp_re.match(cur))
 		{
 			parse_imperatorinfos();
 		}
@@ -258,7 +226,8 @@ void UVParserTXT::parse_auswertung()
 			parse_sensorenreport();
 		}
 
-		if(match("^Lagerbest.nde auf fremden Schiffen:"))
+		static UVRegExp fl_re("^Lagerbest.nde auf fremden Schiffen:");
+		if(fl_re.match(cur))
 		{
 			parse_fremde_lager();
 		}
@@ -278,14 +247,14 @@ void UVParserTXT::parse_auswertung()
 void UVParserTXT::parse_header()
 {
 	//   --- Universum V --- a PBM (c) 1994-2004 by Black Bird Software
-	set_re("--- (.*?) --- (.*)$");
-	while(!match())
+	static UVRegExp hdr_re("--- (.*?) --- (.*)$");
+	while(!hdr_re.match(cur))
 	{
 		getline();
 	}
-	debug("header");
-	welt->set_partie(re->sub(1));
-	welt->copyright = re->sub(2);
+	debug("header", &hdr_re);
+	welt->set_partie(hdr_re.sub(1));
+	welt->copyright = hdr_re.sub(2);
 	getline();
 
 	parse_leerzeile();
@@ -300,69 +269,77 @@ void UVParserTXT::parse_oldschool_header()
 	UVSpieler* s = new UVSpieler();
 
 	// Busy Eagle der Kämpfer
-	if(!match("^Name: +(.*)$"))
+	static UVRegExp name_re("^Name: +(.*)$");
+	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
 	}
-	s->name = re->sub(1);
+	s->name = name_re.sub(1);
 	getline();
 
 	// Spieler: Daniel Röthlisberger
 	// Spieler: NSC
-	if(!match("^Spieler: +(.*)$"))
+	static UVRegExp sp_re("^Spieler: +(.*)$");
+	if(!sp_re.match(cur))
 	{
 		throw EXCEPTION("Spieler: fehlt!");
 	}
-	s->spieler = re->sub(1);
+	s->spieler = sp_re.sub(1);
 	getline();
 
 	s->status = "Imperator";
 
 	// Galaxie: Awakening
-	if(!match("^Galaxie: +(.*)$"))
+	static UVRegExp gal_re("^Galaxie: +(.*)$");
+	if(!gal_re.match(cur))
 	{
 		throw EXCEPTION("Galaxie: fehlt!");
 	}
-	welt->galaxie = re->sub(1);
+	welt->galaxie = gal_re.sub(1);
 	getline();
 
 	// MotU: Roman Meng
-	if(!match("^MotU: +(.*)$"))
+	static UVRegExp motu_re("^MotU: +(.*)$");
+	if(!motu_re.match(cur))
 	{
 		throw EXCEPTION("MotU: fehlt!");
 	}
-	welt->motu = re->sub(1);
+	welt->motu = motu_re.sub(1);
 	getline();
 
 	// Sternzeit: 55
-	if(!match("^Sternzeit: +(.*)$"))
+	static UVRegExp sz_re("^Sternzeit: +(.*)$");
+	if(!sz_re.match(cur))
 	{
 		throw EXCEPTION("Sternzeit: fehlt!");
 	}
-	welt->sternzeit = re->subtol(1);
+	welt->sternzeit = sz_re.subtol(1);
 	getline();
 
 	// Punkte: 846000
-	if(!match("^Punkte: +(.*)$"))
+	static UVRegExp pt_re("^Punkte: +(.*)$");
+	if(!pt_re.match(cur))
 	{
 		throw EXCEPTION("Punkte: fehlt!");
 	}
-	s->legal = re->subtoll(1);
+	s->legal = pt_re.subtoll(1);
 	getline();
 
 	//?Einkommen: 543074 t Erz
-	if(match("^Einkommen: +(.*) t Erz$"))
+	static UVRegExp ein_re("^Einkommen: +(.*) t Erz$");
+	if(ein_re.match(cur))
 	{
-		s->erzertrag = re->subtol(1);
+		s->erzertrag = ein_re.subtol(1);
 		getline();
 	}
 
 	// Konto: 376761 Credits
-	if(!match("^Konto: +(.*) Credits$"))
+	static UVRegExp kt_re("^Konto: +(.*) Credits$");
+	if(!kt_re.match(cur))
 	{
 		throw EXCEPTION("Konto: fehlt!");
 	}
-	s->konto = re->subtoll(1);
+	s->konto = kt_re.subtoll(1);
 	getline();
 
 	welt->set_spieler(s);
@@ -373,30 +350,34 @@ void UVParserTXT::parse_oldschool_header()
 	// 	Loco (2), Commander Strike (2), Proteus (1), Lord McFalcon (1), _
 	// 	Johannes-Urban IX (3), Kane (2), Idaho Roschd (2), Mith (2), _
 	// 	Huitzilopochtli (3), Phan-Thomas (3), Starlord (2)
-	if(!match("^Allianz mit: +(.*)$"))
+	static UVRegExp al_re("^Allianz mit: +(.*)$");
+	if(!al_re.match(cur))
 	{
 		throw EXCEPTION("Allianz mit fehlt!");
 	}
-//	cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//	cerr << "IGNORED: [" << al_re.sub(1) << "]" << endl;
 	getline();
 
 	// 0 Prozent des Erzertrages (an die Lager) für
-	if(match("^([0-9]+) Prozent des Erzertrages"))
+	static UVRegExp erz_re("^([0-9]+) Prozent des Erzertrages");
+	if(erz_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << erz_re.sub(1) << "]" << endl;
 		getline();
 	}
 
 	// Spionageabwehr
-	if(match("^Spionageabwehr\\.$"))
+	static UVRegExp spio_re("^Spionageabwehr\\.$");
+	if(spio_re.match(cur))
 	{
 		getline();
 	}
 
 	// Erzkurs: 2 Credits pro Tonne Erz
-	if(match("^Erzkurs: ([0-9]+) Credits pro Tonne Erz$"))
+	static UVRegExp kurs_re("^Erzkurs: ([0-9]+) Credits pro Tonne Erz$");
+	if(kurs_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << kurs_re.sub(1) << "]" << endl;
 		getline();
 	}
 
@@ -412,70 +393,78 @@ void UVParserTXT::parse_spielerinfos()
 	UVSpieler* s = new UVSpieler();
 
 	// Name: Doctor Who
-	if(!match("^Name: +(.*)$"))
+	static UVRegExp name_re("^Name: +(.*)$");
+	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
 	}
-	s->name = re->sub(1);
+	s->name = name_re.sub(1);
 	getline();
 
 	// Spieler: Daniel Röthlisberger
 	// Spieler: NSC
-	if(!match("^Spieler: +(.*)$"))
+	static UVRegExp sp_re("^Spieler: +(.*)$");
+	if(!sp_re.match(cur))
 	{
 		throw EXCEPTION("Spieler: fehlt!");
 	}
-	s->spieler = re->sub(1);
+	s->spieler = sp_re.sub(1);
 	getline();
 
 	// Status: Freischaffender
 	// Status: Imperator
-	if(!match("^Status: +(.*)$"))
+	static UVRegExp status_re("^Status: +(.*)$");
+	if(!status_re.match(cur))
 	{
 		throw EXCEPTION("Status: fehlt!");
 	}
-	s->status = re->sub(1);
+	s->status = status_re.sub(1);
 	getline();
 
 	// Gesellschaft: Keine
-	if(!match("^Gesellschaft: +(.*)$"))
+	static UVRegExp gesellschaft_re("^Gesellschaft: +(.*)$");
+	if(!gesellschaft_re.match(cur))
 	{
 		throw EXCEPTION("Gesellschaft: fehlt!");
 	}
-	s->gesellschaft = re->sub(1);
+	s->gesellschaft = gesellschaft_re.sub(1);
 	getline();
 
 	parse_leerzeile();
 
 	// Legalitätsstatus:  5
-	if(!match("^Legalit.tsstatus: +(.*)$"))
+	static UVRegExp legal_re("^Legalit.tsstatus: +(.*)$");
+	if(!legal_re.match(cur))
 	{
 		throw EXCEPTION("Legalitätsstatus: fehlt!");
 	}
-	s->legal = re->subtol(1);
+	s->legal = legal_re.subtol(1);
 	getline();
 
 	// Punkte: 886
-	if(!match("^Punkte: +(.*)$"))
+	static UVRegExp pt_re("^Punkte: +(.*)$");
+	if(!pt_re.match(cur))
 	{
 		throw EXCEPTION("Punkte: fehlt!");
 	}
-	s->legal = re->subtoll(1);
+	s->legal = pt_re.subtoll(1);
 	getline();
 
 	//?Erzertrag: 120 t Erz
-	if(match("^Erzertrag: +(.*) t Erz$"))
+	static UVRegExp erz_re("^Erzertrag: +(.*) t Erz$");
+	if(erz_re.match(cur))
 	{
-		s->erzertrag = re->subtol(1);
+		s->erzertrag = erz_re.subtol(1);
 		getline();
 	}
 
 	// Konto: 214461 Credits
-	if(!match("^Konto: +(.*) Credits$"))
+	static UVRegExp kt_re("^Konto: +(.*) Credits$");
+	if(!kt_re.match(cur))
 	{
 		throw EXCEPTION("Konto: fehlt!");
 	}
-	s->konto = re->subtoll(1);
+	s->konto = kt_re.subtoll(1);
 	getline();
 
 	welt->set_spieler(s);
@@ -490,19 +479,21 @@ void UVParserTXT::parse_spielerinfos()
 void UVParserTXT::parse_spielstand()
 {
 	// MotU: Roman Meng
-	if(!match("^MotU: +(.*)$"))
+	static UVRegExp motu_re("^MotU: +(.*)$");
+	if(!motu_re.match(cur))
 	{
 		throw EXCEPTION("MotU: fehlt!");
 	}
-	welt->motu = re->sub(1);
+	welt->motu = motu_re.sub(1);
 	getline();
 
 	// Sternzeit: 214
-	if(!match("^Sternzeit: +(.*)$"))
+	static UVRegExp sz_re("^Sternzeit: +(.*)$");
+	if(!sz_re.match(cur))
 	{
 		throw EXCEPTION("Sternzeit: fehlt!");
 	}
-	welt->sternzeit = re->subtol(1);
+	welt->sternzeit = sz_re.subtol(1);
 	getline();
 
 	parse_leerzeile();
@@ -515,11 +506,12 @@ void UVParserTXT::parse_spielstand()
 void UVParserTXT::parse_imperatorinfos()
 {
 	// Spionageabwehr: 0% Erzertrag
-	if(!match("^Spionageabwehr: +(.*)% Erzertrag$"))
+	static UVRegExp spio_re("^Spionageabwehr: +(.*)% Erzertrag$");
+	if(!spio_re.match(cur))
 	{
 		throw EXCEPTION("Spionageabwehr: fehlt!");
 	}
-	welt->get_spieler()->spionageabwehr = re->subtol(1);
+	welt->get_spieler()->spionageabwehr = spio_re.subtol(1);
 	getline();
 
 	parse_leerzeile();
@@ -534,59 +526,66 @@ void UVParserTXT::parse_allianzen()
 	// *** TODO: Parsing der Allianzpartner vollenden
 
 	//?Mitgesellschafter: Plinius, Rumba Joe, Gigabyte Goeffrey
-	if(match("^Mitgesellschafter: +(.*)$"))
+	static UVRegExp mitges_re("^Mitgesellschafter: +(.*)$");
+	if(mitges_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << mitges_re.sub(1) << "]" << endl;
 		getline();
 	}
 
 	// Allianz mit Spieler: Zsakash (2), Xantes hocar (1), Kynar (2)
 	// Allianz mit: Tass (1), Knorrly Intergalaktisch (1), Aiwendil (2)
-	if(!match("^Allianz mit(?: Spieler)?: +(.*)$"))
+	static UVRegExp alsp_re("^Allianz mit(?: Spieler)?: +(.*)$");
+	if(!alsp_re.match(cur))
 	{
 		throw EXCEPTION("Allianzen mit Spieler fehlen!");
 	}
-//	cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//	cerr << "IGNORED: [" << alsp_re.sub(1) << "]" << endl;
 	getline();
 
 	// Sie haben diesen Spielern den Krieg erklärt: 
 	// Krieg mit Spieler: 
 	// Krieg mit: Minion Zork, Great Zork, Drjakard Ceptor, Drjakard I
-	if(!match("^(?:Sie haben diesen Spielern den Krieg erkl.rt|Krieg mit(?: Spieler)?): +(.*)$"))
+	static UVRegExp krsp_re("^(?:Sie haben diesen Spielern den Krieg erkl.rt|Krieg mit(?: Spieler)?): +(.*)$");
+	if(!krsp_re.match(cur))
 	{
 		throw EXCEPTION("Kriegserklärungen an Spieler fehlen!");
 	}
-//	cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//	cerr << "IGNORED: [" << krsp_re.sub(1) << "]" << endl;
 	getline();
 
 	//?Diese Spieler haben Ihnen den Krieg erklärt: 
-	if(match("^Diese Spieler haben Ihnen den Krieg erkl.rt: +(.*)$"))
+	static UVRegExp spkr_re("^Diese Spieler haben Ihnen den Krieg erkl.rt: +(.*)$");
+	if(spkr_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << spkr_re.sub(1) << "]" << endl;
 		getline();
 	}
 
 	//?Sie haben diesen Gesellschaften den Krieg erklärt: 
 	//?Krieg mit Gesellschaft: 
-	if(match("^(?:Sie haben diesen Gesellschaften den Krieg erkl.rt|Krieg mit Gesellschaft): +(.*)$"))
+	static UVRegExp krges_re("^(?:Sie haben diesen Gesellschaften den Krieg erkl.rt|Krieg mit Gesellschaft): +(.*)$");
+	if(krges_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << krges_re.sub(1) << "]" << endl;
 		getline();
 	}
 
 	//?Diese Spieler haben Ihrer Gesellschaft den Krieg erklärt: 
-	if(match("^Diese Spieler haben Ihrer Gesellschaft den Krieg erkl.rt: +(.*)$"))
+	static UVRegExp geskr_re("^Diese Spieler haben Ihrer Gesellschaft den Krieg erkl.rt: +(.*)$");
+	if(geskr_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << geskr_re.sub(1) << "]" << endl;
 		getline();
 	}
 
 	//?Diese Spieler haben allen den Krieg erklärt: Clingons Wadish, _
 	//     Clingons Emen, Pirat Fjodr, Pirat Knork, Pirat Killerjoe, _
 	//     Clingons Ishmani, Pirat Langfinger-Ede
-	if(match("^Diese Spieler haben allen den Krieg erkl.rt: +(.*)$"))
+	static UVRegExp allkr_re("^Diese Spieler haben allen den Krieg erkl.rt: +(.*)$");
+	if(allkr_re.match(cur))
 	{
-//		cerr << "IGNORED: [" << re->sub(1) << "]" << endl;
+//		cerr << "IGNORED: [" << allkr_re.sub(1) << "]" << endl;
 		getline();
 	}
 
@@ -605,7 +604,7 @@ void UVParserTXT::parse_schiffe(UVPlanet* p)
 {
 	// * Schiff Cristina (Doctor Who) 100000 BRT  (118314,15922,4 - Vaeroch Agei)
 	//   [...]
-	UVRegExp schiff_re("^\\* Schiff ");
+	static UVRegExp schiff_re("^\\* Schiff ");
 	while(schiff_re.match(cur))
 	{
 		parse_schiff(p);
@@ -625,7 +624,7 @@ void UVParserTXT::parse_planeten()
 {
 	// Coventina (5201) (Niemand) (120588,16267,4 - Vaeroch Agei) (5498,5527)
 	//  (5152) (Niemand) (123048,21142,4 - Vaeroch Agei)
-	UVRegExp planet_re("^.*? \\([0-9]+\\) \\(.*?\\) \\(-?[0-9]+,-?[0-9]+,[0-9]+ - .+?\\)(?: \\([0-9,]+\\))?$");
+	static UVRegExp planet_re("^.*? \\([0-9]+\\) \\(.*?\\) \\(-?[0-9]+,-?[0-9]+,[0-9]+ - .+?\\)(?: \\([0-9,]+\\))?$");
 	while(planet_re.match(cur))
 	{
 		parse_planet();
@@ -641,7 +640,7 @@ void UVParserTXT::parse_planeten()
 void UVParserTXT::parse_oldschool_planeten()
 {
 	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
-	UVRegExp old_planet_re("^.*? \\([0-9]+\\) \\(.*?\\) \\( ?-?[0-9]+, ?-?[0-9]+\\)(?: \\([0-9,]+\\))?$");
+	static UVRegExp old_planet_re("^.*? \\([0-9]+\\) \\(.*?\\) \\( ?-?[0-9]+, ?-?[0-9]+\\)(?: \\([0-9,]+\\))?$");
 	while(old_planet_re.match(cur))
 	{
 		parse_oldschool_planet();
@@ -665,7 +664,7 @@ void UVParserTXT::parse_sensorenreport()
 	
 	parse_leerzeile();
 
-	UVRegExp report_re("^(?:  )?(Schiff|Container|Kosmische|SensorSonde|InfoSonde)");
+	static UVRegExp report_re("^(?:  )?(Schiff|Container|Kosmische|SensorSonde|InfoSonde)");
 	while(report_re.match(cur))
 	{
 		if(report_re.sub(1) == "Schiff")
@@ -707,7 +706,8 @@ void UVParserTXT::parse_sensorenreport()
  */
 void UVParserTXT::parse_fremde_lager()
 {
-	if(!match("^Lagerbest.nde auf fremden Schiffen:$"))
+	static UVRegExp lager_re("^Lagerbest.nde auf fremden Schiffen:$");
+	if(!lager_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Lagerbestaende auf fremden Schiffen!");
 	}
@@ -716,7 +716,8 @@ void UVParserTXT::parse_fremde_lager()
 	parse_leerzeile();
 
 	// *** Schiffe und Lager parsen
-	while(match("^  "))
+	static UVRegExp indent_re("^  ");
+	while(indent_re.match(cur))
 	{
 		getline();
 	}
@@ -730,7 +731,8 @@ void UVParserTXT::parse_fremde_lager()
  */
 void UVParserTXT::parse_nachrichten()
 {
-	if(!match("^Besondere Nachrichten:$"))
+	static UVRegExp beso_re("^Besondere Nachrichten:$");
+	if(!beso_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in besonderen Nachrichten!");
 	}
@@ -739,7 +741,8 @@ void UVParserTXT::parse_nachrichten()
 	parse_leerzeile();
 
 	// *** Besondere Nachrichten (selektiv) parsen
-	while(match("^- "))
+	static UVRegExp dash_re("^- ");
+	while(dash_re.match(cur))
 	{
 		getline();
 	}
@@ -759,27 +762,28 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	// * Schiff Cristina (Doctor Who) 100000 BRT in der Werft Hubertus (1) 
 	// * Schiff Cristina (Doctor Who) 100000 BRT verteidigt auch allierte Zonen
 	// * Schiff Cristina (Doctor Who) 100000 BRT  (118314,15922,4 - Vaeroch Agei)
-	if(!match("^\\* Schiff (.*?) \\((.*?)\\) (\\d+) BRT((?: in der Werft .*? \\([0-9]+\\))?) ((?:verteidigt auch allierte Zonen)?)(?: \\((-?[0-9]+),(-?[0-9]+),([0-9]+) - (.*?)\\))?$"))
+	static UVRegExp schiff_re("^\\* Schiff (.*?) \\((.*?)\\) (\\d+) BRT((?: in der Werft .*? \\([0-9]+\\))?) ((?:verteidigt auch allierte Zonen)?)(?: \\((-?[0-9]+),(-?[0-9]+),([0-9]+) - (.*?)\\))?$");
+	if(!schiff_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Schiff!");
 	}
-	debug("schiff");
+	debug("schiff", &schiff_re);
 	UVSchiff* s = new UVSchiff(
-		re->sub(1),
-		re->sub(2),
-		re->subtol(3));
-	if(re->sub(4) != "")
+		schiff_re.sub(1),
+		schiff_re.sub(2),
+		schiff_re.subtol(3));
+	if(schiff_re.sub(4) != "")
 	{
-		UVRegExp werft_re("^ in der Werft .*? \\(([0-9]+)\\)$");
-		werft_re.match(re->sub(4));
+		static UVRegExp werft_re("^ in der Werft .*? \\(([0-9]+)\\)$");
+		werft_re.match(schiff_re.sub(4));
 		s->werft = werft_re.subtol(1);
 	}
 	else
 	{
 		s->werft = 0;
 	}
-	s->zonenstatus = (re->sub(5) != "");
-	if(re->subs() == 5)
+	s->zonenstatus = (schiff_re.sub(5) != "");
+	if(schiff_re.subs() == 5)
 	{
 		if(p == NULL)
 		{
@@ -788,18 +792,19 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	}
 	else
 	{
-		s->x = re->subtol(6);
-		s->y = re->subtol(7);
-		s->dim = re->subtol(8);
-		welt->set_dim(s->dim, re->sub(9));
+		s->x = schiff_re.subtol(6);
+		s->y = schiff_re.subtol(7);
+		s->dim = schiff_re.subtol(8);
+		welt->set_dim(s->dim, schiff_re.sub(9));
 		s->planet = 0;
 	}
 	getline();
 
 	//?  Gemaechlich tuckert die Cristina vor sich hin. [...]
-	if((cur != "") && !match("^(?:[^ ] |  (?:Geschwindigkeit|Waffenstatus): )"))
+	static UVRegExp beschr_re("^(?:[^ ] |  (?:Geschwindigkeit|Waffenstatus): )");
+	if((cur != "") && !beschr_re.match(cur))
 	{
-		debug("schiff-beschreibung");
+		debug("schiff-beschreibung", &beschr_re);
 		s->beschreibung = cur.substr(2, cur.length() - 2);
 		getline();
 	}
@@ -809,11 +814,12 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	}
 
 	//?  Geschwindigkeit: 17.81 KpZ / Ausrichtung: 252°
-	if(match("^  Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$"))
+	static UVRegExp gesch_re("^  Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$");
+	if(gesch_re.match(cur))
 	{
-		debug("schiff-geschwindigkeit");
-		s->v = re->subtof(1);
-		s->w = re->subtol(2);
+		debug("schiff-geschwindigkeit", &gesch_re);
+		s->v = gesch_re.subtof(1);
+		s->w = gesch_re.subtol(2);
 		getline();
 	}
 	else
@@ -824,157 +830,166 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 
 	//?  Waffenstatus: 3 / Offensivbereich: 0 / Fluchtwert: 296/367 HP
 	//?  Waffenstatus: 3 / Offensivbereich: 0 / Fluchtwert: 120 HP
-	if(match("^  Waffenstatus: ([0-9]) / Offensivbereich: ([0-9]+) / Fluchtwert: ([0-9]+)(?:/([0-9]+))? HP$"))
+	static UVRegExp waff_re("^  Waffenstatus: ([0-9]) / Offensivbereich: ([0-9]+) / Fluchtwert: ([0-9]+)(?:/([0-9]+))? HP$");
+	if(waff_re.match(cur))
 	{
-		debug("schiff-waffenstatus");
-		s->waffenstatus = re->subtol(1);
-		s->offensivbereich = re->subtol(2);
-		s->fluchtwert = re->subtol(3);
-		if(re->subs() > 3)
+		debug("schiff-waffenstatus", &waff_re);
+		s->waffenstatus = waff_re.subtol(1);
+		s->offensivbereich = waff_re.subtol(2);
+		s->fluchtwert = waff_re.subtol(3);
+		if(waff_re.subs() > 3)
 		{
-			s->hitpoints = re->subtol(4);
+			s->hitpoints = waff_re.subtol(4);
 		}
 		getline();
 	}
 
 	//?  Traktorstrahl: An / Treibstofftanks: 14058.008/20000 BRT 
 	//?  Traktorstrahl: Aus / Treibstofftanks: 20000 / 20000 BRT
-	if(match("^  Traktorstrahl: (An|Aus) / Treibstofftanks: ([0-9.]+) ?/ ?([0-9]+) BRT $"))
+	static UVRegExp trakt_re("^  Traktorstrahl: (An|Aus) / Treibstofftanks: ([0-9.]+) ?/ ?([0-9]+) BRT $");
+	if(trakt_re.match(cur))
 	{
-		debug("schiff-traktorstrahl");
-		s->traktorstrahl = (re->sub(1) == "An");
-		s->treibstoff = re->subtof(2);
-		s->treibstofftanks = re->subtol(3);
+		debug("schiff-traktorstrahl", &trakt_re);
+		s->traktorstrahl = (trakt_re.sub(1) == "An");
+		s->treibstoff = trakt_re.subtof(2);
+		s->treibstofftanks = trakt_re.subtol(3);
 		getline();
 	}
 
 	//?  =------------------------------------------------------------=
-	if(match("^  =-+=$"))
+	static UVRegExp sep_re("^  =-+=$");
+	if(sep_re.match(cur))
 	{
 		getline();
 	}
 
 	//?  Pray CX (40/40) 4000 BRT, Argongenerator (40/40) 4000 BRT, SensoStar II (20/20) 3000 BRT
 	//?  Kein Bordcomputer, Kein Energiegenerator
-	if(match("^  (?!<[0-9]+\\. )(?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (B)(o)(r)dcomputer), (?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (E)(n)(e)rgiegenerator)(?:, (.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT)?$"))
+	static UVRegExp cpu_re("^  (?!<[0-9]+\\. )(?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (B)(o)(r)dcomputer), (?:(.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT|(Kein) (E)(n)(e)rgiegenerator)(?:, (.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT)?$");
+	if(cpu_re.match(cur))
 	{
-		debug("schiff-bordcomputer");
-		if(re->sub(1) != "Kein")
+		debug("schiff-bordcomputer", &cpu_re);
+		if(cpu_re.sub(1) != "Kein")
 		{
-			s->bordcomputer = new UVKomponente(re->sub(1),
-							re->subtol(2),
-							re->subtol(3),
-							re->subtol(4));
+			s->bordcomputer = new UVKomponente(cpu_re.sub(1),
+							cpu_re.subtol(2),
+							cpu_re.subtol(3),
+							cpu_re.subtol(4));
 		}
-		if(re->sub(5) != "Kein")
+		if(cpu_re.sub(5) != "Kein")
 		{
-			s->energiegenerator = new UVKomponente(re->sub(5),
-							re->subtol(6),
-							re->subtol(7),
-							re->subtol(8));
+			s->energiegenerator = new UVKomponente(cpu_re.sub(5),
+							cpu_re.subtol(6),
+							cpu_re.subtol(7),
+							cpu_re.subtol(8));
 		}
-		if(re->subs() > 8)
+		if(cpu_re.subs() > 8)
 		{
-			s->sensoren = new UVKomponente(re->sub(9),
-							re->subtol(10),
-							re->subtol(11),
-							re->subtol(12));
+			s->sensoren = new UVKomponente(cpu_re.sub(9),
+							cpu_re.subtol(10),
+							cpu_re.subtol(11),
+							cpu_re.subtol(12));
 		}
 		getline();
 	}
 
 	//?  Brücke, Standardkabinen (40/40) 2000 BRT
-	if(match("^  (?!<[0-9]+\\. )(Br.cke.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT$"))
+	static UVRegExp bridge_re("^  (?!<[0-9]+\\. )(Br.cke.*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT$");
+	if(bridge_re.match(cur))
 	{
-		debug("schiff-mannschaftsraum");
-		s->mannschaftsraum = new UVKomponente(re->sub(1),
-						re->subtol(2),
-						re->subtol(3),
-						re->subtol(4));
+		debug("schiff-mannschaftsraum", &bridge_re);
+		s->mannschaftsraum = new UVKomponente(bridge_re.sub(1),
+						bridge_re.subtol(2),
+						bridge_re.subtol(3),
+						bridge_re.subtol(4));
 		getline();
 	}
 
 	//?  Energieschild I (50/50) 1000 BRT
 	//?  Energieschild I (50/50) 1000 BRT, Metallpanzer (200/200) 10000 BRT
-	if(match("^  (?!<[0-9]+\\. )(.*?(?:[Ss]child|Atomd.mpfer|schirm).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?"))
+	static UVRegExp schild_re("^  (?!<[0-9]+\\. )(.*?(?:[Ss]child|Atomd.mpfer|schirm).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
+	if(schild_re.match(cur))
 	{
-		debug("schiff-energieschild");
-		s->schild = new UVKomponente(re->sub(1),
-						re->subtol(2),
-						re->subtol(3),
-						re->subtol(4));
-		shiftline();
+		debug("schiff-energieschild", &schild_re);
+		s->schild = new UVKomponente(schild_re.sub(1),
+						schild_re.subtol(2),
+						schild_re.subtol(3),
+						schild_re.subtol(4));
+		shiftline(&schild_re);
 	}
 
 	//?  Metallpanzer (200/200) 10000 BRT
-	if(match("^(?:  )?(?!<[0-9]+\\. )(.*?(?:panzer|beschichtung|Zellneuralnetz|Dunkelmaterie).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT$"))
+	static UVRegExp panzer_re("^(?:  )?(?!<[0-9]+\\. )(.*?(?:panzer|beschichtung|Zellneuralnetz|Dunkelmaterie).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT$");
+	if(panzer_re.match(cur))
 	{
-		debug("schiff-metallpanzer");
-		s->panzerung = new UVKomponente(re->sub(1),
-						re->subtol(2),
-						re->subtol(3),
-						re->subtol(4));
+		debug("schiff-metallpanzer", &panzer_re);
+		s->panzerung = new UVKomponente(panzer_re.sub(1),
+						panzer_re.subtol(2),
+						panzer_re.subtol(3),
+						panzer_re.subtol(4));
 		getline();
 	}
 
 	//?  1. Impulslaser (30/30) 10000 BRT, 2. Impulslaser (30/30) 10000 BRT
-	set_re("^(?:  )?([0-9]+)\\. (.*?(?:laser|beschleuniger|Desintegrations-Strahler|Nukleoidenwerfer|kanone).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
-	while(match())
+	static UVRegExp ek_re("^(?:  )?([0-9]+)\\. (.*?(?:laser|beschleuniger|Desintegrations-Strahler|Nukleoidenwerfer|kanone).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
+	while(ek_re.match(cur))
 	{
-		debug("schiff-energiekanone");
+		debug("schiff-energiekanone", &ek_re);
 		s->set_energiekanone(new UVKomponente(
-				re->sub(2),
-				re->subtol(3),
-				re->subtol(4),
-				re->subtol(5),
-				re->subtol(1)));
-		shiftline();
+				ek_re.sub(2),
+				ek_re.subtol(3),
+				ek_re.subtol(4),
+				ek_re.subtol(5),
+				ek_re.subtol(1)));
+		shiftline(&ek_re);
 	}
 
 	//?  1. Raketenwerfer (30/30) 10000 BRT, 2. Raketenwerfer (30/30) 10000 BRT
-	set_re("^(?:  )?([0-9]+)\\. (.*?(?:[Rr]akete|[Tt]orpedo).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
-	while(match())
+	static UVRegExp rak_re("^(?:  )?([0-9]+)\\. (.*?(?:[Rr]akete|[Tt]orpedo).*?) \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
+	while(rak_re.match(cur))
 	{
-		debug("schiff-raketenwerfer");
+		debug("schiff-raketenwerfer", &rak_re);
 		s->set_rakete(new UVKomponente(
-				re->sub(2),
-				re->subtol(3),
-				re->subtol(4),
-				re->subtol(5),
-				re->subtol(1)));
-		shiftline();
+				rak_re.sub(2),
+				rak_re.subtol(3),
+				rak_re.subtol(4),
+				rak_re.subtol(5),
+				rak_re.subtol(1)));
+		shiftline(&rak_re);
 	}
 
 	//?  1. Erweitertes Schubtriebwerk (89.097% Leistung) (37/40) 25000 BRT, 2. Erweitertes Schubtriebwerk (89.097% Leistung) (37/40) 25000 BRT
-	set_re("^(?:  )?([0-9]+)\\. (.*?)(?: \\(([0-9.]+)% Leistung\\))? \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
-	while(match())
+	static UVRegExp tw_re("^(?:  )?([0-9]+)\\. (.*?)(?: \\(([0-9.]+)% Leistung\\))? \\(([0-9]+)/([0-9]+)\\) ([0-9]+) BRT(?:, )?");
+	while(tw_re.match(cur))
 	{
-		debug("schiff-schubtriebwerk");
+		debug("schiff-schubtriebwerk", &tw_re);
 		s->set_triebwerk(new UVKomponente(
-				re->sub(2),
-				re->subtol(4),
-				re->subtol(5),
-				re->subtol(6),
-				re->subtol(1),
-				re->subtof(3)));
-		shiftline();
+				tw_re.sub(2),
+				tw_re.subtol(4),
+				tw_re.subtol(5),
+				tw_re.subtol(6),
+				tw_re.subtol(1),
+				tw_re.subtof(3)));
+		shiftline(&tw_re);
 	}
 
 	//?  =------------------------------------------------------------=
-	if(match("^  =-+=$"))
+	// static UVRegExp sep_re("^  =-+=$");
+	if(sep_re.match(cur))
 	{
 		getline();
 	}
 
 	//?  Lagerraum: 10000 BRT gesamt, 5259 BRT frei
 	//?  Lagerraum: 10000 BRT
-	if(match("^  Lagerraum: ([0-9]+) BRT(?: gesamt, ([0-9]+) BRT frei)?$"))
+	static UVRegExp lager_re("^  Lagerraum: ([0-9]+) BRT(?: gesamt, ([0-9]+) BRT frei)?$");
+	if(lager_re.match(cur))
 	{
-		debug("schiff-lagerraum");
-		s->lagerraum = re->subtol(1);
-		if(re->subs() > 1)
+		debug("schiff-lagerraum", &lager_re);
+		s->lagerraum = lager_re.subtol(1);
+		if(lager_re.subs() > 1)
 		{
-			s->lagerraum_frei = re->subtol(2);
+			s->lagerraum_frei = lager_re.subtol(2);
 		}
 		getline();
 	}
@@ -983,15 +998,15 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	//*   2. Militaerlaser Klasse X (25000 BRT, Doctor Who)
 	//*   3. Boosterpack (10 BRT, Doctor Who)
 	//*   4. Forschungsdokument WAB (110 BRT, Doctor Who)
-	set_re("^   ([0-9]+)\\. (.*?) \\(([0-9]+) BRT, (.*?)\\)$");
-	while(match())
+	static UVRegExp ladung_re("^   ([0-9]+)\\. (.*?) \\(([0-9]+) BRT, (.*?)\\)$");
+	while(ladung_re.match(cur))
 	{
-		debug("schiff-lagerraum-ladung");
+		debug("schiff-lagerraum-ladung", &ladung_re);
 		s->set_ladung(new UVLadung(
-				re->subtol(1),
-				re->sub(2),
-				re->subtol(3),
-				re->sub(4)));
+				ladung_re.subtol(1),
+				ladung_re.sub(2),
+				ladung_re.subtol(3),
+				ladung_re.sub(4)));
 		getline();
 	}
 
@@ -1005,129 +1020,141 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 void UVParserTXT::parse_planet()
 {
 	// Coventina (5201) (Niemand) (120588,16267,4 - Vaeroch Agei) (5498,5527)
-	if(!match("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\((-?[0-9]+),(-?[0-9]+),([0-9]+) - (.*?)\\)(?: \\(([0-9,]+)\\))?$"))
+	static UVRegExp planet_re("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\((-?[0-9]+),(-?[0-9]+),([0-9]+) - (.*?)\\)(?: \\(([0-9,]+)\\))?$");
+	if(!planet_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("planet");
+	debug("planet", &planet_re);
 	UVPlanet* p = new UVPlanet(
-		re->subtol(2),
-		re->sub(1),
-		re->sub(3),
-		re->subtol(4),
-		re->subtol(5),
-		re->subtol(6));
-	welt->set_dim(p->dim, re->sub(7));
-	if(re->subs() > 7)
+		planet_re.subtol(2),
+		planet_re.sub(1),
+		planet_re.sub(3),
+		planet_re.subtol(4),
+		planet_re.subtol(5),
+		planet_re.subtol(6));
+	welt->set_dim(p->dim, planet_re.sub(7));
+	if(planet_re.subs() > 7)
 	{
-		string links_str = re->sub(8);
-		set_re("^,?([0-9]+)");
-		while(re->match(links_str))
+		string links_str = planet_re.sub(8);
+		static UVRegExp links_re("^,?([0-9]+)");
+		while(links_re.match(links_str))
 		{
-			links_str = links_str.substr(re->get_match_end(), links_str.length() - re->get_match_end());
-			p->nachbarn.push_back(re->subtol(1));
+			links_str = links_str.substr(links_re.get_match_end(), \
+			                             links_str.length() - links_re.get_match_end());
+			p->nachbarn.push_back(links_re.subtol(1));
 		}
 	}
 	getline();
 
 	// Ausserlich einer unscheinbaren Murmel gleich, ...
-	if(!match("^Bev.lkerung: "))
+	static UVRegExp beschr_re("^Bev.lkerung: ");
+	if(!beschr_re.match(cur))
 	{
-		debug("planet-beschreibung");
+		debug("planet-beschreibung", &beschr_re);
 		p->beschreibung = cur;
 		getline();
 	}
 
 	// Bevölkerung: 1485.2 Millionen (Ruhig)
 	// Bevölkerung: 623.8 Millionen (REVOLUTION!)
-	if(!match("^Bev.lkerung: ([0-9.]+) Millionen \\((.+?)\\)$"))
+	static UVRegExp bev_re("^Bev.lkerung: ([0-9.]+) Millionen \\((.+?)\\)$");
+	if(!bev_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	p->bevoelkerung = re->subtof(1);
-	p->zustand = re->sub(2);
-	debug("planet-bevoelkerung");
+	p->bevoelkerung = bev_re.subtof(1);
+	p->zustand = bev_re.sub(2);
+	debug("planet-bevoelkerung", &bev_re);
 	getline();
 
 	// Minen: 7/65 Fabriken: 5/43
-	if(!match("^Minen: ([0-9]+)/([0-9]+) Fabriken: ([0-9]+)/([0-9]+)$"))
+	static UVRegExp minen_re("^Minen: ([0-9]+)/([0-9]+) Fabriken: ([0-9]+)/([0-9]+)$");
+	if(!minen_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("planet-minenfabriken");
-	p->minen = re->subtol(1);
-	p->minen_max = re->subtol(2);
-	p->fabriken = re->subtol(3);
-	p->fabriken_max = re->subtol(4);
+	debug("planet-minenfabriken", &minen_re);
+	p->minen = minen_re.subtol(1);
+	p->minen_max = minen_re.subtol(2);
+	p->fabriken = minen_re.subtol(3);
+	p->fabriken_max = minen_re.subtol(4);
 	getline();
 
 	//?Produktion: 0% für Lager, 100% für Bevölkerung
-	if(match("^Produktion: ([0-9]+)% f.r Lager, [0-9]+% f.r Bev.lkerung$"))
+	static UVRegExp prod_re("^Produktion: ([0-9]+)% f.r Lager, [0-9]+% f.r Bev.lkerung$");
+	if(prod_re.match(cur))
 	{
-		debug("planet-produktion");
-		p->produktion = re->subtol(1);
+		debug("planet-produktion", &prod_re);
+		p->produktion = prod_re.subtol(1);
 		getline();
 	}
 
 	// Tropische Vegetation, sehr fruchtbar, 29710 km Diameter
-	if(!match("^(.*), ([0-9]+) km Diameter$"))
+	static UVRegExp dia_re("^(.*), ([0-9]+) km Diameter$");
+	if(!dia_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("planet-klima");
-	p->klima = re->sub(1);
+	debug("planet-klima", &dia_re);
+	p->klima = dia_re.sub(1);
 	p->image = get_image_planet(p->klima);
-	p->diameter = re->subtol(2);
+	p->diameter = dia_re.subtol(2);
 	getline();
 
 	// Techlevel: 1
 	// Techlevel: 1 Energiegenerator: 5 Tribut: 1234 t Erz
-	if(!match("^Techlevel: ([0-9]+)(?: Energiegenerator: ([0-9]+) Tribut: ([0-9]+) t Erz)?$"))
+	static UVRegExp tech_re("^Techlevel: ([0-9]+)(?: Energiegenerator: ([0-9]+) Tribut: ([0-9]+) t Erz)?$");
+	if(!tech_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("planet-techlevel");
-	p->techlevel = re->subtol(1);
-	if(re->subs() == 3)
+	debug("planet-techlevel", &tech_re);
+	p->techlevel = tech_re.subtol(1);
+	if(tech_re.subs() == 3)
 	{
-		p->energiegenerator = re->subtol(2);
-		p->tribut = re->subtol(3);
+		p->energiegenerator = tech_re.subtol(2);
+		p->tribut = tech_re.subtol(3);
 	}
 	getline();
 
 	// X-Batts: 1 Y-Batts: 1 Z-Batts: 1
-	if(match("^X-Batts: ([0-9]+) Y-Batts: ([0-9]+) Z-Batts: ([0-9]+) $"))
+	static UVRegExp batts_re("^X-Batts: ([0-9]+) Y-Batts: ([0-9]+) Z-Batts: ([0-9]+) $");
+	if(batts_re.match(cur))
 	{
-		debug("planet-batts");
-		p->xbatts = re->subtol(1);
-		p->ybatts = re->subtol(2);
-		p->zbatts = re->subtol(3);
+		debug("planet-batts", &batts_re);
+		p->xbatts = batts_re.subtol(1);
+		p->ybatts = batts_re.subtol(2);
+		p->zbatts = batts_re.subtol(3);
 		getline();
 	}
 
 	welt->set_planet(p);
 
 	// Zone  (3) (Niemand) (278 FUs)
-	UVRegExp zone_re("^Zone ");
+	static UVRegExp zone_re("^Zone ");
 	while(zone_re.match(cur))
 	{
 		p->set_zone(parse_zone(p));
 	}
 
 	// § Handelsstation 'Red Blood'
-	if(match("^§ Handelsstation "))
+	static UVRegExp hs_re("^§ Handelsstation ");
+	if(hs_re.match(cur))
 	{
 		parse_handelsstation(p);
 	}
 
 	// *** IMP Basen
-	while(match("^\\+ "))
+	static UVRegExp imp_base_re("^\\+ ");
+	while(imp_base_re.match(cur))
 	{
-		debug("planet-impbase-skip");
+		debug("planet-impbase-skip", &imp_base_re);
 		getline();
-		while(match("^  "))
+		static UVRegExp imp_base_skip_re("^  ");
+		while(imp_base_skip_re.match(cur))
 		{
-			debug("planet-impbase-skip-whitespace");
+			debug("planet-impbase-skip-whitespace", &imp_base_skip_re);
 			getline();
 		}
 	}
@@ -1135,13 +1162,15 @@ void UVParserTXT::parse_planet()
 	parse_schiffe(p);
 
 	// *** IMP Toys
-	while(match("^\\+ "))
+	static UVRegExp imp_toys_re("^\\+ ");
+	while(imp_toys_re.match(cur))
 	{
-		debug("planet-imptoys-skip");
+		debug("planet-imptoys-skip", &imp_toys_re);
 		getline();
-		while(match("^  "))
+		static UVRegExp imp_toys_skip_re("^  ");
+		while(imp_toys_skip_re.match(cur))
 		{
-			debug("planet-imptoys-skip-whitespace");
+			debug("planet-imptoys-skip-whitespace", &imp_toys_skip_re);
 			getline();
 		}
 	}
@@ -1156,105 +1185,115 @@ void UVParserTXT::parse_planet()
 void UVParserTXT::parse_oldschool_planet()
 {
 	// Bespin (172) (Busy Eagle) (-15842,-14782) (178,813)
-	if(!match("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\( ?(-?[0-9]+), ?(-?[0-9]+)\\)(?: \\(([0-9,]+)\\))?$"))
+	static UVRegExp planet_re("^(.*?) \\(([0-9]+)\\) \\((.*?)\\) \\( ?(-?[0-9]+), ?(-?[0-9]+)\\)(?: \\(([0-9,]+)\\))?$");
+	if(!planet_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("oldschool-planet");
+	debug("oldschool-planet", &planet_re);
 	UVPlanet* p = new UVPlanet(
-		re->subtol(2),
-		re->sub(1),
-		re->sub(3),
-		re->subtol(4),
-		re->subtol(5),
+		planet_re.subtol(2),
+		planet_re.sub(1),
+		planet_re.sub(3),
+		planet_re.subtol(4),
+		planet_re.subtol(5),
 		1);
 	welt->set_dim(p->dim, welt->galaxie);
-	if(re->subs() > 6)
+	if(planet_re.subs() > 6)
 	{
-		string links_str = re->sub(6);
-		set_re("^,?([0-9]+)");
-		while(re->match(links_str))
+		string links_str = planet_re.sub(6);
+		static UVRegExp links_re("^,?([0-9]+)");
+		while(links_re.match(links_str))
 		{
-			links_str = links_str.substr(re->get_match_end(), links_str.length() - re->get_match_end());
-			p->nachbarn.push_back(re->subtol(1));
+			links_str = links_str.substr(links_re.get_match_end(), \
+			                             links_str.length() - links_re.get_match_end());
+			p->nachbarn.push_back(links_re.subtol(1));
 		}
 	}
 	getline();
 
 	// Bevölkerung: 1485.2 Millionen (Ruhig)
 	// Bevölkerung: 623.8 Millionen (REVOLUTION!)
-	if(!match("^Bev.lkerung: ([0-9.]+) Millionen \\((.+?)\\)$"))
+	static UVRegExp bev_re("^Bev.lkerung: ([0-9.]+) Millionen \\((.+?)\\)$");
+	if(!bev_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	p->bevoelkerung = re->subtof(1);
-	p->zustand = re->sub(2);
-	debug("oldschool-planet-bevoelkerung");
+	p->bevoelkerung = bev_re.subtof(1);
+	p->zustand = bev_re.sub(2);
+	debug("oldschool-planet-bevoelkerung", &bev_re);
 	getline();
 
 	// Minen: 7/65 
-	if(!match("^Minen: ([0-9]+)/([0-9]+) $"))
+	static UVRegExp minen_re("^Minen: ([0-9]+)/([0-9]+) $");
+	if(!minen_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("oldschool-planet-minen");
-	p->minen = re->subtol(1);
-	p->minen_max = re->subtol(2);
+	debug("oldschool-planet-minen", &minen_re);
+	p->minen = minen_re.subtol(1);
+	p->minen_max = minen_re.subtol(2);
 	getline();
 
 	// Fabriken: 5/43
-	if(!match("^Fabriken: ([0-9]+)/([0-9]+)$"))
+	static UVRegExp fabr_re("^Fabriken: ([0-9]+)/([0-9]+)$");
+	if(!fabr_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("oldschool-planet-fabriken");
-	p->fabriken = re->subtol(1);
-	p->fabriken_max = re->subtol(2);
+	debug("oldschool-planet-fabriken", &fabr_re);
+	p->fabriken = fabr_re.subtol(1);
+	p->fabriken_max = fabr_re.subtol(2);
 	getline();
 
 	//?Produktion: 0% für Lager, 100% für Bevölkerung
-	if(match("^Produktion: ([0-9]+)% f.r Lager, [0-9]+% f.r Bev.lkerung$"))
+	static UVRegExp prod_re("^Produktion: ([0-9]+)% f.r Lager, [0-9]+% f.r Bev.lkerung$");
+	if(prod_re.match(cur))
 	{
-		debug("oldschool-planet-produktion");
-		p->produktion = re->subtol(1);
+		debug("oldschool-planet-produktion", &prod_re);
+		p->produktion = prod_re.subtol(1);
 		getline();
 	}
 
 	// Tropische Vegetation, sehr fruchtbar, 29710 km Diameter
-	if(!match("^(.*), ([0-9]+) km Diameter$"))
+	static UVRegExp dia_re("^(.*), ([0-9]+) km Diameter$");
+	if(!dia_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Planet!");
 	}
-	debug("oldschool-planet-klima");
-	p->klima = re->sub(1);
+	debug("oldschool-planet-klima", &dia_re);
+	p->klima = dia_re.sub(1);
 	p->image = get_image_planet(p->klima);
-	p->diameter = re->subtol(2);
+	p->diameter = dia_re.subtol(2);
 	getline();
 
 	//?X-Batts: 1 Y-Batts: 1 Z-Batts: 1
-	if(match("^X-Batts: ([0-9]+) Y-Batts: ([0-9]+) Z-Batts: ([0-9]+) $"))
+	static UVRegExp batts_re("^X-Batts: ([0-9]+) Y-Batts: ([0-9]+) Z-Batts: ([0-9]+) $");
+	if(batts_re.match(cur))
 	{
-		debug("oldschool-planet-batts");
-		p->xbatts = re->subtol(1);
-		p->ybatts = re->subtol(2);
-		p->zbatts = re->subtol(3);
+		debug("oldschool-planet-batts", &batts_re);
+		p->xbatts = batts_re.subtol(1);
+		p->ybatts = batts_re.subtol(2);
+		p->zbatts = batts_re.subtol(3);
 		getline();
 	}
 
 	//?Energiegenerator: 5 Tribut: 1234 t Erz
-	if(match("^Energiegenerator: ([0-9]+) Tribut: ([0-9]+) t Erz$"))
+	static UVRegExp gen_re("^Energiegenerator: ([0-9]+) Tribut: ([0-9]+) t Erz$");
+	if(gen_re.match(cur))
 	{
-		debug("oldschool-planet-energietribut");
+		debug("oldschool-planet-energietribut", &gen_re);
 		p->techlevel = 0;
-		p->energiegenerator = re->subtol(1);
-		p->tribut = re->subtol(2);
+		p->energiegenerator = gen_re.subtol(1);
+		p->tribut = gen_re.subtol(2);
 		getline();
 	}
 
 	welt->set_planet(p);
 
 	// Handelsstation 'Paradysse'
-	if(match("^Handelsstation "))
+	static UVRegExp hs_re("^Handelsstation ");
+	if(hs_re.match(cur))
 	{
 		parse_handelsstation(p);
 	}
@@ -1262,10 +1301,9 @@ void UVParserTXT::parse_oldschool_planet()
 	// *** Skip alle Imp-Toys
 	while(cur != "")
 	{
-		debug("oldschool-planet-imp-skip");
+		debug("oldschool-planet-imp-skip", NULL);
 		getline();
 	}
-
 	parse_leerzeile();
 }
 
@@ -1278,21 +1316,23 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	UVZone* z;
 
 	// Zone  (4) (Doctor Who) (193 FUs)
-	if(!match("^Zone (.*?) \\(([0-9]+)\\) \\((.+?)\\) \\(([0-9]+) FUs\\)$"))
+	static UVRegExp zone_re("^Zone (.*?) \\(([0-9]+)\\) \\((.+?)\\) \\(([0-9]+) FUs\\)$");
+	if(!zone_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Zone!");
 	}
-	debug("zone");
-	z = new UVZone(re->subtol(2));
-	z->name = re->sub(1);
-	z->besitzer = re->sub(3);
-	z->groesse = re->subtol(4);
+	debug("zone", &zone_re);
+	z = new UVZone(zone_re.subtol(2));
+	z->name = zone_re.sub(1);
+	z->besitzer = zone_re.sub(3);
+	z->groesse = zone_re.subtol(4);
 	getline();
 
 	// Beschreibung
-	if(!match("^(?:[ -][0-9.]+ \\t){12}D?T:[ -][0-9.]+ °C$"))
+	static UVRegExp beschr_re("^(?:[ -][0-9.]+ \\t){12}D?T:[ -][0-9.]+ °C$");
+	if(!beschr_re.match(cur))
 	{
-		debug("zone-beschreibung");
+		debug("zone-beschreibung", &beschr_re);
 		z->beschreibung = cur;
 		getline();
 	}
@@ -1303,39 +1343,42 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	// -3.3 	-3.5 	-1.4 	 3.8 	 11.2 	 16.9 	 21.3 	 14.5 	 9.6 	 1.1 	-3.5 	-3.3 	T: 5.2 °C
 	// -25 	-27.5 	-25 	-20.1 	-15.1 	-10.1 	-5.2 	-10.1 	-15.1 	-20.1 	-23.8 	-25 	T:-18.6 °C
 	//  22.8 	 22.2 	 21.6 	 20.8 	 20.2 	 20.2 	 19.8 	 20.8 	 20.1 	 19.1 	 20.2 	 19.5 	DT: 20.6 °C
-	if(!match("^([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\tD?T:([ -][0-9.]+) °C$"))
+	static UVRegExp temp_re("^([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\t([ -][0-9.]+) \\tD?T:([ -][0-9.]+) °C$");
+	if(!temp_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Klimadaten!");
 	}
-	debug("klima-temperaturen");
+	debug("klima-temperaturen", &temp_re);
 	for(i = 0; i < 12; i++)
 	{
-		z->temperatur[i] = re->subtof(i + 1);
+		z->temperatur[i] = temp_re.subtof(i + 1);
 	}
-	z->T = re->subtof(i + 1);
+	z->T = temp_re.subtof(i + 1);
 	getline();
 
 	//  138 	 124 	 111 	 69 	 76 	 41 	 21 	 14 	 32 	 111 	 124 	 138 	N: 99.9 cm
 	//  127 	 164 	 146 	 91 	 73 	 84 	 100 	 120 	 91 	 146 	 164 	 127 	N: 143.3 cm
 	//  17 	 13 	 9 	 6 	 8 	 13 	 6 	 7 	 8 	 4 	 9 	 13 	N: 11.3 cm
-	if(match("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tN: ([0-9.]+) cm$"))
-	{
-		debug("klima-niederschlag-cm");
-		for(i = 0; i < 12; i++)
-		{
-			z->niederschlag[i] = re->subtof(i + 1);
-		}
-		z->N = re->subtof(i + 1);
-	}
+	static UVRegExp ncm_re("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tN: ([0-9.]+) cm$");
 	//  149 	 196 	 164 	 161 	 201 	 214 	 262 	 264 	 299 	 342 	 358 	 405 	GN: 3015 mm
-	else if(match("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tGN: ([0-9]+) mm$"))
+	static UVRegExp nmm_re("^ ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\t ([0-9]+) \\tGN: ([0-9]+) mm$");
+	if(ncm_re.match(cur))
 	{
-		debug("klima-niederschlag-mm");
+		debug("klima-niederschlag-cm", &ncm_re);
 		for(i = 0; i < 12; i++)
 		{
-			z->niederschlag[i] = re->subtof(i + 1);
+			z->niederschlag[i] = ncm_re.subtof(i + 1);
 		}
-		z->N = re->subtof(i + 1) / 10.0;
+		z->N = ncm_re.subtof(i + 1);
+	}
+	else if(nmm_re.match(cur))
+	{
+		debug("klima-niederschlag-mm", &nmm_re);
+		for(i = 0; i < 12; i++)
+		{
+			z->niederschlag[i] = nmm_re.subtof(i + 1);
+		}
+		z->N = nmm_re.subtof(i + 1) / 10.0;
 	}
 	else
 	{
@@ -1354,25 +1397,25 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 
 	// # Agrarfeld 1, 10 FUs
 	// # Agrarfeld 1, 10 FUs: Hirse angebaut.200 BRT Ertrag.
-	set_re("^# Agrarfeld ([0-9]+), ([0-9]+) FUs(?:: (.*?) angebaut\\.([0-9]+) BRT Ertrag\\.)?$");
-	while(match())
+	static UVRegExp agrar_re("^# Agrarfeld ([0-9]+), ([0-9]+) FUs(?:: (.*?) angebaut\\.([0-9]+) BRT Ertrag\\.)?$");
+	while(agrar_re.match(cur))
 	{
-		debug("zone-agrarfeld");
-		if(re->subs() == 2)
+		debug("zone-agrarfeld", &agrar_re);
+		if(agrar_re.subs() == 2)
 		{
 			p->set_agrarfeld(new UVAgrarfeld(
-				re->subtol(1),
+				agrar_re.subtol(1),
 				z,
-				re->subtol(2)), z);
+				agrar_re.subtol(2)), z);
 		}
 		else
 		{
 			p->set_agrarfeld(new UVAgrarfeld(
-				re->subtol(1),
+				agrar_re.subtol(1),
 				z,
-				re->subtol(2),
-				re->sub(3),
-				re->subtol(4)), z);
+				agrar_re.subtol(2),
+				agrar_re.sub(3),
+				agrar_re.subtol(4)), z);
 		}
 		getline();
 	}
@@ -1380,34 +1423,34 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	// # SpeicherFeld 1, 10 FUs
 	// # SpeicherFeld 1, 10 FUs: 1000 BRT Speicherplatz. Lager leer.
 	// # SpeicherFeld 1, 10 FUs: 1000 BRT Speicherplatz. Gelagert werden 1000 BRT Hirse.
-	set_re("^# SpeicherFeld ([0-9]+), ([0-9]+) FUs(?:: ([0-9]+) BRT Speicherplatz\\. (?:Lager leer\\.|Gelagert werden ([0-9]+) BRT (.*)\\.)?)?$");
-	while(match())
+	static UVRegExp speicher_re("^# SpeicherFeld ([0-9]+), ([0-9]+) FUs(?:: ([0-9]+) BRT Speicherplatz\\. (?:Lager leer\\.|Gelagert werden ([0-9]+) BRT (.*)\\.)?)?$");
+	while(speicher_re.match(cur))
 	{
-		debug("zone-speicherfeld");
-		if(re->subs() == 2)
+		debug("zone-speicherfeld", &speicher_re);
+		if(speicher_re.subs() == 2)
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
-				re->subtol(1),
+				speicher_re.subtol(1),
 				z,
-				re->subtol(2)), z);
+				speicher_re.subtol(2)), z);
 		}
-		else if(re->subs() == 3)
+		else if(speicher_re.subs() == 3)
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
-				re->subtol(1),
+				speicher_re.subtol(1),
 				z,
-				re->subtol(2),
-				re->subtol(3)), z);
+				speicher_re.subtol(2),
+				speicher_re.subtol(3)), z);
 		}
 		else
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
-				re->subtol(1),
+				speicher_re.subtol(1),
 				z,
-				re->subtol(2),
-				re->subtol(3),
-				re->subtol(4),
-				re->sub(5)), z);
+				speicher_re.subtol(2),
+				speicher_re.subtol(3),
+				speicher_re.subtol(4),
+				speicher_re.sub(5)), z);
 		}
 		getline();
 	}
@@ -1415,49 +1458,52 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	// # Mine 1, 30 FUs
 	// # Mine 1, 30 FUs: Nichts gefunden.
 	// # Mine 1, 30 FUs: Phospor entdeckt.1234 BRT Ertrag.
-	set_re("^# Mine ([0-9]+), ([0-9]+) FUs(?:: )?(?:(Nichts) gefunden\\.)?(?:(.*?) entdeckt\\.([0-9]+) BRT Ertrag\\.)?$");
-	while(match())
+	static UVRegExp mine_re("^# Mine ([0-9]+), ([0-9]+) FUs(?:: )?(?:(Nichts) gefunden\\.)?(?:(.*?) entdeckt\\.([0-9]+) BRT Ertrag\\.)?$");
+	while(mine_re.match(cur))
 	{
-		debug("zone-mine");
-		if(re->subs() == 2)
+		debug("zone-mine", &mine_re);
+		if(mine_re.subs() == 2)
 		{
 			p->set_minenfeld(new UVMinenfeld(
-				re->subtol(1),
+				mine_re.subtol(1),
 				z,
-				re->subtol(2)), z);
+				mine_re.subtol(2)), z);
 		}
-		else if(re->subs() == 3)
+		else if(mine_re.subs() == 3)
 		{
 			p->set_minenfeld(new UVMinenfeld(
-				re->subtol(1),
+				mine_re.subtol(1),
 				z,
-				re->subtol(2),
-				re->sub(3),
+				mine_re.subtol(2),
+				mine_re.sub(3),
 				0), z);
 		}
 		else
 		{
 			p->set_minenfeld(new UVMinenfeld(
-				re->subtol(1),
+				mine_re.subtol(1),
 				z,
-				re->subtol(2),
-				re->sub(4),
-				re->subtol(5)), z);
+				mine_re.subtol(2),
+				mine_re.sub(4),
+				mine_re.subtol(5)), z);
 		}
 		getline();
 	}
 
-	while(match("^# Werft "))
+	static UVRegExp werft_re("^# Werft ");
+	while(werft_re.match(cur))
 	{
 		p->set_werft(parse_werft(z), z);
 	}
 
-	while(match("^# Forschungsstation "))
+	static UVRegExp fs_re("^# Forschungsstation ");
+	while(fs_re.match(cur))
 	{
 		p->set_forschungsstation(parse_forschungsstation(z), z);
 	}
 
-	while(match("^# Stadt "))
+	static UVRegExp stadt_re("^# Stadt ");
+	while(stadt_re.match(cur))
 	{
 		p->set_stadt(parse_stadt(z), z);
 	}
@@ -1475,25 +1521,28 @@ UVWerft* UVParserTXT::parse_werft(UVZone* z)
 
 	// # Werft Blah (1), 200 FUs
 	// # Werft Blah (1), 200 FUs: Formel: 110000001, Erzlager: 21234
-	if(!match("^# Werft (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: Formel: ([0-9A-F]{9}), Erzlager: ([0-9]+))?$"))
+	static UVRegExp werft_re("^# Werft (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: Formel: ([0-9A-F]{9}), Erzlager: ([0-9]+))?$");
+	if(!werft_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Werft!");
 	}
-	debug("werft");
-	w = new UVWerft(re->subtol(2), z);
-	w->name = re->sub(1);
-	w->groesse = re->subtol(3);
-	if(re->subs() != 3)
+	debug("werft", &werft_re);
+	w = new UVWerft(werft_re.subtol(2), z);
+	w->name = werft_re.sub(1);
+	w->groesse = werft_re.subtol(3);
+	if(werft_re.subs() != 3)
 	{
-		w->formel = re->sub(4);
-		w->erzlager = re->subtol(5);
+		w->formel = werft_re.sub(4);
+		w->erzlager = werft_re.subtol(5);
 	}
 	getline();
 
 	//?  Beschreibung
-	if(match("^  ") && !match("^  [0-9]+\\. [^ ]"))
+	static UVRegExp indent_re("^  ");
+	static UVRegExp beschr_re("^  [0-9]+\\. [^ ]");
+	if(indent_re.match(cur) && !beschr_re.match(cur))
 	{
-		debug("werft-beschreibung");
+		debug("werft-beschreibung", NULL);
 		w->beschreibung = strip(cur);
 		getline();
 	}
@@ -1503,9 +1552,9 @@ UVWerft* UVParserTXT::parse_werft(UVZone* z)
 	//       Bordcomputer
 	//   97. Normales Schubtriebwerk, 20000 BRT, 20 HP, 5000 Cr
 	//       Triebwerk, Verbrauch 0.0005, Geschwindigkeit 10 KpZ
-	while(match("^  "))
+	while(indent_re.match(cur))
 	{
-		debug("werft-katalog-skip");
+		debug("werft-katalog-skip", NULL);
 		// *** katalog 2x
 		// *** w->set_bauteil(...)
 		// *** welt->set_bauteil(...)
@@ -1525,25 +1574,27 @@ UVForschungsstation* UVParserTXT::parse_forschungsstation(UVZone* z)
 
 	// # Forschungsstation Blah (1), 200 FUs
 	// # Forschungsstation Blah (1), 200 FUs: 123 Wissenspunkte
-	if(!match("^# Forschungsstation (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: ([0-9]+) Wissenspunkte)?$"))
+	static UVRegExp fs_re("^# Forschungsstation (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: ([0-9]+) Wissenspunkte)?$");
+	if(!fs_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Forschungsstation!");
 	}
-	debug("forschungsstation");
-	f = new UVForschungsstation(re->subtol(2), z);
-	f->name = re->sub(1);
-	f->groesse = re->subtol(3);
-	if(re->subs() != 3)
+	debug("forschungsstation", &fs_re);
+	f = new UVForschungsstation(fs_re.subtol(2), z);
+	f->name = fs_re.sub(1);
+	f->groesse = fs_re.subtol(3);
+	if(fs_re.subs() != 3)
 	{
-		f->wissenspunkte = re->subtol(4);
+		f->wissenspunkte = fs_re.subtol(4);
 	}
 	getline();
 
 	//?  Beschreibung
-	if(match("^  (.*)$"))
+	static UVRegExp beschr_re("^  (.*)$");
+	if(beschr_re.match(cur))
 	{
-		debug("forschungsstation-beschreibung");
-		f->beschreibung = re->sub(1);
+		debug("forschungsstation-beschreibung", &beschr_re);
+		f->beschreibung = beschr_re.sub(1);
 		getline();
 	}
 
@@ -1560,25 +1611,27 @@ UVStadt* UVParserTXT::parse_stadt(UVZone* z)
 
 	// # Stadt Belleville (1), 74 FUs
 	// # Stadt Belleville (1), 74 FUs: 1397599 Seelen
-	if(!match("^# Stadt (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: ([0-9]+) Seelen)?$"))
+	static UVRegExp stadt_re("^# Stadt (.*) \\(([0-9]+)\\), ([0-9]+) FUs(?:: ([0-9]+) Seelen)?$");
+	if(!stadt_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Stadt!");
 	}
-	debug("stadt");
-	s = new UVStadt(re->subtol(2), z);
-	s->name = re->sub(1);
-	s->groesse = re->subtol(3);
-	if(re->subs() != 3)
+	debug("stadt", &stadt_re);
+	s = new UVStadt(stadt_re.subtol(2), z);
+	s->name = stadt_re.sub(1);
+	s->groesse = stadt_re.subtol(3);
+	if(stadt_re.subs() != 3)
 	{
-		s->einwohner = re->subtol(4);
+		s->einwohner = stadt_re.subtol(4);
 	}
 	getline();
 
 	//?  Beschreibung
-	if(match("^  (.*)$"))
+	static UVRegExp beschr_re("^  (.*)$");
+	if(beschr_re.match(cur))
 	{
-		debug("stadt-beschreibung");
-		s->beschreibung = re->sub(1);
+		debug("stadt-beschreibung", &beschr_re);
+		s->beschreibung = beschr_re.sub(1);
 		getline();
 	}
 
@@ -1595,19 +1648,21 @@ void UVParserTXT::parse_handelsstation(UVPlanet* p)
 
 	// § Handelsstation 'Red Blood'
 	// Handelsstation 'Paradysse'
-	if(!match("^(?:§ )?Handelsstation '(.*)'$"))
+	static UVRegExp hs_re("^(?:§ )?Handelsstation '(.*)'$");
+	if(!hs_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Handelsstation!");
 	}
-	debug("handelsstation");
-	h = new UVHandelsstation(re->sub(1), p);
+	debug("handelsstation", &hs_re);
+	h = new UVHandelsstation(hs_re.sub(1), p);
 	getline();
 
 	//   Beschreibung
-	if(match("^  (.*)$"))
+	static UVRegExp beschr_re("^  (.*)$");
+	if(beschr_re.match(cur))
 	{
-		debug("handelsstation-beschreibung");
-		h->beschreibung = re->sub(1);
+		debug("handelsstation-beschreibung", &beschr_re);
+		h->beschreibung = beschr_re.sub(1);
 		getline();
 	}
 
@@ -1622,26 +1677,28 @@ void UVParserTXT::parse_report_schiff()
 {
 
 	//   Schiff Foo (Doctor Who) 20000 BRT (-12345,12345,4)
-	if(!match("^(?:  )?Schiff (.*) \\((.*)\\) ([0-9]+) BRT \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	static UVRegExp schiff_re("^(?:  )?Schiff (.*) \\((.*)\\) ([0-9]+) BRT \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$");
+	if(!schiff_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Schiff!");
 	}
-	debug("report-schiff");
+	debug("report-schiff", &schiff_re);
 	UVSchiff* s = new UVSchiff(
-		re->sub(1),
-		re->sub(2),
-		re->subtol(3));
-	s->x = re->subtol(4);
-	s->y = re->subtol(5);
-	s->dim = re->subtol(6);
+		schiff_re.sub(1),
+		schiff_re.sub(2),
+		schiff_re.subtol(3));
+	s->x = schiff_re.subtol(4);
+	s->y = schiff_re.subtol(5);
+	s->dim = schiff_re.subtol(6);
 	getline();
 
 	//     Geschwindigkeit: 54.62 KpZ / Ausrichtung: 123°
-	if(match("^(?:  )?  Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$"))
+	static UVRegExp geschw_re("^(?:  )?  Geschwindigkeit: ([0-9.]+) KpZ / Ausrichtung: ([0-9]+)°$");
+	if(geschw_re.match(cur))
 	{
-		debug("report-schiff-geschwindigkeit");
-		s->v = re->subtof(1);
-		s->w = re->subtol(2);
+		debug("report-schiff-geschwindigkeit", &geschw_re);
+		s->v = geschw_re.subtof(1);
+		s->w = geschw_re.subtol(2);
 		getline();
 	}
 
@@ -1657,15 +1714,16 @@ void UVParserTXT::parse_report_container()
 	UVContainer* c = new UVContainer();
 
 	//   Container 10 BRT  (-45433,74445,4)
-	if(!match("^(?:  )?Container ([0-9]+) BRT  \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	static UVRegExp cont_re("^(?:  )?Container ([0-9]+) BRT  \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$");
+	if(!cont_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Container!");
 	}
-	debug("report-container");
-	c->groesse = re->subtol(1);
-	c->x = re->subtol(2);
-	c->y = re->subtol(3);
-	c->dim = re->subtol(4);
+	debug("report-container", &cont_re);
+	c->groesse = cont_re.subtol(1);
+	c->x = cont_re.subtol(2);
+	c->y = cont_re.subtol(3);
+	c->dim = cont_re.subtol(4);
 	getline();
 
 	welt->set_container(c);
@@ -1680,15 +1738,16 @@ void UVParserTXT::parse_report_anomalie()
 	UVAnomalie* a = new UVAnomalie();
 
 	//   Kosmische Anomalie mit 6 Lichtjahren Durchmesser (-1316,-26761,1)
-	if(!match("^(?:  )?Kosmische Anomalie mit ([0-9]+) Lichtjahren Durchmesser \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	static UVRegExp anomalie_re("^(?:  )?Kosmische Anomalie mit ([0-9]+) Lichtjahren Durchmesser \\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$");
+	if(!anomalie_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Anomalie!");
 	}
-	debug("report-anomalie");
-	a->radius = re->subtol(1) / 2;
-	a->x = re->subtol(2);
-	a->y = re->subtol(3);
-	a->dim = re->subtol(4);
+	debug("report-anomalie", &anomalie_re);
+	a->radius = anomalie_re.subtol(1) / 2;
+	a->x = anomalie_re.subtol(2);
+	a->y = anomalie_re.subtol(3);
+	a->dim = anomalie_re.subtol(4);
 	getline();
 
 	welt->set_anomalie(a);
@@ -1704,24 +1763,25 @@ void UVParserTXT::parse_report_sensorsonde()
 
 	//   SensorSonde 123 (33339,3333,4)
 	//   SensorSonde 123 - Lebensdauer: 12 (33339,3333,4)
-	if(!match("^(?:  )?SensorSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	static UVRegExp sensor_re("^(?:  )?SensorSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$");
+	if(!sensor_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Sensorsonde!");
 	}
-	debug("report-sensorsonde");
-	s = new UVSensorsonde(re->subtol(1));
-	if(re->subs() == 4)
+	debug("report-sensorsonde", &sensor_re);
+	s = new UVSensorsonde(sensor_re.subtol(1));
+	if(sensor_re.subs() == 4)
 	{
-		s->x = re->subtol(2);
-		s->y = re->subtol(3);
-		s->dim = re->subtol(4);
+		s->x = sensor_re.subtol(2);
+		s->y = sensor_re.subtol(3);
+		s->dim = sensor_re.subtol(4);
 	}
 	else
 	{
-		s->lebensdauer = re->subtol(2);
-		s->x = re->subtol(3);
-		s->y = re->subtol(4);
-		s->dim = re->subtol(5);
+		s->lebensdauer = sensor_re.subtol(2);
+		s->x = sensor_re.subtol(3);
+		s->y = sensor_re.subtol(4);
+		s->dim = sensor_re.subtol(5);
 	}
 	getline();
 
@@ -1738,24 +1798,25 @@ void UVParserTXT::parse_report_infosonde()
 
 	//   InfoSonde 123 (33339,3333,4)
 	//   InfoSonde 123 - Lebensdauer: 12 (33339,3333,4)
-	if(!match("^(?:  )?InfoSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$"))
+	static UVRegExp info_re("^(?:  )?InfoSonde ([0-9]+) (?:- Lebensdauer: ([0-9]+) )?\\((-?[0-9]+),(-?[0-9]+),([0-9]+)\\)$");
+	if(!info_re.match(cur))
 	{
 		throw EXCEPTION("Fehler in Infosonde!");
 	}
-	debug("report-infosonde");
-	i = new UVInfosonde(re->subtol(1));
-	if(re->subs() == 4)
+	debug("report-infosonde", &info_re);
+	i = new UVInfosonde(info_re.subtol(1));
+	if(info_re.subs() == 4)
 	{
-		i->x = re->subtol(2);
-		i->y = re->subtol(3);
-		i->dim = re->subtol(4);
+		i->x = info_re.subtol(2);
+		i->y = info_re.subtol(3);
+		i->dim = info_re.subtol(4);
 	}
 	else
 	{
-		i->lebensdauer = re->subtol(2);
-		i->x = re->subtol(3);
-		i->y = re->subtol(4);
-		i->dim = re->subtol(5);
+		i->lebensdauer = info_re.subtol(2);
+		i->x = info_re.subtol(3);
+		i->y = info_re.subtol(4);
+		i->dim = info_re.subtol(5);
 	}
 	getline();
 
@@ -1838,14 +1899,17 @@ long UVParserTXT::get_image_planet(const string& s) const
  * Den letztem Regexp-Match zum Debuggen ausgeben.
  */
 #ifdef DEBUG
-void UVParserTXT::parse_debug(const string& s) const
+void UVParserTXT::parse_debug(const string& s, UVRegExp* re) const
 {
 	if(verbose)
 	{
 		cerr << ">>> " << s;
-		for(long i = 1; i <= re->subs(); i++)
+		if(re != NULL)
 		{
-			cerr << " $" << i << "=" << re->sub(i);
+			for(long i = 1; i <= re->subs(); i++)
+			{
+				cerr << " $" << i << "=" << re->sub(i);
+			}
 		}
 		cerr << endl;
 	}

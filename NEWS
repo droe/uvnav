@@ -1,5 +1,12 @@
 $Id$
 
+                   Windows ist nun unterstuetzt, getestet mit MinGW32,
+                   und die Bibliothek PCRE++ wird nicht mehr benoetigt.
+                   Der Parser wurde deutlich verbessert und ist nun in
+                   der Lage, auch alte und uralte Auswertungen zu parsen,
+                   ausserdem wurde die Performance um 50%-100% gesteigert.
+                   Die Bildqualität der Planeten wurde merklich verbessert.
+
 2004-07-21  0.0.1  Erster Release.  Alles noch sehr provisorisch, aber die
                    Grundfunktionalität ist mal in den Ansätzen vorhanden.
 

@@ -36,8 +36,8 @@ gibts auf den Projektseiten:
 
   https://projects.roe.ch/trac/uvnav/
 
-UV Navigator benutzt unter anderem im Parser fuer Text-Auswertungen
-eine interne, stark reduzierte Version der PCRE-Bibliothek von
+UV Navigator benutzt eine interne, stark reduzierte Version der
+genialen Library Perl Compatible Regular Expressions (PCRE) von
 Philip Hazel, Copyright (C) University of Cambridge, England.
 
 Details zu diesem und anderem verwendetem Fremdcode siehe die Datei
@@ -91,9 +91,6 @@ Die Karte wird bei vielen Objekten sehr unübersichtlich.
 Die momentane Art, wie Planeten und Schiffe dargestellt werden,
 muss gründlich überarbeitet werden.
 
-Der Parser kann noch optimiert werden was die Geschwindigkeit
-angeht.
-
 Hardware-Surfaces funktionieren nicht.
 
 
@@ -104,9 +101,11 @@ Performance
 Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 
 Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
-Workstation ca 1 MB/s, auf meinem alten 700 MHz Thinkpad ca 400 KB/s.
-Das dürfte noch etwas schneller sein.  Hier gibt es sicher noch
-Spielraum für Optimierungen.
+Workstation 2-3 MB/s, auf meinem alten 700 MHz Thinkpad 700-800 KB/s,
+je nach Komplexität der Auswertungsdaten.
+
+Zum Vergleich:  ToVU 4.13 ist ca um einen Faktor von 20 langsamer,
+AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
 
 Die Anzeige ist sogar auf meinem Thinkpad mit grossen Auswertungen
 noch einigermassen flüssig.  Notfalls kann man das rechenintensive
@@ -216,6 +215,6 @@ Um einen Cross-Compiler-Build ab Subversion Repo zu starten:
 
 Vorher sollte build-cross-mingw32.sh noch an die lokalen Gegebenheiten
 angepasst werden.  Der Default passt für eine FreeBSD Installation der
-devel/mingw32-* Ports.
+devel/mingw32-* Ports (GCC 3.x).
 
 
