@@ -43,4 +43,7 @@ extern const char* revision;
 
 #define PI 3.141592
 
+#define min(x,y) (((x) < (y)) ? (x) : (y))
+#define max(x,y) (((x) > (y)) ? (x) : (y))
+
 #endif // GLOBAL_H

@@ -391,9 +391,16 @@ void UVNavigator::run()
 						break;
 
 					case SDLK_HOME:
-						map->zoom_in();
+						map->jump_eigene();
 						break;
 					case SDLK_END:
+						map->jump_alle();
+						break;
+
+					case SDLK_PAGEUP:
+						map->zoom_in();
+						break;
+					case SDLK_PAGEDOWN:
 						map->zoom_out();
 						break;
 

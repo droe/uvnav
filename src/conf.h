@@ -52,6 +52,8 @@ class UVConf
 		void   b_set(const string&, bool, bool = false);
 		void   b_del(const string&, bool = false);
 
+		bool have_data() const;
+
 	private:
 		string aw_besitzer;
 		long aw_sternzeit;

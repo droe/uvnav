@@ -5,8 +5,10 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  1...5         Zur Dimension 1...5 springen
 
  Pfeiltasten   Scrollen
- Home          Hineinzoomen
- End           Hinauszoomen
+ Page Up       Hineinzoomen
+ Page Down     Hinauszoomen
+ Home          Alle eigenen Objekte in sichtbarem Kartenausschnitt
+ End           Alle existierenden Objekte in sichtbarem Kartenausschitt
 
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
  q, ESC        Beenden

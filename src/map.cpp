@@ -123,6 +123,9 @@ UVMapQuadrant::~UVMapQuadrant()
  */
 
 
+#define LABEL_RGB 0xCC,0xCC,0xCC
+
+
 /*
  * Konstruktor.
  *
@@ -130,12 +133,15 @@ UVMapQuadrant::~UVMapQuadrant()
  * d.h. wenn keine Daten sichtbar waeren.
  */
 UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
-: conf(c), images(i), welt(w), screen(s)
-, phys(NULL), virt_x(0), virt_y(0), virt_w(0), virt_h(0)
+: conf(c), images(i), welt(w), screen(s), phys(NULL)
+, virt_x(0), virt_y(0), virt_w(0), virt_h(0)
+, alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
+, eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
 	screen_size.w = s->w;
 	screen_size.h = s->h;
 
+	bool have_conf_data = conf->have_data();
 	offset_x = conf->l_get("map-offset-x", true);
 	offset_y = conf->l_get("map-offset-y", true);
 	zoom = conf->f_get("map-zoom", true);
@@ -161,8 +167,16 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 		}
 	}
 
-	// *** Sinnvollen Zoom und Auschnitt waehlen falls keine Daten sichtbar
-	// *** gleichzeitig muss aber der Default in conf.cpp geaendert werden
+	jump_init();
+	if(!have_conf_data)
+	{
+		zoom = max(double(alle_x2 - alle_x1) / double(screen_size.w),
+		           double(alle_y2 - alle_y1) / double(screen_size.h));
+		offset_x = alle_x1 - (long(rint(double(screen_size.w) * zoom))
+		                      - (alle_x2 - alle_x1)) / 2;
+		offset_y = alle_y1 - (long(rint(double(screen_size.h) * zoom))
+		                      - (alle_y2 - alle_y1)) / 2;
+	}
 
 	drw = new UVDraw(conf);
 	debug_font = new UVFont(conf, FNT_SANS, conf->l_get("map-debug-font-size"));
@@ -189,11 +203,252 @@ UVMap::~UVMap()
 
 
 /*
+ * Benutzte Bereiche eigener/aller Objekte finden.
+ */
+void UVMap::jump_init()
+{
+	bool first_alle = true;
+	bool first_eigene = true;
+	string spieler = welt->get_spieler()->name;
+
+	// Ueber alle Objekte loopen.
+	for(planeten_iterator iter = welt->first_planet(); iter != welt->last_planet(); iter++)
+	{
+		UVPlanet* p = (*iter).second;
+		if(p->dim == dim)
+		{
+			bool ist_eigener = false;
+			if(p->besitzer == spieler)
+			{
+				ist_eigener = true;
+			}
+			else
+			{
+				for(int i = 1; (i < p->max_zone()) && (!ist_eigener); i++)
+				{
+					if(p->get_zone(i) && (p->get_zone(i)->besitzer == spieler))
+					{
+						ist_eigener = true;
+					}
+				}
+			}
+			if(ist_eigener)
+			{
+				if(first_eigene)
+				{
+					eigene_x1 = p->x;
+					eigene_y1 = p->y;
+					eigene_x2 = p->x;
+					eigene_y2 = p->y;
+					first_eigene = false;
+				}
+				else
+				{
+					eigene_x1 = min(p->x, eigene_x1);
+					eigene_y1 = min(p->y, eigene_y1);
+					eigene_x2 = max(p->x, eigene_x2);
+					eigene_y2 = max(p->y, eigene_y2);
+				}
+			}
+			if(first_alle)
+			{
+				alle_x1 = p->x;
+				alle_y1 = p->y;
+				alle_x2 = p->x;
+				alle_y2 = p->y;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(p->x, alle_x1);
+				alle_y1 = min(p->y, alle_y1);
+				alle_x2 = max(p->x, alle_x2);
+				alle_y2 = max(p->y, alle_y2);
+			}
+		}
+	}
+	for(schiffe_iterator iter = welt->first_schiff(); iter != welt->last_schiff(); iter++)
+	{
+		UVSchiff* s = (*iter).second;
+		if(s->dim == dim)
+		{
+			if(s->besitzer == spieler)
+			{
+				if(first_eigene)
+				{
+					eigene_x1 = s->x;
+					eigene_y1 = s->y;
+					eigene_x2 = s->x;
+					eigene_y2 = s->y;
+					first_eigene = false;
+				}
+				else
+				{
+					eigene_x1 = min(s->x, eigene_x1);
+					eigene_y1 = min(s->y, eigene_y1);
+					eigene_x2 = max(s->x, eigene_x2);
+					eigene_y2 = max(s->y, eigene_y2);
+				}
+			}
+			if(first_alle)
+			{
+				alle_x1 = s->x;
+				alle_y1 = s->y;
+				alle_x2 = s->x;
+				alle_y2 = s->y;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(s->x, alle_x1);
+				alle_y1 = min(s->y, alle_y1);
+				alle_x2 = max(s->x, alle_x2);
+				alle_y2 = max(s->y, alle_y2);
+			}
+		}
+	}
+	for(container_iterator iter = welt->first_container(); iter != welt->last_container(); iter++)
+	{
+		UVContainer* c = (*iter);
+		if(c->dim == dim)
+		{
+			if(first_alle)
+			{
+				alle_x1 = c->x;
+				alle_y1 = c->y;
+				alle_x2 = c->x;
+				alle_y2 = c->y;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(c->x, alle_x1);
+				alle_y1 = min(c->y, alle_y1);
+				alle_x2 = max(c->x, alle_x2);
+				alle_y2 = max(c->y, alle_y2);
+			}
+		}
+	}
+	for(anomalien_iterator iter = welt->first_anomalie(); iter != welt->last_anomalie(); iter++)
+	{
+		UVAnomalie* a = (*iter);
+		if(a->dim == dim)
+		{
+			if(first_alle)
+			{
+				alle_x1 = a->x - a->radius;
+				alle_y1 = a->y - a->radius;
+				alle_x2 = a->x + a->radius;
+				alle_y2 = a->y + a->radius;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(a->x - a->radius, alle_x1);
+				alle_y1 = min(a->y - a->radius, alle_y1);
+				alle_x2 = max(a->x + a->radius, alle_x2);
+				alle_y2 = max(a->y + a->radius, alle_y2);
+			}
+		}
+	}
+	for(sensorsonden_iterator iter = welt->first_sensorsonde(); iter != welt->last_sensorsonde(); iter++)
+	{
+		UVSensorsonde* s = (*iter).second;
+		if(s->dim == dim)
+		{
+			if(first_alle)
+			{
+				alle_x1 = s->x - s->lebensdauer * 1000;
+				alle_y1 = s->y - s->lebensdauer * 1000;
+				alle_x2 = s->x + s->lebensdauer * 1000;
+				alle_y2 = s->y + s->lebensdauer * 1000;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(s->x - s->lebensdauer * 1000, alle_x1);
+				alle_y1 = min(s->y - s->lebensdauer * 1000, alle_y1);
+				alle_x2 = max(s->x + s->lebensdauer * 1000, alle_x2);
+				alle_y2 = max(s->y + s->lebensdauer * 1000, alle_y2);
+			}
+		}
+	}
+	for(infosonden_iterator iter = welt->first_infosonde(); iter != welt->last_infosonde(); iter++)
+	{
+		UVInfosonde* s = (*iter).second;
+		if(s->dim == dim)
+		{
+			if(first_alle)
+			{
+				alle_x1 = s->x - s->lebensdauer * 1000;
+				alle_y1 = s->y - s->lebensdauer * 1000;
+				alle_x2 = s->x + s->lebensdauer * 1000;
+				alle_y2 = s->y + s->lebensdauer * 1000;
+				first_alle = false;
+			}
+			else
+			{
+				alle_x1 = min(s->x - s->lebensdauer * 1000, alle_x1);
+				alle_y1 = min(s->y - s->lebensdauer * 1000, alle_y1);
+				alle_x2 = max(s->x + s->lebensdauer * 1000, alle_x2);
+				alle_y2 = max(s->y + s->lebensdauer * 1000, alle_y2);
+			}
+		}
+	}
+
+	// 1 ly Rand drumrum
+	alle_x1 -= 1000;
+	alle_y1 -= 1000;
+	alle_x2 += 1000;
+	alle_y2 += 1000;
+	eigene_x1 -= 1000;
+	eigene_y1 -= 1000;
+	eigene_x2 += 1000;
+	eigene_y2 += 1000;
+}
+
+
+/*
+ * Springt zu Ausschnitt mit allen Objekten sichtbar.
+ */
+void UVMap::jump_alle()
+{
+	zoom = max(double(alle_x2 - alle_x1) / double(screen_size.w),
+	           double(alle_y2 - alle_y1) / double(screen_size.h));
+	offset_x = alle_x1 - (long(rint(double(screen_size.w) * zoom))
+	                      - (alle_x2 - alle_x1)) / 2;
+	offset_y = alle_y1 - (long(rint(double(screen_size.h) * zoom))
+	                      - (alle_y2 - alle_y1)) / 2;
+
+	SDL_Rect rect = { 0, 0, screen->w, screen->h };
+	draw(&rect);
+}
+
+
+/*
+ * Springt zu Ausschnitt mit allen eigenen Objekten sichtbar.
+ */
+void UVMap::jump_eigene()
+{
+	zoom = max(double(eigene_x2 - eigene_x1) / double(screen_size.w),
+	           double(eigene_y2 - eigene_y1) / double(screen_size.h));
+	offset_x = eigene_x1 - (long(rint(double(screen_size.w) * zoom))
+	                        - (eigene_x2 - eigene_x1)) / 2;
+	offset_y = eigene_y1 - (long(rint(double(screen_size.h) * zoom))
+	                        - (eigene_y2 - eigene_y1)) / 2;
+
+	SDL_Rect rect = { 0, 0, screen->w, screen->h };
+	draw(&rect);
+}
+
+
+/*
  * Setzt die Dimension.
  */
 void UVMap::set_dim(long d)
 {
 	dim = d;
+	jump_init();
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 	draw(&rect);
 }
@@ -361,7 +616,7 @@ void UVMap::draw(SDL_Rect* rect)
 	SDL_Surface* status = debug_font->get_surface(
 		str_stream() << dim << " - " << welt->get_dim(dim) << ", "
 		             << welt->get_spieler()->name
-		             << ", Sternzeit " << welt->sternzeit, 0x88, 0x88, 0x88);
+		             << ", Sternzeit " << welt->sternzeit, LABEL_RGB);
 	dst.x = screen->w - status->w - status->h * 2;
 	dst.y = status->h;
 	drw->box(screen, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
@@ -376,7 +631,7 @@ void UVMap::draw(SDL_Rect* rect)
 		             << "  /  " << dticks << " ms = "
 		             << 1000 / dticks << " fps  /  uvnav-" << PACKAGE_VERSION
 		             << " (" << revision << ")"
-		, 0x88, 0x88, 0x88);
+		, LABEL_RGB);
 	dst.x = screen->w - debug->w - debug->h * 2;
 	dst.y = screen->h - debug->h * 2;
 	drw->box(screen, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
@@ -640,7 +895,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			{
 				label_text = str_stream() << planet->nummer;
 			}
-			SDL_Surface* label = label_font->get_surface(label_text, 0x88, 0x88, 0x88);
+			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
 			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
@@ -718,7 +973,7 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 				label_text = str_stream() << schiff->name;
 			}
 			SDL_Rect dst = { 0, 0, 0, 0};
-			SDL_Surface* label = label_font->get_surface(label_text, 0x88, 0x88, 0x88);
+			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
 			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);

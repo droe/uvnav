@@ -62,6 +62,9 @@ class UVMap
 		void zoom_out();
 		void zoom_by(double);
 		void resize(SDL_Surface*);
+		void jump_init();
+		void jump_alle();
+		void jump_eigene();
 
 		void draw(SDL_Rect*);
 
@@ -77,6 +80,9 @@ class UVMap
 		long offset_x, offset_y;
 		double zoom;
 		long dim;
+
+		long alle_x1, alle_y1, alle_x2, alle_y2;
+		long eigene_x1, eigene_y1, eigene_x2, eigene_y2;
 
 		UVDraw* drw;
 		UVFont* debug_font;

@@ -2,11 +2,6 @@ $Id$
 
 == 0.0.2 ==
 
-- Grafik überdenken / verschönern.
-  - verbleibend: planet näher an endgültige form bringen
-    - TL-kreise weg / optional
-    - dauer-infos rundherum platzieren (versuch)
-
 dann wär auch schon bald wieder mal n release möglich...
 eventuell noch n paar low-pri's killen... TODO checken
 
@@ -29,22 +24,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Linien mit Koords > 16 bit
     - Eigene Routinen mit 32bit Arithmetik implementieren
     - oder allen Linien zeichnenden Code mit "dirty Rect"-Correctness versehen
-
-- Intelligentes auto-scaling / positioning
-  - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
-  - zoom standardwerte daraus berechnen
-    - eventuell auch gespeicherte werte damit überschreiben
-      wenn kein exakter match für die sternzeit gefunden wurde.
-      benötigt eventuell API change in UVConf.
-  - zoom limitieren wenn alles sichtbar
-  - funktion um direkt rauszuspringen (View All)
-  - Keys:
-    PgUp/Dn: manueller Zoom
-    Home: alle eigenen sichtbar
-    End: alles bekannte sichtbar
-    Ins: aktuelle Ansicht speichern
-    Del: aktuelle Ansicht verwerfen und zur letzten gespeicherten Ansicht
-         zurückkehren (Stack)
 
 - Statistik
   - UVWelt zählt Anzahl Objekte jedes relevanten Typs
@@ -83,6 +62,15 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     - Koordinaten laufend anzeigen
   - Zeichenreihenfolge
   - Such-Overlay à la Celestia
+  - Neue Map Keys:
+    Ins: aktuelle Ansicht speichern
+    Del: aktuelle Ansicht verwerfen und zur letzten gespeicherten Ansicht
+         zurückkehren (Stack)
+  - UVMap / UVConf: Zoomsettings schöner implementieren
+    - per Dimension Einstellungen speichern
+
+- Freund/Feind-Erkennung
+  - zentralisieren
 
 - UVFontCache
   - cachen und blitten anstatt immer neu rendern und blitten
@@ -124,6 +112,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
     speichern, inklusive Statistik à la wieviele Objekte welchen Typs
     besitzt er.
   - korrektes destroyen aller Objekte
+  - set_partie eliminieren
 
 
 

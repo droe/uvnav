@@ -505,3 +505,27 @@ void UVConf::b_del(const string& key, bool aw)
 }
 
 
+/*
+ * Sind auswertungsspezifische Daten vorhanden?
+ */
+bool UVConf::have_data() const
+{
+	string key = "map-zoom";
+	if(f_conf.count(key) == 0)
+	{
+		return false;
+	}
+
+	if((aw_besitzer == "") || (aw_sternzeit == 0))
+	{
+		throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+	}
+	string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+	if(f_conf.count(k) == 0)
+	{
+		return false;
+	}
+	return true;
+}
+
+
