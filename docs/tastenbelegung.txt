@@ -5,10 +5,10 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  1...5         Zur Dimension 1...5 springen
 
  Pfeiltasten   Scrollen
- PgUp          Hineinzoomen
- PgDn          Hinauszoomen
+ Home          Hineinzoomen
+ End           Hinauszoomen
 
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
  q, ESC        Beenden
 
-Während dem Ladevorgang kann mit ESC abgebrochen und beendet werden.
+Waehrend dem Ladevorgang kann mit ESC abgebrochen und beendet werden.

@@ -3,14 +3,16 @@ $Id$
 
 == 0.0.1 ==
 
+- Autotools Upgrade 257->259 & 17->18
 - Sonden mit unbekanntem Radius entsprechend markieren
   - Sonde mit Zentrum versehen (quadrat wie bei container)
   - Radius nur zeichnen falls bekannt
   - Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
+    und Längenangaben (1 LJ = 1000 KE)
 - Dirty Rect erkennung der Objekte verbessern
 
 
-== 0.2.0 ==
+== 0.0.2 ==
 
 - Gemäss Roadmap
 
@@ -19,7 +21,10 @@ $Id$
 
 == HOHE PRIORITAET ==
 
-- BUG: gfxPrimitives zeichnen daneben für sehr kleinen Zoomfaktor
+- BUG: gfxPrimitives zeichnen daneben für sehr kleine Zoomfaktoren
+  - AA-Ellipse
+  - AA-Line
+    - Eigene Routinen mit 32bit Arithmetik implementieren
 
 - Intelligentes auto-scaling / positioning
   - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
@@ -73,6 +78,7 @@ $Id$
 
 - UVImages
   - Schnelleren Zoom-Code benutzen
+    - SDL_gfx generell obsolet?
   - Low-Q Variante unterstützen für Fast-Scaling
   - In X Zoomfaktoren gezoomte Planetenbilder prescalen und cachen
     - preload(array of w/h's)
@@ -117,6 +123,7 @@ $Id$
     - b) history-objekte führen
     - c) alt-modus beim parsen, der nur planetendaten parst
     - d) planetendaten-cache/db
+    - e) UVWelt als Auswertungsdatei serialisieren (interessant!)
   - Mehrere Spieler
     - intelligent mergen
 

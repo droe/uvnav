@@ -36,7 +36,6 @@ class UVNavigator
 		~UVNavigator();
 
 		void splash();
-		void status(const string&);
 		void load(const string&, bool = false);
 		void wait();
 		void run();
@@ -49,9 +48,12 @@ class UVNavigator
 		UVImages* images;
 		UVFont* font_splash;
 
-		int flags;
 		SDL_Surface* screen;
+
 		long status_y;
+		void splash_status(const string&);
+
+		void init_video();
 };
 
 #endif // NAVIGATOR_H

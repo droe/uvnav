@@ -44,10 +44,10 @@
 /*
  * Konstruktor.
  *
- * Initialisiert die SDL Surface des Bildschirms.
+ * Initialisiert automatisch die SDL Surface des Bildschirms.
  */
 UVNavigator::UVNavigator(UVConf* c)
-: welt(NULL), map(NULL), conf(c), flags(0)
+: welt(NULL), map(NULL), conf(c)
 {
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -55,6 +55,39 @@ UVNavigator::UVNavigator(UVConf* c)
 	}
 	atexit(SDL_Quit);
 
+	init_video();
+
+	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
+	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+	SDL_EnableUNICODE(1);
+
+	font_splash = new UVFont(conf, FNT_SANS, screen->h / 32);
+	images = new UVImages(conf);
+}
+
+
+/*
+ * Destruktor.
+ */
+UVNavigator::~UVNavigator()
+{
+	delete images;
+	delete font_splash;
+}
+
+
+/*
+ * Video Mode initialisieren.
+ *
+ * Initialisiert den SDL-Video-Mode aufgrund der aktuellen
+ * Einstellungen im globalen Konfigurationsobjekt conf neu.
+ * Ueberschreibt die globale SDL_Surface.
+ */
+void UVNavigator::init_video()
+{
+	int flags = 0;
+
+	cout << "------------------------------------------------------------------------------" << endl;
 	cout << "Angeforderte Bildschirmoptionen:";
 	SDL_Rect r = { 0, 0, 0, 0 };
 	if(conf->b_get("screen-fullscreen"))
@@ -134,23 +167,7 @@ UVNavigator::UVNavigator(UVConf* c)
 		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
 		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
 	}
-
-	SDL_WM_SetCaption(TITLE, PACKAGE_NAME);
-	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_EnableUNICODE(1);
-
-	font_splash = new UVFont(conf, FNT_SANS, screen->h / 32);
-	images = new UVImages(conf);
-}
-
-
-/*
- * Destruktor.
- */
-UVNavigator::~UVNavigator()
-{
-	delete images;
-	delete font_splash;
+	cout << "------------------------------------------------------------------------------" << endl;
 }
 
 
@@ -226,9 +243,9 @@ void UVNavigator::splash()
 
 
 /*
- * Status anzeigen.
+ * Splash-Screen-Status anzeigen.
  */
-void UVNavigator::status(const string& text)
+void UVNavigator::splash_status(const string& text)
 {
 	SDL_Surface* surface = font_splash->get_surface(text);
 	SDL_Rect bounds = { 0, status_y, screen->w, surface->h };
@@ -274,7 +291,7 @@ void UVNavigator::load(const string& file, bool v)
 {
 	if(welt == NULL)
 	{
-		status("Lade Auswertung: " + file);
+		splash_status("Lade Auswertung: " + file);
 
 		UVParserTXT* parser = new UVParserTXT(conf);
 		if(v)
@@ -305,7 +322,7 @@ void UVNavigator::load(const string& file, bool v)
  */
 void UVNavigator::wait()
 {
-	status("Weiter mit beliebiger Taste!");
+	splash_status("Weiter mit beliebiger Taste!");
 
 	SDL_Event event;
 	bool waiting = true;
@@ -343,7 +360,7 @@ void UVNavigator::run()
 			case SDL_VIDEORESIZE:
 				conf->l_set("screen-width", event.resize.w);
 				conf->l_set("screen-height", event.resize.h);
-				screen = SDL_SetVideoMode(event.resize.w, event.resize.h, 0, flags);
+				init_video();
 				map->resize(screen);
 				break;
 			case SDL_KEYDOWN:
@@ -356,17 +373,7 @@ void UVNavigator::run()
 
 					case SDLK_f:
 						conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
-						flags ^= SDL_FULLSCREEN;
-						if((flags & SDL_FULLSCREEN) == SDL_FULLSCREEN)
-						{
-							sysdep_screensize(&rect);
-						}
-						else
-						{
-							rect.w = conf->l_get("screen-width");
-							rect.h = conf->l_get("screen-height");
-						}
-						screen = SDL_SetVideoMode(rect.w, rect.h, 0, flags);
+						init_video();
 						map->resize(screen);
 						break;
 
@@ -383,10 +390,10 @@ void UVNavigator::run()
 						map->scroll(0, screen->w / 16);
 						break;
 
-					case SDLK_PAGEUP:
+					case SDLK_HOME:
 						map->zoom_in();
 						break;
-					case SDLK_PAGEDOWN:
+					case SDLK_END:
 						map->zoom_out();
 						break;
 
