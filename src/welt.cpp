@@ -1083,6 +1083,14 @@ string UVWelt::get_dim(long d) const
 {
 	return dim[d];
 }
+dim_iterator UVWelt::first_dim()
+{
+	return dim.begin();
+}
+dim_iterator UVWelt::last_dim()
+{
+	return dim.end();
+}
 
 
 /*

@@ -146,13 +146,23 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 	dim = conf->l_get("map-dim", true);
 
 	// Sinnvolle Dimension waehlen, falls keine Daten in dim.
-	while((welt->get_dim(dim) == "") && (dim < 5))
-	{
-		dim++;
-	}
 	if(welt->get_dim(dim) == "")
 	{
-		throw EXCEPTION("Keine Dimension hat Daten!");
+		for(dim_iterator iter = welt->first_dim(); iter != welt->last_dim(); iter++)
+		{
+			if((*iter).second != "")
+			{
+				dim = (*iter).first;
+			}
+		}
+		if(welt->get_dim(dim) == "")
+		{
+			throw EXCEPTION("Keine Dimension hat Daten!");
+		}
+		else
+		{
+			conf->l_set("map-dim", dim, true);
+		}
 	}
 
 	// *** Sinnvollen Zoom und Auschnitt waehlen falls keine Daten sichtbar

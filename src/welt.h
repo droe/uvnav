@@ -419,6 +419,7 @@ class UVSchiff
 
 // ===========================================================================
 
+typedef ext::hash_map<long, string>::iterator dim_iterator;
 typedef ext::hash_map<string, UVSchiff*>::iterator schiffe_iterator;
 typedef ext::hash_map<long, UVPlanet*>::iterator planeten_iterator;
 typedef ext::hash_map<string, UVHandelsstation*>::iterator handelsstationen_iterator;
@@ -442,6 +443,8 @@ class UVWelt
 
 		void   set_dim(const long, const string&);
 		string get_dim(const long) const;
+		dim_iterator first_dim();
+		dim_iterator last_dim();
 
 		void set_spieler(UVSpieler*);
 		UVSpieler* get_spieler() const;

@@ -38,7 +38,6 @@
  * - Fenstermanagment
  *   vector<UVFenster> in Anzeigereihenfolge
  *   von hinten durchackern
- * - SDL optimieren: automatisch optimalen mode finden
  */
 
 
