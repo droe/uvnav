@@ -115,8 +115,6 @@ $Id$
   - parse_imp_*
   - Display-Support
 
-- /usr/include/sysexits.h benutzen, falls verfügbar
-
 - billigen demo-effekt nach splash screen als übergang zum navigator
   (warp-effekt wäre ultra-cool)
 
@@ -153,4 +151,4 @@ $Id$
     - wie detecten?
     - wie handeln wenn detected?
 
-- TODO's und *** und FIXME's abarbeiten.
+- Verbleibende verstreute TODOs und *** und FIXMEs abarbeiten

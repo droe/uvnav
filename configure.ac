@@ -34,6 +34,7 @@ AC_PATH_PROG([SVNVERSION], [svnversion], [], [$PATH:/bin:/usr/bin:/usr/local/bin
 
 # Checks for header files.
 # AC_HEADER_STDC
+AC_CHECK_HEADERS([sys/types.h sys/stat.h sysexits.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_CXX_HAVE_HASH_MAP
