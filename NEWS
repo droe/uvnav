@@ -1,5 +1,8 @@
 $Id$
 
+                   Grosses Architektur-Refactoring.
+                   Der Parser wurde um rudimentaeres Handling der Messages
+                   erweitert.
                    Bugfix: Vollbildschirm-Toggle vergroessert Screen nun
                    auch in der Vertikalen wieder.
 

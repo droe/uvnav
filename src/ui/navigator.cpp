@@ -301,7 +301,9 @@ void UVNavigator::load(const string& file, int v)
 		dest.x = screen->w / 16; dest.w = screen->w * 7 / 8;
 		dest.y = screen->h * 5 / 8;  dest.h = screen->h / 16;
 		UVProgress* progress = new UVProgress(conf, screen, &dest);
-		parser->parse(file, progress);
+		parser->attach(progress);
+		parser->parse(file);
+		parser->detach(progress);
 		delete progress;
 		welt = parser->get_welt();
 		conf->set_auswertung(welt->get_spieler()->name, welt->sternzeit);

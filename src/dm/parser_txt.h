@@ -23,26 +23,28 @@
 
 #include "../si/conf.h"
 #include "../pd/welt.h"
-#include "../ui/progress.h"
 #include "../lib/regexp.h"
+#include "../lib/observer.h"
 
-class UVParserTXT
+class UVParserTXT : public Subject
 {
 	public:
 		UVParserTXT(UVConf* c, int = 0, UVWelt* = NULL);
 		~UVParserTXT();
 
-		void parse(const string& file, UVProgress* pro = NULL);
+		void parse(const string& file);
 		UVWelt* get_welt() const;
+		unsigned long get_filesize() const;
+		unsigned long get_bytecount() const;
 
 	private:
 		UVConf* conf;
 		UVWelt* welt;
-		UVProgress* progress;
 
 		ifstream stream;
 		string cur;
 		unsigned long line;
+		unsigned long filesize;
 		unsigned long bytecount;
 		int verbosity;
 

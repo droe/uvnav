@@ -1,16 +1,15 @@
 $Id$
 
-- PRI 1: OO-Architecture Redesign: Observer-Pattern, Objekthierarchie
-  - util/global.h -> gui/sdl.h ...
-  - util/debug.h -> infra/log.{h,cpp} util/exceptions.h
-  - gui/progress.{h,cpp} von inout/parser_txt.{h,cpp} trennen
-    - observer pattern oder callback
-  - gui/navigator.{h,cpp} -> gui/splash.{h,cpp} gui/abstractwidget.{h,cpp}
-                             gui/root.{h,cpp}
-  - infra/* -> Singletons
-  - nur includen was nötig
-  - Observer
-  - OS/SysDep: what to do?
+- PRI 1: OO-Architecture Redesign
+  - si/* -> Singletons
+  - OS/SysDep: lib oder si? static oder Singleton?
+  - lib/observer.* benutzen, um ui von pd und dm zu separieren
+  - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
+    - model interface (virtual class)
+  - parser_txt.* refactoren:
+    - abstractparser.*, txtparser.*/xmlparser.*/htmparser.*, parserhandler.*
+  - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
+                            ui/root.{h,cpp}
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)
@@ -18,6 +17,8 @@ $Id$
     - Zonendaten
     - Income-Stats (?)
 - Maushandling: Zoom, Zentrieren, Scrollen, Koordinaten anzeigen.
+  - Hierarchisches Widget-System
+    - Widgets und Containers
 
 Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap

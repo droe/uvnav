@@ -18,32 +18,28 @@
  * $Id$
  */
 
-#ifndef PROGRESS_H
-#define PROGRESS_H
+#ifndef OBSERVER_H
+#define OBSERVER_H
 
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "../lib/sdl.h"
-#include "../lib/stl.h"
-#include "../lib/observer.h"
+#include "stl.h"
 
-class UVProgress : public Observer
+class Subject;
+
+class Observer
 {
 	public:
-		UVProgress(const UVConf*, SDL_Surface*, SDL_Rect*);
-		~UVProgress();
-
-		void init(unsigned long);
-		void update(Subject*);
-
-	private:
-		UVFont* font;
-		SDL_Surface* screen;
-		SDL_Rect rect;
-		string message;
-		unsigned long total;
-		long ticks;
+		virtual void update(Subject*);
 };
 
-#endif // PROGRESS_H
+class Subject
+{
+	public:
+		void attach(Observer*);
+		void detach(Observer*);
+		void notify();
 
+	private:
+		vector<Observer*> observers;
+};
+
+#endif // OBSERVER_H

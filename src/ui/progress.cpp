@@ -21,6 +21,7 @@
 #include "progress.h"
 
 #include "../lib/exceptions.h"
+#include "../dm/parser_txt.h"
 
 /*
  * UVProgress - Implementiert einen lightweight Progress-Bar.
@@ -45,7 +46,6 @@ UVProgress::UVProgress(const UVConf* conf, SDL_Surface* s, SDL_Rect* r)
  */
 UVProgress::~UVProgress()
 {
-	update(total);
 	delete font;
 }
 
@@ -57,7 +57,6 @@ void UVProgress::init(unsigned long newtot)
 {
 	total = newtot;
 	ticks = SDL_GetTicks();
-	update(0);
 //*** DEBUG
 //	cerr << "progress init total=" << total << endl;
 }
@@ -85,8 +84,16 @@ void UVProgress::init(unsigned long newtot)
  * ¦                            rect.x+rect.w/rect.y+rect.h) ¦
  * +---------------------------------------------------------+
  */
-void UVProgress::update(unsigned long current)
+void UVProgress::update(Subject* s)
 {
+	UVParserTXT* p = static_cast<UVParserTXT*>(s);
+
+//cerr << "s=" << s << " p=" << p << endl;
+
+	unsigned long current = p->get_bytecount();
+	if(current == 0)
+		init(p->get_filesize());
+
 	// Events abklopfen - aber nur bei Programmabbruch handeln.
 	// Alle andern Events werden einfach ignoriert.
 	SDL_Event event;

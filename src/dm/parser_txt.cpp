@@ -53,7 +53,7 @@
  * Konstruktor.
  */
 UVParserTXT::UVParserTXT(UVConf* c, int v, UVWelt* w)
-: conf(c), welt(w), progress(NULL), verbosity(v)
+: conf(c), welt(w), line(0), filesize(0), bytecount(0), verbosity(v)
 , stats_schiffe(0), stats_planeten(0)
 {
 	if(welt == NULL)
@@ -77,6 +77,24 @@ UVParserTXT::~UVParserTXT()
 UVWelt* UVParserTXT::get_welt() const
 {
 	return welt;
+}
+
+
+/*
+ * Gibt den aktuellen Filesize zurueck.
+ */
+unsigned long UVParserTXT::get_filesize() const
+{
+	return filesize;
+}
+
+
+/*
+ * Gibt den aktuellen Bytecount zurueck.
+ */
+unsigned long UVParserTXT::get_bytecount() const
+{
+	return bytecount;
 }
 
 
@@ -109,9 +127,9 @@ string UVParserTXT::getline()
 	{
 		cerr << line << ": " << cur << endl;
 	}
-	if((line % 500 == 0) && (progress))
+	if(line % 500 == 0)
 	{
-		progress->update(bytecount);
+		notify();
 	}
 	return cur;
 }
@@ -151,18 +169,17 @@ string UVParserTXT::strip(string& s) const
 /*
  * Laedt eine Datei und jagt sie durch den Parser.
  */
-void UVParserTXT::parse(const string& file, UVProgress* pro)
+void UVParserTXT::parse(const string& file)
 {
 	cout << "Lade Auswertung: " << file << endl;
-	progress = pro;
-	if(progress)
-	{
-		progress->init(sysdep_filesize(file));
-	}
 
-	stream.open(file.c_str());
+	filesize = sysdep_filesize(file);
 	line = 0;
 	bytecount = 0;
+
+	notify();
+
+	stream.open(file.c_str());
 
 	stats_schiffe = 0;
 	stats_planeten = 0;
@@ -183,6 +200,8 @@ void UVParserTXT::parse(const string& file, UVProgress* pro)
 	cout << "Auswertung erfolgreich geladen:" << endl;
 	cout << "Total " << stats_schiffe << " Schiffe und " << stats_planeten << " Planeten." << endl;
 	cout << "------------------------------------------------------------------------------" << endl;
+
+	notify();
 }
 
 

@@ -18,32 +18,38 @@
  * $Id$
  */
 
-#ifndef PROGRESS_H
-#define PROGRESS_H
+#include "observer.h"
 
-#include "../si/conf.h"
-#include "../si/font.h"
-#include "../lib/sdl.h"
-#include "../lib/stl.h"
-#include "../lib/observer.h"
+/*
+ * Subject
+ */
 
-class UVProgress : public Observer
+void Subject::attach(Observer* o)
 {
-	public:
-		UVProgress(const UVConf*, SDL_Surface*, SDL_Rect*);
-		~UVProgress();
+	observers.push_back(o);
+}
 
-		void init(unsigned long);
-		void update(Subject*);
+void Subject::detach(Observer* o)
+{
+	int count = observers.size();
 
-	private:
-		UVFont* font;
-		SDL_Surface* screen;
-		SDL_Rect rect;
-		string message;
-		unsigned long total;
-		long ticks;
-};
+	int i;
+	for(i = 0; i < count; i++)
+	{
+		if(observers[i] == o)
+			break;
+	}
+	if(i < count)
+		observers.erase(observers.begin() + i);
+}
 
-#endif // PROGRESS_H
+void Subject::notify()
+{
+	int count = observers.size();
+
+	for(int i = 0; i < count; i++)
+	{
+		(observers[i])->update(this);
+	}
+}
 
