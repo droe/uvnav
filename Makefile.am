@@ -39,8 +39,10 @@ MAINTAINERCLEANFILES = \
     config.guess config.sub depcomp install-sh missing mkinstalldirs
 
 ChangeLog: FORCE
-	touch ChangeLog
-	tools/svn2log.sh
+	@if [ -d .svn -a -x aux/svn2log.sh ]; then \
+		touch ChangeLog ; \
+		aux/svn2log.sh ; \
+	fi
 
 FORCE:
 

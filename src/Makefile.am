@@ -74,9 +74,11 @@ rev.h:
 
 .build-rev.h:
 	@echo Updating rev.h... ; \
+	echo -n "pwd=" ; pwd ; \
 	touch .rev .rev-str ; \
 	oldrev=`cat .rev 2>/dev/null` || true ; \
 	oldstr=`cat .rev-str 2>/dev/null` || true ; \
+	echo "oldrev=$${oldrev} oldstr=$${oldstr}" ; \
 	if [ "x$(SVNVERSION)" != "x" -a -x "$(SVNVERSION)" ]; then \
 		newrev=`$(SVNVERSION) .` ; \
 		echo "Output of svnversion: $${newrev}" ; \
@@ -84,32 +86,28 @@ rev.h:
 		newrev="exported" ; \
 		echo "No svnversion available, falling back to: exported" ; \
 	fi ; \
-	if [ "x$${newrev}" != "x$${oldrev}" ]; then \
-		if [ "x$${newrev}" = "xexported" ]; then \
-			if [ "x$${oldrev}" = "x" ]; then \
-				newstr="exported" ; \
-			else \
-				newstr="exported from r$${oldrev}" ; \
-			fi ; \
+	if [ "x$${newrev}" = "xexported" ]; then \
+		if [ "x$${oldrev}" = "x" ]; then \
+			newstr="exported" ; \
 		else \
-			newstr="r$${newrev}" ; \
-			echo "$${newrev}" > .rev ; \
+			newstr="exported from r$${oldrev}" ; \
 		fi ; \
-		echo "Revision is: $${newstr}" ; \
-		if [ "x$${newstr}" != "x$${oldstr}" ]; then \
-			echo "/*" > rev.h ; \
-			echo " * Diese Datei wird von make automatisch generiert." >> rev.h ; \
-			echo " * Veraenderungen koennen in src/Makefile.am gemacht werden." >> rev.h ; \
-			echo " */" >> rev.h ; \
-			echo "#ifdef REVISION" >> rev.h ; \
-			echo "#undef REVISION" >> rev.h ; \
-			echo "#endif" >> rev.h ; \
-			echo "#define REVISION \"$${newstr}\"" >> rev.h ; \
-			echo "rev.h brought up to date" ; \
-			echo "$${newstr}" > .rev-str ; \
-		else \
-			echo "rev.h is up to date - not changed" ; \
-		fi ; \
+	else \
+		newstr="r$${newrev}" ; \
+		echo "$${newrev}" > .rev ; \
+	fi ; \
+	echo "Revision is: $${newstr}" ; \
+	if [ "x$${newstr}" != "x$${oldstr}" ]; then \
+		echo "/*" > rev.h ; \
+		echo " * Diese Datei wird von make automatisch generiert." >> rev.h ; \
+		echo " * Veraenderungen koennen in src/Makefile.am gemacht werden." >> rev.h ; \
+		echo " */" >> rev.h ; \
+		echo "#ifdef REVISION" >> rev.h ; \
+		echo "#undef REVISION" >> rev.h ; \
+		echo "#endif" >> rev.h ; \
+		echo "#define REVISION \"$${newstr}\"" >> rev.h ; \
+		echo "rev.h brought up to date" ; \
+		echo "$${newstr}" > .rev-str ; \
 	else \
 		echo "rev.h is up to date - not changed" ; \
 	fi

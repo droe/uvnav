@@ -5,8 +5,6 @@ $Id$
 
 [0.0.1]
   - schiff: richtungsvektor implementieren
-  - rev.h hack fix -- always rebuild ist scheisse
-
 
 
 == HOHE PRIORITAET ==

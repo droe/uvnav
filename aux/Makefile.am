@@ -16,7 +16,7 @@
 #
 # $Id$
 
-noinst_SCRIPTS = svn2log.sh
+EXTRA_DIST = svn2log.sh
 
 MAINTAINERCLEANFILES = Makefile.in
 
