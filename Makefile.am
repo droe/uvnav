@@ -34,4 +34,6 @@ distcleancheck_listfiles = \
     find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
 
 # maintainer-clean etwas erweitern ... verhindert bugs
-MAINTAINERCLEANFILES = Makefile.in configure aclocal.m4 config.h.in
+MAINTAINERCLEANFILES = \
+    Makefile.in configure aclocal.m4 config.h.in \
+    config.guess config.sub depcomp install-sh missing mkinstalldirs
