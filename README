@@ -99,7 +99,7 @@ Das reicht, dürfte aber noch etwas schneller sein. Hier gibt es sicher
 noch Spielraum für Optimierungen.
 
 UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigrösse der
-Auswertung an RAM. Da lässt sich vermutlich nur wenig daran ändern;
+Auswertung an RAM.  Da lässt sich vermutlich nur wenig daran ändern;
 tendenziell wird der Speicherbedarf eher steigen als sinken, da mir
 gute Performance wichtiger ist als ein niedriger Speicherbedarf.
 
@@ -113,23 +113,6 @@ grösseren Datenmengen im schlimmsten Fall um die 250 ms = 4 fps,
 im weniger rechenintensiven Modus bei 125 = 8 fps.  Damit lässt sich
 immer noch arbeiten.  Auf schnelleren Maschinen dürfte die
 Geschwindigkeit bereits jetzt kaum zum Problem werden.
-
-
-
-Systemvoraussetzungen: Software
--------------------------------
-
-UVNav wird von mir primär unter FreeBSD 5 entwickelt, dürfte aber auch
-unter NetBSD, OpenBSD, Linux, MacOS X sowie Windows (Cygwin & MingW32)
-dank den GNU Autotools relativ einfach kompilierbar sein.
-
-Andere Betriebssysteme als FreeBSD werden etwas systemabhängigen Code
-benötigen.  Die systemabhängigen Teile befinden sich in sysdep.cpp;
-um UVNav zu portieren müssen also nur einige wenige Zeilen Code zu
-diesem File für dein Betriebssystem hinzugefügt werden.
-
-Die Autotools-Toolchain ist noch etwas lückenhaft.  Korrekturen,
-zusätzliche oder bessere Tests sind natürlich willkommen.
 
 
 
