@@ -18,8 +18,8 @@
  * $Id$
  */
 
-#ifndef IMAGES_H
-#define IMAGES_H
+#ifndef IMAGEHANDLER_H
+#define IMAGEHANDLER_H
 
 #include "../lib/sdl.h"
 #include "../lib/singleton.h"
@@ -45,17 +45,17 @@ struct uv_img
 	double faktor;
 };
 
-class UVImages : public Singleton<UVImages>
+class UVImageHandler : public Singleton<UVImageHandler>
 {
-	friend class Singleton<UVImages>;
+	friend class Singleton<UVImageHandler>;
 
 	public:
 		SDL_Surface* get_surface(const long id, const double f = 1.0);
 		SDL_Surface* get_surface(const long id, const int w, const int h);
 
 	protected:
-		UVImages();
-		~UVImages();
+		UVImageHandler();
+		~UVImageHandler();
 
 	private:
 		uv_img images[NUM_IMG];
@@ -63,5 +63,5 @@ class UVImages : public Singleton<UVImages>
 		int smoothing;
 };
 
-#endif // IMAGES_H
+#endif // IMAGEHANDLER_H
 

@@ -273,7 +273,7 @@ class UVPlanet
 		long fabriken_max;
 		long produktion;		// in %
 		string klima;
-		long image;				// #defined in images.h
+		long image;				// #defined in si/imagehandler.h
 		long diameter;			// in km
 		long techlevel;			// 0..10
 		long energiegenerator;	// 0..100

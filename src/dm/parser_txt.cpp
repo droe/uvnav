@@ -20,7 +20,7 @@
 
 #include "parser_txt.h"
 
-#include "../si/images.h"
+#include "../si/imagehandler.h"
 #include "../lib/sysdep.h"
 
 /*

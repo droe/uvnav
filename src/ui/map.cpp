@@ -144,7 +144,7 @@ UVMap::UVMap(UVWelt* w, SDL_Surface* s)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
-	images = UVImages::get_instance();
+	imagehandler = UVImageHandler::get_instance();
 
 	screen_size.w = s->w;
 	screen_size.h = s->h;
@@ -892,7 +892,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 		// Planetenbild
 		// *** konfigurierbar: groesse des planeten beruecksichtigen
 		// *** benoetigt aber besseres caching sonst ist performance im arsch
-		SDL_Surface* surface = images->get_surface(planet->image, 0, h);
+		SDL_Surface* surface = imagehandler->get_surface(planet->image, 0, h);
 		SDL_Rect dst;
 		dst.x = long(rint(center_x - h / 2));
 		dst.y = long(rint(center_y - h / 2));

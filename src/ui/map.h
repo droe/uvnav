@@ -21,7 +21,7 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "../si/images.h"
+#include "../si/imagehandler.h"
 #include "../si/font.h"
 #include "../si/draw.h"
 #include "../pd/welt.h"
@@ -79,7 +79,7 @@ class UVMap
 		void draw(SDL_Rect*);
 
 	private:
-		UVImages* images;
+		UVImageHandler* imagehandler;
 		UVWelt* welt;
 		UVSpieler* spieler;
 		SDL_Surface* screen;

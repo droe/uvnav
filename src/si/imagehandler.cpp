@@ -18,14 +18,14 @@
  * $Id$
  */
 
-#include "images.h"
+#include "imagehandler.h"
 
 #include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
 #include "../si/conf.h"
 
 /*
- * UVImages - Bilder effizient laden, skalieren und verwalten.
+ * UVImageHandler - Bilder effizient laden, skalieren und verwalten.
  *
  * Laedt alle Bilder als Surface in Originalgroesse.
  * Stellt die Bilder in beliebiger Groesse zu Verfuegung.
@@ -63,7 +63,7 @@ const string img_files[NUM_IMG] = {
  * Laedt die Bilder als Surface in Originalgroesse.
  * Erledigt auch die Konversion ins passende Bildschirmformat.
  */
-UVImages::UVImages()
+UVImageHandler::UVImageHandler()
 {
 	smoothing = UVConf::get_instance()->b_get("screen-quality")
 		? SMOOTHING_ON
@@ -104,7 +104,7 @@ UVImages::UVImages()
  *
  * Entfernt alle Surfaces im Cache.
  */
-UVImages::~UVImages()
+UVImageHandler::~UVImageHandler()
 {
 	for(int i = 0; i < NUM_IMG; i++)
 	{
@@ -129,7 +129,7 @@ UVImages::~UVImages()
  * Entweder nach Zoomfaktor skaliert, oder direkt auf gewuenschte Groesse.
  * Wenn in der zweiten Variante w UND h gegeben sind, wird w verwendet.
  */
-SDL_Surface* UVImages::get_surface(const long id, const double f)
+SDL_Surface* UVImageHandler::get_surface(const long id, const double f)
 {
 	if(id >= NUM_IMG)
 	{
@@ -166,7 +166,7 @@ SDL_Surface* UVImages::get_surface(const long id, const double f)
 		}
 	}
 }
-SDL_Surface* UVImages::get_surface(const long id, const int w, const int h)
+SDL_Surface* UVImageHandler::get_surface(const long id, const int w, const int h)
 {
 	double f;
 
@@ -181,5 +181,4 @@ SDL_Surface* UVImages::get_surface(const long id, const int w, const int h)
 
 	return get_surface(id, f);
 }
-
 

@@ -24,7 +24,7 @@
 #include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
 #include "../dm/parser_txt.h"
-#include "../si/images.h"
+#include "../si/imagehandler.h"
 #include "progress.h"
 
 /*
@@ -155,7 +155,7 @@ void UVNavigator::splash()
 	SDL_Surface* img;
 	SDL_Rect dst = { 0, 0, 0, 0 };
 
-	UVImages* images = UVImages::get_instance();
+	UVImageHandler* imagehandler = UVImageHandler::get_instance();
 
 	if(SDL_MUSTLOCK(screen))
 	{
@@ -173,13 +173,13 @@ void UVNavigator::splash()
 	dst.w = 0;
 	dst.h = 0;
 	// Universum V mitte oben, h / 12 unter rand
-	img = images->get_surface(IMG_UNIVERSUM, 0, screen->h / 6);
+	img = imagehandler->get_surface(IMG_UNIVERSUM, 0, screen->h / 6);
 	dst.x = screen->w / 2 - img->w / 2;
 	dst.y = screen->h / 12;
 	SDL_BlitSurface(img, 0, screen, &dst);
 
 	// SDL powered mitte unten, h / 12 ueber rand
-	img = images->get_surface(IMG_SDL_POWERED, 0, screen->h / 8);
+	img = imagehandler->get_surface(IMG_SDL_POWERED, 0, screen->h / 8);
 	dst.x = screen->w / 2 - img->w / 2;
 	dst.y = screen->h - screen->h / 12 - img->h;
 	SDL_BlitSurface(img, 0, screen, &dst);
