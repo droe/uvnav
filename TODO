@@ -1,14 +1,14 @@
 $Id$
 
+== 0.0.2 ==
 
-== post 0.0.1 ==
+- Screenshots
+- Lizenzrechtliche Abklärungen zum Bildmaterial und Fonts
+- Transparente PNGs einlesen statt Würg-PNGs
+- Fonts konfigurierbar mit konstanter Grösse
+- Rest der RoadMap
 
-- Wiki: Roadmap
-- Wiki: Downloads
-- Wiki: Screenshots
-
-
-Weiter gemäss Roadmap im Wiki:
+Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 

@@ -76,6 +76,8 @@ UVConf::UVConf()
 	l_set("map-offset-y", 0);
 	f_set("map-zoom", 200.0);
 	l_set("map-dim", 1);
+//	l_set("map-grid-font-size", 8);
+//	l_set("map-label-font-size", 8);
 
 	// Konfigurationsdatei drueberladen
 	load();
@@ -111,6 +113,36 @@ void UVConf::set_auswertung(string besitzer, long sternzeit)
 		{
 			aw_besitzer[i] = '_';
 		}
+	}
+}
+
+
+/*
+ * Konfiguration auf aktuellen Stand bringen.
+ *
+ * Bringt die geladene Konfiguration auf aktuellen Stand.
+ * Muss direkt nach dem Laden der Konfiguration aufgerufen werden.
+ */
+void UVConf::convert()
+{
+	long version = 0;
+
+	ifstream stream_in;
+	stream_in.open((sysdep_confdir() + "version").c_str());
+	if(stream_in.good())
+	{
+		stream_in >> version;
+	}
+	stream_in.close();
+
+	// Fallthrough: Schrittweise Aktualisierung auf aktuelle Version.
+	switch(version)
+	{
+		case 0:
+			l_del("autoconfig");
+		case CONF_VERSION:
+		default:
+			break;
 	}
 }
 
@@ -153,11 +185,7 @@ void UVConf::load()
 			else if(type == "l")
 			{
 				stream >> key >> l;
-				// von v0.0.0
-				if(key != "autoconfig")
-				{
-					l_set(key, l);
-				}
+				l_set(key, l);
 			}
 			else if(type == "f")
 			{
@@ -183,6 +211,9 @@ void UVConf::load()
 	}
 
 	stream.close();
+
+	// Geladene Konfiguration aktualisieren
+	convert();
 }
 #undef GETLINE
 
@@ -192,10 +223,18 @@ void UVConf::load()
  */
 void UVConf::save() const
 {
-	ofstream stream;
 	sysdep_mkdir(sysdep_confdir(), 0750);
-	stream.open((sysdep_confdir() + "config").c_str());
 
+	// Version in .uvnav/version
+	ofstream stream_ver;
+	stream_ver.open((sysdep_confdir() + "version").c_str());
+	stream_ver << CONF_VERSION << endl;
+	stream_ver.clear();
+	stream_ver.close();
+
+	// Konfiguration nach .uvnav/config
+	ofstream stream;
+	stream.open((sysdep_confdir() + "config").c_str());
 	stream << "# Konfigurationsdatei fuer " << PACKAGE_STRING << endl;
 	stream << "# DIESE DATEI WIRD BEI PROGRAMMENDE UEBERSCHRIEBEN!" << endl;
 	stream << "# Aenderungen koennen gemacht werden, aber Kommentare gehen verloren." << endl;
@@ -276,6 +315,19 @@ void UVConf::s_set(const string& key, string value, bool aw)
 	}
 	s_conf[key] = value;
 }
+void UVConf::s_del(const string& key, bool aw)
+{
+	if(aw)
+	{
+		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		{
+			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+		}
+		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		s_conf.erase(k);
+	}
+	s_conf.erase(key);
+}
 
 
 /*
@@ -320,6 +372,19 @@ void UVConf::l_set(const string& key, long value, bool aw)
 		l_conf[k] = value;
 	}
 	l_conf[key] = value;
+}
+void UVConf::l_del(const string& key, bool aw)
+{
+	if(aw)
+	{
+		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		{
+			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+		}
+		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		l_conf.erase(k);
+	}
+	l_conf.erase(key);
 }
 
 
@@ -366,6 +431,19 @@ void UVConf::f_set(const string& key, double value, bool aw)
 	}
 	f_conf[key] = value;
 }
+void UVConf::f_del(const string& key, bool aw)
+{
+	if(aw)
+	{
+		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		{
+			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+		}
+		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		f_conf.erase(k);
+	}
+	f_conf.erase(key);
+}
 
 
 /*
@@ -410,6 +488,19 @@ void UVConf::b_set(const string& key, bool value, bool aw)
 		b_conf[k] = value;
 	}
 	b_conf[key] = value;
+}
+void UVConf::b_del(const string& key, bool aw)
+{
+	if(aw)
+	{
+		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		{
+			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+		}
+		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		b_conf.erase(k);
+	}
+	b_conf.erase(key);
 }
 
 

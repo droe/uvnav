@@ -23,6 +23,14 @@
 
 #include "global.h"
 
+/*
+ * Version der Konfigurationsdatenbank.
+ *
+ * CONF_VERSION wird inkrementiert, wenn Keys geloescht oder
+ * umbenannt werden, aber nicht, wenn Keys hinzugefuegt werden.
+ */
+#define CONF_VERSION 1
+
 class UVConf
 {
 	public:
@@ -33,12 +41,16 @@ class UVConf
 
 		string s_get(const string&, bool = false) const;
 		void   s_set(const string&, string, bool = false);
+		void   s_del(const string&, bool = false);
 		long   l_get(const string&, bool = false) const;
 		void   l_set(const string&, long, bool = false);
+		void   l_del(const string&, bool = false);
 		double f_get(const string&, bool = false) const;
 		void   f_set(const string&, double, bool = false);
+		void   f_del(const string&, bool = false);
 		bool   b_get(const string&, bool = false) const;
 		void   b_set(const string&, bool, bool = false);
+		void   b_del(const string&, bool = false);
 
 	private:
 		string aw_besitzer;
@@ -50,6 +62,7 @@ class UVConf
 		mutable ext::hash_map<string, bool>   b_conf;
 
 		void load();
+		void convert();
 		void save() const;
 };
 

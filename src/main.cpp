@@ -362,9 +362,13 @@ void version()
 
 	cout << endl;
 
-	// configured paths
-	cout << "Config dir:    " << sysdep_confdir() << endl;
-	cout << "Data dir:      " << sysdep_datadir() << endl;
+	// Version der Konfigurationsdateien
+	cout << "Conf Version:  " << CONF_VERSION << endl;
+	cout << endl;
+
+	// Konfigurierte Pfade
+	cout << "Config Dir:    " << sysdep_confdir() << endl;
+	cout << "Data Dir:      " << sysdep_datadir() << endl;
 	cout << endl;
 }
 
