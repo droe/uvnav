@@ -528,7 +528,7 @@ void UVMap::resize(SDL_Surface* s)
 //	cout << "factors wf=" << wf << " hf=" << hf << endl;
 
 	screen_size.w = screen->w;
-//	screen_size.h = screen->h;
+	screen_size.h = screen->h;
 
 	zoom *= wf;
 
