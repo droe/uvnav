@@ -17,10 +17,6 @@
 #
 # $Id$
 
-if [ ! -e ChangeLog ]; then
-	echo "Error: No ChangeLog to update." >&2
-fi
-
 echo "Updating ChangeLog..."
 svn -v log > ChangeLog
 echo "Done."

@@ -52,6 +52,10 @@ ac="2.57"
 am_suffix=`echo "$am" | sed 's/[^0-9]//g'`
 ac_suffix=`echo "$ac" | sed 's/[^0-9]//g'`
 
+# Updating / creating ChangeLog
+tools/svn2log.sh
+
+# Gentoo fix
 which emerge 2>&1 >/dev/null
 if [ $? -eq 0 ]; then
 	echo "Using Gentoo WANT_AUTOCONF=$ac / WANT_AUTOMAKE=$am hack."
@@ -61,6 +65,7 @@ if [ $? -eq 0 ]; then
 	export WANT_AUTOMAKE
 fi
 
+# Multiplatform autotools invocation
 sysver=`uname -s`
 echo -n "Running autotools toolchain"
 case "$sysver" in
@@ -69,7 +74,7 @@ case "$sysver" in
 	aclocal$am_suffix &&
 	autoheader$ac_suffix &&
 	autoconf$ac_suffix &&
-	automake$am_suffix -Wportability --add-missing &&
+	automake$am_suffix --gnu -Wportability --add-missing &&
 	autoreconf$ac_suffix
 	;;
 *)
@@ -77,7 +82,7 @@ case "$sysver" in
 	aclocal &&
 	autoheader &&
 	autoconf &&
-	automake -Wportability --add-missing &&
+	automake --gnu -Wportability --add-missing &&
 	autoreconf
 	;;
 esac

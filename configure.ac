@@ -20,8 +20,7 @@ AC_PREREQ(2.57)
 AC_INIT([UV Navigator], [0.0.0], [uvnav-bugs@projects.roe.ch], [uvnav])
 AC_REVISION([[$Rev$]])
 AC_CANONICAL_TARGET
-# sobald ChangeLog verfuegbar hier von foreign auf gnu umstellen
-AM_INIT_AUTOMAKE([foreign std-options check-news dist-bzip2 dist-zip])
+AM_INIT_AUTOMAKE([gnu std-options check-news dist-bzip2 dist-zip])
 AC_CONFIG_SRCDIR([src/global.h])
 AC_CONFIG_HEADER([config.h])
 
