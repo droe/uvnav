@@ -207,7 +207,7 @@ void UVNavigator::splash()
 	SDL_BlitSurface(img, 0, screen, &dst);
 
 	// Titel
-	SDL_Surface* line1 = font_splash->get_surface(TITLE " " PACKAGE_VERSION);
+	SDL_Surface* line1 = font_splash->get_surface(str_stream() << TITLE " " PACKAGE_VERSION " (" << revision << ")");
 	dst.x = screen->w / 2 - line1->w / 2;
 	dst.y = screen->h / 2 - line1->h / 2 * 3;
 	SDL_BlitSurface(line1, 0, screen, &dst);
