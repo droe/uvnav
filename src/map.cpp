@@ -551,32 +551,33 @@ void UVMap::draw_grid()
  */
 void UVMap::draw_planet(UVPlanet* planet)
 {
-	static const long size = 250;
+	static const long size = 125;
 
 	planet->drawflag = !planet->drawflag;
 
-		long h = long(rint(1.0 * size / zoom));
-		h = (h < 5) ? 5 : h;
+	long h = long(rint(1.0 * size / zoom));
+	h = (h < 5) ? 5 : h;
 
-		double center_x = double(planet->x - offset_x) / zoom;
-		double center_y = double(planet->y - offset_y) / zoom;
+	double center_x = double(planet->x - offset_x) / zoom;
+	double center_y = double(planet->y - offset_y) / zoom;
 
-		// Verbindungen
-		// *** Zeichnet jede Verbindung zweimal!
-		for(vector<long>::iterator iter = planet->nachbarn.begin(); iter != planet->nachbarn.end(); iter++)
+	// Verbindungen
+	// *** optional
+	for(vector<long>::iterator iter = planet->nachbarn.begin(); iter != planet->nachbarn.end(); iter++)
+	{
+		UVPlanet* p = welt->get_planet((*iter));
+		// *** Verbindungen zu unbekannten Planeten auch zeichnen!
+		if((p != NULL) && (p->drawflag != planet->drawflag))
 		{
-			UVPlanet* p = welt->get_planet((*iter));
-			// *** Verbindungen zu unbekannten Planeten auch zeichnen!
-			if((p != NULL) && (p->drawflag != planet->drawflag))
-			{
-				double target_x = double(p->x - offset_x) / zoom;
-				double target_y = double(p->y - offset_y) / zoom;
-				drw->line(screen, long(rint(center_x)), long(rint(center_y)),
-				                  long(rint(target_x)), long(rint(target_y)),
-				                  0x88, 0x88, 0x88);
-			}
+			double target_x = double(p->x - offset_x) / zoom;
+			double target_y = double(p->y - offset_y) / zoom;
+			drw->line(screen, long(rint(center_x)), long(rint(center_y)),
+			                  long(rint(target_x)), long(rint(target_y)),
+			                  0x88, 0x88, 0x88);
 		}
+	}
 
+	// *** details zeichnen falls selektiert
 	if(((virt_x - size < planet->x) && (virt_x + virt_w + size >= planet->x))
 	&& ((virt_y - size < planet->y) && (virt_y + virt_h + size >= planet->y)))
 	{
@@ -618,13 +619,31 @@ void UVMap::draw_planet(UVPlanet* planet)
 			                    h / 2 + 2, r, g, b, 0xFF);
 		}
 
-		if(zoom < 20.0)
+		if(zoom < 40.0)
 		{
 			// Beschriftung
 			// *** provisorisch
-			SDL_Surface* label = label_font->get_surface(str_stream() << ((welt->galaxie != "") ? planet->name : planet->name.substr(0,3)) << " (" << planet->nummer << ")", 0x88, 0x88, 0x88);
+			string label_text = "";
+			if(welt->galaxie != "")
+			{
+				label_text = str_stream() << planet->name << " (" << planet->nummer << ")";
+			}
+			else if(zoom < 10.0)
+			{
+				label_text = str_stream() << planet->nummer << " " << planet->name;
+			}
+			else if(zoom < 20.0)
+			{
+				label_text = str_stream() << planet->nummer << " " << planet->name.substr(0,3);
+			}
+			else
+			{
+				label_text = str_stream() << planet->nummer;
+			}
+			SDL_Surface* label = label_font->get_surface(label_text, 0x88, 0x88, 0x88);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
+			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
 			SDL_BlitSurface(label, 0, screen, &dst);
 			SDL_FreeSurface(label);
 		}
@@ -648,8 +667,9 @@ void UVMap::draw_planet(UVPlanet* planet)
  */
 void UVMap::draw_schiff(UVSchiff* schiff)
 {
-	static const long size = 100;
+	static const long size = 75;
 
+	// *** Vektor nur fuer selektiertes Schiff zeichnen
 	if(((virt_x - size - schiff->v * 100 < schiff->x) && (virt_x + virt_w + size + schiff->v * 100 >= schiff->x))
 	&& ((virt_y - size - schiff->v * 100 < schiff->y) && (virt_y + virt_h + size + schiff->v * 100 >= schiff->y)))
 	{
@@ -684,14 +704,24 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 		drw->line(screen, long(rint(center_x)), long(rint(center_y)),
 		                  long(rint(target_x)), long(rint(target_y)),
 		                  0xFF, 0xFF, 0xFF);
-		if(zoom < 50.0)
+		if(zoom < 30.0)
 		{
 			// Beschriftung
 			// *** provisorisch
+			string label_text = "";
+			if(zoom < 20.0)
+			{
+				label_text = str_stream() << schiff->name << " (" << schiff->besitzer << ")";
+			}
+			else
+			{
+				label_text = str_stream() << schiff->name;
+			}
 			SDL_Rect dst = { 0, 0, 0, 0};
-			SDL_Surface* label = label_font->get_surface(str_stream() << schiff->name << " (" << schiff->besitzer << ")", 0x88, 0x88, 0x88);
+			SDL_Surface* label = label_font->get_surface(label_text, 0x88, 0x88, 0x88);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
+			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
 			SDL_BlitSurface(label, 0, screen, &dst);
 			SDL_FreeSurface(label);
 		}

@@ -7,41 +7,53 @@ grossen Zoomfaktoren.
 Diese Baumstruktur könnte dieses Problem lösen. Muss das aber vor der
 Implementation nochmals genau durchdenken und durchrechnen.
 
-
  - baum 2 dim binär, zentrum jedes obj als key
-   - quadratische sektoren einer fixen minimalgrösse
-     2-dimensional binär organisieren
-   - immer 4 sektoren bilden einen übergeordneten node
-   - immer parent-node bilden bis alle objekte abgedeckt
+   - quadratische sektoren einer fixen minimalgrösse (1x1 ly)
+     in quadranten 2-dimensional binär organisieren
+   - immer 4 quadranten bilden einen übergeordneten quadranten
+     ODER
+     ein quadrant ist leaf = hat einen payload-sektor
+   - immer parent-quadrant bilden bis alle benutzten sektoren abgedeckt
+   - quadranten führen effektiv benutztes rect mit (opt)
+   - quadranten führen anzahl objekte mit, die sie beinhalten,
+     um auf jeder stufe zusammenfassen zu können
    - suche mit draw-rect und key-rect: key-rect ist grösser als draw-rect
      um randbereiche um objektmittelpunkte abzudecken
-   - threshold implementieren beim redraw-search:
-     hinaufmelden, wieviele objekte welchen typs gezeichnet worden sind;
-     falls threshold überschritten und mehrere gleiche objs: gruppe anzeigen
-     evtl in jedem node anzahl subobjekte jederzeit mitführen
 
    - INSERT (data x):
      - ist baum leer?
        ja:
-         - neues leaf-node mit x wird root
-           - leaf-node := alle 4 quadranten == NULL, data-ptr == vector<>*
+         - neuer leaf-quadrant mit sektor(x) als payload wird root
+           standardgroesse sektor: 1x1 ly, quadrant: 1x1 ly
+           alle 4 subquadranten == NULL
        nein:
          - deckt root x ab?
            nein: "hinauf erweitern"
-             - neues root generieren, n ist quadrant vom neuen root
+             - neues root generieren, altes root ist quadrant vom neuen root
+               dabei optimieren, dass quadranten mit nur 1 subquadranten
+               übersprungen werden: sektor direkt in parent quadrant linken
              - wiederholen bis root x abdeckt
            ja: "runtergehen"
-             - n = root
              - rekursiv alle quadranten, die x abdecken, absuchen,
-               bis leaf oder nicht allozierter quadrant gefunden wird.
-               leaf:
-                 - leaf in node umwandeln und leaf zu quadrant machen
-                 - wiederholen bis x in nicht alloziertem quadrant
-               null:
-                 - leaf allozieren mit x als payload
+               bis leaf(sektor) oder nicht allozierter quadrant/sektor
+               gefunden wird.
+               leaf & sektor passt:
+                 - x zu sektor hinzufügen
+                   bookkeeping
+               leaf & sektor passt nicht:
+                 - quadrant aufsplitten
+                   leaf-sektor in 1. neuen subquadranten
+                   x in neuen sektor in 2. neuen subquadranten
+                   bookkeeping
+               node & subquadrant NULL:
+                 - subquadrant mit sektor(x) allozieren
+                   bookkeeping
+               node & subquadrant existiert:
+                 - descend
 
    - NEAREST NEIGHBOUR (point) -- klicken
-     - ? (difficult?)
+     - recursive return nearest(a,b,c,d)
 
    - REDRAW (rect) -- zeichnen
-     - ? (easy)
+     - recursive draw(rect) if(intersecting rect) - ineffizient
+     - opt: zusätzlich alle sektoren direkt ->next verlinken - effizient enum

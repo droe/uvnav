@@ -2,22 +2,14 @@ $Id$
 
 == 0.0.2 ==
 
-- Mehr Details in die Karte zeichnen.
-- Grafik optisch verschönern.
-- Karte auch bei kleinen Zoomfaktoren und sehr vielen Objekten effizient
-  und übersichtlich zeichnen: Objekte zusammenfassen, dirty Rectangles
-  strikter handhaben.
-  -> Tree?
-  -> Grid & Tree?
-  -> Grid?
-  Sicher Sektoren mit Minimalgrösse um zusammenzufassen.
-  Tree bringt nicht viel.
+- Grafik überdenken / verschönern.
+  - verbleibend: planet näher an endgültige form bringen
+    - TL-kreise weg / optional
+    - dauer-infos rundherum platzieren (versuch)
 
-== 0.0.3 ==
+dann wär auch schon bald wieder mal n release möglich...
+eventuell noch n paar low-pri's killen... TODO checken
 
-- Uebersichtskarte.
-- Konfigurierbare Detailstufen.
-- Primitives Maushandling für Navigation.
 
 Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
@@ -72,6 +64,10 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Objekte sinnvoll verkleinern, eventuell clusterweise zu gruppen
     zusammenfassen (schwierig?)
   - Eventuell dann mal noch Speed verbessern mit eigenen Datenstrukturen
+  - Alle Labels abgekoppelt zeichnen - mit Shadow-Rect über alle andere Objs
+    - API für abgekoppeltes zeichnen
+      Liste aller zu zeichnenden Labels
+    - evtl Quick'n'Dirty optimieren; überschneidende Labels -> "..."
   - Objektgroessen ueberdenken von usability her
     - nicht nur mindest, sondern auch maximalgroesse der objekte festlegen,
       und zoom-code entsprechend anpassen
@@ -95,7 +91,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 == MITTLERE PRIORITAET ==
 
-- Windows-Benutzbarkeit
+- Win32-Benutzbarkeit
   - Sichtbare Fehlermeldung
   - Auswertungs-Auswahl-Dialog
 
@@ -139,15 +135,27 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - bzip2
 
 - Mehrere Auswertungen
-  - 1 Spieler
+  - 1 Spieler / mehrere Spieler
     - a) alte daten erkennen und intelligent ersetzen
-         BEDINGT SERIALISIERUNG VON UVWelt
+         - UVWelt serialisieren und wieder einlesen
     - b) history-objekte führen
     - c) alt-modus beim parsen, der nur planetendaten parst
+         - ineffizient, skaliert schlecht
     - d) planetendaten-cache/db
-    - e) UVWelt als Auswertungsdatei serialisieren (interessant!)
-  - Mehrere Spieler
-    - intelligent mergen
+         - SQLite DB als Store
+         - UVPlanetendaten verwaltet Planetendaten
+         - wohin mit History?
+    - e) UVWelt als Auswertungsdatei ausgeben
+         - interessant, evtl auch als zusatzfeature zu anderer lösung
+         - ineffizient
+         - merging notwendig
+    - f) DB mit kompletter Auswertungs-History
+         - SQLite DB als Store
+           =ODER=
+           XML-Dok als Store
+         - UVHistory stellt vergangene Daten zu Verfuegung
+           inklusive effizientem Enum von Dingen, die noch aktuell sind
+           und inklusive Quellenangabe (index in tbl_source (spieler/sz/file))
 
 - Imperatoren-Support
   - parse_imp_*
