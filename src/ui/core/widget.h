@@ -22,7 +22,7 @@
 #define WIDGET_H
 
 #include "lib/sdl.h"
-#include "ui/widgets/rect.h"
+#include "ui/core/rect.h"
 
 class UVWidget : public UVRect
 {

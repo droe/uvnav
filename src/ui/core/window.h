@@ -18,19 +18,16 @@
  * $Id$
  */
 
-#ifndef ROOTWINDOW_H
-#define ROOTWINDOW_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
-#include "si/conf.h"
-#include "si/video.h"
-//#include "si/keyboard.h"
-#include "ui/widgets/window.h"
+#include "ui/core/widget.h"
 
-class UVRootWindow : public UVWindow
+class UVWindow : public UVWidget
 {
 	public:
-		UVRootWindow(UVWidget*, SDL_Surface*);
-		~UVRootWindow();
+		UVWindow(UVWidget*, SDL_Surface*);
+		~UVWindow();
 
 		virtual void resize();
 		virtual void draw();
@@ -38,17 +35,10 @@ class UVRootWindow : public UVWindow
 
 		virtual void set_surface(SDL_Surface*);
 
-		void run();
-
 	protected:
-		void handle_event();
-
-	private:
-		bool running;
-		UVConf* conf;
-		UVVideo* video;
-//		UVKeyboard* keyboard;
+		UVWidget* widget;
+		SDL_Surface* my_surface;
 };
 
-#endif // ROOTWINDOW_H
+#endif // WINDOW_H
 

@@ -18,33 +18,24 @@
  * $Id$
  */
 
-#ifndef COMPOSITEWIDGET_H
-#define COMPOSITEWIDGET_H
+#ifndef RECT_H
+#define RECT_H
 
-#include "lib/stl.h"
-#include "ui/widgets/orientation.h"
-#include "ui/widgets/widget.h"
+#include "lib/sdl.h"
+#include "ui/core/size.h"
 
-class UVCompositeWidget : public UVWidget
+class UVRect : public UVSize
 {
 	public:
-		UVCompositeWidget(int = 1, UVOrientation = UVOHorizontal, SDL_Surface* = NULL);
-		~UVCompositeWidget();
+		UVRect(int = 0, int = 0, int = 0, int = 0);
+		~UVRect();
 
-		virtual void add_widget(UVWidget*);
+		bool contains(int, int) const;
+		SDL_Rect* to_sdl_rect() const;
 
-		virtual void resize();
-		virtual void draw();
-		virtual void handle_click(int, int);
-
-		virtual void set_surface(SDL_Surface*);
-
-	protected:
-		vector<UVWidget*> widgets;
-		bool modified;
-		UVOrientation orientation;
-		int weight_total;
+		int x;
+		int y;
 };
 
-#endif // COMPOSITEWIDGET_H
+#endif // RECT_H
 

@@ -26,9 +26,9 @@
 #include "si/conf.h"
 #include "si/fonthandler.h"
 
-#include "ui/widgets/widget.h"
-#include "ui/widgets/compositewidget.h"
-#include "ui/widgets/window.h"
+#include "ui/core/widget.h"
+#include "ui/core/compositewidget.h"
+#include "ui/core/window.h"
 
 #define PI 3.14159265358979323846
 
