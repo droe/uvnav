@@ -3,20 +3,23 @@ $Id$
 
 == 0.0.1 ==
 
+- Erste Dinge anschreiben
+  - Font-Surface-Cache?
+    - UVFontCache?
 - Autotools Upgrade 257->259 & 17->18
-- Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
-  und Längenangaben (1 LJ = 1000 KE)
-- Wichtigste Dinge anschreiben (?)
-- Dirty Rect Verhalten der Objekte verbessern
 
-== 0.0.2 ==
 
-- Gemäss Roadmap
-
+Weiter gemäss Roadmap im Wiki:
+https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 ------------------------------------------------------------------------------
 
 == HOHE PRIORITAET ==
+
+- Besseres Dirty Rect Verhalten / DR-Correctness der Objekte
+  - Kreis nicht zeichnen wenn komplett reingezoomt
+  - Linie nicht zeichnen wenn sie das Rect nicht schneidet
+  - weitere?
 
 - BUG: gfxPrimitives zeichnen daneben für sehr kleine Zoomfaktoren
   - AA-Ellipse
@@ -69,7 +72,6 @@ $Id$
   - Mehr Informationen zeichnen
   - Schlaues System um die gezeichneten Infos individuell zu kontrollieren
   - Minimap
-  - Windrose & Massstab Overlay
   - Statusinformationen in ein sauberes Info-Overlay überführen.
   - Maushandling einführen
 

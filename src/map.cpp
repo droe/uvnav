@@ -118,12 +118,8 @@ UVMapQuadrant::~UVMapQuadrant()
  *    V +y
  *
  * UVMap Zeichnet UVWelt. UVWelt ist die Datenstruktur, welche von UVMap
- * iteriert und gezeichnet wird. UVWelt wird zur Ablage von Surface Caches
- * benutzt, hat aber lediglich eine passive Rolle in der
- * Bildschirmdarstellung. Das mag zwar von der Objektorientierung her nicht
- * so schoen sein, ist aber X mal schneller und viel weniger umstaendlich
- * zu implementieren. Unter dem Strich viel schoenerer Code, auch wenn sich
- * die Objekte nicht selber zeichnen koennen.
+ * iteriert und gezeichnet wird. UVWelt hat lediglich eine passive Rolle
+ * in der Bildschirmdarstellung.
  */
 
 
@@ -251,8 +247,8 @@ void UVMap::zoom_by(double f)
 		f = 1000000.0 / zoom;
 	}
 
-	offset_x -= long(rint(1.0 * screen->w * zoom * (f - 1.0) / 2.0));
-	offset_y -= long(rint(1.0 * screen->h * zoom * (f - 1.0) / 2.0));
+	offset_x -= long(rint(double(screen->w) * zoom * (f - 1.0) / 2.0));
+	offset_y -= long(rint(double(screen->h) * zoom * (f - 1.0) / 2.0));
 	zoom *= f;
 
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
@@ -269,8 +265,8 @@ void UVMap::resize(SDL_Surface* s)
 
 //	cout << "resize from w=" << screen_size.w << " h=" << screen_size.h << endl;
 //	cout << "resize to w=" << screen->w << " h=" << screen->h << endl;
-	double wf = 1.0 * screen_size.w / screen->w;
-//	double hf = 1.0 * screen_size.h / screen->h;
+	double wf = double(screen_size.w) / double(screen->w);
+//	double hf = double(screen_size.h) / double(screen->h);
 //	cout << "factors wf=" << wf << " hf=" << hf << endl;
 
 	screen_size.w = screen->w;
@@ -279,8 +275,8 @@ void UVMap::resize(SDL_Surface* s)
 	zoom *= wf;
 
 	delete overlay_font;
-	delete grid_font;
 	overlay_font = new UVFont(conf, FNT_SANS, screen->h / 48);
+	delete grid_font;
 	grid_font = new UVFont(conf, FNT_SANS, screen->h / 64);
 
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
@@ -395,15 +391,13 @@ void UVMap::draw(SDL_Rect* rect)
  * Berechnet eine sinnvolle Maschengroesse als Vielfaches
  * von ganzen Lichtjahren (1000 Karteneinheiten).
  *
- * TODO: 3D-Windrose (x, y, dim), Massstab.
- *
  * +-------------------------------------------+
  * | ¦123     ¦124     ¦125     ¦126     ¦127  |
  * | ¦        ¦        ¦        ¦        ¦     |
  * |-+--------+--------+--------+--------+-----|
- * |13        ¦        ¦        ¦        ¦   13|
- * | ¦        ¦        ¦        ¦        ¦     |
- * | ¦        ¦        ¦        ¦        ¦     |
+ * |13 +-->x  ¦        ¦        ¦        ¦   13|
+ * | ¦ ¦      ¦        ¦        ¦        ¦     |
+ * | ¦ Vy     ¦        ¦        ¦        ¦     |
  * |-+--------+--------+--------+--------+-----|
  * |14        ¦        ¦        ¦        ¦   14|
  * | ¦        ¦        ¦        ¦        ¦     |
@@ -411,14 +405,16 @@ void UVMap::draw(SDL_Rect* rect)
  * |-+--------+--------+--------+--------+-----|
  * |15        ¦        ¦        ¦        ¦   15|
  * | ¦        ¦        ¦        ¦        ¦     |
- * | ¦        ¦        ¦        ¦        ¦     |
- * |-+--------+--------+--------+--------+-----|
- * |16123     ¦124     ¦125     ¦126     ¦127  |
+ * | ¦ 1000 KE¦        ¦        ¦        ¦     |
+ * |-+========+--------+--------+--------+-----|
+ * |16123 1:45¦124     ¦125     ¦126     ¦12716|
  * +-------------------------------------------+
  *
  */
 void UVMap::draw_grid()
 {
+	static const long tick = screen->h / 64 / 2;
+
 	// Maschengroesse = groesste Zweierpotenz in Lichtjahren kleiner als 100px
 	long d = long(rint(zoom / 10.0));
 	long i = 1;
@@ -430,7 +426,9 @@ void UVMap::draw_grid()
 	SDL_Rect dst = { 0, 0, 0, 0 };
 
 	// Abszissen-Linien (senkrechte Linien)
-	for(long x = long(rint(floor(double(offset_x) / d) * d)); x < offset_x + long(rint(screen->w * zoom)); x += d)
+	long first_x = long(rint(ceil(double(offset_x) / d) * d));
+	long last_x = first_x;
+	for(long x = first_x; x < offset_x + long(rint(screen->w * zoom)); x += d)
 	{
 		long p_x = long(rint(double(x - offset_x) / zoom));
 		drw->line(screen, p_x, 0, p_x, screen->h - 1, 0x22, 0x22, 0x22);
@@ -442,10 +440,14 @@ void UVMap::draw_grid()
 		dst.x = p_x + 2; dst.y = screen->h - 1 - abszisse->h;
 		SDL_BlitSurface(abszisse, 0, screen, &dst);
 		SDL_FreeSurface(abszisse);
+
+		last_x = x;
 	}
 
 	// Ordinaten-Linien (waagrechte Linien)
-	for(long y = long(rint(floor(double(offset_y) / d) * d)); y < offset_y + long(rint(screen->h * zoom)); y += d)
+	long first_y = long(rint(ceil(double(offset_y) / d) * d));
+	long last_y = first_y;
+	for(long y = first_y; y < offset_y + long(rint(screen->h * zoom)); y += d)
 	{
 		long p_y = long(rint(double(y - offset_y) / zoom));
 		drw->line(screen, 0, p_y, screen->w - 1, p_y, 0x22, 0x22, 0x22);
@@ -457,7 +459,54 @@ void UVMap::draw_grid()
 		dst.x = screen->w - 1 - ordinate->w; dst.y = p_y + 2;
 		SDL_BlitSurface(ordinate, 0, screen, &dst);
 		SDL_FreeSurface(ordinate);
+
+		last_y = y;
 	}
+
+	// Massstabsbalken mit Laengenangabe d und Massstab 1:zoom
+	SDL_Surface* distanz = grid_font->get_surface(str_stream() << d << " KE", 0x88, 0x88, 0x88);
+	SDL_Surface* massstab = grid_font->get_surface(str_stream() << "1:" << long(rint(zoom)), 0x88, 0x88, 0x88);
+	long m_y = long(rint(double(last_y - offset_y) / zoom));
+	long m_x1 = long(rint(double(first_x - offset_x) / zoom));
+	long m_x2 = long(rint(double(first_x + d - offset_x) / zoom));
+	long m_d = long(rint(double(d) / zoom));
+	if(screen->h - m_y < massstab->h + 2)
+	{
+		m_y = long(rint(double(last_y - d - offset_y) / zoom));
+	}
+	drw->line(screen, m_x1, m_y, m_x2, m_y, 0x66, 0x66, 0x66);
+	drw->line(screen, m_x1, m_y - tick, m_x1, m_y + tick, 0x66, 0x66, 0x66);
+	drw->line(screen, m_x2, m_y - tick, m_x2, m_y + tick, 0x66, 0x66, 0x66);
+	dst.x = m_x1 + m_d / 2 - distanz->w / 2;
+	dst.y = m_y - 2 - distanz->h;
+	SDL_BlitSurface(distanz, 0, screen, &dst);
+	SDL_FreeSurface(distanz);
+	dst.x = m_x1 + m_d / 2 - massstab->w / 2;
+	dst.y = m_y + 2;
+	SDL_BlitSurface(massstab, 0, screen, &dst);
+	SDL_FreeSurface(massstab);
+
+	// System-Pfeile mit Dimensionsangabe
+	long s_x1 = m_x1;
+	long s_x2 = long(rint(double(first_x + d/2 - offset_x) / zoom));
+	long s_y1 = long(rint(double(first_y - offset_y) / zoom));
+	long s_y2 = long(rint(double(first_y + d/2 - offset_y) / zoom));
+	drw->line(screen, s_x1, s_y1, s_x2, s_y1, 0x66, 0x66, 0x66);
+	drw->line(screen, s_x1, s_y1, s_x1, s_y2, 0x66, 0x66, 0x66);
+	drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 - tick, 0x66, 0x66, 0x66);
+	drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
+	drw->line(screen, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
+	drw->line(screen, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
+	SDL_Surface* x_label = grid_font->get_surface(str_stream() << "X", 0x88, 0x88, 0x88);
+	SDL_Surface* y_label = grid_font->get_surface(str_stream() << "Y", 0x88, 0x88, 0x88);
+	dst.x = s_x2 + tick;
+	dst.y = s_y1 - x_label->h / 2;
+	SDL_BlitSurface(x_label, 0, screen, &dst);
+	SDL_FreeSurface(x_label);
+	dst.x = s_x1 - y_label->w / 2;
+	dst.y = s_y2;
+	SDL_BlitSurface(y_label, 0, screen, &dst);
+	SDL_FreeSurface(y_label);
 }
 
 
@@ -498,8 +547,8 @@ void UVMap::draw_planet(UVPlanet* planet)
 		SDL_Surface* surface = images->get_surface(planet->image, 0, h);
 
 		SDL_Rect dst;
-		double center_x = 1.0 * (planet->x - offset_x) / zoom;
-		double center_y = 1.0 * (planet->y - offset_y) / zoom;
+		double center_x = double(planet->x - offset_x) / zoom;
+		double center_y = double(planet->y - offset_y) / zoom;
 		dst.x = long(rint(center_x - h / 2));
 		dst.y = long(rint(center_y - h / 2));
 
@@ -521,7 +570,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			short b = ((tl >= 7) && (tl <= 9)) ? 0xFF : 0x00;
 
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-				              h / 2 + 2, r, g, b, 0xFF);
+			                    h / 2 + 2, r, g, b, 0xFF);
 		}
 	}
 }
@@ -546,11 +595,11 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 	if(((virt_x - size - schiff->v * 100 < schiff->x) && (virt_x + virt_w + size + schiff->v * 100 >= schiff->x))
 	&& ((virt_y - size - schiff->v * 100 < schiff->y) && (virt_y + virt_h + size + schiff->v * 100 >= schiff->y)))
 	{
-		long h = long(rint(1.0 * size / zoom));
+		long h = long(rint(double(size) / zoom));
 		h = (h < 10) ? 10 : h;
 
-		double center_x = 1.0 * (schiff->x - offset_x) / zoom;
-		double center_y = 1.0 * (schiff->y - offset_y) / zoom;
+		double center_x = double(schiff->x - offset_x) / zoom;
+		double center_y = double(schiff->y - offset_y) / zoom;
 
 		/*
 		 *         dx
@@ -574,10 +623,10 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 //		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 
 		drw->circle(screen, long(rint(center_x)), long(rint(center_y)), h/2,
-		                     0xFF, 0xFF, 0xFF);
+		                    0xFF, 0xFF, 0xFF);
 		drw->line(screen, long(rint(center_x)), long(rint(center_y)),
-		                   long(rint(target_x)), long(rint(target_y)),
-		                   0xFF, 0xFF, 0xFF);
+		                  long(rint(target_x)), long(rint(target_y)),
+		                  0xFF, 0xFF, 0xFF);
 	}
 }
 
@@ -598,17 +647,17 @@ void UVMap::draw_container(UVContainer* container)
 	if(((virt_x - size < container->x) && (virt_x + virt_w + size >= container->x))
 	&& ((virt_y - size < container->y) && (virt_y + virt_h + size >= container->y)))
 	{
-		long h = long(rint(1.0 * size / zoom));
+		long h = long(rint(double(size) / zoom));
 		h = (h < 2) ? 2 : h;
 
-		double center_x = 1.0 * (container->x - offset_x) / zoom;
-		double center_y = 1.0 * (container->y - offset_y) / zoom;
+		double center_x = double(container->x - offset_x) / zoom;
+		double center_y = double(container->y - offset_y) / zoom;
 
 //		cout << "draw Container (" << center_x << "/" << center_y << ")" << endl;
 
 		drw->box(screen, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
-		                  long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
-			              0xFF, 0xFF, 0xFF);
+		                 long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
+		                 0xFF, 0xFF, 0xFF);
 	}
 }
 
@@ -627,20 +676,20 @@ void UVMap::draw_anomalie(UVAnomalie* anomalie)
 	if(((virt_x - size < anomalie->x) && (virt_x + virt_w + size >= anomalie->x))
 	&& ((virt_y - size < anomalie->y) && (virt_y + virt_h + size >= anomalie->y)))
 	{
-		double center_x = 1.0 * (anomalie->x - offset_x) / zoom;
-		double center_y = 1.0 * (anomalie->y - offset_y) / zoom;
+		double center_x = double(anomalie->x - offset_x) / zoom;
+		double center_y = double(anomalie->y - offset_y) / zoom;
 
 		if(anomalie->radius)
 		{
 			// Kreis
-			long h = long(rint(1.0 * size / zoom));
+			long h = long(rint(double(size) / zoom));
 			h = (h < 10) ? 10 : h;
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2, 0xFF, 0x00, 0x00, 0xFF);
 		}
 
 		// Zentrum
-		long mitte_r = long(rint(1.0 * mitte_size / zoom));
+		long mitte_r = long(rint(double(mitte_size) / zoom));
 		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
 		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
 		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
