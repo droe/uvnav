@@ -375,6 +375,7 @@ void UVMap::draw(SDL_Rect* rect)
 		             << " offset_y=" << offset_y
 		             << "  /  " << dticks << " ms = "
 		             << 1000 / dticks << " fps  /  uvnav-" << PACKAGE_VERSION
+		             << " (" << revision << ")"
 		, 0x88, 0x88, 0x88);
 	dst.x = screen->w - debug->w - debug->h * 2;
 	dst.y = screen->h - debug->h * 2;

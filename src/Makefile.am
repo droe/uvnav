@@ -18,7 +18,7 @@
 
 bin_PROGRAMS = uvnav
 
-uvnav_SOURCES = rev.h global.h stl.h debug.h sysdep.h sysdep.cpp \
+uvnav_SOURCES = rev.h rev.cpp global.h stl.h debug.h sysdep.h sysdep.cpp \
 	conf.h conf.cpp images.h images.cpp font.h font.cpp draw.h draw.cpp \
 	progress.h progress.cpp welt.h welt.cpp parser_txt.h parser_txt.cpp \
 	map.h map.cpp gui.h gui.cpp navigator.h navigator.cpp main.cpp

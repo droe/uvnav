@@ -19,7 +19,6 @@
  */
 
 #include "global.h"
-#include "rev.h"
 
 #include "conf.h"
 #include "navigator.h"
@@ -320,7 +319,7 @@ int main(int argc, char* argv[])
  */
 void version()
 {
-	cout << PACKAGE_STRING << " (" << REVISION << ")" << endl;
+	cout << PACKAGE_STRING << " (" << revision << ")" << endl;
 	cout << COPYRIGHT << endl;
 	cout << "https://projects.roe.ch/trac/uvnav/" << endl;
 	cout << endl;

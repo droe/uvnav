@@ -18,26 +18,19 @@
  * $Id$
  */
 
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#include "rev.h"
 
-#include "config.h"
+/*
+ * Subversion Revision Hack.
+ *
+ * rev.h wird von make (Code in src/Makefile.am) erzeugt / aktualisiert.
+ * Damit eine neue Revision keine langen Kompilierungsvorgaenge ausloest,
+ * wird die aktuelle Revision hier ueber eine globale Variable allen
+ * anderen Dateien zu Verfuegung gestellt.  Aendert die Revision, muss
+ * nur rev.cpp neu kompiliert, und anschliessend gelinkt werden.
+ * Um diesen Vorgang zu beschleunigen, werden hier keinerlei Header
+ * eingebunden.
+ */
 
-#include "stl.h"
-#include "debug.h"
+const char* revision = REVISION;
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_ttf.h"
-#include "SDL_syswm.h"
-#include "SDL_rotozoom.h"		// SDL_gfx
-#include "SDL_gfxPrimitives.h"	// SDL_gfx
-
-#define TITLE			"Universum V Navigator"
-#define COPYRIGHT		"Copyright (C) 2004 Daniel Roethlisberger"
-
-extern const char* revision;
-
-#define PI 3.141592
-
-#endif // GLOBAL_H
