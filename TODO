@@ -18,8 +18,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 == HOHE PRIORITAET ==
 
-- Autotools Upgrade 257->259 & 17->18
-
 - Besseres Dirty Rect Verhalten / DR-Correctness der Objekte
   - Kreis nicht zeichnen wenn komplett reingezoomt
   - Linie nicht zeichnen wenn sie das Rect nicht schneidet

@@ -158,7 +158,7 @@ Kompilieren und Installieren
 UVNav wird mit GCC 3.3.x und den C/C++-Libs von FreeBSD entwickelt,
 sollte aber auch mit anderen Compilern und Libs kompilieren.
 Probleme in diesem Zusammenhang bitte melden; es ist gut möglich,
-dass es noch einige Veränderungen an configure.ac und den relevanten
+dass es noch kleine Veränderungen an configure.ac und den relevanten
 Header-Files braucht, um andere Systeme zu unterstützen.
 
 Folgende Bibliotheken werden benötigt:
@@ -183,13 +183,18 @@ werden:
  $ make
  # make install
 
+Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss ziemlich
+sicher `gmake' (GNU Make) statt `make' verwendet werden.
+
 
 
 Kompilieren und Installieren ab Subversion Repository
 -----------------------------------------------------
 
 Um UVNav direkt ab Repository zu kompilieren, wird ein Subversion
-Client sowie zusätzlich GNU Autoconf 2.57 und Automake 1.7 benötigt.
+Client sowie zusätzlich GNU Autoconf 2.59 und Automake 1.8 benötigt
+(2.57 und 1.7 sollten auch funktionieren, alles was älter ist aber
+nicht).
 
 Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
 
@@ -199,5 +204,8 @@ Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
  $ ./configure
  $ make
  # make install
+
+Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss ziemlich
+sicher `gmake' (GNU Make) statt `make' verwendet werden.
 
 

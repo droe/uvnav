@@ -46,8 +46,8 @@
 # config.log, config.status, stamp-h1
 #
 
-am="1.7"
-ac="2.57"
+am="1.8"
+ac="2.59"
 
 am_suffix=`echo "$am" | sed 's/[^0-9]//g'`
 ac_suffix=`echo "$ac" | sed 's/[^0-9]//g'`
@@ -71,27 +71,27 @@ echo -n "Running autotools toolchain"
 case "$sysver" in
 *BSD)
 	echo ", BSD style..."
+	make=gmake
 	aclocal$am_suffix &&
 	autoheader$ac_suffix &&
 	autoconf$ac_suffix &&
-	automake$am_suffix --gnu -Wportability --add-missing &&
-	autoreconf$ac_suffix
+	automake$am_suffix --gnu -Wportability --add-missing
 	;;
 *)
 	echo ", generic style..."
+	make=make
 	aclocal &&
 	autoheader &&
 	autoconf &&
-	automake --gnu -Wportability --add-missing &&
-	autoreconf
+	automake --gnu -Wportability --add-missing
 	;;
 esac
 
 if [ $? -eq 0 ]; then
 	echo "Done. To build and install now, run:"
 	echo -e "\t./configure"
-	echo -e "\tmake"
-	echo -e "\tmake install"
+	echo -e "\t$make"
+	echo -e "\t$make install"
 else
 	echo " *** An error occured!"
 	echo " *** Before sending in a bug report, check that you have appropriate"
