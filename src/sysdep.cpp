@@ -146,7 +146,7 @@ void sysdep_screensize(SDL_Rect* rect)
 		}
 		else
 		{
-			throw EXCEPTION("Unbekanntes Grafik-Subsystem." << wmi.subsystem);
+			throw EXCEPTION("Unbekanntes Grafik-Subsystem. " + to_string(wmi.subsystem));
 		}
 	}
 	else

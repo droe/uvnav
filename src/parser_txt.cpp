@@ -648,6 +648,10 @@ void UVParserTXT::parse_planeten()
 	}
 
 	parse_leerzeile();
+	while(cur == "")
+	{
+		parse_leerzeile();
+	}
 }
 
 
@@ -664,6 +668,10 @@ void UVParserTXT::parse_oldschool_planeten()
 	}
 
 	parse_leerzeile();
+	while(cur == "")
+	{
+		parse_leerzeile();
+	}
 }
 
 
@@ -711,7 +719,7 @@ void UVParserTXT::parse_sensorenreport()
 	}
 
 	parse_leerzeile();
-	if(cur == "")
+	while(cur == "")
 	{
 		parse_leerzeile();
 	}
@@ -738,8 +746,12 @@ void UVParserTXT::parse_fremde_lager()
 	{
 		getline();
 	}
+
 	parse_leerzeile();
-	parse_leerzeile();
+	while(cur == "")
+	{
+		parse_leerzeile();
+	}
 }
 
 
@@ -757,10 +769,1469 @@ void UVParserTXT::parse_nachrichten()
 
 	parse_leerzeile();
 
-	// *** Besondere Nachrichten (selektiv) parsen
 	static UVRegExp dash_re("^- ");
+
+// ?
+	// NMR-Warnung
+	// - ACHTUNG! Sollten Sie nächste Runde keinen Zug abgeben, werden Sie aus der Partie unwiderruflich entfernt!
+	// - ACHTUNG! Sie können jederzeit aus dem Spiel entfernt werden. Bitte nehmen Sie sofort mit dem Spielleiter Kontakt auf!
+	static UVRegExp nmr_re("^- ACHTUNG! S.*? entfernt.*!$");
+	if(nmr_re.match(cur))
+	{
+		debug("nachricht-nmr", &nmr_re);
+		// ***
+		getline();
+	}
+
+// 1. Befehlsgruppe
+	// AL - Allianz
+	// - Sie haben Sepp die Allianz 1 erklärt.
+	static UVRegExp al_o_re("^- Sie haben (.+) die Allianz ([1-3]) erkl.rt\\.$");
+	// - Hotzenplotz hat Ihnen die Allianz 2 erklärt.
+	static UVRegExp al_i_re("^- (.+) hat Ihnen die Allianz ([1-3]) erkl.rt\\.$");
+	// NE - Neutralitaet
+	// - Sie haben Sepp die Neutralität erklärt.
+	static UVRegExp ne_o_re("^- Sie haben (.+) die Neutralit.t erkl.rt\\.$");
+	// - Hotzenplotz hat Ihnen die Neutralität erklärt.
+	static UVRegExp ne_i_re("^- (.+) hat Ihnen die Neutralit.t erkl.rt\\.$");
+	// KR - Krieg
+	// NG - Neutralitaet vs Gesellschaften
+	// - Mr. Spock hat ihrer Gesellschaft die Neutralität erklärt.
+	static UVRegExp ng_i_re("^- (.+) hat ihrer Gesellschaft die Neutralit.t erkl.rt\\.$");
+	// KG - Krieg vs Gesellschaften
+	// GS - Geld schicken
+	// - Sie haben Doctor Who 1000000000 Cr geschickt.
+	static UVRegExp gs_o_re("^- Sie haben (.+) ([0-9]+) Cr geschickt\\.$");
+	// - Doctor Who hat Ihnen 1000000000 Cr geschickt.
+	static UVRegExp gs_i_re("^- (.+) hat Ihnen ([0-9]+) Cr geschickt\\.$");
+	// MSG - Message
+	// - Messageempfang von Sepp bestätigt. Nachricht war 154 Zeichen lang.
+	static UVRegExp msg_o_re("^- Messageempfang von (.*) best.tigt. Nachricht war ([0-9]+) Zeichen lang\\.$");
+	// - Doctor Who: Hey Du Arschgeige!
+	static UVRegExp msg_i_re("^- (?!Zentichron [0-9]+: )([^:]{1,30}): (.*)$"); // Ende!
+	// - Biberfritz an die Gesellschaft: Testmsg
+	static UVRegExp msg_ig_re("^- (?!Zentichron [0-9]+: )([^:]{1,30}) an die Gesellschaft: (.*)$"); // Ende!
+	// IN - UDB eintragen
+	// FN - UDB abfragen
+	// - UDB-Auskunft über Roman Meng: Keine Information vorhanden.
+	static UVRegExp fn_re("^- UDB-Auskunft .ber ([^:]+): (.*)$");
+	// GX - Gesellschaft beitreten
+	// - Sie sind in die Gesellschaft Munchkins, Inc. eingetreten.
+	static UVRegExp gx_o_re("^- Sie sind in die Gesellschaft (.+) eingetreten\\.$");
+	// - Brummbaerist in die Gesellschaft Munchkins, Inc. eingetreten.
+	static UVRegExp gx_i_re("^- (.+?)ist in die Gesellschaft (.+) eingetreten\\.$");
+	// - Sie sind aus der Gesellschaft Munchkins, Inc. ausgetreten.
+	static UVRegExp gx_o2_re("^- Sie sind aus der Gesellschaft (.+) ausgetreten\\.$");
+	// - Brummbaerist aus der Gesellschaft ausgetreten.
+	static UVRegExp gx_i2_re("^- (.+?)ist aus der Gesellschaft ausgetreten\\.$");
+	// KS - Kopfgeld
+	// - Das Kopfgeld auf Sie wurde um 100000 Cr erhöht.
+	static UVRegExp ks_re("^- Das Kopfgeld auf Sie wurde um ([0-9]+) Cr erh.ht\\.$");
+	// PS - Planet uebertragen
+	// ZK - Zone kaufen
+	// - Sie haben auf Planet  (1234) Zone 14 gekauft.
+	static UVRegExp zk_re("^- Sie haben auf Planet (.*) \\(([0-9]+)\\) Zone ([0-9]+) gekauft\\.$");
+	// LO - Aufgeben
+	// WA - An Werft andocken
 	while(dash_re.match(cur))
 	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(al_o_re.match(cur))
+		{
+			debug("nachricht-al_o", &al_o_re);
+			// ***
+		}
+		else if(al_i_re.match(cur))
+		{
+			debug("nachricht-al_i", &al_i_re);
+			// ***
+		}
+		else if(ne_o_re.match(cur))
+		{
+			debug("nachricht-ne_o", &ne_o_re);
+			// ***
+		}
+		else if(ne_i_re.match(cur))
+		{
+			debug("nachricht-ne_i", &ne_i_re);
+			// ***
+		}
+		else if(ng_i_re.match(cur))
+		{
+			debug("nachricht-ng_i", &ng_i_re);
+			// ***
+		}
+		else if(gs_o_re.match(cur))
+		{
+			debug("nachricht-gs_o", &gs_o_re);
+			// ***
+		}
+		else if(gs_i_re.match(cur))
+		{
+			debug("nachricht-gs_i", &gs_i_re);
+			// ***
+		}
+		else if(msg_o_re.match(cur))
+		{
+			debug("nachricht-msg_o", &msg_o_re);
+			// ***
+		}
+		else if(fn_re.match(cur))
+		{
+			debug("nachricht-fn", &fn_re);
+			// ***
+		}
+		else if(gx_o_re.match(cur))
+		{
+			debug("nachricht-gx_o", &gx_o_re);
+			// ***
+		}
+		else if(gx_i_re.match(cur))
+		{
+			debug("nachricht-gx_i", &gx_i_re);
+			// ***
+		}
+		else if(gx_o2_re.match(cur))
+		{
+			debug("nachricht-gx_o2", &gx_o2_re);
+			// ***
+		}
+		else if(gx_i2_re.match(cur))
+		{
+			debug("nachricht-gx_i2", &gx_i2_re);
+			// ***
+		}
+		else if(ks_re.match(cur))
+		{
+			debug("nachricht-ks", &ks_re);
+			// ***
+		}
+		else if(zk_re.match(cur))
+		{
+			debug("nachricht-zk", &zk_re);
+			// ***
+		}
+		else if(msg_ig_re.match(cur)) // Ende!
+		{
+			debug("nachricht-msg_ig", &msg_ig_re);
+			// ***
+		}
+		else if(msg_i_re.match(cur)) // Ende!
+		{
+			debug("nachricht-msg_i", &msg_i_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 2. Befehlsgruppe
+	// ZV - Zone vergeben
+	// - Sie haben auf Planet Shubito (1234) Zone 1 an Hugo übertragen.
+	static UVRegExp zv_o_re("^- Sie haben auf Planet (.*) \\(([0-9]+)\\) Zone ([0-9]+) an (.+) .bertragen\\.$");
+	// - Sie haben Planet Shubito (1234) Zone 1 von Hugo übertragen bekommen.
+	static UVRegExp zv_i_re("^- Sie haben Planet (.*) \\(([0-9]+)\\) Zone ([0-9]+) von (.+) .bertragen bekommen\\.$");
+	// ZB - Zone benennen
+	// AP - Agrarfeld bauen
+	// AB - Agrarfeld abbauen
+	// AT - Agrarfeld abspalten
+	// AZ - Agrarfeld zusammenlegen
+	// MU - Mine bauen
+	// - Auf Planet  (1234) Zone 1 wurde eine Probebohrung für eine Mine vorgenommen und leider nichts gefunden.
+	static UVRegExp mu1_re("^- Auf Planet (.*?) \\(([0-9]+)\\) Zone ([0-9]+) wurde eine Probebohrung f.r eine Mine vorgenommen und leider nichts gefunden\\.$");
+	// - Auf Planet  (1234) Zone 1 wurde eine Probebohrung für eine Mine vorgenommen und Uran gefunden.
+	static UVRegExp mu2_re("^- Auf Planet (.*?) \\(([0-9]+)\\) Zone ([0-9]+) wurde eine Probebohrung f.r eine Mine vorgenommen und (?!leider nichts)(.+) gefunden\\.$");
+	// ME - Mine erweitern
+	// MN - Mine abreissen
+	// AI - Speicher bauen
+	// AK - Speicher abspalten
+	// AM - Speicherinhalt verschieben
+	// AR - Speicher zusammenlegen
+	// AU - Speicher abbauen
+	// WB - Werft bauen
+	// WE - Werft einreissen
+	// - Sie haben auf Planet Scheisshaus (1234) die Werft Pfupfikon einreissen lassen.
+	static UVRegExp we_re("^- Sie haben auf Planet (.+?) \\(([0-9]+)\\) die Werft (.*?) einreissen lassen\\.$");
+	// WZ - Erz zu Werft uebertragen
+	// - 1234 BRT Erz wurden von Ihnen an die Werft Yehaa von Doctor Who auf Planet Shubito (1234) geliefert.
+	static UVRegExp wz_o_re("^- ([0-9]+) BRT Erz wurden von Ihnen an die Werft (.*?) von (.+?) auf Planet (.*?) \\(([0-9]+)\\) geliefert\\.$");
+	// - 1234 BRT Erz wurden an ihre Werft Yehaa auf Planet Shubito (1234) von Doctor Who geliefert.
+	static UVRegExp wz_i_re("^- ([0-9]+) BRT Erz wurden an ihre Werft (.*?) auf Planet (.*?) \\(([0-9]+)\\) von (.+) geliefert\\.$");
+	// WC - Schiff bauen
+	// - Die Cristina (Doctor Who) wurde fertig gebaut und ausgeliefert. Kostenpunkt: 1234567 Cr (und das entsprechende Erz)
+	static UVRegExp wc_o_re("^- Die (.+) \\(.+\\) wurde fertig gebaut und ausgeliefert\\. Kostenpunkt: ([0-9]+) Cr \\(und das entsprechende Erz\\)$");
+	// - Der Schiffsbau kam aufgrund kompetenter Leute 5% billiger als geplant.
+	static UVRegExp wc2_re("^- Der Schiffsbau kam aufgrund kompetenter Leute ([0-9]+)% billiger als geplant\\.$");
+	// - Schiffsnamen PiPaPo gibt es schon, es wurde automatisch ein neuer ausgewählt.
+	static UVRegExp wc3_re("^- Schiffsnamen (.+?) gibt es schon, es wurde automatisch ein neuer ausgew.hlt\\.$");
+	// WL - Komponenten ins Lager liefern
+	// - Die Lieferung der Komponente 21 an die Xy kostete 3200 Cr und 100.5 BRT Erz
+	static UVRegExp wl_re("^- Die Lieferung der Komponente ([0-9]+) an die (.+?) kostete ([0-9]+) Cr und ([0-9.]+) BRT Erz$");
+	// WO - Komponente einbauen
+	// - Der Einbau in die Bugaloo kostete 100000 Cr und 1000.5 BRT Erz @<?151
+	// - Produktion und Einbau in die Bugaloo kostete 100000 Cr und 1000.5 BRT Erz @151
+	static UVRegExp wo_re("^- (?:Der|Produktion und) Einbau in die (.+) kostete ([0-9]+) Cr und ([0-9.]+) BRT Erz$");
+	// - Der Komponentenbau kam aufgrund kompetenter Leute 5% billiger als geplant.
+	static UVRegExp w2_re("^- Der Komponentenbau kam aufgrund kompetenter Leute ([0-9]+)% billiger als geplant\\.$");
+	// - Für den Einbau des Triebwerks mussten zusätzlich 100000 Cr aufgebracht werden.
+	static UVRegExp w3_re("^- F.r den Einbau des Triebwerks mussten zus.tzlich ([0-9]+) Cr aufgebracht werden\\.$");
+	// WU - Komponente ausbauen
+	// - Der Ausbau aus der Bugaloo hat 100000 Cr eingebracht.
+	static UVRegExp wu_re("^- Der Ausbau aus der (.+) hat ([0-9]+) Cr eingebracht\\.$");
+	// WK - Komponenten ausbauen und ins Lager
+	// WR - Komponenten reparieren
+	// - Die Reparatur an der Xyz kostete 1234 Cr und 1000.5 BRT Erz.
+	static UVRegExp wr_re("^- Die Reparatur an der (.+?) kostete ([0-9]+) Cr und ([0-9.]+) BRT Erz\\.$");
+	// FS - Forschungsstation bauen
+	// FE - Forschungsstation einreissen
+	// FO - Forschen
+	// - Die Forschung in der Station Dingsbums hat ihnen 123.2 Wissenspunkte eingebracht.
+	static UVRegExp fo_re("^- Die Forschung in der Station (.*?) hat ihnen ([0-9.]+) Wissenspunkte eingebracht\\.$");
+	// FW - Werftdoku herstellen
+	// FT - Planetendoku herstellen
+	// FP - Planetendoku anwenden
+	// - Planet Shakizo (1234) ist ein Techlevel aufgestiegen.
+	static UVRegExp fp_re("^- Planet (.*) \\([0-9]+\\) ist ein Techlevel aufgestiegen\\.$");
+	// - Auf Planet Shakizo (1234) konnte eine neue Zone nutzbar gemacht werden!
+	static UVRegExp fp2_re("^- Auf Planet (.*) \\([0-9]+\\) konnte eine neue Zone nutzbar gemacht werden!$");
+	// FF - Werftdoku anwenden
+	// - Die Formel der Werft 1 auf Planetenbaby (1234) wurde verbessert.
+	static UVRegExp ff_re("^- Die Formel der Werft ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde verbessert\\.$");
+	// SC - Stadt bauen
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(zv_o_re.match(cur))
+		{
+			debug("nachricht-zv_o", &zv_o_re);
+			// ***
+		}
+		else if(zv_i_re.match(cur))
+		{
+			debug("nachricht-zv_i", &zv_i_re);
+			// ***
+		}
+		else if(mu1_re.match(cur))
+		{
+			debug("nachricht-mu1", &mu1_re);
+			// ***
+		}
+		else if(mu2_re.match(cur))
+		{
+			debug("nachricht-mu2", &mu2_re);
+			// ***
+		}
+		else if(we_re.match(cur))
+		{
+			debug("nachricht-we", &we_re);
+			// ***
+		}
+		else if(wz_o_re.match(cur))
+		{
+			debug("nachricht-wz_o", &wz_o_re);
+			// ***
+		}
+		else if(wz_i_re.match(cur))
+		{
+			debug("nachricht-wz_i", &wz_i_re);
+			// ***
+		}
+		else if(wc_o_re.match(cur))
+		{
+			debug("nachricht-wc_o", &wc_o_re);
+			// ***
+		}
+		else if(wc2_re.match(cur))
+		{
+			debug("nachricht-wc2", &wc2_re);
+			// ***
+		}
+		else if(wc3_re.match(cur))
+		{
+			debug("nachricht-wc3", &wc3_re);
+			// ***
+		}
+		else if(wl_re.match(cur))
+		{
+			debug("nachricht-wl", &wl_re);
+			// ***
+		}
+		else if(wo_re.match(cur))
+		{
+			debug("nachricht-wo", &wo_re);
+			// ***
+		}
+		else if(w2_re.match(cur))
+		{
+			debug("nachricht-w2", &w2_re);
+			// ***
+		}
+		else if(w3_re.match(cur))
+		{
+			debug("nachricht-w3", &w3_re);
+			// ***
+		}
+		else if(wu_re.match(cur))
+		{
+			debug("nachricht-wu", &wu_re);
+			// ***
+		}
+		else if(wr_re.match(cur))
+		{
+			debug("nachricht-wr", &wr_re);
+			// ***
+		}
+		else if(fo_re.match(cur))
+		{
+			debug("nachricht-fo", &fo_re);
+			// ***
+		}
+		else if(fp_re.match(cur))
+		{
+			debug("nachricht-fp", &fp_re);
+			// ***
+		}
+		else if(fp2_re.match(cur))
+		{
+			debug("nachricht-fp2", &fp2_re);
+			// ***
+		}
+		else if(ff_re.match(cur))
+		{
+			debug("nachricht-ff", &ff_re);
+			// ***
+		}
+		else if(zk_re.match(cur)) // von 1. Befehlsgruppe - compat 144
+		{
+			debug("nachricht-zk-compat", &zk_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 3. Befehlsgruppe
+	// WT - Schiff tanken
+	// WS - Schiff aus Werft ausklinken
+	// BI - Become Imp!
+	// ZG - Imp: Zone enteignen
+	// - Sie haben die Zone 1 auf Shakiro (1234) von Niemand gewaltsam in ihren Besitz genommen.
+	static UVRegExp zg_o_re("^- Sie haben die Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) von (.+) gewaltsam in ihren Besitz genommen\\.$");
+	// - Zone 3 auf Shakiro (1234) wurde von ihrem Imperator Tschu-Tschu gewaltsam enteignet.
+	static UVRegExp zg_i_re("^- Zone ([0-9]+) auf (.*) \\(([0-9]+)\\) wurde von ihrem Imperator (.+) gewaltsam enteignet\\.$");
+	// BN - Planet benennen
+	// MB - Imp: Minen bauen
+	// FB - Imp: Fabriken bauen
+	// PV - Imp: Produktionsverhaeltnis aendern
+	// GB - Imp: Geschuetztuerme bauen
+	// EA - Imp: Energiegenerator ausbauen
+	// SA - Imp: Spionageabwehr
+	// BB - Imp: Basis bauen
+	// - Sie haben auf Pimp (1234) eine Basis gekauft.
+	static UVRegExp bb_re("^- Sie haben auf (.*?) \\(([0-9]+)\\) eine Basis gekauft\\.$");
+	// HP - Imp: Basis-Prio
+	// FK - Imp: Flotte kaufen
+	// RB - Imp: Flotte ausbauen
+	// RT - Imp: Flotte transfer
+	// FA - Imp: Flotte abstossen
+	// TK - Imp: Transporter kaufen
+	// TL - Imp: Transporter beladen
+	// TB - Imp: Transporter exakt beladen
+	// TE - Imp: Transporter entladen
+	// - Transporter 213 hat an der Handelsstation Erz und Klunker sein Erz für 12345 Cr verkauft.
+	static UVRegExp te1_re("^- Transporter ([0-9]+) hat an der Handelsstation (.+?) sein Erz f.r ([0-9]+) Cr verkauft\\.$");
+	// - Transporter 213 hat an der Basis 123 seine 50000 t Erz abgeladen.
+	static UVRegExp te2_re("^- Transporter ([0-9]+) hat an der Basis ([0-9]+) seine ([0-9]+) t Erz abgeladen\\.$");
+	// TA - Imp: Transporter abstossen
+	// EM - Imp: Erzkoenig: Minen bauen
+	// EM - Imp: Erzkoenig: Fabriken bauen
+	// KF - Imp: Kaempfer: Freiwillige
+	// KE - Imp: Kaempfer: Suizidtrupp
+	// DR - Imp: Diplomat: Revolution
+	// DC - Imp: Diplomat: Abwerben
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(zg_o_re.match(cur))
+		{
+			debug("nachricht-zg_o", &zg_o_re);
+			// ***
+		}
+		else if(zg_i_re.match(cur))
+		{
+			debug("nachricht-zg_i", &zg_i_re);
+			// ***
+		}
+		else if(bb_re.match(cur))
+		{
+			debug("nachricht-bb", &bb_re);
+			// ***
+		}
+		else if(te1_re.match(cur))
+		{
+			debug("nachricht-te1", &te1_re);
+			// ***
+		}
+		else if(te2_re.match(cur))
+		{
+			debug("nachricht-te2", &te2_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 4. Befehlsgruppe
+	// SW - Waffenstatus setzen
+	// SO - Offensivbereich setzen
+	// SF - Fluchtbereich setzen
+	// SR - Traktorstrahl toggle
+	// SU - Schiff scannen
+	// - Ihr Schiff Yehaa wurde von der Bullenschiff (Weltraumbullen) überprüft.
+	static UVRegExp su_i_re("^- Ihr Schiff (.+?) wurde von der (.*?) \\((.+?)\\) .berpr.ft\\.$");
+	// SE - Schiff in anderes Schiff einladen
+	// - Sie haben die S1 in die S2 (Doctor Who) eingeladen.
+	static UVRegExp se_o_re("^- Sie haben die (.+?) in die (.+?) \\(.+?\\) eingeladen\\.$");
+	// - Die S2 (Doedel) wurde in ihre S1 eingeladen.
+	static UVRegExp se_i_re("^- Die (.+?) \\((.+?)\\) wurde in ihre (.+?) eingeladen\\.$");
+	// SY - Schiff aus Schiff ausladen
+	// - Die S1 wurde aus der S2 (Doctor Who) ausgeladen.
+	static UVRegExp sy_re("^- Die (.+) wurde aus der (.+) \\((.+)\\) ausgeladen\\.$");
+	// SD - Zone verteidigen
+	// LA - Lager aufspalten
+	// LB - Lager uebertragen
+	// - Sie haben Lager 1 auf dem Schiff Habakuk an Susi übertragen.
+	static UVRegExp lb_o_re("^- Sie haben Lager ([0-9]+) auf dem Schiff (.+?) an (.+) .bertragen\\.$");
+	// - Hugo hat Ihnen Lager 1 auf dem Schiff Pipapo übertragen.
+	static UVRegExp lb_i_re("^- (.+) hat Ihnen Lager ([0-9]+) auf dem Schiff (.+) .bertragen\\.$");
+	// CA - Container abwerfen
+	// - Lager 1 (1000 BRT Hanf) von Rudi Völler auf dem Schiff Radieschen wurde ins All gefeuert.
+	static UVRegExp ca1_re("^- Lager ([0-9]+) \\(([0-9]+) BRT (.+?)\\) von (.*?) auf dem Schiff (.+) wurde ins All gefeuert\\.$");
+	// - Lager 2 (2000 BRT Hanf) auf dem Schiff Tuckerkahn (Depp) wurde ins All gefeuert.
+	static UVRegExp ca2_re("^- Lager ([0-9]+) \\(([0-9]+) BRT (.+?)\\) auf dem Schiff (.+) \\((.*?)\\) wurde ins All gefeuert\\.$");
+	// CU - Container uebergeben
+	// - Lager 1 (100 BRT Dattel) auf dem Schiff S1 (Susi) wurde auf das Schiff S1 (Hugo), Lager 1 übertragen.
+	static UVRegExp cu1_re("^- Lager ([0-9]+) \\(([0-9]+) BRT (.+)\\) auf dem Schiff (.+) \\((.+)\\) wurde auf das Schiff (.+) \\((.+)\\), Lager ([0-9]+) .bertragen\\.$");
+	// - Lager 1 auf ihrem Schiff Cargo2 wurde auf Schiff Wislwisl (Goh) übertragen.
+	static UVRegExp cu2_re("^- Lager ([0-9]+) auf ihrem Schiff (.+) wurde auf Schiff (.+) \\((.+)\\) .bertragen\\.$");
+	// - Von Schiff Xy (Hugo) wurde ein Lager von Susi auf ihr Schiff Zzz in Lager 1 übertragen.
+	static UVRegExp cu3_re("^- Von Schiff (.+?) \\((.+?)\\) wurde ein Lager von (.+?) auf ihr Schiff (.+?) in Lager ([0-9]+) .bertragen\\.$");
+	// CW - Lager anwenden
+	// - Sie haben Lager 2 auf dem Schiff PiPaPo fürs Schiff benutzt.
+	static UVRegExp cw1_re("^- Sie haben Lager ([0-9]+) auf dem Schiff (.+?) f.rs Schiff benutzt\\.$");
+	// - Lager 2 auf dem Schiff PiPaPo wurde fürs Schiff benutzt.
+	static UVRegExp cw2_re("^- Lager ([0-9]+) auf dem Schiff (.+?) wurde f.rs Schiff benutzt\\.$");
+	// - Der Treibstoff wurde in den Tank abgefüllt.
+	static UVRegExp cw3_re("^- Der Treibstoff wurde in den Tank abgef.llt\\.$");
+	// - Der Tarngenerator wurde aktiviert, anscheinend baut er die Treibsubstanz mit 1 BRT pro Zentichron ab. Es scheint, als ob wir komplett unsichtbar für unsere eigene Sensoren - Phalanx sind, ob das wohl auch so bei fremden Schiffen ist? Die Waffen scheinen allerdings durch das Gerät gestört zu werden! Wir müssten also vor einem Angriff den Generator abschalten.
+	static UVRegExp cw4_re("^- Der Tarngenerator wurde aktiviert, anscheinend baut er die Treibsubstanz mit 1 BRT pro Zentichron ab\\. Es scheint, als ob wir komplett unsichtbar f.r unsere eigene Sensoren - Phalanx sind, ob das wohl auch so bei fremden Schiffen ist\\? Die Waffen scheinen allerdings durch das Ger.t gest.rt zu werden! Wir m.ssten also vor einem Angriff den Generator abschalten\\.$");
+	// - Die Boosterpacks verpufften im Tank und plötzlich war alles voller Treibstoff...
+	static UVRegExp cw5_re("^- Die Boosterpacks verpufften im Tank und pl.tzlich war alles voller Treibstoff\\.\\.\\.$");
+	// - Der Tarngenerator wurde deaktiviert.
+	static UVRegExp cw6_re("^- Der Tarngenerator wurde deaktiviert\\.$");
+	// MA - Auftrag annehmen
+	// MF - Auftrag abschliessen
+	// SG - Schiff uebertragen
+	// Eigentlich in 10. Befehlsgruppe.
+	// - Sie haben die HMS Crapper an Moechtegern übergeben.
+	static UVRegExp sg_o_re("^- Sie haben die (.+?) an (.+?) .bergeben\\.$");
+	// - Irgendwer hat Ihnen die Xyz übergeben.
+	static UVRegExp sg_i_re("^- (.+?) hat Ihnen die (.+?) .bergeben\\.$");
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(su_i_re.match(cur))
+		{
+			debug("nachricht-su_i", &su_i_re);
+			// ***
+		}
+		else if(se_o_re.match(cur))
+		{
+			debug("nachricht-se_o", &se_o_re);
+			// ***
+		}
+		else if(se_i_re.match(cur))
+		{
+			debug("nachricht-se_i", &se_i_re);
+			// ***
+		}
+		else if(sy_re.match(cur))
+		{
+			debug("nachricht-sy", &sy_re);
+			// ***
+		}
+		else if(lb_o_re.match(cur))
+		{
+			debug("nachricht-lb_o", &lb_o_re);
+			// ***
+		}
+		else if(lb_i_re.match(cur))
+		{
+			debug("nachricht-lb_i", &lb_i_re);
+			// ***
+		}
+		else if(ca1_re.match(cur))
+		{
+			debug("nachricht-ca1", &ca1_re);
+			// ***
+		}
+		else if(ca2_re.match(cur))
+		{
+			debug("nachricht-ca2", &ca2_re);
+			// ***
+		}
+		else if(cu1_re.match(cur))
+		{
+			debug("nachricht-cu1", &cu1_re);
+			// ***
+		}
+		else if(cu2_re.match(cur))
+		{
+			debug("nachricht-cu2", &cu2_re);
+			// ***
+		}
+		else if(cu3_re.match(cur))
+		{
+			debug("nachricht-cu3", &cu3_re);
+			// ***
+		}
+		else if(cw1_re.match(cur))
+		{
+			debug("nachricht-cw1", &cw1_re);
+			// ***
+		}
+		else if(cw2_re.match(cur))
+		{
+			debug("nachricht-cw2", &cw2_re);
+			// ***
+		}
+		else if(cw3_re.match(cur))
+		{
+			debug("nachricht-cw3", &cw3_re);
+			// ***
+		}
+		else if(cw4_re.match(cur))
+		{
+			debug("nachricht-cw4", &cw4_re);
+			// ***
+		}
+		else if(cw5_re.match(cur))
+		{
+			debug("nachricht-cw5", &cw5_re);
+			// ***
+		}
+		else if(cw6_re.match(cur))
+		{
+			debug("nachricht-cw6", &cw6_re);
+			// ***
+		}
+		else if(sg_o_re.match(cur))
+		{
+			debug("nachricht-sg_o", &sg_o_re);
+			// ***
+		}
+		else if(sg_i_re.match(cur))
+		{
+			debug("nachricht-sg_i", &sg_i_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 5. Befehlsgruppe
+	// AH - Imp: Agent anheuern
+	// KH - Imp: Kopfgeldjaeger anheuern
+	// PH - Imp: Pirat anheuern
+	// BP - Imp: Pirat pluendern
+	// PE - Imp: Pirat entladen
+	// BT - Imp: Pirat Terror
+	// SB - Imp: Agent Sabotage
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 6. Befehlsgruppe
+	// BU - Erz von Basis auf Schiff laden
+	// - Es wurde von Basis 84 12297 BRT Erz auf die Warfighter Void verladen.
+	static UVRegExp bu_re("^- Es wurde von Basis ([0-9]+) ([0-9]+) BRT Erz auf die (.+) verladen\\.$");
+	// OS - Speicherinhalt auf Schiff laden
+	// - Sie haben 1000 BRT Kaffee auf die Huga transportiert.
+	static UVRegExp os_o_re("^- Sie haben ([0-9]+) BRT (.+) auf die (.+) transportiert\\.$");
+	// - Auf ihr Schiff Huga wurde 1000 BRT Kaffee von Hulahooper transportiert.
+	static UVRegExp os_i_re("^- Auf ihr Schiff (.+) wurde ([0-9]+) BRT (.+) von (.*) transportiert\\.$");
+	// OG - Schiffslager in Speicher abladen
+	// - In ihren Speicher 1 auf Erde (1234) wurde durch Arschgeige 1234 BRT Handwaffen geladen.
+	static UVRegExp og_i_re("^- In ihren Speicher ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde durch (.+?) ([0-9]+) BRT (.+?) geladen\\.$");
+	// OV - Ware verkaufen
+	// - Sie haben das Lager 1 (Tee, 1000 BRT) auf der Huga zu 64.935 Cr pro BRT für gesamthaft 12345678 Cr veräussert. Das Geld wurde zu Ihren Gunsten überwiesen.
+	static UVRegExp ov1_re("^- Sie haben das Lager ([0-9]+) \\((.+), ([0-9]+) BRT\\) auf der (.+) zu ([0-9.]+) Cr pro BRT f.r gesamthaft ([0-9]+) Cr ver.ussert\\. Das Geld wurde zu Ihren Gunsten .berwiesen\\.$");
+	// - Lager 4 (Kaffee, 1000 BRT) auf der Huga wurde zu 123.1234 Cr pro BRT für gesamthaft 123123 Cr veräussert. Das Geld wurde an Hulahooper überwiesen.
+	static UVRegExp ov2_re("^- Lager ([0-9]+) \\((.+), ([0-9]+) BRT\\) auf der (.+) wurde zu ([0-9.]+) Cr pro BRT f.r gesamthaft ([0-9]+) Cr ver.ussert\\. Das Geld wurde an (.+) .berwiesen\\.$");
+	// - Ein Lager (1234 BRT,Dattel) auf der Gugus (Dada) wurde zu Ihren Gunsten zu 11.23455 Cr pro BRT für gesamthaft 123456 Cr veräussert.
+	static UVRegExp ov3_re("^- Ein Lager \\(([0-9]+) BRT,(.+?)\\) auf der (.+?) \\((.+?)\\) wurde zu Ihren Gunsten zu ([0-9.]+) Cr pro BRT f.r gesamthaft ([0-9]+) Cr ver.ussert\\.$");
+	// - Lager 1 (Handwaffen, 10000 BRT) auf der SuperDuper konnte nicht komplett verkauft werden, die Handelsstation wollte nicht soviel ankaufen.
+	static UVRegExp ov4_re("^- Lager ([0-9]+) \\((.+?), ([0-9]+) BRT\\) auf der (.+?) konnte nicht komplett verkauft werden, die Handelsstation wollte nicht soviel ankaufen\\.$");
+	// OK - Ware kaufen
+	// - Sie haben 100 BRT Erz zu 12.345 für 1234 Cr eingekauft.
+	static UVRegExp ok1_re("^- Sie haben ([0-9]+) BRT Erz zu ([0-9.]+) f.r ([0-9]+) Cr eingekauft\\.$");
+	// - Doctor Who hat 10000 BRT Kaffee auf die HMS Fuchur eingekauft.
+	static UVRegExp ok2_re("^- (.+) hat ([0-9]+) BRT (.+) auf die (.+) eingekauft\\.$");
+	// - Sie haben 10000 BRT Kaffee zu 2345.045 für 123445 Cr auf die HMS Fuchur eingekauft.
+	static UVRegExp ok3_re("^- Sie haben ([0-9]+) BRT (.+) zu ([0-9.]+) f.r ([0-9]+) Cr auf die (.+) eingekauft\\.$");
+	// - Produkt Colabaum auf der Handelsstation Gier und Plünder war nicht mehr in genügender Menge vorhanden.
+	static UVRegExp ok4_re("^- Produkt (.+?) auf der Handelsstation (.+?) war nicht mehr in gen.gender Menge vorhanden\\.$");
+	// SK - Schiff an HS tanken
+	// PI - Planet beschreiben
+	// ZI - Zone beschreiben
+	// WI - Werft beschreiben
+	// TI - Stadt beschreiben
+	// FI - FS beschreiben
+	// SI - Schiff beschreiben
+	// CI - Charakter beschreiben
+	// SL - Auswertung Spalten
+	// FR - Auswertung Farbset
+	// AY - Auswertung Typ
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(bu_re.match(cur))
+		{
+			debug("nachricht-bu", &bu_re);
+			// ***
+		}
+		else if(os_o_re.match(cur))
+		{
+			debug("nachricht-os_o", &os_o_re);
+			// ***
+		}
+		else if(os_i_re.match(cur))
+		{
+			debug("nachricht-os_i", &os_i_re);
+			// ***
+		}
+		else if(og_i_re.match(cur))
+		{
+			debug("nachricht-og_i", &og_i_re);
+			// ***
+		}
+		else if(ov1_re.match(cur))
+		{
+			debug("nachricht-ov1", &ov1_re);
+			// ***
+		}
+		else if(ov2_re.match(cur))
+		{
+			debug("nachricht-ov2", &ov2_re);
+			// ***
+		}
+		else if(ov3_re.match(cur))
+		{
+			debug("nachricht-ov3", &ov3_re);
+			// ***
+		}
+		else if(ov4_re.match(cur))
+		{
+			debug("nachricht-ov4", &ov4_re);
+			// ***
+		}
+		else if(ok1_re.match(cur))
+		{
+			debug("nachricht-ok1", &ok1_re);
+			// ***
+		}
+		else if(ok2_re.match(cur))
+		{
+			debug("nachricht-ok2", &ok2_re);
+			// ***
+		}
+		else if(ok3_re.match(cur))
+		{
+			debug("nachricht-ok3", &ok3_re);
+			// ***
+		}
+		else if(ok4_re.match(cur))
+		{
+			debug("nachricht-ok4", &ok4_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 7. Befehlsgruppe
+	// AS - Artikel anmelden
+	// AW - Artikel bewerten
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// 8. Befehlsgruppe Zentichron 1-100
+	// SV - Schiff Speed
+	// ST - Schiff Richtung
+	// SP - Sprung
+	// SH - Hyperdimensionssprung
+	// VM - Verfolgungsmodus
+	// IA - Infosonde absetzen
+	// RA - Sensorsonde absetzen
+	// Kampfbeginn
+	// - Die Schiffe Shubiduu (Minime), Killerbiene (Q) beginnen einen Kampf in Zentichron 45. @144
+	static UVRegExp kampf1_re("^- Die Schiffe .* beginnen einen Kampf in Zentichron [0-9]+\\.$");
+	// - Zentichron 1: Die Schiffe Xy (Dumpfbacke), Blaster (Dagobert) beginnen einen Kampf.
+	static UVRegExp kampf2_re("^- Zentichron [0-9]+: Die Schiffe .* beginnen einen Kampf\\.$");
+	// Verfolgung
+	// - Zentichron 13: Schiff Zzz nimmt Verfolgung der Xy (Dumpfbacke) auf.
+	static UVRegExp verfolgung_on_re("^- Zentichron ([0-9]+): Schiff (.+?) nimmt Verfolgung der (.+?) \\((.+?)\\) auf\\.$");
+	// - Zentichron 13: Schiff Zzz deaktiviert Verfolgungsmodus.
+	static UVRegExp verfolgung_off1_re("^- Zentichron ([0-9]+): Schiff (.+?) deaktiviert Verfolgungsmodus\\.$");
+	// - Zentichron 13: Schiff Zzz deaktiviert Verfolgungsmodus, Zielobjekt nicht gefunden.
+	static UVRegExp verfolgung_off2_re("^- Zentichron ([0-9]+): Schiff (.+?) deaktiviert Verfolgungsmodus, Zielobjekt nicht gefunden\\.$");
+	// - Zentichron 13: Schiff Zzz musste Verfolgung abbrechen. Zielobjekt existiert nicht mehr. Antrieb wird deaktiviert.
+	static UVRegExp verfolgung_off3_re("^- Zentichron ([0-9]+): Schiff (.+?) musste Verfolgung abbrechen\\. Zielobjekt existiert nicht mehr\\. Antrieb wird deaktiviert\\.$");
+	// Anomalien
+	// - Zentichron 13: Schiff Zzz geriet in die Anziehungskraft einer kosmischen Anomalie. Das Schiff geriet in in einen Strudel und eine unbekannte Anziehungskraft die das Schiff zerstörten.
+	static UVRegExp anomalie_re("^- Zentichron ([0-9]+): Schiff (.+?) geriet in die Anziehungskraft einer kosmischen Anomalie\\. Das Schiff geriet in in einen Strudel und eine unbekannte Anziehungskraft die das Schiff zerst.rten\\.$");
+	// Container einladen
+	// - Ein Container wurde vom Schiff Gigabyte eingeladen. Er enthielt 100000 BRT Militärlaser Klasse A.
+	static UVRegExp container1_re("^- Ein Container wurde vom Schiff (.+) eingeladen\\. Er enthielt ([0-9]+) BRT (.+)\\.$");
+	// - Es wurde versucht einen Container auf Schiff Gigabyte einzuladen. Er war allerdings zu gross.
+	static UVRegExp container2_re("^- Es wurde versucht einen Container auf Schiff (.+) einzuladen\\. Er war allerdings zu gross\\.$");
+	// Infosonde
+	// - Sonde bei (-123,123,4) sendet Nachricht: ...
+	static UVRegExp infosonde_re("^- Sonde bei \\((-?[0-9]+),(-?[0-9]+),([0-9])\\) sendet Nachricht: (.*)$");
+	// Treibstoffmangel
+	// - Zentichron 13: Schiff Xyz Triebwerk 1 musste aufgrund Treibstoffmangels abgestellt werden.
+	static UVRegExp treibstoff_re("^- Zentichron ([0-9]+): Schiff (.+?) Triebwerk ([0-9]+) musste aufgrund Treibstoffmangels abgestellt werden\\.$");
+	// Ausfall von Systemen
+	// - Das Sensorensystem des Schiffes Xyz ist aufgrund zu schwachem Bordcomputer oder Energiegenerator nicht einsatzfähig.
+	static UVRegExp sensoren_re("^- Das Sensorensystem des Schiffes (.+?) ist aufgrund zu schwachem Bordcomputer oder Energiegenerator nicht einsatzf.hig\\.$");
+	// - Waffe XY ist aufgrund mangelnder Energiegenerator- oder Bordcomputerleistung nicht einsatzfähig.
+	static UVRegExp waffen_re("^- (.+?) ist aufgrund mangelnder Energiegenerator- oder Bordcomputerleistung nicht einsatzf.hig\\.$");
+	// Sondenzerstoerung
+	// - Die Sensorsonde bei 1234,5678 wurde von der Hotzenplotz (Arschgeige) zerstört.
+	static UVRegExp sensorsonde_i_re("^- Die Sensorsonde bei (-?[0-9]+),(-?[0-9]+) wurde von der (.+?) \\((.+)\\) zerst.rt\\.$");
+	// - Die Hotzenplotz hat die Sensorsonde bei -123,123 von Doofie zerstört.
+	static UVRegExp sensorsonde_o_re("^- Die (.+?) hat die Sensorsonde bei (-?[0-9]+),(-?[0-9]+) von (.+) zerst.rt\\.$");
+
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+			getline();
+		}
+		else if(kampf1_re.match(cur) || kampf2_re.match(cur))
+		{
+			parse_kampfreport();
+		}
+		else if(verfolgung_on_re.match(cur))
+		{
+			debug("nachricht-verfolgung_on", &verfolgung_on_re);
+			// ***
+			getline();
+		}
+		else if(verfolgung_off1_re.match(cur))
+		{
+			debug("nachricht-verfolgung_off1", &verfolgung_off1_re);
+			// ***
+			getline();
+		}
+		else if(verfolgung_off2_re.match(cur))
+		{
+			debug("nachricht-verfolgung_off2", &verfolgung_off2_re);
+			// ***
+			getline();
+		}
+		else if(verfolgung_off3_re.match(cur))
+		{
+			debug("nachricht-verfolgung_off3", &verfolgung_off3_re);
+			// ***
+			getline();
+		}
+		else if(anomalie_re.match(cur))
+		{
+			debug("nachricht-anomalie", &anomalie_re);
+			// ***
+			getline();
+		}
+		else if(container1_re.match(cur))
+		{
+			debug("nachricht-container1", &container1_re);
+			// ***
+			getline();
+		}
+		else if(container2_re.match(cur))
+		{
+			debug("nachricht-container2", &container2_re);
+			// ***
+			getline();
+		}
+		else if(infosonde_re.match(cur))
+		{
+			debug("nachricht-infosonde", &infosonde_re);
+			// ***
+			getline();
+		}
+		else if(treibstoff_re.match(cur))
+		{
+			debug("nachricht-infosonde", &infosonde_re);
+			// ***
+			getline();
+		}
+		else if(sensoren_re.match(cur))
+		{
+			debug("nachricht-sensoren", &sensoren_re);
+			// ***
+			getline();
+		}
+		else if(waffen_re.match(cur))
+		{
+			debug("nachricht-waffen", &waffen_re);
+			// ***
+			getline();
+		}
+		else if(sensorsonde_i_re.match(cur))
+		{
+			debug("nachricht-sensorsonde_i", &sensorsonde_i_re);
+			// ***
+			getline();
+		}
+		else if(sensorsonde_o_re.match(cur))
+		{
+			debug("nachricht-sensorsonde_o", &sensorsonde_o_re);
+			// ***
+			getline();
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	// Orbit einklinken
+	// - Schiff Blubb hat sich in den Orbit von Wuerg (1234) eingeklinkt.
+	static UVRegExp orbit_re("^- Schiff (.+?) hat sich in den Orbit von (.*) \\(([0-9]+)\\) eingeklinkt\\.$");
+	while(orbit_re.match(cur))
+	{
+		debug("nachricht-orbit", &orbit_re);
+		// ***
+		getline();
+	}
+
+// 9. Befehlsgruppe
+	// SZ - Zone angreifen
+	// - Die Zone 1 auf Teletubbieland (1234) wurde auftragsgemäss von der Xyz vernichtet.
+	static UVRegExp sz_o1_re("^- Die Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde auftragsgem.ss von der (.+) vernichtet\\.$");
+	// - Sie haben für die Zerstörung der Zone 1 auf Teletubbieland (1234) Kopfgeld in der Höhe von 0 Cr erhalten.
+	static UVRegExp sz_o2_re("^- Sie haben f.r die Zerst.rung der Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) Kopfgeld in der H.he von ([0-9]+) Cr erhalten\\.$");
+	// - Das Schiff Surfboard (Globi) wurde durch den Angriff auf die Werft Schiffbaue (1) von Teletubbieland (1234) zerstört.
+	static UVRegExp sz_o3_re("^- Das Schiff (.+?) \\((.+?)\\) wurde durch den Angriff auf die Werft (.+?) \\(([0-9]+)\\) von (.*?) \\(([0-9]+)\\) zerst.rt\\.$");
+	// - Zone 1 auf Pfupfike (1234) wurde von der Killerschiff (Feind TM) angegriffen und komplett zerstört.
+	static UVRegExp sz_i1_re("^- Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde von der (.+?) \\((.+)\\) angegriffen und komplett zerstört\\.$");
+	// - Das Schiff Liblingschiff wurde durch einen Angriff von Eeeevil auf die Werft Schiffbaue (1) von Pfupfike (1234) zerstört.
+	static UVRegExp sz_i2_re("^- Das Schiff (.+?) wurde durch einen Angriff von (.+?) auf die Werft (.+?) \\(([0-9]+)\\) von (.*?) \\(([0-9]+)\\) zerst.rt\\.$");
+	// - Sie haben für die Killerbiene 1000 Cr Kopfgeld kassiert. (DUP!)
+	static UVRegExp kopfgeld_re("^- Sie haben f.r die (.+) ([0-9]+) Cr Kopfgeld kassiert\\.$");
+	// PL - Zone pluendern
+	// - Die Zone 1 auf Teletubbieland (1234) wurde auftragsgemäss von der Xyz geplündert.
+	static UVRegExp pl_o_re("^- Die Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde auftragsgem.ss von der (.+) gepl.ndert\\.$");
+	// - Zone 1 auf Teletubbieland (1234) wurde von der Katze (Eeevil) geplündert.
+	static UVRegExp pl_i_re("^- Zone ([0-9]+) auf (.*?) \\(([0-9]+)\\) wurde von der (.+?) \\((.+)\\) gepl.ndert\\.$");
+	// BV - Imp: Basis verschieben
+	// FV - Imp: Flotte verschieben
+	// TV - Imp: Transporter verschieben
+	// CV - Imp: Charakter verschieben
+	// HM - Imp: Haendler Extrasprung
+	// CM - Imp: Charakter Extrasprung
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(sz_o1_re.match(cur))
+		{
+			debug("nachricht-sz_o1", &sz_o1_re);
+			// ***
+		}
+		else if(sz_o2_re.match(cur))
+		{
+			debug("nachricht-sz_o2", &sz_o2_re);
+			// ***
+		}
+		else if(sz_o3_re.match(cur))
+		{
+			debug("nachricht-sz_o3", &sz_o3_re);
+			// ***
+		}
+		else if(sz_i1_re.match(cur))
+		{
+			debug("nachricht-sz_i1", &sz_i1_re);
+			// ***
+		}
+		else if(sz_i2_re.match(cur))
+		{
+			debug("nachricht-sz_i2", &sz_i2_re);
+			// ***
+		}
+		else if(kopfgeld_re.match(cur))
+		{
+			debug("nachricht-kopfgeld", &kopfgeld_re);
+			// ***
+		}
+		else if(pl_o_re.match(cur))
+		{
+			debug("nachricht-pl_o", &pl_o_re);
+			// ***
+		}
+		else if(pl_i_re.match(cur))
+		{
+			debug("nachricht-pl_i", &pl_i_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// ?
+	// Imp: Charakterkampf
+	// Imp: Flottenkampf
+	// Imp: Planeten erobern
+	// - Flotte 123 hat den Planeten  (1234) von Niemand erobert.
+	static UVRegExp eroberung_re("^- Flotte ([0-9]+) hat den Planeten (.*?) \\(([0-9]+)\\) von (.+) erobert\\.$");
+	// Imp: Erztribute
+	// - Der Planet  (1234) ist an keine Basis angeschlossen.
+	static UVRegExp erz_nobase_re("^- Der Planet (.*?) \\(([0-9]+)\\) ist an keine Basis angeschlossen\\.$");
+	// - Der Transporter 1 hat 1234 t Erz vom Planeten  (1234) aufgeladen.
+	static UVRegExp erz_transp_re("^- Der Transporter ([0-9]+) hat ([0-9]+) t Erz vom Planeten (.*?) \\(([0-9]+)\\) aufgeladen\\.$");
+	// Imp: Revolutionen
+	// - Auf Planet ASdfds (1234) hat sich die Lage beruhigt.
+	static UVRegExp rev_ende_re("^- Auf Planet (.*?) \\(([0-9]+)\\) hat sich die Lage beruhigt\\.$");
+	// - Die Stimmung der Bevölkerung auf Planet  (1234) ist ziemlich unruhig geworden.
+	static UVRegExp rev_unruhig_re("^- Die Stimmung der Bev.lkerung auf Planet (.*?) \\(([0-9]+)\\) ist ziemlich unruhig geworden\\.$");
+	// - Auf Planet  (1234) hat sich die Situation drastisch zugespitzt. Massnahmen wären dringend erforderlich. Beinahe wäre es zu einer Katastrophe gekommen.
+	static UVRegExp rev_beinahe_re("^- Auf Planet (.*?) \\(([0-9]+)\\) hat sich die Situation drastisch zugespitzt\\. Massnahmen w.ren dringend erforderlich\\. Beinahe w.re es zu einer Katastrophe gekommen\\.$");
+	// - Auf Planet  (1234) ist ein Revolution ausgebrochen!
+	static UVRegExp rev_olution_re("^- Auf Planet (.*?) \\(([0-9]+)\\) ist ein Revolution ausgebrochen!$");
+
+	while(dash_re.match(cur))
+	{
+		if(eroberung_re.match(cur))
+		{
+			debug("nachricht-eroberung", &eroberung_re);
+			// ***
+		}
+		else if(erz_nobase_re.match(cur))
+		{
+			debug("nachricht-erz_nobase", &erz_nobase_re);
+			// ***
+		}
+		else if(erz_transp_re.match(cur))
+		{
+			debug("nachricht-erz_transp", &erz_transp_re);
+			// ***
+		}
+		else if(rev_ende_re.match(cur))
+		{
+			debug("nachricht-rev_ende", &rev_ende_re);
+			// ***
+		}
+		else if(rev_unruhig_re.match(cur))
+		{
+			debug("nachricht-rev_unruhig", &rev_unruhig_re);
+			// ***
+		}
+		else if(rev_beinahe_re.match(cur))
+		{
+			debug("nachricht-rev_beinahe", &rev_beinahe_re);
+			// ***
+		}
+		else if(rev_olution_re.match(cur))
+		{
+			debug("nachricht-rev_olution", &rev_olution_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+	// Imp: Random-Gags
+	// - Calgooros haben den Planeten  (1234) unsicher gemacht.
+	static UVRegExp random1_re("^- Calgooros haben den Planeten (.*?) \\(([0-9]+)\\) unsicher gemacht\\.$");
+	// - Schwere Stürme donnerten über den Planeten  (1234).
+	static UVRegExp random2_re("^- Schwere Stürme donnerten über den Planeten (.*?) \\(([0-9]+)\\)\\.$");
+	while(dash_re.match(cur))
+	{
+		if(random1_re.match(cur))
+		{
+			debug("nachricht-random1", &random1_re);
+			// ***
+		}
+		else if(random2_re.match(cur))
+		{
+			debug("nachricht-random2", &random2_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+
+// 10. Befehlsgruppe
+	// DS - Imp: Pirat Digital Scan
+	// DG - Imp: Diplomat Geld
+	// SS - Imp: Agent Spionage
+	// SG - Schiff uebertragen
+	// Siehe 4. Befehlsgruppe.
+	// PP - Station Preisliste
+	// - Preisinfo 1234 / Handelsstation Mamma Mia - [...]
+	static UVRegExp pp_re("^- Preisinfo ([0-9]+) / Handelsstation (.+) - (.*)$");
+	// ZD - Zonendaten abfragen
+	// - Zonedaten von Zone  ( (1234),1)= Besitzer: Niemand, Grösse: 123 FUs, -22.9 °C / -26.4 °C / -22.9 °C / -15.7 °C / -8.6 °C / -1.4 °C /  5.7 °C / -1.4 °C / -8.6 °C / -15.7 °C / -21.1 °C / -22.9 °C,  13 mm /  9 mm /  6 mm /  4 mm /  6 mm /  9 mm /  4 mm /  5 mm /  6 mm /  3 mm /  6 mm /  9 mm, DT:-13.5 °C / GN: 80 mm
+	static UVRegExp zd_re("^- Zonedaten von Zone (.*) \\((.*) \\(([0-9]+)\\),([0-9]+)\\)= Besitzer: (.+), Gr.sse: ([0-9]+) FUs,  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C /  ?([0-9.-]+) °C,  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm /  ([0-9]+) mm, DT: ?([0-9.-]+) °C / GN: ([0-9]+) mm$");
+	while(dash_re.match(cur))
+	{
+		if(cur[2] == '!')
+		{
+			// *** Fehlermeldung skipped
+		}
+		else if(sg_o_re.match(cur))
+		{
+			debug("nachricht-sg_o", &sg_o_re);
+			// ***
+		}
+		else if(sg_i_re.match(cur))
+		{
+			debug("nachricht-sg_i", &sg_i_re);
+			// ***
+		}
+		else if(pp_re.match(cur))
+		{
+			debug("nachricht-pp", &pp_re);
+			// ***
+		}
+		else if(zd_re.match(cur))
+		{
+			debug("nachricht-zd", &zd_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+// ?
+	// Ernte/Ertrag
+	// - Die Ernte der Zone Gaga (Planet Gugu (1234), Zone 4, Agrarfeld 5) konnte nicht komplett gelagert werden und es gingen 1000 BRT Kaffee verloren.
+	static UVRegExp ernte_re("^- Die Ernte der Zone (.*) \\(Planet (.*) \\(([0-9]+)\\), Zone ([0-9]+), Agrarfeld ([0-9]+)\\) konnte nicht komplett gelagert werden und es gingen ([0-9]+) BRT (.+) verloren\\.$");
+	// - Der Ertrag der Zone  (Planet Gaga (1234), Zone 2, Mine 6) konnte nicht komplett gelagert werden und es gingen 1000 BRT Kristall verloren.
+	static UVRegExp ertrag_re("^- Der Ertrag der Zone (.*) \\(Planet (.*) \\(([0-9]+)\\), Zone ([0-9]+), Mine ([0-9]+)\\) konnte nicht komplett gelagert werden und es gingen ([0-9]+) BRT (.+) verloren\\.$");
+	// - Die Ernte der Zone  (Planet Gugu (1234), Zone 4, Agrarfeld 5) konnte nicht eingebracht werden, da sie als Imperator keine Zeit haben, sich darum zu kümmern.
+	static UVRegExp ernte_imp_re("^- Die Ernte der Zone (.*) \\(Planet (.*) \\(([0-9]+)\\), Zone ([0-9]+), Agrarfeld ([0-9]+)\\) konnte nicht eingebracht werden, da sie als Imperator keine Zeit haben, sich darum zu k.mmern\\.$");
+	// - Die Minenarbeit der Zone Michikaze6 (Planet Yggdrasil (4559), Zone 4, Mine 2) konnte nicht fortgesetzt werden, da sie als Imperator keine Zeit haben, sich darum zu kümmern.
+	static UVRegExp ertrag_imp_re("^- Die Minenarbeit der Zone (.*) \\(Planet (.*) \\(([0-9]+)\\), Zone ([0-9]+), Mine ([0-9]+)\\) konnte nicht fortgesetzt werden, da sie als Imperator keine Zeit haben, sich darum zu k.mmern.$");
+	while(dash_re.match(cur))
+	{
+		if(ernte_re.match(cur))
+		{
+			debug("nachricht-ernte", &ernte_re);
+			// ***
+		}
+		else if(ertrag_re.match(cur))
+		{
+			debug("nachricht-ertrag", &ertrag_re);
+			// ***
+		}
+		else if(ernte_imp_re.match(cur))
+		{
+			debug("nachricht-ernte_imp", &ernte_imp_re);
+			// ***
+		}
+		else if(ertrag_imp_re.match(cur))
+		{
+			debug("nachricht-ertrag_imp", &ertrag_imp_re);
+			// ***
+		}
+		else
+		{
+			break;
+		}
+		getline();
+	}
+
+	// Stadt-Steuern
+	// - Die Stadt Ruzzfos auf Gwandibuz (1234) hat 1234567 Steuern eingebracht.
+	static UVRegExp steuern_re("^- Die Stadt (.+?) auf (.*?) \\(([0-9]+)\\) hat ([0-9]+) Steuern eingebracht\\.$");
+	while(steuern_re.match(cur))
+	{
+		debug("nachricht-steuern", &steuern_re);
+		// ***
+		getline();
+	}
+	// - Die Stadt Ruzzfos auf Gwandibuz (1234) verweigerte ihnen die Steuern in Höhe von 123456. Ich fürchte sie werden einen Freischaffenden als Verwalter einstellen, der die Besteuerung übernimmt.
+	static UVRegExp steuern_imp_re("^- Die Stadt (.+?) auf (.*?) \\(([0-9]+)\\) verweigerte ihnen die Steuern in H.he von ([0-9]+)\\. Ich f.rchte sie werden einen Freischaffenden als Verwalter einstellen, der die Besteuerung .bernimmt\\.$");
+	while(steuern_imp_re.match(cur))
+	{
+		debug("nachricht-steuern_imp", &steuern_imp_re);
+		// ***
+		getline();
+	}
+	// Arbeitslosengeld
+	// - Da sie dieses Jahr kein Einkommen hatten, wurde ihnen das Arbeitslosengeld/IV (1000 Cr) ausbezahlt.
+	static UVRegExp income_re("^- Da sie dieses Jahr kein Einkommen hatten, wurde ihnen das Arbeitslosengeld/IV \\(([0-9]+) Cr\\) ausbezahlt\\.$");
+	if(income_re.match(cur))
+	{
+		debug("nachricht-income", &income_re);
+		// ***
+		getline();
+	}
+	// Tod
+	// - Du bist leider tot! Du kannst, wenn Du möchtest jederzeit mit einem neuen Charakter wieder einsteigen. Danke fürs Mitspielen!
+	static UVRegExp tod_re("^- Du bist leider tot! Du kannst, wenn Du m.chtest jederzeit mit einem neuen Charakter wieder einsteigen\\. Danke f.rs Mitspielen!$");
+	if(tod_re.match(cur))
+	{
+		debug("nachricht-tod", &tod_re);
+		// ***
+		getline();
+	}
+	// Willkommen
+	// - Willkommen im Universum! Im Moment bist Du noch nirgends im Universum angesiedelt. Du kannst nun bei einer Werft einen Schiffsbau aufgeben (informier Dich vorher über ihre Preise). Damit hast Du Dich dann auch für einen Startort entschieden und das Abenteuer kann beginnen! (Werftsliste im aktuellen Chronator / siehe Homepage)
+	static UVRegExp willkommen_re("^- Willkommen im Universum! Im Moment bist Du noch nirgends im Universum angesiedelt\\. Du kannst nun bei einer Werft einen Schiffsbau aufgeben \\(informier Dich vorher .ber ihre Preise\\)\\. Damit hast Du Dich dann auch f.r einen Startort entschieden und das Abenteuer kann beginnen! \\(Werftsliste im aktuellen Chronator / siehe Homepage\\)$");
+	if(willkommen_re.match(cur))
+	{
+		debug("nachricht-willkommen", &willkommen_re);
+		// ***
+		getline();
+	}
+
+
+	if(dash_re.match(cur))
+	{
+		throw EXCEPTION("Unbekannter Nachrichtentyp!");
+	}
+}
+
+
+/*
+ * Ein Kampfreport aus den Nachrichten parsen.
+ */
+void UVParserTXT::parse_kampfreport()
+{
+	static UVRegExp dash_re("^- ");
+
+	// - Die Schiffe Shubiduu (Minime), Killerbiene (Q) beginnen einen Kampf in Zentichron 45. @144
+	static UVRegExp start1a_re("^- Die Schiffe (.+?) \\((.+?)\\)(?=(?:, | beginnen einen Kampf in Zentichron [0-9]+\\.$))");
+	static UVRegExp start1b_re("^, (.+?) \\((.+?)\\)(?=(?:, | beginnen einen Kampf in Zentichron [0-9]+\\.$))");
+	static UVRegExp start1c_re("^ beginnen einen Kampf in Zentichron ([0-9]+)\\.$");
+	// - Zentichron 13: Die Schiffe Xy (Dumpfbacke), Blaster (Dagobert) beginnen einen Kampf.
+	static UVRegExp start2a_re("^- Zentichron ([0-9]+): Die Schiffe (.+?) \\((.+?)\\)(?=(?:, | beginnen einen Kampf\\.$))");
+	static UVRegExp start2b_re("^, (.+?) \\((.+?)\\)(?=(?:, | beginnen einen Kampf\\.$))");
+	static UVRegExp start2c_re("^ beginnen einen Kampf\\.$");
+
+	if(start1a_re.match(cur))
+	{
+		debug("nachricht-kampf-start1a", &start1a_re);
+		// ***
+		shiftline(&start1a_re);
+		while(start1b_re.match(cur))
+		{
+			debug("nachricht-kampf-start1b", &start1b_re);
+			// ***
+			shiftline(&start1b_re);
+		}
+		if(!start1c_re.match(cur))
+		{
+			throw EXCEPTION("Fehler in Kampfreport!");
+		}
+		debug("nachricht-kampf-start1c", &start1c_re);
+		// ***
+	}
+	else if(start2a_re.match(cur))
+	{
+		debug("nachricht-kampf-start2a", &start2a_re);
+		// ***
+		shiftline(&start2a_re);
+		while(start2b_re.match(cur))
+		{
+			debug("nachricht-kampf-start2b", &start2b_re);
+			// ***
+			shiftline(&start2b_re);
+		}
+		if(!start2c_re.match(cur))
+		{
+			throw EXCEPTION("Fehler in Kampfreport!");
+		}
+		debug("nachricht-kampf-start2c", &start2c_re);
+		// ***
+	}
+	else
+	{
+		throw EXCEPTION("Fehler in Kampfreport!");
+	}
+	getline();
+
+	// - Die Sensoren konnten leider keine verwertbaren Daten über die Xy empfangen.
+	static UVRegExp noint_re("^- Die Sensoren konnten leider keine verwertbaren Daten .ber die (.+) empfangen\\.$");
+	// - Die Xy hat eine geschätzte Schadenstauglichkeit von 123 HP, wovon Schild und Panzer ca. 23 % Prozent ausmachen. _
+	// - Die Xy hat eine geschätzte Schadenstauglichkeit von 123 HP, der Anteil von Schild und Panzer ist aber nicht bekannt. _
+	// - Die Schadenstauglichkeit sowie Schutzmassnahmen der Xy sind nicht erkennbar. _
+	static UVRegExp int_defense1_re("^- Die (.+?) hat eine gesch.tzte Schadenstauglichkeit von ([0-9]+) HP, wovon Schild und Panzer ca\\. ([0-9]+) % Prozent ausmachen\\. ");
+	static UVRegExp int_defense2_re("^- Die (.+?) hat eine gesch.tzte Schadenstauglichkeit von ([0-9]+) HP, der Anteil von Schild und Panzer ist aber nicht bekannt\\. ");
+	static UVRegExp int_defense3_re("^- Die Schadenstauglichkeit sowie Schutzmassnahmen der (.+?) sind nicht erkennbar\\. ");
+	//   Ihre Zerstörungskraft umfasst ca. 5 Punkte Schaden pro Salve. _
+	//   Ihre Zerstörungskraft ist unbekannt. _
+	static UVRegExp int_offense1_re("^Ihre Zerst.rungskraft umfasst ca\\. ([0-9]+) Punkte Schaden pro Salve\\. ");
+	static UVRegExp int_offense2_re("^Ihre Zerst.rungskraft ist unbekannt\\. ");
+	//   Die Fluchtgeschwindigkeit ist bei 5.6 mal Lichtgeschwindigkeit anzusetzen.
+	//   Die Fluchtgeschwindigkeit kann nicht ermittelt werden.
+	static UVRegExp int_flucht1_re("^Die Fluchtgeschwindigkeit ist bei ([0-9.]+) mal Lichtgeschwindigkeit anzusetzen\\.$");
+	static UVRegExp int_flucht2_re("^Die Fluchtgeschwindigkeit kann nicht ermittelt werden\\.$");
+	static UVRegExp int_re("^- Die .*Schadenstauglichkeit .*\\. Ihre Zerst.rungskraft .*\\. Die Fluchtgeschwindigkeit .*\\.$");
+
+	// - Detonationen bei Raketegeschütz auf der Xy durch Treffer von der Xyz.
+	// - Detonationen bei Kanone auf der Xy durch Treffer von der Xyz.
+	static UVRegExp det_re("^- Detonationen bei (.+) auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Raketenlafette (3fach) der Xy durch Treffer von der Xyz zerstört.
+	static UVRegExp zer_re("^- (.+?) der (.+?) durch Treffer von der (.+?) zerst.rt\\.$");
+	// - Schwere Detonationen auf der Xy durch Treffer von der Xyz.
+	static UVRegExp sdet_re("^- Schwere Detonationen auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Zusammenbruch des Energiesystems auf der Xy durch Treffer von der Xyz.
+	static UVRegExp energie_re("^- Zusammenbruch des Energiesystems auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Schildzusammenbruch auf der Xy durch Treffer von der Xyz.
+	static UVRegExp schild_re("^- Schildzusammenbruch auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Feuer im Lagersektor auf der Xy durch Treffer von der Xyz.
+	static UVRegExp lagerfeuer_re("^- Feuer im Lagersektor auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Lager 1 (Uran) der Xy durch Treffer von der Xyz zerstört.
+	static UVRegExp lager_re("^- Lager ([0-9]+) \\((.+?)\\) der (.+?) durch Treffer von der (.+) zerst.rt\\.$");
+	// - Ausfall des Sensorbereichs auf der Xy durch Treffer von der Xyz.
+	static UVRegExp sensor_re("^- Ausfall des Sensorbereichs auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Zusammenbruch der Schiffskommunikation auf der Xy durch Treffer von der Xyz.
+	static UVRegExp komm_re("^- Zusammenbruch der Schiffskommunikation auf der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Schwere Explosion bei den Treibstofftanks der Xy durch Treffer von der Xyz.
+	static UVRegExp treibstoff_re("^- Schwere Explosion bei den Treibstofftanks der (.+?) durch Treffer von der (.+?)\\.$");
+	// - Explosion von Triebwerk auf der Xy durch Treffer von der Xyz.
+	static UVRegExp triebwerk_re("^- Explosion von Triebwerk auf der (.+?) durch Treffer von der (.+?)\\.$");
+
+	// - Die Hypertrans ist aus dem Kampf geflüchtet.
+	static UVRegExp flucht_re("^- Die (.+) ist aus dem Kampf gefl.chtet\\.$");
+	// - Schiff Xy wurde von einem Kommandotrupp der Xyz geentert und übernommen.
+	static UVRegExp enter_re("^- Schiff (.+?) wurde von einem Kommandotrupp der (.+?) geentert und .bernommen\\.$");
+	// - Die Killerbiene ist explodiert.
+	static UVRegExp explosion_re("^- Die (.+) ist explodiert\\.$");
+	// - Sie haben für die Killerbiene 1000 Cr Kopfgeld kassiert. (DUP!)
+	static UVRegExp kopfgeld_re("^- Sie haben f.r die (.+) ([0-9]+) Cr Kopfgeld kassiert\\.$");
+	// - Der Kampf wurde beendet, als die beteiligten Schiffe erkannten, dass sie sich aufgrund zu schwacher Waffen gegenseitig nicht beschädigen konnten.
+	static UVRegExp patt_re("^- Der Kampf wurde beendet, als die beteiligten Schiffe erkannten, dass sie sich aufgrund zu schwacher Waffen gegenseitig nicht besch.digen konnten\\.$");
+
+	while(dash_re.match(cur))
+	{
+		if(noint_re.match(cur))
+		{
+			debug("nachricht-kampf-noint", &noint_re);
+			// ***
+		}
+		else if(int_re.match(cur))
+		{
+			if(int_defense1_re.match(cur))
+			{
+				debug("nachricht-kampf-int_defense1", &int_defense1_re);
+				// ***
+				shiftline(&int_defense1_re);
+			}
+			else if(int_defense2_re.match(cur))
+			{
+				debug("nachricht-kampf-int_defense2", &int_defense2_re);
+				// ***
+				shiftline(&int_defense2_re);
+			}
+			else if(int_defense3_re.match(cur))
+			{
+				debug("nachricht-kampf-int_defense3", &int_defense3_re);
+				// ***
+				shiftline(&int_defense3_re);
+			}
+			else
+			{
+				throw EXCEPTION("Fehler in Kampfreport!");
+			}
+
+			if(int_offense1_re.match(cur))
+			{
+				debug("nachricht-kampf-int_offense1", &int_offense1_re);
+				// ***
+				shiftline(&int_offense1_re);
+			}
+			else if(int_offense2_re.match(cur))
+			{
+				debug("nachricht-kampf-int_offense2", &int_offense2_re);
+				// ***
+				shiftline(&int_offense2_re);
+			}
+			else
+			{
+				throw EXCEPTION("Fehler in Kampfreport!");
+			}
+
+			if(int_flucht1_re.match(cur))
+			{
+				debug("nachricht-kampf-int_flucht1", &int_flucht1_re);
+				// ***
+			}
+			else if(int_flucht2_re.match(cur))
+			{
+				debug("nachricht-kampf-int_flucht2", &int_flucht2_re);
+				// ***
+			}
+			else
+			{
+				throw EXCEPTION("Fehler in Kampfreport!");
+			}
+		}
+		else if(det_re.match(cur))
+		{
+			debug("nachricht-kampf-det", &det_re);
+			// ***
+		}
+		else if(zer_re.match(cur))
+		{
+			debug("nachricht-kampf-zer", &zer_re);
+			// ***
+		}
+		else if(sdet_re.match(cur))
+		{
+			debug("nachricht-kampf-sdet", &sdet_re);
+			// ***
+		}
+		else if(energie_re.match(cur))
+		{
+			debug("nachricht-kampf-energie", &energie_re);
+			// ***
+		}
+		else if(schild_re.match(cur))
+		{
+			debug("nachricht-kampf-schild", &schild_re);
+			// ***
+		}
+		else if(lagerfeuer_re.match(cur))
+		{
+			debug("nachricht-kampf-lagerfeuer", &lagerfeuer_re);
+			// ***
+		}
+		else if(lager_re.match(cur))
+		{
+			debug("nachricht-kampf-lager", &lager_re);
+			// ***
+		}
+		else if(sensor_re.match(cur))
+		{
+			debug("nachricht-kampf-sensor", &sensor_re);
+			// ***
+		}
+		else if(komm_re.match(cur))
+		{
+			debug("nachricht-kampf-komm", &komm_re);
+			// ***
+		}
+		else if(treibstoff_re.match(cur))
+		{
+			debug("nachricht-kampf-treibstoff", &treibstoff_re);
+			// ***
+		}
+		else if(triebwerk_re.match(cur))
+		{
+			debug("nachricht-kampf-triebwerk", &triebwerk_re);
+			// ***
+		}
+		else if(flucht_re.match(cur))
+		{
+			debug("nachricht-kampf-flucht", &flucht_re);
+			// ***
+		}
+		else if(enter_re.match(cur))
+		{
+			debug("nachricht-kampf-enter", &enter_re);
+			// ***
+		}
+		else if(explosion_re.match(cur))
+		{
+			debug("nachricht-kampf-explosion", &explosion_re);
+			// ***
+		}
+		else if(kopfgeld_re.match(cur))
+		{
+			debug("nachricht-kampf-kopfgeld", &kopfgeld_re);
+			// ***
+		}
+		else if(patt_re.match(cur))
+		{
+			debug("nachricht-kampf-patt", &patt_re);
+			// ***
+			getline();
+			break;
+		}
+		else
+		{
+			break;
+		}
 		getline();
 	}
 }
@@ -1407,11 +2878,11 @@ UVZone* UVParserTXT::parse_zone(UVPlanet* p)
 	}
 	getline();
 
-	if(abs(z->N - z->get_N()) > 0.11)
+	if(abs((long int)(z->N - z->get_N())) > 0.11)
 	{
 		cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (N:" << z->N << "!=" << z->get_N() << ")" << endl;
 	}
-	if(abs(z->T - z->get_T()) > 0.11)
+	if(abs((long int)(z->T - z->get_T())) > 0.11)
 	{
 		cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (T:" << z->T << "!=" << z->get_T() << ")" << endl;
 	}
@@ -2004,7 +3475,8 @@ void UVParserTXT::parse_debug(const string& s, UVRegExp* re) const
  */
 string UVParserTXT::get_exception(const string& text, const string& src_file, const int src_line, const string& src_func) const
 {
-	return str_stream() << text << " in " << src_func << "() at " << src_file << ":" << src_line << " while processing:\n"
-	                    << line << ":" << cur;
+	return text + " in " + src_func + "() at " + src_file + ":"
+	            + to_string(src_line) + " while processing:\n"
+	            + to_string(line) + ":" + to_string(cur);
 }
 

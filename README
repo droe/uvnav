@@ -21,14 +21,16 @@ $Id$
 Allgemeines
 -----------
 
-UV Navigator ist ein weiteres Tool für Universum V.  ToVU passte
-mir aus technischen Gründen nicht so wirklich, und AMAP / PoN
-laufen nur unter Windows und sind nicht Open Source, womit die
-Moeglichkeit für Bugfixes und Erweiterungen nicht gegeben ist.
-Ergo musste was richtiges her, und das hier ist das vorlaeufige
-Resultat.  Ich habe UVNav primaer für mich selber entwickelt, und
-momentan gibt UVNav wohl auch noch nicht genug Features her, um
-AMAP, PoN und ToVU zu konkurrenzieren.  Trotzdem ist UVNav
+UV Navigator ist ein weiteres Tool fuer Universum V.  ToVU passte
+mir aus technischen Gruenden nicht so wirklich (browserbasiert,
+Java), und AMAP / PoN laufen nur unter Windows und sind nicht
+Open Source, womit die Moeglichkeit für Bugfixes und Erweiterungen
+nicht gegeben ist.
+
+Ergo musste was ``richtiges'' her, und das hier ist das Resultat.
+Ich habe UVNav primaer für mich selber entwickelt, und momentan
+gibt UVNav sicher auch noch nicht genug Features her, um AMAP,
+PoN und ToVU ernsthaft zu konkurrenzieren.  Trotzdem ist UVNav
 oeffentlich.  Ihr seid eingeladen, auch selber an UVNav
 Verbesserungen anzubringen, und mir die in Form von Unified
 Diffs (diff -ruN) zu schicken.
@@ -199,7 +201,7 @@ Kompilieren und Installieren ab Subversion Repository
 -----------------------------------------------------
 
 Um UVNav direkt ab Repository zu kompilieren, wird ein Subversion
-Client sowie zusaetzlich GNU Autoconf 2.59 und Automake 1.8 benoetigt
+Client sowie zusaetzlich GNU Autoconf 2.59 und Automake 1.9 benoetigt
 (2.57 und 1.7 sollten auch funktionieren, alles was aelter ist aber
 nicht).
 

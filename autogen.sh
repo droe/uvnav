@@ -46,7 +46,7 @@
 # config.log, config.status, stamp-h1
 #
 
-am="1.8"
+am="1.9"
 ac="2.59"
 
 am_suffix=`echo "$am" | sed 's/[^0-9]//g'`

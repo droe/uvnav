@@ -1,9 +1,21 @@
 $Id$
 
+- PRI 1: OO-Architecture Redesign
+
+- ccache ausprobieren (symlink oder ccache g++)
+- Nachrichten parsen (für Karte relevante)
+  - Tokenizing fertig bis auf letzte Bugs (H220)
+  - Parsing relevanter Daten als nächstes
+    - Zonendaten
+    - Income-Stats (?)
+- Maushandling: Zoom, Zentrieren, Scrollen, Koordinaten anzeigen.
+
 Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 ------------------------------------------------------------------------------
+
+== UNSORTED ==
 
 == HOHE PRIORITAET ==
 
@@ -97,6 +109,13 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 - UVGUIWidgets
   - ...
 
+- detailansicht menuliste (depends on UVGUIWidgets)
+  - auswahlrechteck startet detailansicht mit selektierten objects
+  - schiffe etc immer mit (mini) signatur und richtungsvektor
+  - planeten mit symbol
+  - sortieren nach ...
+  - auswahl eines objekts, gleiche aktionen wie im kartenfenster
+
 - UVWelt
   - Spieler ausbauen. Für jeden Spieler möglichst viele Informationen
     speichern, inklusive Statistik à la wieviele Objekte welchen Typs
@@ -106,6 +125,9 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 
 
 == TIEFE PRIORITAET ==
+
+- HUD-Switcher
+  - nix / nur titel oben / plus distanzmesser / plus x/y / plus debug
 
 - Unterstützung für komprimierte Auswertungen
   - ZIP à la Meng in allen Variationen (mühsam)

@@ -78,6 +78,7 @@ class UVParserTXT
 		void parse_sensorenreport();
 		void parse_fremde_lager();
 		void parse_nachrichten();
+		void parse_kampfreport();
 
 		void parse_schiff(UVPlanet* p = NULL);
 		void parse_planet();

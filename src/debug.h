@@ -35,6 +35,7 @@
 
 // *** DEBUG_PRINT
 
-#define EXCEPTION(x) string(str_stream() << x << " in " << __FUNCTION__ << "() at " << __FILE__ << ":" << __LINE__)
+//#define EXCEPTION(x) string(str_stream() << x << " in " << __FUNCTION__ << "() at " << __FILE__ << ":" << __LINE__)
+#define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
 
 #endif // DEBUG_H

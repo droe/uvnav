@@ -662,10 +662,10 @@ void UVMap::draw(SDL_Rect* rect)
 
 	// Status-Overlay
 	SDL_Surface* status = debug_font->get_surface(
-		str_stream() << dim << " - " << welt->get_dim(dim) << ", "
-		             << spieler->name
-		             << ((spieler->talent != "") ? " der " + spieler->talent : "")
-		             << ", Sternzeit " << welt->sternzeit, LABEL_RGB);
+		             to_string(dim) + " - " + welt->get_dim(dim) + ", "
+		             + spieler->name
+		             + ((spieler->talent != "") ? " der " + spieler->talent : "")
+		             + ", Sternzeit " + to_string(welt->sternzeit), LABEL_RGB);
 	dst.x = screen->w - status->w - status->h * 2;
 	dst.y = status->h;
 	drw->box(screen, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
@@ -674,12 +674,12 @@ void UVMap::draw(SDL_Rect* rect)
 	// Debug-Overlay
 	long dticks = SDL_GetTicks() - ticks;
 	SDL_Surface* debug = debug_font->get_surface(
-		str_stream() << "debug  /  zoom=" << zoom
-		             << " offset_x=" << offset_x
-		             << " offset_y=" << offset_y
-		             << "  /  " << dticks << " ms = "
-		             << 1000 / dticks << " fps  /  uvnav-" << PACKAGE_VERSION
-		             << " (" << revision << ")"
+		             + "debug  /  zoom=" + to_string(zoom)
+		             + " offset_x=" + to_string(offset_x)
+		             + " offset_y=" + to_string(offset_y)
+		             + "  /  " + to_string(dticks) + " ms = "
+		             + to_string(1000 / dticks) + " fps  /  uvnav-"
+	                 + PACKAGE_VERSION + " (" + to_string(revision) + ")"
 		, LABEL_RGB);
 	dst.x = screen->w - debug->w - debug->h * 2;
 	dst.y = screen->h - debug->h * 2;
@@ -751,7 +751,7 @@ void UVMap::draw_grid()
 		drw->line(screen, p_x, 0, p_x, screen->h - 1, 0x22, 0x22, 0x22);
 
 		// Beschriftung
-		SDL_Surface* abszisse = grid_font->get_surface(str_stream() << x, 0x44, 0x44, 0x44);
+		SDL_Surface* abszisse = grid_font->get_surface(to_string(x), 0x44, 0x44, 0x44);
 		dst.x = p_x + 2; dst.y = 0;
 		SDL_BlitSurface(abszisse, 0, screen, &dst);
 		dst.x = p_x + 2; dst.y = screen->h - 1 - abszisse->h;
@@ -770,7 +770,7 @@ void UVMap::draw_grid()
 		drw->line(screen, 0, p_y, screen->w - 1, p_y, 0x22, 0x22, 0x22);
 
 		// Beschriftung
-		SDL_Surface* ordinate = grid_font->get_surface(str_stream() << y, 0x44, 0x44, 0x44);
+		SDL_Surface* ordinate = grid_font->get_surface(to_string(y), 0x44, 0x44, 0x44);
 		dst.x = 0; dst.y = p_y + 2;
 		SDL_BlitSurface(ordinate, 0, screen, &dst);
 		dst.x = screen->w - 1 - ordinate->w; dst.y = p_y + 2;
@@ -781,8 +781,8 @@ void UVMap::draw_grid()
 	}
 
 	// Massstabsbalken mit Laengenangabe d und Massstab 1:zoom
-	SDL_Surface* distanz = grid_font->get_surface(str_stream() << d << " KE", 0x88, 0x88, 0x88);
-	SDL_Surface* massstab = grid_font->get_surface(str_stream() << "1:" << long(rint(zoom)), 0x88, 0x88, 0x88);
+	SDL_Surface* distanz = grid_font->get_surface(to_string(d) + " KE", 0x88, 0x88, 0x88);
+	SDL_Surface* massstab = grid_font->get_surface("1:" + to_string(long(rint(zoom))), 0x88, 0x88, 0x88);
 	long m_y = long(rint(double(last_y - offset_y) / zoom));
 	long m_x1 = long(rint(double(first_x - offset_x) / zoom));
 	long m_x2 = long(rint(double(first_x + d - offset_x) / zoom));
@@ -817,12 +817,12 @@ void UVMap::draw_grid()
 		drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
 		drw->line(screen, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
 		drw->line(screen, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
-		SDL_Surface* x_label = grid_font->get_surface(str_stream() << "X", 0x88, 0x88, 0x88);
+		SDL_Surface* x_label = grid_font->get_surface("X", 0x88, 0x88, 0x88);
 		dst.x = s_x2 + tick;
 		dst.y = s_y1 - x_label->h / 2;
 		SDL_BlitSurface(x_label, 0, screen, &dst);
 		SDL_FreeSurface(x_label);
-		SDL_Surface* y_label = grid_font->get_surface(str_stream() << "Y", 0x88, 0x88, 0x88);
+		SDL_Surface* y_label = grid_font->get_surface("Y", 0x88, 0x88, 0x88);
 		dst.x = s_x1 - y_label->w / 2;
 		dst.y = s_y2;
 		SDL_BlitSurface(y_label, 0, screen, &dst);
@@ -931,15 +931,15 @@ void UVMap::draw_planet(UVPlanet* planet)
 			string label_text = "";
 			if(zoom < 10.0)
 			{
-				label_text = str_stream() << planet->nummer << " " << planet->name;
+				label_text = to_string(planet->nummer) + " " + planet->name;
 			}
 			else if(zoom < 20.0)
 			{
-				label_text = str_stream() << planet->nummer << " " << planet->name.substr(0,3);
+				label_text = to_string(planet->nummer) + " " + planet->name.substr(0,3);
 			}
 			else
 			{
-				label_text = str_stream() << planet->nummer;
+				label_text = to_string(planet->nummer);
 			}
 			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
 			dst.x = long(rint(center_x + h / 2)) + 4;
@@ -1013,11 +1013,11 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			string label_text = "";
 			if(zoom < 20.0)
 			{
-				label_text = str_stream() << schiff->name << " (" << schiff->besitzer << ")";
+				label_text = schiff->name + " (" + schiff->besitzer + ")";
 			}
 			else
 			{
-				label_text = str_stream() << schiff->name;
+				label_text = schiff->name;
 			}
 			SDL_Rect dst = { 0, 0, 0, 0};
 			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);

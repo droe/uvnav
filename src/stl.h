@@ -112,6 +112,7 @@ using namespace std;
  *
  * string blah = str_stream() << "n=" << 123;
  */
+/*
 struct str_stream
 {
 	std::stringstream& get_stream() const
@@ -132,6 +133,14 @@ const str_stream& operator<< (const str_stream& out, const type& value)
     out.get_stream() << value;
     return out;
 }
+*/
 
+template<class type>
+inline std::string to_string(const type & value)
+{
+    std::ostringstream streamOut;
+    streamOut << value;
+    return streamOut.str();
+}
 
 #endif // STL_H

@@ -50,13 +50,13 @@ UVRegExp::UVRegExp(const string& pattern)
 	re = pcre_compile(pattern.c_str(), 0, &err, &err_off, NULL);
 	if(re == NULL)
 	{
-		throw EXCEPTION("PCRE: " << err << " at offset " << err_off);
+		throw EXCEPTION("PCRE: " + to_string(err) + " at offset " + to_string(err_off));
 	}
 
 	int rc = pcre_fullinfo(re, NULL, PCRE_INFO_CAPTURECOUNT, &sub_count);
 	if(rc < 0)
 	{
-		throw EXCEPTION("PCRE: pcre_fullinfo returned " << rc);
+		throw EXCEPTION("PCRE: pcre_fullinfo returned " + to_string(rc));
 	}
 	sub_vector = new int[3 * (sub_count + 1)];
 }
@@ -111,7 +111,7 @@ inline const char* UVRegExp::sub_c_str(int index)
 	}
 	if(sub_list[index] == NULL)
 	{
-		throw EXCEPTION("Substring nicht vorhanden: " << index);
+		throw EXCEPTION("Substring nicht vorhanden: " + to_string(index));
 	}
 	return sub_list[index];
 }

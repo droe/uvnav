@@ -122,7 +122,7 @@ void UVProgress::update(unsigned long current)
 	inner.y = rect.y + 2;	inner.h = rect.h - 4;
 	SDL_FillRect(screen, &inner, SDL_MapRGB(screen->format, 0, 0, 0xFF));
 
-	SDL_Surface* percent = font->get_surface(str_stream() << long(progress * 100) << "% (" << long(double(current) / (double(SDL_GetTicks() - ticks + 1) / 1000.0) / 1024.0) << " kb/s)");
+	SDL_Surface* percent = font->get_surface(to_string(long(progress * 100)) + "% (" + to_string(long(double(current) / (double(SDL_GetTicks() - ticks + 1) / 1000.0) / 1024.0)) + " kb/s)");
 	inner.x = rect.x + 2 + rect.w / 2 - percent->w / 2;	inner.w = percent->w;
 	inner.y = rect.y + 2 + rect.h / 2 - percent->h / 2;	inner.h = percent->h;
 	SDL_BlitSurface(percent, 0, screen, &inner);

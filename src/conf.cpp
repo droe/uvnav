@@ -293,7 +293,7 @@ string UVConf::s_get(const string& key, bool aw) const
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		if(s_conf.count(k) == 0)
 		{
 			s_conf[k] = s_conf[key];
@@ -313,7 +313,7 @@ void UVConf::s_set(const string& key, string value, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		s_conf[k] = value;
 	}
 	s_conf[key] = value;
@@ -326,7 +326,7 @@ void UVConf::s_del(const string& key, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		s_conf.erase(k);
 	}
 	s_conf.erase(key);
@@ -351,7 +351,7 @@ long UVConf::l_get(const string& key, bool aw) const
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		if(l_conf.count(k) == 0)
 		{
 			l_conf[k] = l_conf[key];
@@ -371,7 +371,7 @@ void UVConf::l_set(const string& key, long value, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		l_conf[k] = value;
 	}
 	l_conf[key] = value;
@@ -384,7 +384,7 @@ void UVConf::l_del(const string& key, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		l_conf.erase(k);
 	}
 	l_conf.erase(key);
@@ -409,7 +409,7 @@ double UVConf::f_get(const string& key, bool aw) const
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		if(f_conf.count(k) == 0)
 		{
 			f_conf[k] = f_conf[key];
@@ -429,7 +429,7 @@ void UVConf::f_set(const string& key, double value, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		f_conf[k] = value;
 	}
 	f_conf[key] = value;
@@ -442,7 +442,7 @@ void UVConf::f_del(const string& key, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		f_conf.erase(k);
 	}
 	f_conf.erase(key);
@@ -467,7 +467,7 @@ bool UVConf::b_get(const string& key, bool aw) const
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		if(b_conf.count(k) == 0)
 		{
 			b_conf[k] = b_conf[key];
@@ -487,7 +487,7 @@ void UVConf::b_set(const string& key, bool value, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		b_conf[k] = value;
 	}
 	b_conf[key] = value;
@@ -500,7 +500,7 @@ void UVConf::b_del(const string& key, bool aw)
 		{
 			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 		}
-		string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 		b_conf.erase(k);
 	}
 	b_conf.erase(key);
@@ -522,7 +522,7 @@ bool UVConf::have_data() const
 	{
 		throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
 	}
-	string k = str_stream() << aw_besitzer << "@" << aw_sternzeit << ":" << key;
+	string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
 	if(f_conf.count(k) == 0)
 	{
 		return false;
