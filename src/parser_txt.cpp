@@ -1199,7 +1199,7 @@ void UVParserTXT::parse_oldschool_planet()
 		planet_re.subtol(5),
 		1);
 	welt->set_dim(p->dim, welt->galaxie);
-	if(planet_re.subs() > 6)
+	if(planet_re.subs() > 5)
 	{
 		string links_str = planet_re.sub(6);
 		static UVRegExp links_re("^,?([0-9]+)");
