@@ -95,7 +95,15 @@ unsigned long sysdep_filesize(const string& file)
 		throw EXCEPTION("Kann Dateigroesse nicht bestimmen!");
 	}
 #elif defined(SYSDEP_W32)
-	#error Hier fehlt noch Code fuer Windows...
+	struct _stat res;
+	if(!_stat(file.c_str(), &res))
+	{
+		return res.st_size;
+	}
+	else
+	{
+		throw EXCEPTION("Kann Dateigroesse nicht bestimmen!");
+	}
 #endif
 }
 
@@ -108,7 +116,13 @@ bool sysdep_file_exists(const string& file)
 #if defined(SYSDEP_UNIX)
 	return !eaccess(file.c_str(), F_OK);
 #elif defined(SYSDEP_W32)
-	#error Hier fehlt noch Code fuer Windows...
+	FILE *fp = fopen(path, "r");
+	if(!fp)
+	{
+		return false;
+	}
+	fclose(fp);
+	return true;
 #endif
 }
 
@@ -156,7 +170,7 @@ void sysdep_screensize(SDL_Rect* rect)
  */
 string sysdep_homedir()
 {
-#if defined(__unix__)
+#if defined(SYSDEP_UNIX)
 	string home = getenv("HOME");
 	if(home == "")
 	{
@@ -191,7 +205,7 @@ string sysdep_confdir()
  */
 string sysdep_datadir()
 {
-#if defined(__unix__)
+#if defined(SYSDEP_UNIX)
 	string d = sysdep_homedir() \
 	         + "share" + PATH_SEP \
 	         + PACKAGE_TARNAME + PATH_SEP;
