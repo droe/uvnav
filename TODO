@@ -2,8 +2,6 @@ $Id$
 
 - PRI 1: OO-Architecture Redesign
   - si/font.* -> Singleton<UVFont> mit HashMap of Font Objs
-  - SDL: wech mit hardware surfaces
-  - OS/SysDep: lib oder si? static oder Singleton?
   - lib/observer.* benutzen, um ui von pd und dm zu separieren
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
     - model interface (virtual class)

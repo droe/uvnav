@@ -136,14 +136,7 @@ void UVProgress::update(Subject* s)
 	inner.y = rect.y + 2 + rect.h / 2 - percent->h / 2;	inner.h = percent->h;
 	SDL_BlitSurface(percent, 0, screen, &inner);
 
-	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
-	{
-		SDL_Flip(screen);
-	}
-	else
-	{
-		SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
-	}
+	SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
 
 	if(SDL_MUSTLOCK(screen))
 	{

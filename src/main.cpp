@@ -54,10 +54,6 @@ void usage()
 		 << "        -R --no-resizable     Fenstergroesse nicht aenderbar" << endl
 		 << "        -f --fullscreen       Vollbildschirmmodus              (impliziert -R)" << endl
 		 << "        -F --no-fullscreen    Kein Vollbildschirmmodus" << endl
-//		 << "        -d --double-buf       Double Buffering verwenden       (impliziert -S)" << endl
-//		 << "        -D --no-double-buf    Kein double Buffering verwenden" << endl
-//		 << "        -s --software         Software-Videomodus erzwingen    (impliziert -D)" << endl
-//		 << "        -S --no-software      Hardware-Videomodus verwenden" << endl
 		 << "        -q --quality          Anti-Aliasing und Smoothing (schoener)" << endl
 		 << "        -Q --no-quality       Kein Anti-Aliasing/Smoothing (schneller)" << endl
 		 << "Nicht persistente Optionen:" << endl
@@ -88,10 +84,6 @@ int main(int argc, char* argv[])
 		{ "no-resizable",	no_argument,		0,	'R' },
 		{ "fullscreen",		no_argument,		0,	'f' },
 		{ "no-fullscreen",	no_argument,		0,	'F' },
-		{ "double-buf",		no_argument,		0,	'd' },
-		{ "no-double-buf",	no_argument,		0,	'D' },
-		{ "software",		no_argument,		0,	's' },
-		{ "no-software",	no_argument,		0,	'S' },
 		{ "quality",		no_argument,		0,	'q' },
 		{ "no-quality",		no_argument,		0,	'Q' },
 		{ "verbose",		no_argument,		0,	'v' },
@@ -113,15 +105,11 @@ int main(int argc, char* argv[])
 		bool R = false;
 		bool f = false;
 		bool F = false;
-		bool d = false;
-		bool D = false;
-		bool s = false;
-		bool S = false;
 		bool q = false;
 		bool Q = false;
 		int v = 0;
 
-		while((ch = getopt_long(argc, argv, "w:h:rRfFdDsSqQvVH", longopts, NULL)) != -1)
+		while((ch = getopt_long(argc, argv, "w:h:rRfFqQvVH", longopts, NULL)) != -1)
 		{
 			switch(ch)
 			{
@@ -144,20 +132,6 @@ int main(int argc, char* argv[])
 					break;
 				case 'R':
 					R = true;
-					break;
-				case 'd':
-					d = true;
-					S = true;
-					break;
-				case 'D':
-					D = true;
-					break;
-				case 's':
-					s = true;
-					D = true;
-					break;
-				case 'S':
-					S = true;
 					break;
 				case 'q':
 					q = true;
@@ -192,7 +166,7 @@ int main(int argc, char* argv[])
 		}
 
 		// widerspruechliche Argumente
-		if((r && R) || (f && F) || (d && D) || (s && S) || (q && Q))
+		if((r && R) || (f && F) || (q && Q))
 		{
 			cerr << " *** Fehler: Widerspruechliche Argumente!" << endl;
 			usage();
@@ -203,11 +177,6 @@ int main(int argc, char* argv[])
 		{
 			cerr << " *** Fehler: Auswertungsdatei existiert nicht!" << endl;
 			exit(EX_NOINPUT);
-		}
-
-		if(S)
-		{
-			cerr << " *** Warnung: Hardware-Modus ist noch nicht benutzbar!" << endl;
 		}
 
 		UVConf *conf = UVConf::get_instance();
@@ -235,22 +204,6 @@ int main(int argc, char* argv[])
 		if(F)
 		{
 			conf->b_set("screen-fullscreen", false);
-		}
-		if(d)
-		{
-			conf->b_set("screen-double-buf", true);
-		}
-		if(D)
-		{
-			conf->b_set("screen-double-buf", false);
-		}
-		if(s)
-		{
-			conf->b_set("screen-software", true);
-		}
-		if(S)
-		{
-			conf->b_set("screen-software", false);
 		}
 		if(q)
 		{
@@ -331,7 +284,7 @@ void version()
 	cout << COPYRIGHT << endl;
 	cout << "https://projects.roe.ch/trac/uvnav/" << endl;
 #ifdef DEBUG
-	cout << "Achtung: DEBUG-Code aktiviert!" << endl;
+	cout << "Build-Flags: DEBUG" << endl;
 #endif // DEBUG
 	cout << endl;
 

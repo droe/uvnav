@@ -57,15 +57,13 @@ UVConf::UVConf()
 : aw_besitzer(""), aw_sternzeit(0)
 {
 	// Version von UVNav, mit welcher die Konfiguration generiert wurde
-	s_set("version", PACKAGE_VERSION);
+	s_set("version", to_string(PACKAGE_VERSION) + " (" + to_string(revision) + ")");
 
 	// Bildschirm- & Grafikoptionen
 	l_set("screen-width", 1024);
 	l_set("screen-height", 768);
 	b_set("screen-fullscreen", false);
 	b_set("screen-resizable", true);
-	b_set("screen-double-buf", false);
-	b_set("screen-software", true);
 	b_set("screen-quality", true);
 
 	// Optionen der Kartenanzeige
@@ -140,6 +138,9 @@ void UVConf::convert()
 	{
 		case 0:
 			l_del("autoconfig");
+		case 1:
+			b_del("screen-double-buf");
+			b_del("screen-software");
 		case CONF_VERSION:
 		default:
 			break;
@@ -227,13 +228,6 @@ void UVConf::save() const
 {
 	sysdep_mkdir(sysdep_confdir(), 0750);
 
-	// Version in .uvnav/version
-	ofstream stream_ver;
-	stream_ver.open((sysdep_confdir() + "version").c_str());
-	stream_ver << CONF_VERSION << endl;
-	stream_ver.clear();
-	stream_ver.close();
-
 	// Konfiguration nach .uvnav/config
 	ofstream stream;
 	stream.open((sysdep_confdir() + "config").c_str());
@@ -271,6 +265,13 @@ void UVConf::save() const
 
 	stream.clear();
 	stream.close();
+
+	// Version in .uvnav/version
+	ofstream stream_ver;
+	stream_ver.open((sysdep_confdir() + "version").c_str());
+	stream_ver << CONF_VERSION << endl;
+	stream_ver.clear();
+	stream_ver.close();
 }
 
 

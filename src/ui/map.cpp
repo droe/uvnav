@@ -213,7 +213,6 @@ UVMap::~UVMap()
 	conf->b_set("map-sichtradien", opt_sichtradien, true);
 	conf->b_set("map-kaufradien", opt_kaufradien, true);
 
-	delete drw;
 	delete debug_font;
 	delete grid_font;
 	delete label_font;
@@ -697,14 +696,7 @@ void UVMap::draw(SDL_Rect* rect)
 	drw->box(screen, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
 	SDL_BlitSurface(debug, 0, screen, &dst);
 
-	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
-	{
-		SDL_Flip(screen);
-	}
-	else
-	{
-		SDL_UpdateRect(screen, phys->x, phys->y, phys->w, phys->h);
-	}
+	SDL_UpdateRect(screen, phys->x, phys->y, phys->w, phys->h);
 
 	if(SDL_MUSTLOCK(screen))
 	{

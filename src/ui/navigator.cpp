@@ -52,6 +52,8 @@
 UVNavigator::UVNavigator()
 : welt(NULL), map(NULL)
 {
+	conf = UVConf::get_instance();
+
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
@@ -64,7 +66,6 @@ UVNavigator::UVNavigator()
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
-	conf = UVConf::get_instance();
 	font_splash = new UVFont(FNT_SANS, screen->h / 32);
 
 	if(conf->b_get("screen-quality"))
@@ -99,7 +100,7 @@ UVNavigator::~UVNavigator()
  */
 void UVNavigator::init_video()
 {
-	int flags = 0;
+	int flags = SDL_SWSURFACE;
 
 	cout << "Angeforderte Bildschirmoptionen:";
 	SDL_Rect r = { 0, 0, 0, 0 };
@@ -119,21 +120,6 @@ void UVNavigator::init_video()
 	{
 		cout << " Resizable";
 		flags |= SDL_RESIZABLE;
-	}
-	if(conf->b_get("screen-double-buf"))
-	{
-		cout << " DoubleBuf";
-		flags |= SDL_DOUBLEBUF;
-	}
-	if(conf->b_get("screen-software"))
-	{
-		cout << " SWSurface";
-		flags |= SDL_SWSURFACE;
-	}
-	else
-	{
-		cout << " HWSurface";
-		flags |= SDL_HWSURFACE;
 	}
 	cout << "." << endl;
 
@@ -155,18 +141,6 @@ void UVNavigator::init_video()
 	if((screen->flags & SDL_RESIZABLE) == SDL_RESIZABLE)
 	{
 		cout << " Resizable";
-	}
-	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
-	{
-		cout << " DoubleBuf";
-	}
-	if((screen->flags & SDL_HWSURFACE) == SDL_HWSURFACE)
-	{
-		cout << " HWSurface";
-	}
-	else
-	{
-		cout << " SWSurface";
 	}
 	cout << "." << endl;
 	cout << "------------------------------------------------------------------------------" << endl;
@@ -227,16 +201,9 @@ void UVNavigator::splash()
 	SDL_FreeSurface(line1);
 	SDL_FreeSurface(line2);
 
-	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
-	{
-		SDL_Flip(screen);
-	}
-	else
-	{
-		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		//SDL_UpdateRects(screen, nupdates, updates);
-		// with SDL_Rect* updates
-	}
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	//SDL_UpdateRects(screen, nupdates, updates);
+	// with SDL_Rect* updates
 
 	if(SDL_MUSTLOCK(screen))
 	{
@@ -266,16 +233,9 @@ void UVNavigator::splash_status(const string& text)
 	bounds.x = screen->w / 2 - surface->w / 2;
 	SDL_BlitSurface(surface, 0, screen, &bounds);
 
-	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
-	{
-		SDL_Flip(screen);
-	}
-	else
-	{
-		SDL_UpdateRect(screen, 0, 0, 0, 0);
-		//SDL_UpdateRects(screen, nupdates, updates);
-		// with SDL_Rect* updates
-	}
+	SDL_UpdateRect(screen, 0, 0, 0, 0);
+	//SDL_UpdateRects(screen, nupdates, updates);
+	// with SDL_Rect* updates
 
 	if(SDL_MUSTLOCK(screen))
 	{
