@@ -1,0 +1,123 @@
+/*
+ * UV Navigator - Auswertungsvisualisierung fuer Universum V
+ * Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see http://www.gnu.org/copyleft/
+ *
+ * $Id$
+ */
+
+#include "progress.h"
+
+/*
+ * UVProgress - Implementiert einen lightweight Progress-Bar.
+ *
+ * Zeichnet einen Progress Bar mit Prozentanzeige in ein SDL_Rect
+ * auf einer SDL_Surface.
+ */
+
+
+/*
+ * Konstruktor.
+ */
+UVProgress::UVProgress(const UVConf* conf, SDL_Surface* s, SDL_Rect* r)
+: screen(s), rect(*r)
+{
+	font = new UVFont(conf, FNT_SANS, screen->h / 32);
+}
+
+
+/*
+ * Destruktor.
+ */
+UVProgress::~UVProgress()
+{
+	update(total);
+	delete font;
+}
+
+
+/*
+ * Progress-Bar initialisieren.
+ */
+void UVProgress::init(unsigned long newtot)
+{
+	total = newtot;
+	update(0);
+//*** DEBUG
+//	cerr << "progress init total=" << total << endl;
+}
+
+
+/*
+ * Fortschritt quantifizieren und neu zeichnen.
+ *
+ * +---------------------------------------------------------+
+ * ¦ (rect.x/rect.y                                          ¦
+ * ¦ +----------------------------------------+ - - - - - -+ ¦
+ * ¦ ¦ (rect.x+2/rect.y+2)                    ¦              ¦
+ * ¦ ¦                                        ¦            ¦ ¦
+ * ¦ ¦                     +--------+         ¦              ¦
+ * ¦ ¦                     ¦        ¦         ¦  ---->     ¦ ¦
+ * ¦ ¦                     ¦        ¦         ¦              ¦
+ * ¦ ¦                     +--------+         ¦            ¦ ¦
+ * ¦ ¦                                        ¦              ¦
+ * ¦ ¦                                        ¦            ¦ ¦
+ * ¦ +----------------------------------------+ - - - - - -+ ¦
+ * ¦                            rect.x+rect.w/rect.y+rect.h) ¦
+ * +---------------------------------------------------------+
+ */
+void UVProgress::update(unsigned long current)
+{
+	double progress = 1.0 * current / total;
+
+//*** DEBUG
+//	cerr << "progress update current=" << current << " total=" << total << " progress=" << progress << endl;
+
+	if(SDL_MUSTLOCK(screen))
+	{
+		if(SDL_LockSurface(screen) < 0)
+		{
+			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
+		}
+	}
+
+	SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
+
+	SDL_Rect inner;
+	inner.x = rect.x + 2;	inner.w = long(rint(progress * (rect.w - 4)));
+	inner.y = rect.y + 2;	inner.h = rect.h - 4;
+	SDL_FillRect(screen, &inner, SDL_MapRGB(screen->format, 0, 0, 0xFF));
+
+	SDL_Surface* percent = font->get_surface(str_stream() << (current * 100 / total) << "%");
+	inner.x = rect.x + 2 + rect.w / 2 - percent->w / 2;	inner.w = percent->w;
+	inner.y = rect.y + 2 + rect.h / 2 - percent->h / 2;	inner.h = percent->h;
+	SDL_BlitSurface(percent, 0, screen, &inner);
+
+	if((screen->flags & SDL_DOUBLEBUF) == SDL_DOUBLEBUF)
+	{
+		SDL_Flip(screen);
+	}
+	else
+	{
+		SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
+	}
+
+	if(SDL_MUSTLOCK(screen))
+	{
+		SDL_UnlockSurface(screen);
+	}
+}
+
+

@@ -1,0 +1,8 @@
+$Id$
+
+Daniel Straessle <d@niel.ch>
+ - Autor von ToVU -- UVNav's UVParserTXT::get_image_planet()
+   basiert auf seinem Planet::setKlima() v 1.9 von ToVU.
+
+Daniel Roethlisberger <roe@chronator.ch>
+ - Alles andere :)

@@ -1,0 +1,193 @@
+UV Navigator - Auswertungsvisualisierung fuer Universum V
+Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, see http://www.gnu.org/copyleft/
+
+$Id$
+
+
+
+Allgemeines
+-----------
+
+UV Navigator ist ein weiteres Tool für Universum V. ToVU passte
+mir aus technischen Gründen nicht so wirklich, und AMAP / PoN
+laufen nur unter Windows und sind nicht Open Source. Ergo musste
+was richtiges her, und das hier ist das vorläufige Resultat. Ich
+habe UVNav primär für mich selber entwickelt, und momentan gibt
+UVNav wohl auch noch nicht genug Features her, um AMAP, PoN und
+ToVU zu konkurrenzieren. Trotzdem ist UVNav öffentlich. Ihr seid
+eingeladen, auch selber an UVNav Verbesserungen anzubringen, und
+mir die in Form von Unified Diffs (diff -ruN) zu schicken.
+
+
+
+Stand der Entwicklung
+---------------------
+
+UV Navigator befindet sich in der Frühphase der Entwicklung.
+
+Der Parser ist mittlerwile stabil und kann die allermeisten
+Auswertungen korrekt einlesen. Was vor allem noch fehlt ist
+das Parsen der Nachrichten, speziell Resultate von Zonendaten-
+Abfragen. Imperatoren-Spielzeug wird zwar korrekt verarbeitet,
+aber noch grösstenteils ignoriert.
+
+Der Navigator ist erst wenige Stunden alt, und noch sehr sehr
+experimentell. Grafik und Benutzerführung steckt noch in den
+Kinderschuhen. Generell ist das Kartenfenster momentan mehr
+Proof-of-Concept Code, und taugt noch nicht viel für das
+Erstellen von Zügen... das sollte sich aber bald ändern. Die
+meisten Dinge sind vorbereitet, aber noch nicht 100% fertig
+implementiert.
+
+Diverse Hilfsmodule für Konfiguration, Image-Caching, Font-
+Renderer, Zeichenhilfen etc sind stabil und funktionieren
+zuverlässig. Einige Features fehlen noch, sind aber vorbereitet
+oder geplant.
+
+Was noch fehlt ist vor allem ein Datenbankmodul für die Ablage
+von persistenten Daten. Momentan kann nur eine Auswertung aufs
+Mal eingelesen und angeschaut werden.
+
+Fazit: Momentan noch nicht für produktive Arbeiten geeignet!
+
+
+
+Bekannte Probleme
+-----------------
+
+Hardware-Surfaces funktionieren nicht oder nicht richtig.
+
+Der Parser kann noch optimiert werden was die Geschwindigkeit
+angeht.
+
+Bei vielen Objekten in der Darstellung ist die momentane
+Methode des herauszoomens zu langsam. Objekte sollen sich zu
+Gruppen oder farbigen Flächen formieren sobald sie eh zu klein
+sind um einzeln erkannt zu werden. Das bedingt eine baumartige
+Strukturierung dieser Objekte, und ist daher nicht ganz einfach
+zu implementieren.
+
+
+
+Systemvoraussetzungen: Hardware
+-------------------------------
+
+Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
+
+Ich entwickle UVNav auf einem alten Thinkpad, 700 MHz CPU, 128 MB RAM,
+ATI Rage Mobility GPU, 16 MB VRAM, und absolut ultralahmer Harddisk.
+
+Der Parser verarbeitet hier ca 500 KB Text-Auswertung pro Sekunde.
+Das reicht, dürfte aber noch etwas schneller sein. Hier gibt es sicher
+noch Spielraum für Optimierungen.
+
+UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigrösse der
+Auswertung an RAM. Da lässt sich vermutlich nur wenig daran ändern;
+tendenziell wird der Speicherbedarf eher steigen als sinken, da mir
+gute Performance wichtiger ist als ein niedriger Speicherbedarf.
+
+Die Anzeige ist auch mit grossen Auswertungen einigermassen flüssig;
+und falls nicht, kann man das rechenintensive Anti-Aliasing und die
+Interpolation im Zoom-Code mit -Q deaktivieren -- muss dafür aber mit
+hässlich verpixelter Anzeige leben. Wie bei PoN, AMAP und ToVU halt :)
+
+
+
+Systemvoraussetzungen: Software
+-------------------------------
+
+UVNav wird von mir primär unter FreeBSD 5 entwickelt, dürfte aber auch
+unter NetBSD, OpenBSD, Linux, MacOS X sowie Windows (Cygwin & MingW32)
+dank den GNU Autotools relativ einfach kompilierbar sein.
+
+Andere Betriebssysteme als FreeBSD werden etwas systemabhängigen Code
+benötigen. Die systemabhängigen Teile befinden sich in sysdep.cpp;
+um UVNav zu portieren müssen also nur einige wenige Zeilen Code zu
+diesem File für dein Betriebssystem hinzugefügt werden.
+
+UVNav wird ganz sicher unter BSD, Linux und Windows sauber laufen,
+wenns dann mal fertig ist. Patches sind jederzeit willkommen.
+
+
+
+Systemvoraussetzungen: Hardware Surfaces / Grafikbeschleunigung
+---------------------------------------------------------------
+
+SDL kann die Grafikbeschleunigung einiger Karten nutzen. Dies ist
+jedoch momentan von UV Navigator noch nicht sauber unterstützt.
+
+Unter Unix muss dazu UV Navigator mit root-Rechten gestartet werden,
+und die Env-Var SDL_VIDEODRIVER auf "dga" gesetzt werden. Falls ein
+beschleunigter DGA-Driver zu Verfügung steht, kann dann uvnav mit -S
+gestartet werden, z.B. so:
+
+ $ SDL_VIDEODRIVER=dga sudo uvnav -S /pfad/zu/auswertung.txt
+
+ACHTUNG: DIES IST MOMENTAN NOCH SEHR EXPERIMENTELL UND NICHT RICHTIG
+         UNTERSTUETZT. AUSPROBIEREN AUF EIGENE GEFAHR.
+         Bei mir funktionierts jedenfalls momentan nicht :)
+
+
+
+Kompilieren und Installieren
+----------------------------
+
+UVNav wird mit GCC 3.3.x und den C/C++-Libs von FreeBSD entwickelt,
+sollte aber auch mit anderen Compilern und Libs kompilieren.
+Probleme in diesem Zusammenhang bitte melden; es ist gut möglich,
+dass es noch einige Veränderungen an configure.ac und den relevanten
+Header-Files braucht, um andere Systeme zu unterstützen.
+
+Folgende Bibliotheken werden benötigt:
+ - SDL        Simple Directmedia Layer
+              http://www.libsdl.org/
+ - SDL_ttf    TrueType Font Library für SDL
+              http://www.libsdl.org/projects/SDL_ttf/
+ - SDL_image  Image Loading Library für SDL
+              http://www.libsdl.org/projects/SDL_image/
+ - SDL_gfx    Erweiterte Grafiklibrary für SDL
+              http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/
+ - PCRE       Perl Compatible Regular Expressions
+              http://www.pcre.org/
+ - PCRE++     C++ Wrapper für PCRE
+              http://www.daemon.de/PCRE
+
+UVNav kann auf allem was sich POSIX-kompatibel schimpft mit der
+üblichen ``magischen Dreifaltigkeit'' kompiliert und installiert
+werden:
+
+ $ ./configure
+ $ make
+ # make install
+
+
+
+Kompilieren und Installieren ab Subversion Repository
+-----------------------------------------------------
+
+Um UVNav direkt ab Repository zu kompilieren, wird ein Subversion
+Client sowie zusätzlich GNU Autoconf 2.57 und Automake 1.7 benötigt.
+
+Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
+
+ $ svn checkout svn://projects.roe.ch/repos/uvnav/trunk/ uvnav
+ $ cd uvnav
+ $ ./autogen.sh
+ $ ./configure
+ $ make
+ # make install
+
+

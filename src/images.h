@@ -1,0 +1,67 @@
+/*
+ * UV Navigator - Auswertungsvisualisierung fuer Universum V
+ * Copyright (C) 2004 Daniel Roethlisberger <roe@chronator.ch>
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see http://www.gnu.org/copyleft/
+ *
+ * $Id$
+ */
+
+#ifndef IMAGES_H
+#define IMAGES_H
+
+#include "global.h"
+
+#include "conf.h"
+#include "sysdep.h"
+
+#define IMG_UNIVERSUM	 0
+#define IMG_SDL_POWERED	 1
+#define IMG_PLANET_00	 2
+#define IMG_PLANET_01	 3
+#define IMG_PLANET_02	 4
+#define IMG_PLANET_03	 5
+#define IMG_PLANET_04	 6
+#define IMG_PLANET_05	 7
+#define IMG_PLANET_06	 8
+#define IMG_PLANET_07	 9
+#define IMG_PLANET_08	10
+#define IMG_PLANET_09	11
+#define IMG_PLANET_10	12
+#define NUM_IMG			13
+
+struct uv_img
+{
+	SDL_Surface* original;
+	SDL_Surface* resultat;
+	double faktor;
+};
+
+class UVImages
+{
+	public:
+		UVImages(const UVConf* conf);
+		~UVImages();
+
+		SDL_Surface* get_surface(const long id, const double f = 1.0);
+		SDL_Surface* get_surface(const long id, const int w, const int h);
+
+	private:
+		uv_img images[NUM_IMG];
+
+		int smoothing;
+};
+
+#endif // IMAGES_H
+

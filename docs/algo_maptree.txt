@@ -1,0 +1,47 @@
+$Id$
+
+Eine Möglichkeit, die zeichenbaren Objekte effizienter zu organisieren.
+Wichtig ist vor allem, dass sie sich einfach gruppieren lassen bei
+grossen Zoomfaktoren.
+
+Diese Baumstruktur könnte dieses Problem lösen. Muss das aber vor der
+Implementation nochmals genau durchdenken und durchrechnen.
+
+
+ - baum 2 dim binär, zentrum jedes obj als key
+   - quadratische sektoren einer fixen minimalgrösse
+     2-dimensional binär organisieren
+   - immer 4 sektoren bilden einen übergeordneten node
+   - immer parent-node bilden bis alle objekte abgedeckt
+   - suche mit draw-rect und key-rect: key-rect ist grösser als draw-rect
+     um randbereiche um objektmittelpunkte abzudecken
+   - threshold implementieren beim redraw-search:
+     hinaufmelden, wieviele objekte welchen typs gezeichnet worden sind;
+     falls threshold überschritten und mehrere gleiche objs: gruppe anzeigen
+     evtl in jedem node anzahl subobjekte jederzeit mitführen
+
+   - INSERT (data x):
+     - ist baum leer?
+       ja:
+         - neues leaf-node mit x wird root
+           - leaf-node := alle 4 quadranten == NULL, data-ptr == vector<>*
+       nein:
+         - deckt root x ab?
+           nein: "hinauf erweitern"
+             - neues root generieren, n ist quadrant vom neuen root
+             - wiederholen bis root x abdeckt
+           ja: "runtergehen"
+             - n = root
+             - rekursiv alle quadranten, die x abdecken, absuchen,
+               bis leaf oder nicht allozierter quadrant gefunden wird.
+               leaf:
+                 - leaf in node umwandeln und leaf zu quadrant machen
+                 - wiederholen bis x in nicht alloziertem quadrant
+               null:
+                 - leaf allozieren mit x als payload
+
+   - NEAREST NEIGHBOUR (point) -- klicken
+     - ? (difficult?)
+
+   - REDRAW (rect) -- zeichnen
+     - ? (easy)

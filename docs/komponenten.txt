@@ -1,0 +1,229 @@
+$Id$
+
+Alle bekannten Komponenten, Stand SZ 216, Werftformel FFFFFFFFF
+---------------------------------------------------------------
+
+  1. Standardgenerator, 1000 BRT, 20 HP, 4500 Cr
+     Energiegenerator, Energie 100, Regeneration 10
+  2. Atomgenerator, 2000 BRT, 30 HP, 15750 Cr
+     Energiegenerator, Energie 150, Regeneration 16
+  3. Argongenerator, 4000 BRT, 40 HP, 36000 Cr
+     Energiegenerator, Energie 200, Regeneration 24
+  4. Nukleongenerator, 8000 BRT, 60 HP, 67500 Cr
+     Energiegenerator, Energie 300, Regeneration 39
+  5. Gaseidpressor, 16000 BRT, 80 HP, 112500 Cr
+     Energiegenerator, Energie 400, Regeneration 56
+  6. Nukleongenerator 3C, 32000 BRT, 120 HP, 148500 Cr
+     Energiegenerator, Energie 600, Regeneration 90
+  7. Space Power IIe (Nukleon), 60000 BRT, 160 HP, 240000 Cr
+     Energiegenerator, Energie 800, Regeneration 128
+  8. Plasmagenerator, 120000 BRT, 200 HP, 390000 Cr
+     Energiegenerator, Energie 1000, Regeneration 200
+  9. Plasmagenerator II, 250000 BRT, 240 HP, 700000 Cr
+     Energiegenerator, Energie 1500, Regeneration 280
+  10. Reflonintegrator, 500000 BRT, 280 HP, 2250000 Cr
+      Energiegenerator, Energie 2100, Regeneration 500
+  11. Reflonintegrator II, 1000000 BRT, 340 HP, 4000000 Cr
+      Energiegenerator, Energie 3000, Regeneration 750
+  12. Hyperkompressionsgenerator, 2000000 BRT, 400 HP, 8500000 Cr
+      Energiegenerator, Energie 4000, Regeneration 1000
+
+  13. Pray I, 1000 BRT, 20 HP, 3000 Cr
+      Bordcomputer
+  14. Pray II, 2000 BRT, 30 HP, 10500 Cr
+      Bordcomputer
+  15. Pray CX, 4000 BRT, 40 HP, 24000 Cr
+      Bordcomputer
+  16. Master Mind-X, 8000 BRT, 60 HP, 45000 Cr
+      Bordcomputer
+  17. Master Mind-Z, 16000 BRT, 80 HP, 75000 Cr
+      Bordcomputer
+  18. Spectrum SE70, 32000 BRT, 120 HP, 99000 Cr
+      Bordcomputer
+  19. MyghtBrain cr3, 64000 BRT, 160 HP, 150000 Cr
+      Bordcomputer
+  20. NeuronSpeed, 100000 BRT, 200 HP, 260000 Cr
+      Bordcomputer
+  21. NeuralNetMaster 8, 150000 BRT, 240 HP, 700000 Cr
+      Bordcomputer
+  22. NeuralNetMaster 17c, 300000 BRT, 280 HP, 1500000 Cr
+      Bordcomputer
+  23. CyberWeb , 500000 BRT, 340 HP, 4000000 Cr
+      Bordcomputer
+  24. CyberWeb III, 1000000 BRT, 400 HP, 8500000 Cr
+      Bordcomputer
+
+  25. ScanCipher 1a, 1000 BRT, 10 HP, 1500 Cr
+      Sensoren, Reichweite 1000
+  26. ScanCipher 3e, 2000 BRT, 15 HP, 5250 Cr
+      Sensoren, Reichweite 2000
+  27. SensoStar II, 3000 BRT, 20 HP, 12000 Cr
+      Sensoren, Reichweite 4000
+  28. InfoReceiver 3D, 5000 BRT, 30 HP, 22500 Cr
+      Sensoren, Reichweite 6000
+  29. Starvision II, 10000 BRT, 40 HP, 37500 Cr
+      Sensoren, Reichweite 9000
+  30. Starvision III, 20000 BRT, 60 HP, 55000 Cr
+      Sensoren, Reichweite 12000
+  31. Detector 32cI, 40000 BRT, 80 HP, 90000 Cr
+      Sensoren, Reichweite 15000
+  32. Detector Ultimate, 80000 BRT, 100 HP, 260000 Cr
+      Sensoren, Reichweite 20000
+  33. DigitalScan 2, 100000 BRT, 120 HP, 700000 Cr
+      Sensoren, Reichweite 30000
+  34. Anti-Disguise EL, 200000 BRT, 140 HP, 1500000 Cr
+      Sensoren, Reichweite 50000
+  35. LeechSpector, 300000 BRT, 170 HP, 4000000 Cr
+      Sensoren, Reichweite 100000
+  36. CQ-Doomsday Ed., 500000 BRT, 200 HP, 8500000 Cr
+      Sensoren, Reichweite 200000
+
+  37. Brücke, 1000 BRT, 40 HP, 3000 Cr
+      Mannschaftsraum
+  38. Standardkabinen, 2000 BRT, 60 HP, 10500 Cr
+      Mannschaftsraum
+  39. Medizinische Station, 4000 BRT, 80 HP, 24000 Cr
+      Mannschaftsraum
+  40. Notfallkapseln, 8000 BRT, 120 HP, 45000 Cr
+      Mannschaftsraum
+  41. Offiziersdeck, 16000 BRT, 160 HP, 75000 Cr
+      Mannschaftsraum
+  42. Wohnstationen, 32000 BRT, 240 HP, 99000 Cr
+      Mannschaftsraum
+  43. Freizeiträume, 64000 BRT, 320 HP, 150000 Cr
+      Mannschaftsraum
+  44. Thermokammern, 100000 BRT, 400 HP, 325000 Cr
+      Mannschaftsraum
+  45. Kälteschlafkammer, 150000 BRT, 480 HP, 700000 Cr
+      Mannschaftsraum
+  46. Tech-Chirurg-Station, 300000 BRT, 560 HP, 1500000 Cr
+      Mannschaftsraum
+  47. Holodeck, 500000 BRT, 680 HP, 2400000 Cr
+      Mannschaftsraum
+  48. Ministadt, 1000000 BRT, 800 HP, 4250000 Cr
+      Mannschaftsraum
+
+  49. Energieschild, 1000 BRT, 100 HP, 6000 Cr
+      Schild, Regeneration 10 HP
+  50. Energieschild II, 2000 BRT, 150 HP, 17500 Cr
+      Schild, Regeneration 16 HP
+  51. Energieschild III, 3000 BRT, 200 HP, 28000 Cr
+      Schild, Regeneration 24 HP
+  52. Atomdämpfer, 5000 BRT, 300 HP, 49500 Cr
+      Schild, Regeneration 39 HP
+  53. Mesonenschirm, 10000 BRT, 400 HP, 100000 Cr
+      Schild, Regeneration 56 HP
+  54. Mesonenschirm II, 20000 BRT, 600 HP, 192500 Cr
+      Schild, Regeneration 90 HP
+  55. Osmotischer Schild, 40000 BRT, 800 HP, 300000 Cr
+      Schild, Regeneration 128 HP
+  56. Antimaterieschild I, 80000 BRT, 1000 HP, 487500 Cr
+      Schild, Regeneration 200 HP
+  57. Antimaterieschild II, 100000 BRT, 1200 HP, 1400000 Cr
+      Schild, Regeneration 280 HP
+  58. Warpfeldschild, 200000 BRT, 2000 HP, 3750000 Cr
+      Schild, Regeneration 500 HP
+  59. Warpfeldschild II, 300000 BRT, 3000 HP, 8000000 Cr
+      Schild, Regeneration 750 HP
+  60. Schwarzschild, 500000 BRT, 4000 HP, 12750000 Cr
+      Schild, Regeneration 1000 HP
+
+  61. Metallpanzer, 10000 BRT, 200 HP, 4500 Cr
+      Panzerung
+  62. Karbonpanzer, 15000 BRT, 300 HP, 13125 Cr
+      Panzerung
+  63. Plattenpanzer, 20000 BRT, 400 HP, 36000 Cr
+      Panzerung
+  64. Schmelzpanzer, 35000 BRT, 600 HP, 67500 Cr
+      Panzerung
+  65. Reflektorpanzer, 50000 BRT, 800 HP, 112500 Cr
+      Panzerung
+  66. Gefechtspanzer, 70000 BRT, 1200 HP, 165000 Cr
+      Panzerung
+  67. Titaniumbeschichtung, 100000 BRT, 1600 HP, 300000 Cr
+      Panzerung
+  68. Maranbeschichtung, 150000 BRT, 2000 HP, 650000 Cr
+      Panzerung
+  69. Sonarpanzer, 250000 BRT, 3000 HP, 2100000 Cr
+      Panzerung
+  70. Flüssigpanzer, 350000 BRT, 5000 HP, 3750000 Cr
+      Panzerung
+  71. Zellneuralnetz, 500000 BRT, 7500 HP, 8000000 Cr
+      Panzerung
+  72. Dunkelmaterie, 700000 BRT, 10000 HP, 12750000 Cr
+      Panzerung
+
+  73. Impulslaser, 10000 BRT, 30 HP, 3000 Cr
+      Energiekanone, Schaden 4
+  74. 2-fach Impulslaser, 15000 BRT, 50 HP, 10500 Cr
+      Energiekanone, Schaden 8
+  75. Strahlenlaser, 18000 BRT, 90 HP, 20000 Cr
+      Energiekanone, Schaden 32
+  76. Militärlaser Klasse A, 21000 BRT, 120 HP, 36000 Cr
+      Energiekanone, Schaden 80
+  77. Militärlaser Klasse X, 25000 BRT, 150 HP, 60000 Cr
+      Energiekanone, Schaden 140
+  78. Massebeschleuniger Marke FullMetalJacket, 30000 BRT, 300 HP, 99000 Cr
+      Energiekanone, Schaden 220
+  79. Doppelter Massebeschleuniger FatBoy A, 40000 BRT, 400 HP, 132000 Cr
+      Energiekanone, Schaden 300
+  80. Partikelbeschleuniger Lightspeed VIII, 60000 BRT, 500 HP, 169000 Cr
+      Energiekanone, Schaden 400
+  81. Desintegrations-Strahler Simsalabim A2, 80000 BRT, 600 HP, 210000 Cr
+      Energiekanone, Schaden 560
+  82. Nukleoidenwerfer TakeThat II, 100000 BRT, 700 HP, 247500 Cr
+      Energiekanone, Schaden 720
+  83. Protonenkanone SlugThrower 5000, 120000 BRT, 800 HP, 288000 Cr
+      Energiekanone, Schaden 880
+  84. Plasmakanone Lightning Bolt XV, 150000 BRT, 1000 HP, 340000 Cr
+      Energiekanone, Schaden 1100
+
+  85. Raketenwerfer, 10000 BRT, 30 HP, 3000 Cr
+      Rakete, Schaden 1
+  86. Raketenlafette (3fach), 15000 BRT, 50 HP, 10500 Cr
+      Rakete, Schaden 2
+  87. Splitterrakete, 18000 BRT, 90 HP, 20000 Cr
+      Rakete, Schaden 8
+  88. Mikrofusionsrakete ShrinkSlave I , 21000 BRT, 120 HP, 36000 Cr
+      Rakete, Schaden 20
+  89. Temporale Verzögerungsrakete, 25000 BRT, 150 HP, 60000 Cr
+      Rakete, Schaden 35
+  90. Chronosrakete Black Hole II, 30000 BRT, 300 HP, 99000 Cr
+      Rakete, Schaden 55
+  91. Fragmentationstorpedo Skullbreaker IV, 40000 BRT, 400 HP, 132000 Cr
+      Rakete, Schaden 75
+  92. Schalltorpedo Typ SpeedMetal Pro, 60000 BRT, 500 HP, 169000 Cr
+      Rakete, Schaden 100
+  93. Torpedo mit MARK CXI Atomsprengkopf, 80000 BRT, 600 HP, 210000 Cr
+      Rakete, Schaden 140
+  94. Protonentorpedo Fragmaster 4070, 100000 BRT, 700 HP, 247500 Cr
+      Rakete, Schaden 180
+  95. Skarabäustorpedo II, 120000 BRT, 800 HP, 288000 Cr
+      Rakete, Schaden 220
+  96. Raumfusionstorpedo Lost in Space IX, 150000 BRT, 1000 HP, 340000 Cr
+      Rakete, Schaden 275
+
+  97. Normales Schubtriebwerk, 20000 BRT, 20 HP, 1500 Cr
+      Triebwerk, Verbrauch 0.0005, Geschwindigkeit 10 KpZ
+  98. Erweitertes Schubtriebwerk, 25000 BRT, 40 HP, 5250 Cr
+      Triebwerk, Verbrauch 0.00035, Geschwindigkeit 20 KpZ
+  99. Einfaches Impulstriebwerk, 35000 BRT, 52 HP, 18000 Cr
+      Triebwerk, Verbrauch 0.00025, Geschwindigkeit 40 KpZ
+  100. Zweifach Impulstriebwerk, 45000 BRT, 80 HP, 56250 Cr
+       Triebwerk, Verbrauch 0.00015, Geschwindigkeit 60 KpZ
+  101. Dreifach Impulstriebwerk Typ YEEhaa, 50000 BRT, 104 HP, 150000 Cr
+       Triebwerk, Verbrauch 0.0001, Geschwindigkeit 90 KpZ
+  102. Standard Schubkonverter, 75000 BRT, 160 HP, 412500 Cr
+       Triebwerk, Verbrauch 0.00005, Geschwindigkeit 130 KpZ
+  103. Doppel Schubkonverter PowerBurst C1, 100000 BRT, 180 HP, 1500000 Cr
+       Triebwerk, Verbrauch 0.00005, Geschwindigkeit 200 KpZ
+  104. Sprungtriebwerk First Time, 500000 BRT, 213 HP, 3250000 Cr
+       Triebwerk, Verbrauch 0.00005, Reichweite 10 Lichtjahre
+  105. Warptriebwerk Deep Space X, 120000 BRT, 320 HP, 1050000 Cr
+       Triebwerk, Verbrauch 0.00002, Reichweite 30 Lichtjahre
+  106. Warptriebwerk II Eco, 2000000 BRT, 375 HP, 22500000 Cr
+       Triebwerk, Verbrauch 0.000005, Reichweite 100 Lichtjahre
+  107. Warptriebwerk III Typ CYa, 3000000 BRT, 455 HP, 40000000 Cr
+       Triebwerk, Verbrauch 0.000003, Reichweite 500 Lichtjahre
+  108. Hyperdimensionssprungwerk, 2000000 BRT, 533 HP, 42500000 Cr
+       Triebwerk, Verbrauch 30% des max. Tankinhalts pro Dimension

@@ -1,0 +1,157 @@
+$Id$
+
+
+== DRINGENDE BLOCKER ==
+
+[0.0.1]
+  - ins subversion repo damit
+  - schiff: richtungsvektor implementieren
+
+
+
+== HOHE PRIORITAET ==
+
+- Subversion:
+  1. ALLES LOESCHEN WAS NICHT NIET UND NAGELFEST IST: make maintainer-clean
+  2. svn import . svn://projects.roe.ch/repos/uvnav/trunk/
+  3. svn2log.py suchen und ausprobieren
+
+- Intelligentes auto-scaling / positioning
+  - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
+  - zoom standardwerte daraus berechnen
+    - eventuell auch gespeicherte werte damit überschreiben
+      wenn kein exakter match für die sternzeit gefunden wurde.
+      benötigt eventuell API change in UVConf.
+  - zoom limitieren wenn alles sichtbar
+  - funktion um direkt rauszuspringen (View All)
+
+- Statistik
+  - UVWelt zählt Anzahl Objekte jedes relevanten Typs
+  - Statistik ausgeben in UVNavigator nach Parsen
+  - Statistik pro Dim ausgeben bei Dim Switch
+
+- Geschwindigkeit / Usability optimieren
+  - SDL_Surface temp als zweiten buffer führen,
+    generell nur dort reinzeichnen (fuzzy dirty rect matching), und dann
+    strikte nach dirty rect auf screen blitten.
+    analyse: verlust: const. gewinn durch dirty rects: linear.
+    - dirty rects benutzen für scrolling (wie copy gestalten?)
+    - dirty rects benutzen für mouse handling
+    - dirty rects benutzen für windows
+    - ...
+  - Verschiedene Detailstufen einführen
+  - Objekte sinnvoll verkleinern, eventuell clusterweise zu gruppen
+    zusammenfassen (schwierig?)
+  - Eventuell dann mal noch Speed verbessern mit eigenen Datenstrukturen
+  - Objektgroessen ueberdenken von usability her
+    - nicht nur mindest, sondern auch maximalgroesse der objekte festlegen,
+      und zoom-code entsprechend anpassen
+    - von min/max objektgroessen auf schoene funktion umsteigen
+
+- UVMap
+  - Eye-Candy ...
+    - Objekte anschreiben
+    - Objekte verschönern
+    - Laengenangaben (Masstab)
+    - Minimap
+  - Maushandling einführen
+
+- Fonts cachen und blitten anstatt immer neu rendern und blitten
+
+
+
+== MITTLERE PRIORITAET ==
+
+- UVDraw
+  - eigene Funktionen aus SDL_gfx klauen mit strikter rect unterstützung
+
+- UVImages
+  - Schnelleren Zoom-Code benutzen
+  - Low-Q Variante unterstützen für Fast-Scaling
+  - In X Zoomfaktoren gezoomte Planetenbilder prescalen und cachen
+    - preload(array of w/h's)
+    - Planetenbilder gesondert behandeln (?!)
+  - Sämtliche je gerenderten Bilder cachen (hash_map)
+  - von double Faktor auf long Höhe umstellen, konsequent beim Caching
+
+- Nachrichten parsen
+  - parse_nachrichten implementieren
+  - UVWelt erweitern
+
+- DEBUG / PRINT_DEBUG einführen und generell sauber managen
+  - debuglevels?
+  - debugcategories? [<-]
+
+- UVGUIWidgets
+  - ...
+
+- Parser
+  - Während parsen abbrechen können
+  - Während parsen redraw können
+    (beides in progressbar realisierbar -- mini SDL event loop?)
+  - Parser optimieren
+    - regexps zentralisieren
+
+- UVWelt
+  - Spieler ausbauen. Für jeden Spieler möglichst viele Informationen
+    speichern, inklusive Statistik à la wieviele Objekte welchen Typs
+    besitzt er.
+  - korrektes destroyen aller Objekte
+
+
+
+== TIEFE PRIORITAET ==
+
+- Mehrere Auswertungen
+  - 1 Spieler
+    - a) alte daten erkennen und intelligent ersetzen
+         BEDINGT SERIALISIERUNG VON UVWelt
+    - b) history-objekte führen
+    - c) alt-modus beim parsen, der nur planetendaten parst
+    - d) planetendaten-cache/db
+  - Mehrere Spieler
+    - intelligent mergen
+
+- Imperatoren-Support
+  - parse_imp_*
+  - Display-Support
+
+- /usr/include/sysexits.h benutzen, falls verfügbar
+
+- billigen demo-effekt nach splash screen als übergang zum navigator
+  (warp-effekt wäre ultra-cool)
+
+- Keyboard Belegung konfigurierbar machen
+  - Set Keys Window
+
+- Release Engineering
+  - PCRE++ korrekt in autoconf einbauen
+  - SDL_* korrekt in autoconf einbauen
+  - Debug code in autoconf einbinden
+  - MingW32 crosscompiling (yeeha!)
+  - LXR benutzen für cross-reference des codes zum protzen :)
+    http://lxr.linux.no/
+
+- Charset Durcheinander lösen
+  - Genereller Unicode support
+  - Keystrokes nach Unicode
+  - interne strings?
+  - auswertung nach unicode
+  - iconv?
+
+- Hardware surfaces:
+  - kriege vermutlich gar keine hardware surface
+    - detecten ob hardware-surface oder nicht
+    - printen was wir wollten, und was wir kriegten
+  - probleme wenn windowed:
+    - in fremde windows zeichnen
+  - hardware unter unix nur als root (?!)
+  - hardware langsamer als software
+    - timing einbauen und testen
+  - nur so und so viel video-memory
+    - wie detecten wenn memory full?
+  - double-buf: verschiedene modi!
+    - wie detecten?
+    - wie handeln wenn detected?
+
+- TODO's und *** und FIXME's abarbeiten.
