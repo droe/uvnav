@@ -4,11 +4,10 @@ $Id$
 == 0.0.1 ==
 
 - Autotools Upgrade 257->259 & 17->18
-- Sonden mit unbekanntem Radius entsprechend markieren
-  - Sonde mit Zentrum versehen (quadrat wie bei container)
-  - Radius nur zeichnen falls bekannt
-  - Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
-    und Längenangaben (1 LJ = 1000 KE)
+- Windrose im Stil von +x/-x/+y/-y - Pfeilen mit 0x44
+  und Längenangaben (1 LJ = 1000 KE)
+- Wichtigste Dinge anschreiben (?)
+- Kreisbug Workaround
 - Dirty Rect erkennung der Objekte verbessern
 
 
@@ -34,6 +33,13 @@ $Id$
       benötigt eventuell API change in UVConf.
   - zoom limitieren wenn alles sichtbar
   - funktion um direkt rauszuspringen (View All)
+  - Keys:
+    PgUp/Dn: manueller Zoom
+    Home: alle eigenen sichtbar
+    End: alles bekannte sichtbar
+    Ins: aktuelle Ansicht speichern
+    Del: aktuelle Ansicht verwerfen und zur letzten gespeicherten Ansicht
+         zurückkehren (Stack)
 
 - Statistik
   - UVWelt zählt Anzahl Objekte jedes relevanten Typs

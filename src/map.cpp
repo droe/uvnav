@@ -599,7 +599,7 @@ void UVMap::draw_container(UVContainer* container)
 	&& ((virt_y - size < container->y) && (virt_y + virt_h + size >= container->y)))
 	{
 		long h = long(rint(1.0 * size / zoom));
-		h = (h < 1) ? 1 : h;
+		h = (h < 2) ? 2 : h;
 
 		double center_x = 1.0 * (container->x - offset_x) / zoom;
 		double center_y = 1.0 * (container->y - offset_y) / zoom;
@@ -616,28 +616,40 @@ void UVMap::draw_container(UVContainer* container)
 /*
  * Zeichnet eine Anomalie.
  * 
- *   ( x )
+ *   ( + )
  *
  */
 void UVMap::draw_anomalie(UVAnomalie* anomalie)
 {
+	static const long mitte_size = 100;
 	long size = anomalie->radius * 1000;
 
 	if(((virt_x - size < anomalie->x) && (virt_x + virt_w + size >= anomalie->x))
 	&& ((virt_y - size < anomalie->y) && (virt_y + virt_h + size >= anomalie->y)))
 	{
-		long h = long(rint(1.0 * size / zoom));
-		h = (h < 10) ? 10 : h;
-
-		// evtl kreis fuellen? schraffieren? grafik?
-
 		double center_x = 1.0 * (anomalie->x - offset_x) / zoom;
 		double center_y = 1.0 * (anomalie->y - offset_y) / zoom;
 
-//		cout << "draw Anomalie (" << center_x << "/" << center_y << ")" << endl;
+		if(anomalie->radius)
+		{
+			// Kreis
+			long h = long(rint(1.0 * size / zoom));
+			h = (h < 10) ? 10 : h;
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    h / 2, 0xFF, 0x00, 0x00, 0xFF);
+		}
 
-		drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			              h / 2, 0xFF, 0x00, 0x00, 0xFF);
+		// Zentrum
+		long mitte_r = long(rint(1.0 * mitte_size / zoom));
+		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
+		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
+		                  0xFF, 0x00, 0x00, 0xFF);
+		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
+		                  0xFF, 0x00, 0x00, 0xFF);
+
+//		cout << "draw Anomalie (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
@@ -645,28 +657,40 @@ void UVMap::draw_anomalie(UVAnomalie* anomalie)
 /*
  * Zeichnet eine Sensorsonde.
  * 
- *   ( x )
+ *   ( + )
  *
  */
 void UVMap::draw_sensorsonde(UVSensorsonde* sensorsonde)
 {
+	static const long mitte_size = 100;
 	long size = sensorsonde->lebensdauer * 2000;
 
 	if(((virt_x - size < sensorsonde->x) && (virt_x + virt_w + size >= sensorsonde->x))
 	&& ((virt_y - size < sensorsonde->y) && (virt_y + virt_h + size >= sensorsonde->y)))
 	{
-		long h = long(rint(1.0 * size / zoom));
-		h = (h < 10) ? 10 : h;
-
-		// evtl kreis fuellen? schraffieren? grafik?
-
 		double center_x = 1.0 * (sensorsonde->x - offset_x) / zoom;
 		double center_y = 1.0 * (sensorsonde->y - offset_y) / zoom;
 
-//		cout << "draw Sensorsonde (" << center_x << "/" << center_y << ")" << endl;
+		if(sensorsonde->lebensdauer)
+		{
+			// Kreis
+			long h = long(rint(1.0 * size / zoom));
+			h = (h < 10) ? 10 : h;
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    h / 2, 0x00, 0xFF, 0x00, 0xFF);
+		}
 
-		drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			              h / 2, 0x00, 0xFF, 0x00, 0xFF);
+		// Zentrum
+		long mitte_r = long(rint(1.0 * mitte_size / zoom));
+		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
+		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
+		                  0x00, 0xFF, 0x00, 0xFF);
+		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
+		                  0x00, 0xFF, 0x00, 0xFF);
+
+//		cout << "draw Sensorsonde (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
@@ -674,28 +698,40 @@ void UVMap::draw_sensorsonde(UVSensorsonde* sensorsonde)
 /*
  * Zeichnet eine Infosonde.
  * 
- *   ( x )
+ *   ( + )
  *
  */
 void UVMap::draw_infosonde(UVInfosonde* infosonde)
 {
+	static const long mitte_size = 100;
 	long size = infosonde->lebensdauer * 2000;
 
 	if(((virt_x - size < infosonde->x) && (virt_x + virt_w + size >= infosonde->x))
 	&& ((virt_y - size < infosonde->y) && (virt_y + virt_h + size >= infosonde->y)))
 	{
-		long h = long(rint(1.0 * size / zoom));
-		h = (h < 10) ? 10 : h;
-
-		// evtl kreis fuellen? schraffieren? grafik?
-
 		double center_x = 1.0 * (infosonde->x - offset_x) / zoom;
 		double center_y = 1.0 * (infosonde->y - offset_y) / zoom;
 
-//		cout << "draw Infosonde (" << center_x << "/" << center_y << ")" << endl;
+		if(infosonde->lebensdauer)
+		{
+			// Kreis
+			long h = long(rint(1.0 * size / zoom));
+			h = (h < 10) ? 10 : h;
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    h / 2, 0x00, 0x00, 0xFF, 0xFF);
+		}
 
-		drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			              h / 2, 0x00, 0x00, 0xFF, 0xFF);
+		// Zentrum
+		long mitte_r = long(rint(1.0 * mitte_size / zoom));
+		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
+		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
+		                  0x00, 0x00, 0xFF, 0xFF);
+		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
+		                  0x00, 0x00, 0xFF, 0xFF);
+
+//		cout << "draw Infosonde (" << center_x << "/" << center_y << ")" << endl;
 	}
 }
 
