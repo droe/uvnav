@@ -23,11 +23,11 @@
 
 #include "ui/widgets/widget.h"
 
-class GUIWindow : public GUIWidget
+class UVWindow : public UVWidget
 {
 	public:
-		GUIWindow(GUIWidget*, SDL_Surface*);
-		~GUIWindow();
+		UVWindow(UVWidget*, SDL_Surface*);
+		~UVWindow();
 
 		virtual void resize();
 		virtual void draw();
@@ -36,7 +36,7 @@ class GUIWindow : public GUIWidget
 		virtual void set_surface(SDL_Surface*);
 
 	protected:
-		GUIWidget* widget;
+		UVWidget* widget;
 		SDL_Surface* my_surface;
 };
 

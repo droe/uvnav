@@ -25,13 +25,13 @@
 #include "ui/widgets/orientation.h"
 #include "ui/widgets/widget.h"
 
-class GUICompositeWidget : public GUIWidget
+class UVCompositeWidget : public UVWidget
 {
 	public:
-		GUICompositeWidget(int = 1, GUIOrientation = GUIOHorizontal, SDL_Surface* = NULL);
-		~GUICompositeWidget();
+		UVCompositeWidget(int = 1, UVOrientation = UVOHorizontal, SDL_Surface* = NULL);
+		~UVCompositeWidget();
 
-		virtual void add_widget(GUIWidget*);
+		virtual void add_widget(UVWidget*);
 
 		virtual void resize();
 		virtual void draw();
@@ -40,9 +40,9 @@ class GUICompositeWidget : public GUIWidget
 		virtual void set_surface(SDL_Surface*);
 
 	protected:
-		vector<GUIWidget*> widgets;
+		vector<UVWidget*> widgets;
 		bool modified;
-		GUIOrientation orientation;
+		UVOrientation orientation;
 		int weight_total;
 };
 

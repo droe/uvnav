@@ -21,7 +21,7 @@
 #ifndef ORIENTATION_H
 #define ORIENTATION_H
 
-enum GUIOrientation { GUIOHorizontal, GUIOVertical };
+enum UVOrientation { UVOHorizontal, UVOVertical };
 
 #endif // ORIENTATION_H
 

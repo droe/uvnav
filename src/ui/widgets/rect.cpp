@@ -23,15 +23,15 @@
 /*
  * Konstruktor.
  */
-GUIRect::GUIRect(int _x, int _y, int _w, int _h)
-: GUISize(_w, _h), x(_x), y(_y)
+UVRect::UVRect(int _x, int _y, int _w, int _h)
+: UVSize(_w, _h), x(_x), y(_y)
 {
 }
 
 /*
  * Destruktor.
  */
-GUIRect::~GUIRect()
+UVRect::~UVRect()
 {
 }
 
@@ -39,7 +39,7 @@ GUIRect::~GUIRect()
 /*
  * Enthaelt dieses Rect den Punkt (x, y)?
  */
-bool GUIRect::contains(int px, int py) const
+bool UVRect::contains(int px, int py) const
 {
 	return (px >= x)
 	    && (px <  x + w)
@@ -49,9 +49,9 @@ bool GUIRect::contains(int px, int py) const
 
 
 /*
- * Gibt ein SDL_Rect zurueck, das dem GUIRect entspricht.
+ * Gibt ein SDL_Rect zurueck, das dem UVRect entspricht.
  */
-SDL_Rect* GUIRect::to_sdl_rect() const
+SDL_Rect* UVRect::to_sdl_rect() const
 {
 	static SDL_Rect r;
 	r.x = x;

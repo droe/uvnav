@@ -25,8 +25,8 @@
 /*
  * Konstruktor.
  */
-GUIWindow::GUIWindow(GUIWidget* wi, SDL_Surface* s)
-: GUIWidget(1, s), widget(wi)
+UVWindow::UVWindow(UVWidget* wi, SDL_Surface* s)
+: UVWidget(1, s), widget(wi)
 {
 	widget->set_surface(s);
 }
@@ -34,16 +34,16 @@ GUIWindow::GUIWindow(GUIWidget* wi, SDL_Surface* s)
 /*
  * Destruktor.
  */
-GUIWindow::~GUIWindow()
+UVWindow::~UVWindow()
 {
 	delete widget;
 }
 
 
 /*
- * Berechnet das Layout des GUIWindow neu.
+ * Berechnet das Layout des UVWindow neu.
  */
-void GUIWindow::resize()
+void UVWindow::resize()
 {
 	widget->x = x + 2;
 	widget->y = y + 2;
@@ -54,9 +54,9 @@ void GUIWindow::resize()
 
 
 /*
- * Zeichnet das GUIWindow und alle enthaltenen Widgets.
+ * Zeichnet das UVWindow und alle enthaltenen Widgets.
  */
-void GUIWindow::draw()
+void UVWindow::draw()
 {
 	static UVDraw* drw = UVDraw::get_instance();
 
@@ -70,7 +70,7 @@ void GUIWindow::draw()
  * Window klickt.  Der Event muss verarbeitet und ans richtige
  * Widget weitergegeben werden.
  */
-void GUIWindow::handle_click(int posx, int posy)
+void UVWindow::handle_click(int posx, int posy)
 {
 	if(widget->contains(posx, posy))
 	{
@@ -86,7 +86,7 @@ void GUIWindow::handle_click(int posx, int posy)
  * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
  * die Surface gesetzt wird.
  */
-void GUIWindow::set_surface(SDL_Surface* s)
+void UVWindow::set_surface(SDL_Surface* s)
 {
 	surface = s;
 

@@ -24,11 +24,11 @@
 #include "lib/sdl.h"
 #include "ui/widgets/rect.h"
 
-class GUIWidget : public GUIRect
+class UVWidget : public UVRect
 {
 	public:
-		GUIWidget(int = 1, SDL_Surface* = NULL);
-		~GUIWidget();
+		UVWidget(int = 1, SDL_Surface* = NULL);
+		~UVWidget();
 
 		virtual void set_surface(SDL_Surface*);
 		SDL_Surface* get_surface() const;
@@ -41,8 +41,8 @@ class GUIWidget : public GUIRect
 		virtual void handle_click(int, int);
 
 		int weight;
-		GUISize min;
-		GUISize max;
+		UVSize min;
+		UVSize max;
 
 	protected:
 		SDL_Surface* surface;

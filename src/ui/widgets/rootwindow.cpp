@@ -23,8 +23,8 @@
 /*
  * Konstruktor.
  */
-GUIRootWindow::GUIRootWindow(GUIWidget* wi, SDL_Surface* s)
-: GUIWindow(wi, s)
+UVRootWindow::UVRootWindow(UVWidget* wi, SDL_Surface* s)
+: UVWindow(wi, s)
 {
 	conf = UVConf::get_instance();
 	video = UVVideo::get_instance();
@@ -37,15 +37,15 @@ GUIRootWindow::GUIRootWindow(GUIWidget* wi, SDL_Surface* s)
 /*
  * Destruktor.
  */
-GUIRootWindow::~GUIRootWindow()
+UVRootWindow::~UVRootWindow()
 {
 }
 
 
 /*
- * Berechnet das Layout des GUIWindow neu.
+ * Berechnet das Layout des UVWindow neu.
  */
-void GUIRootWindow::resize()
+void UVRootWindow::resize()
 {
 	w = surface->w;
 	h = surface->h;
@@ -56,9 +56,9 @@ void GUIRootWindow::resize()
 
 
 /*
- * Zeichnet das GUIRootWindow und alle enthaltenen Widgets.
+ * Zeichnet das UVRootWindow und alle enthaltenen Widgets.
  */
-void GUIRootWindow::draw()
+void UVRootWindow::draw()
 {
 	widget->draw();
 }
@@ -69,7 +69,7 @@ void GUIRootWindow::draw()
  * Window klickt.  Der Event muss verarbeitet und ans richtige
  * Widget weitergegeben werden.
  */
-void GUIRootWindow::handle_click(int posx, int posy)
+void UVRootWindow::handle_click(int posx, int posy)
 {
 	if(widget->contains(posx, posy))
 	{
@@ -85,7 +85,7 @@ void GUIRootWindow::handle_click(int posx, int posy)
  * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
  * die Surface gesetzt wird.
  */
-void GUIRootWindow::set_surface(SDL_Surface* s)
+void UVRootWindow::set_surface(SDL_Surface* s)
 {
 	surface = s;
 
@@ -98,7 +98,7 @@ void GUIRootWindow::set_surface(SDL_Surface* s)
 /*
  * SDL Event Loop
  */
-void GUIRootWindow::run()
+void UVRootWindow::run()
 {
 	running = true;
 	while(running)
@@ -115,7 +115,7 @@ void GUIRootWindow::run()
  * aufgerufen werden kann waehrend einer zeitraubenden Operation.
  * Wird z.B. beim Parsen via Importer benoetigt.
  */
-void GUIRootWindow::handle_event()
+void UVRootWindow::handle_event()
 {
 	SDL_Event event;
 	SDL_WaitEvent(&event);

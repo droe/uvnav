@@ -25,7 +25,7 @@
 /*
  * Konstruktor.
  */
-GUIWidget::GUIWidget(int we, SDL_Surface* s)
+UVWidget::UVWidget(int we, SDL_Surface* s)
 : weight(we), surface(s)
 {
 	min.w = 0;
@@ -37,25 +37,25 @@ GUIWidget::GUIWidget(int we, SDL_Surface* s)
 /*
  * Destruktor.
  */
-GUIWidget::~GUIWidget()
+UVWidget::~UVWidget()
 {
 }
 
 
 /*
- * Signalisiert dem GUIWidget, dass seine effektive Groesse geaendert hat.
- * Wird vom umgebenden GUICompositeWidget aufgerufen.
+ * Signalisiert dem UVWidget, dass seine effektive Groesse geaendert hat.
+ * Wird vom umgebenden UVCompositeWidget aufgerufen.
  */
-void GUIWidget::resize()
+void UVWidget::resize()
 {
 	// ignore
 }
 
 
 /*
- * Zeichnet das GUIWidget auf die SDL_Surface surface.
+ * Zeichnet das UVWidget auf die SDL_Surface surface.
  */
-void GUIWidget::draw()
+void UVWidget::draw()
 {
 	static UVDraw* drw = UVDraw::get_instance();
 
@@ -65,9 +65,9 @@ void GUIWidget::draw()
 
 
 /*
- * Einen Mausklick auf das GUIWidget behandeln.
+ * Einen Mausklick auf das UVWidget behandeln.
  */
-void GUIWidget::handle_click(int, int)
+void UVWidget::handle_click(int, int)
 {
 	// ignore
 }
@@ -77,11 +77,11 @@ void GUIWidget::handle_click(int, int)
  * Setzt / holt die Zeichenflaeche, auf welche gezeichnet werden soll.
  * Alle Koordinaten beziehen sich auf diese Surface.
  */
-void GUIWidget::set_surface(SDL_Surface* s)
+void UVWidget::set_surface(SDL_Surface* s)
 {
 	surface = s;
 }
-SDL_Surface* GUIWidget::get_surface() const
+SDL_Surface* UVWidget::get_surface() const
 {
 	return surface;
 }

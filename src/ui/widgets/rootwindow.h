@@ -26,11 +26,11 @@
 //#include "si/keyboard.h"
 #include "ui/widgets/window.h"
 
-class GUIRootWindow : public GUIWindow
+class UVRootWindow : public UVWindow
 {
 	public:
-		GUIRootWindow(GUIWidget*, SDL_Surface*);
-		~GUIRootWindow();
+		UVRootWindow(UVWidget*, SDL_Surface*);
+		~UVRootWindow();
 
 		virtual void resize();
 		virtual void draw();

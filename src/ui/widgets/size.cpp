@@ -23,7 +23,7 @@
 /*
  * Konstruktor.
  */
-GUISize::GUISize(int _w, int _h)
+UVSize::UVSize(int _w, int _h)
 : w(_w), h(_h)
 {
 }
@@ -31,7 +31,7 @@ GUISize::GUISize(int _w, int _h)
 /*
  * Destruktor.
  */
-GUISize::~GUISize()
+UVSize::~UVSize()
 {
 }
 

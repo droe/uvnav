@@ -24,11 +24,11 @@
 #include "lib/sdl.h"
 #include "ui/widgets/size.h"
 
-class GUIRect : public GUISize
+class UVRect : public UVSize
 {
 	public:
-		GUIRect(int = 0, int = 0, int = 0, int = 0);
-		~GUIRect();
+		UVRect(int = 0, int = 0, int = 0, int = 0);
+		~UVRect();
 
 		bool contains(int, int) const;
 		SDL_Rect* to_sdl_rect() const;

@@ -704,19 +704,19 @@ void UVMap::draw(SDL_Rect* rect)
 	/*
 	 * DEBUG Code fuer Widgets
 	 */
-/*	GUICompositeWidget* cw1 = new GUICompositeWidget();
-	GUICompositeWidget* cw2 = new GUICompositeWidget(2, GUIOVertical);
-	GUIWidget* w1 = new GUIWidget();
-	GUIWidget* w2 = new GUIWidget();
-	GUIWidget* w3 = new GUIWidget();
-	GUIWidget* w4 = new GUIWidget();
+/*	UVCompositeWidget* cw1 = new UVCompositeWidget();
+	UVCompositeWidget* cw2 = new UVCompositeWidget(2, UVOVertical);
+	UVWidget* w1 = new UVWidget();
+	UVWidget* w2 = new UVWidget();
+	UVWidget* w3 = new UVWidget();
+	UVWidget* w4 = new UVWidget();
 	cw1->set_surface(screen);
 	cw2->add_widget(w2);
 	cw2->add_widget(w3);
 	cw1->add_widget(w1);
 	cw1->add_widget(cw2);
 	cw1->add_widget(w4);
-	GUIWindow* win = new GUIWindow(cw1, screen);
+	UVWindow* win = new UVWindow(cw1, screen);
 	win->x = dst.x;
 	win->y = dst.y;
 	win->w = dst.w;

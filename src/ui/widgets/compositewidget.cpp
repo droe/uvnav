@@ -26,15 +26,15 @@
 /*
  * Konstruktor.
  */
-GUICompositeWidget::GUICompositeWidget(int we, GUIOrientation o, SDL_Surface* s)
-: GUIWidget(we, s), modified(false), orientation(o), weight_total(0)
+UVCompositeWidget::UVCompositeWidget(int we, UVOrientation o, SDL_Surface* s)
+: UVWidget(we, s), modified(false), orientation(o), weight_total(0)
 {
 }
 
 /*
  * Destruktor.
  */
-GUICompositeWidget::~GUICompositeWidget()
+UVCompositeWidget::~UVCompositeWidget()
 {
 	int count = widgets.size();
 	for(int i = 0; i < count; i++)
@@ -47,19 +47,19 @@ GUICompositeWidget::~GUICompositeWidget()
 /*
  * Fuegt ein Widget hinzu.  Reihenfolge ist signifikant.
  */
-void GUICompositeWidget::add_widget(GUIWidget* wi)
+void UVCompositeWidget::add_widget(UVWidget* wi)
 {
 	wi->set_surface(surface);
 
 	// min/max aktualisieren
-	if(orientation == GUIOHorizontal)
+	if(orientation == UVOHorizontal)
 	{
 		min.h = max(min.h, wi->min.h);
 		max.h = max(max.h, wi->max.h);
 		min.w += wi->min.w;
 		max.w += wi->max.w;
 	}
-	else // GUIOVertical
+	else // UVOVertical
 	{
 		min.h += wi->min.h;
 		max.h += wi->max.h;
@@ -77,10 +77,10 @@ void GUICompositeWidget::add_widget(GUIWidget* wi)
  * Berechnet das Layout des CompositeWidget und aller enthaltenen Widgets
  * und aktualisiert min/max.
  */
-void GUICompositeWidget::resize()
+void UVCompositeWidget::resize()
 {
 /*
-cerr << "===> GUICompositeWidget::resize()" << endl;
+cerr << "===> UVCompositeWidget::resize()" << endl;
 cerr << "x=" << x << endl;
 cerr << "y=" << y << endl;
 cerr << "w=" << w << endl;
@@ -101,8 +101,8 @@ cerr << "max.h=" << max.h << endl;
 	 */
 
 	int dyn = 0;
-	if(orientation == GUIOHorizontal) { dyn = w - min.w; }
-	else /* GUIOVertical */           { dyn = h - min.h; }
+	if(orientation == UVOHorizontal) { dyn = w - min.w; }
+	else /* UVOVertical */           { dyn = h - min.h; }
 	dyn = max(0, dyn);
 /*
 cerr << "dyn=" << dyn << endl;
@@ -119,9 +119,9 @@ cerr << "===> widget[" << i << "]" << endl;
 cerr << "last_x=" << last_x << endl;
 cerr << "last_y=" << last_y << endl;
 */
-		GUIWidget* widget = widgets[i];
+		UVWidget* widget = widgets[i];
 
-		if(orientation == GUIOHorizontal)
+		if(orientation == UVOHorizontal)
 		{
 			widget->x = last_x;
 			widget->y = last_y;
@@ -130,7 +130,7 @@ cerr << "last_y=" << last_y << endl;
 			widget->h = min(h, widget->max.h);
 			last_x += widget->w;
 		}
-		else // GUIOVertical
+		else // UVOVertical
 		{
 			widget->x = last_x;
 			widget->y = last_y;
@@ -154,9 +154,9 @@ cerr << "widgets[" << i << "]->h=" << widget->h << endl;
 
 
 /*
- * Zeichnet das GUICompositeWidget und alle enthaltenen Widgets.
+ * Zeichnet das UVCompositeWidget und alle enthaltenen Widgets.
  */
-void GUICompositeWidget::draw()
+void UVCompositeWidget::draw()
 {
 	static UVDraw* drw = UVDraw::get_instance();
 
@@ -176,10 +176,10 @@ void GUICompositeWidget::draw()
 
 /*
  * Mausklick-Event wird aufgerufen wenn der Benutzer auf die Flaeche des
- * GUICompositeWidgets klickt.  Der Event muss verarbeitet und ans richtige
- * GUIWidget weitergegeben werden.
+ * UVCompositeWidgets klickt.  Der Event muss verarbeitet und ans richtige
+ * UVWidget weitergegeben werden.
  */
-void GUICompositeWidget::handle_click(int posx, int posy)
+void UVCompositeWidget::handle_click(int posx, int posy)
 {
 	int count = widgets.size();
 	for(int i = 0; i < count; i++)
@@ -200,7 +200,7 @@ void GUICompositeWidget::handle_click(int posx, int posy)
  * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
  * die Surface gesetzt wird.
  */
-void GUICompositeWidget::set_surface(SDL_Surface* s)
+void UVCompositeWidget::set_surface(SDL_Surface* s)
 {
 	surface = s;
 

@@ -21,11 +21,11 @@
 #ifndef SIZE_H
 #define SIZE_H
 
-class GUISize
+class UVSize
 {
 	public:
-		GUISize(int = 0, int = 0);
-		~GUISize();
+		UVSize(int = 0, int = 0);
+		~UVSize();
 
 		int w;
 		int h;
