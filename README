@@ -23,17 +23,14 @@ Allgemeines
 
 UV Navigator ist ein weiteres Tool fuer Universum V.  ToVU passte
 mir aus technischen Gruenden nicht so wirklich (browserbasiert,
-Java), und AMAP / PoN laufen nur unter Windows und sind nicht
-Open Source, womit die Moeglichkeit für Bugfixes und Erweiterungen
-nicht gegeben ist.
+Java), und AMAP / PoN / ZugComposer laufen nur unter Windows, werden
+nicht mehr weiterentwickelt, und sind nicht Open Source, womit die
+Moeglichkeit für Bugfixes und Erweiterungen nicht gegeben ist.
 
-Ergo musste was ``richtiges'' her, und das hier ist das Resultat.
-Ich habe UVNav primaer für mich selber entwickelt, und momentan
-gibt UVNav sicher auch noch nicht genug Features her, um AMAP,
-PoN und ToVU ernsthaft zu konkurrenzieren.  Trotzdem ist UVNav
-oeffentlich.  Ihr seid eingeladen, auch selber an UVNav
-Verbesserungen anzubringen, und mir die in Form von unified
-Diffs (diff -ruN) zu schicken.
+Ergo musste was ``Richtiges'' her, und das hier ist das Resultat.
+Ich habe UVNav primaer für mich selber entwickelt, und momentan gibt
+UVNav sicher auch noch nicht genug Features her, um die anderen Tools
+ernsthaft zu konkurrenzieren.
 
 UV Navigator ist freie Software.  Aktuelle Version und Source Code
 gibts auf den Projektseiten:

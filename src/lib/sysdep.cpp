@@ -130,7 +130,7 @@ bool sysdep_file_exists(const string& file)
  * von EGachine
  * Copyright (C) 2004 Jens Thiele <karme@berlios.de>
  * Copyright (C) 2003 Stephan Ferraro <stephan@lazyfellow.com>
- * Lizenziert unter der GNU GPL
+ * Lizenz: GNU GPL
  * http://egachine.berlios.de/
  */
 void sysdep_screensize(SDL_Rect* rect)

@@ -186,6 +186,12 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
            und inklusive Quellenangabe (index in tbl_source (spieler/sz/file))
     - Wie Fremdauswertungen dazuladen?
     - Wie Fremdauswertungen anschauen, mit / ohne Zusatzwissen?
+    - UVUniversumMerger merged zwei UVUniversum* Strukturen
+      - UVUniversum irgendwie persistent machen (XML)
+      - UVUniversum erweitern um Timestamps und Blaim-Mechanismen
+        - UVDataOrigin: SZ, Spieler
+        - UVDataOriginHandler: verwaltet DataOrigin Objekte
+        - in den Datenstrukturen nur Pointer
 
 - Imperatoren-Support
   - parse_imp_*

@@ -5,39 +5,31 @@ $Id$
 Architektur
 -----------
 
-UV Navigator ist in einer klassischen Vierschichtenarchitektur strukturiert:
-User Interface (UI), Data Management (DM), Problem Domain (PD), und System
-Interface (SI).  Zusaetzlich existiert eine Library-Pseudoschicht.
+UV Navigator ist in einer Vierschichtenarchitektur strukturiert:
+User Interface (UI), Data Management (DM), Problem Domain (PD), und
+System Interface (SI).  Zusaetzlich existiert eine Library (Lib)
+Pseudoschicht.
 
 
 
-Die Schichten
--------------
-
-ui   User Interface Layer: Window, Map, Widgets
-dm   Data Management Layer: Import/Export
-pd   Problem Domain Layer: Planet, Planeten, Schiff, ...
-si   System Interface Layer: Config, Image, Font, Log
-lib  Pattern-ABC's, Library-Wrapper, SysDep
-
-     +-----------------------------+     +---+
-     | UI - User Interface Layer   |---->|   |
-     +-----------------------------+     | L |
+     +-----------------------------+     +---+     +------+
+     | UI - User Interface Layer   |---->|   |---->| PCRE |
+     +-----------------------------+     | L |     +------+
          |        |           |          | i |
-         V        |           |          | b |
-     +-----------------------------+     | r |
-     | DM - Data Management Layer  |---->| a |
-     +-----------------------------+     | r |
-                | |         | |          | y |
-                V V         | |          |   |
+         V        |           |          | b |     +------+
+     +-----------------------------+     | r |---->| SDL: |
+     | DM - Data Management Layer  |---->| a |---->| _img |
+     +-----------------------------+     | r |---->| _ttf |
+                | |         | |          | y |---->| _gfx |
+                V V         | |          |   |     +------+
      +-----------------------------+     |   |
-     | PD - Problem Domain Layer   |---->| L |
-     +-----------------------------+     | a |
-                          | | |          | y |
+     | PD - Problem Domain Layer   |---->| L |     +------+
+     +-----------------------------+     | a |---->| X11  |
+                          | | |          | y |     +------+
                           V V V          | e |
-     +-----------------------------+     | r |
-     | SI - System Interface Layer |---->|   |
-     +-----------------------------+     +---+
+     +-----------------------------+     | r |     +------+
+     | SI - System Interface Layer |---->|   |---->| STL  |
+     +-----------------------------+     +---+     +------+
 
 
 

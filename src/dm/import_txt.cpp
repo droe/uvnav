@@ -3360,7 +3360,7 @@ void UVImportTXT::parse_leerzeile()
  *
  * Basiert auf setKlima() aus Planet.java 1.9 von ToVU
  * Copyright (C) 1998-2004 Daniel Straessle <d@niel.ch>
- * Lizenziert unter der GNU GPL
+ * Lizenz: GNU GPL
  * http://www.duffy.ch/universum/tovu/
  */
 long UVImportTXT::get_image_planet(const string& s) const
