@@ -52,8 +52,8 @@
 /*
  * Konstruktor.
  */
-UVParserTXT::UVParserTXT(UVConf* c, int v, UVWelt* w)
-: conf(c), welt(w), line(0), filesize(0), bytecount(0), verbosity(v)
+UVParserTXT::UVParserTXT(int v, UVWelt* w)
+: welt(w), line(0), filesize(0), bytecount(0), verbosity(v)
 , stats_schiffe(0), stats_planeten(0)
 {
 	if(welt == NULL)

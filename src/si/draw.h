@@ -22,22 +22,23 @@
 #define DRAW_H
 
 #include "../lib/sdl.h"
+#include "../lib/singleton.h"
 
-#include "conf.h"
-
-class UVDraw
+class UVDraw : public Singleton<UVDraw>
 {
-	public:
-		UVDraw(const UVConf* conf);
-//		~UVDraw();
+	friend class Singleton<UVDraw>;
 
+	public:
 		void line(SDL_Surface* surface, long, long, long, long, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 		void box(SDL_Surface* surface, Sint16, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
 		void circle(SDL_Surface* surface, Sint16, Sint16, Sint16, Uint8, Uint8, Uint8, Uint8 = 0xFF) const;
+
+	protected:
+		UVDraw();
+//		~UVDraw();
 
 	private:
 		bool antialiasing;
 };
 
 #endif // DRAW_H
-

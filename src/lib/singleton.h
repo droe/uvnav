@@ -18,29 +18,42 @@
  * $Id$
  */
 
-#ifndef FONT_H
-#define FONT_H
+#ifndef SINGLETON_H
+#define SINGLETON_H
 
-#include "../lib/stl.h"
-#include "../lib/sdl.h"
+/*
+ * Singleton-Template.  Stellt sicher, dass es von der betreffenden
+ * Klasse nur eine Instanz gibt.
+ *
+ * Verwendung:
+ * class FooBar : public Singleton<FooBar>
+ * {
+ *     friend Singleton<FooBar>;
+ *     private:
+ *         FooBar();
+ *     // ...
+ * }
+ */
 
-#define FNT_SANS "FreeSans.ttf"
-
-class UVFont
+template <class T>
+class Singleton
 {
 	public:
-		UVFont(const string& file, int size);
-		~UVFont();
+		static T* get_instance();
 
-		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
-		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
-		SDL_Surface* get_surface(const string& text) const;
+	protected:
+		Singleton() {}
 
 	private:
-		TTF_Font* font;
-
-		bool antialiasing;
+		Singleton( const Singleton& );
+		Singleton& operator=(Singleton const&);
 };
 
-#endif // FONT_H
+template <class T>
+T* Singleton<T>::get_instance()
+{
+	static T instance;
+	return &instance;
+}
 
+#endif // SINGLETON_H

@@ -21,7 +21,6 @@
 #ifndef MAP_H
 #define MAP_H
 
-#include "../si/conf.h"
 #include "../si/images.h"
 #include "../si/font.h"
 #include "../si/draw.h"
@@ -50,7 +49,7 @@ class UVMapQuadrant
 class UVMap
 {
 	public:
-		UVMap(UVConf*, UVImages*, UVWelt*, SDL_Surface*);
+		UVMap(UVWelt*, SDL_Surface*);
 		~UVMap();
 
 		void set_dim(long);
@@ -80,7 +79,6 @@ class UVMap
 		void draw(SDL_Rect*);
 
 	private:
-		UVConf* conf;
 		UVImages* images;
 		UVWelt* welt;
 		UVSpieler* spieler;

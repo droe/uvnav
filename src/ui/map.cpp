@@ -21,8 +21,8 @@
 #include "map.h"
 
 #include "../lib/version.h"
-
 #include "../lib/exceptions.h"
+#include "../si/conf.h"
 
 #define PI 3.14159265358979323846
 
@@ -138,16 +138,20 @@ UVMapQuadrant::~UVMapQuadrant()
  * Waehlt sinnvollen Kartenausschnitt und Dimension falls alte Werte sinnlos,
  * d.h. wenn keine Daten sichtbar waeren.
  */
-UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
-: conf(c), images(i), welt(w), spieler(NULL), screen(s), phys(NULL)
+UVMap::UVMap(UVWelt* w, SDL_Surface* s)
+: welt(w), spieler(NULL), screen(s), phys(NULL)
 , virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
+	images = UVImages::get_instance();
+
 	screen_size.w = s->w;
 	screen_size.h = s->h;
 
 	spieler = welt->get_spieler();
+
+	UVConf* conf = UVConf::get_instance();
 
 	opt_sichtradien = conf->b_get("map-sichtradien", true);
 	opt_kaufradien = conf->b_get("map-kaufradien", true);
@@ -189,10 +193,10 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
 		                      - (alle_y2 - alle_y1)) / 2;
 	}
 
-	drw = new UVDraw(conf);
-	debug_font = new UVFont(conf, FNT_SANS, conf->l_get("map-debug-font-size"));
-	grid_font = new UVFont(conf, FNT_SANS, conf->l_get("map-grid-font-size"));
-	label_font = new UVFont(conf, FNT_SANS, conf->l_get("map-label-font-size"));
+	drw = UVDraw::get_instance();
+	debug_font = new UVFont(FNT_SANS, conf->l_get("map-debug-font-size"));
+	grid_font = new UVFont(FNT_SANS, conf->l_get("map-grid-font-size"));
+	label_font = new UVFont(FNT_SANS, conf->l_get("map-label-font-size"));
 }
 
 
@@ -201,6 +205,7 @@ UVMap::UVMap(UVConf* c, UVImages* i, UVWelt* w, SDL_Surface* s)
  */
 UVMap::~UVMap()
 {
+	UVConf* conf = UVConf::get_instance();
 	conf->l_set("map-offset-x", offset_x, true);
 	conf->l_set("map-offset-y", offset_y, true);
 	conf->f_set("map-zoom", zoom, true);
@@ -738,7 +743,7 @@ void UVMap::draw(SDL_Rect* rect)
  */
 void UVMap::draw_grid()
 {
-	static const long tick = conf->l_get("map-grid-font-size") / 2;
+	static const long tick = UVConf::get_instance()->l_get("map-grid-font-size") / 2;
 
 	// Maschengroesse = groesste Zweierpotenz von 125 KE kleiner als 100px
 	long d = long(rint(zoom * 125.0 / 100.0));

@@ -21,6 +21,7 @@
 #ifndef CONF_H
 #define CONF_H
 
+#include "../lib/singleton.h"
 #include "../lib/stl.h"
 
 /*
@@ -31,12 +32,15 @@
  */
 #define CONF_VERSION 1
 
-class UVConf
+class UVConf : public Singleton<UVConf>
 {
-	public:
+	friend class Singleton<UVConf>;
+
+	private:
 		UVConf();
 		~UVConf();
 
+	public:
 		void set_auswertung(string, long);
 
 		string s_get(const string&, bool = false) const;
@@ -54,6 +58,9 @@ class UVConf
 
 		bool have_data() const;
 
+		void load();
+		void save() const;
+
 	private:
 		string aw_besitzer;
 		long aw_sternzeit;
@@ -63,9 +70,7 @@ class UVConf
 		mutable ext::hash_map<string, double> f_conf;
 		mutable ext::hash_map<string, bool>   b_conf;
 
-		void load();
 		void convert();
-		void save() const;
 };
 
 #endif // CONF_H

@@ -20,16 +20,12 @@
 
 #include "conf.h"
 
+#include "../lib/version.h"
 #include "../lib/sysdep.h"
 #include "../lib/exceptions.h"
 
 /*
  * UVConf - Verwaltet die persistente Konfiguration.
- *
- * Die Konfiguration wird bei jedem instanzieren dieser Klasse
- * gelesen, und beim entfernen wieder gespeichert.
- * Die Konfigurationsdatei wird also nach jedem Ausfuehren des
- * Programms neu generiert.
  *
  * UVConf unterstuetzt Globale und auswertungsspezifische Schluessel:
  *
@@ -224,6 +220,8 @@ void UVConf::load()
 
 /*
  * Konfiguration speichern.
+ *
+ * Achtung: Wird von Destruktor aufgerufen -- Singletons bereits destroyed!
  */
 void UVConf::save() const
 {

@@ -20,6 +20,7 @@
 
 #include "lib/version.h"
 #include "lib/sysexits.h"
+#include "lib/sysdep.h"
 
 #include "si/conf.h"
 #include "ui/navigator.h"
@@ -208,7 +209,7 @@ int main(int argc, char* argv[])
 			cerr << " *** Warnung: Hardware-Modus ist noch nicht benutzbar!" << endl;
 		}
 
-		UVConf* conf = new UVConf();
+		UVConf *conf = UVConf::get_instance();
 
 		if(w > 0)
 		{
@@ -259,14 +260,13 @@ int main(int argc, char* argv[])
 			conf->b_set("screen-quality", false);
 		}
 
-		UVNavigator* nav = new UVNavigator(conf);
+		UVNavigator* nav = new UVNavigator();
 		nav->splash();
 		nav->load(argv[0], v);
 		nav->wait();
 		nav->run();
 
 		delete nav;
-		delete conf;
 		exit(EX_OK);
 	}
 	catch(bad_alloc e)

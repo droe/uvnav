@@ -21,16 +21,15 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "../si/conf.h"
 #include "../pd/welt.h"
+#include "../si/conf.h"
 #include "../si/font.h"
-#include "../si/images.h"
 #include "map.h"
 
 class UVNavigator
 {
 	public:
-		UVNavigator(UVConf*);
+		UVNavigator();
 		~UVNavigator();
 
 		void splash();
@@ -43,7 +42,6 @@ class UVNavigator
 		UVMap* map;
 		// *** GUI
 		UVConf* conf;
-		UVImages* images;
 		UVFont* font_splash;
 
 		SDL_Surface* screen;

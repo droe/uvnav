@@ -21,8 +21,8 @@
 #ifndef IMAGES_H
 #define IMAGES_H
 
-#include "conf.h"
-#include "../lib/sysdep.h"
+#include "../lib/sdl.h"
+#include "../lib/singleton.h"
 
 #define IMG_UNIVERSUM	 0
 #define IMG_SDL_POWERED	 1
@@ -45,14 +45,17 @@ struct uv_img
 	double faktor;
 };
 
-class UVImages
+class UVImages : public Singleton<UVImages>
 {
-	public:
-		UVImages(const UVConf* conf);
-		~UVImages();
+	friend class Singleton<UVImages>;
 
+	public:
 		SDL_Surface* get_surface(const long id, const double f = 1.0);
 		SDL_Surface* get_surface(const long id, const int w, const int h);
+
+	protected:
+		UVImages();
+		~UVImages();
 
 	private:
 		uv_img images[NUM_IMG];

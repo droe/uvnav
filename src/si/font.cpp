@@ -21,6 +21,8 @@
 #include "font.h"
 
 #include "../lib/exceptions.h"
+#include "../lib/sysdep.h"
+#include "conf.h"
 
 /*
  * UVFont - Eine TTF-Schriftart laden und Strings rendern.
@@ -38,7 +40,7 @@
 /*
  * Konstruktor.
  */
-UVFont::UVFont(const UVConf* conf, const string& file, int size)
+UVFont::UVFont(const string& file, int size)
 {
 	string ff = sysdep_fontfile(file);
 	if(!sysdep_file_exists(ff))
@@ -46,7 +48,7 @@ UVFont::UVFont(const UVConf* conf, const string& file, int size)
 		throw EXCEPTION("Kann Font-Datei " + file + " nicht finden!");
 	}
 
-	antialiasing = conf->b_get("screen-quality");
+	antialiasing = UVConf::get_instance()->b_get("screen-quality");
 
 	TTF_Init();
 

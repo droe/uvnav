@@ -21,7 +21,6 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include "../si/conf.h"
 #include "../si/font.h"
 #include "../lib/sdl.h"
 #include "../lib/stl.h"
@@ -30,7 +29,7 @@
 class UVProgress : public Observer
 {
 	public:
-		UVProgress(const UVConf*, SDL_Surface*, SDL_Rect*);
+		UVProgress(SDL_Surface*, SDL_Rect*);
 		~UVProgress();
 
 		void init(unsigned long);

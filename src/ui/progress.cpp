@@ -34,10 +34,10 @@
 /*
  * Konstruktor.
  */
-UVProgress::UVProgress(const UVConf* conf, SDL_Surface* s, SDL_Rect* r)
+UVProgress::UVProgress(SDL_Surface* s, SDL_Rect* r)
 : screen(s), rect(*r), ticks(0)
 {
-	font = new UVFont(conf, FNT_SANS, screen->h / 32);
+	font = new UVFont(FNT_SANS, screen->h / 32);
 }
 
 

@@ -21,7 +21,6 @@
 #ifndef PARSER_TXT_H
 #define PARSER_TXT_H
 
-#include "../si/conf.h"
 #include "../pd/welt.h"
 #include "../lib/regexp.h"
 #include "../lib/observer.h"
@@ -29,7 +28,7 @@
 class UVParserTXT : public Subject
 {
 	public:
-		UVParserTXT(UVConf* c, int = 0, UVWelt* = NULL);
+		UVParserTXT(int = 0, UVWelt* = NULL);
 		~UVParserTXT();
 
 		void parse(const string& file);
@@ -38,7 +37,6 @@ class UVParserTXT : public Subject
 		unsigned long get_bytecount() const;
 
 	private:
-		UVConf* conf;
 		UVWelt* welt;
 
 		ifstream stream;

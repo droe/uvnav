@@ -24,6 +24,7 @@
 #include "../lib/exceptions.h"
 #include "../lib/sysdep.h"
 #include "../dm/parser_txt.h"
+#include "../si/images.h"
 #include "progress.h"
 
 /*
@@ -48,8 +49,8 @@
  *
  * Initialisiert automatisch die SDL Surface des Bildschirms.
  */
-UVNavigator::UVNavigator(UVConf* c)
-: welt(NULL), map(NULL), conf(c)
+UVNavigator::UVNavigator()
+: welt(NULL), map(NULL)
 {
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
@@ -63,8 +64,8 @@ UVNavigator::UVNavigator(UVConf* c)
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
-	font_splash = new UVFont(conf, FNT_SANS, screen->h / 32);
-	images = new UVImages(conf);
+	conf = UVConf::get_instance();
+	font_splash = new UVFont(FNT_SANS, screen->h / 32);
 
 	if(conf->b_get("screen-quality"))
 	{
@@ -85,7 +86,6 @@ UVNavigator::UVNavigator(UVConf* c)
  */
 UVNavigator::~UVNavigator()
 {
-	delete images;
 	delete font_splash;
 }
 
@@ -180,6 +180,8 @@ void UVNavigator::splash()
 {
 	SDL_Surface* img;
 	SDL_Rect dst = { 0, 0, 0, 0 };
+
+	UVImages* images = UVImages::get_instance();
 
 	if(SDL_MUSTLOCK(screen))
 	{
@@ -295,12 +297,12 @@ void UVNavigator::load(const string& file, int v)
 	{
 		splash_status("Lade Auswertung: " + file);
 
-		UVParserTXT* parser = new UVParserTXT(conf, v);
+		UVParserTXT* parser = new UVParserTXT(v);
 
 		SDL_Rect dest;
 		dest.x = screen->w / 16; dest.w = screen->w * 7 / 8;
 		dest.y = screen->h * 5 / 8;  dest.h = screen->h / 16;
-		UVProgress* progress = new UVProgress(conf, screen, &dest);
+		UVProgress* progress = new UVProgress(screen, &dest);
 		parser->attach(progress);
 		parser->parse(file);
 		parser->detach(progress);
@@ -347,7 +349,7 @@ void UVNavigator::run()
 {
 	SDL_Rect rect = { 0, 0, screen->w, screen->h };
 
-	map = new UVMap(conf, images, welt, screen);
+	map = new UVMap(welt, screen);
 	map->draw(&rect);
 
 	SDL_Event event;

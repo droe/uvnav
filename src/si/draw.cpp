@@ -20,6 +20,8 @@
 
 #include "draw.h"
 
+#include "conf.h"
+
 /*
  * UVDraw - Grafische Formen zeichnen.
  *
@@ -30,9 +32,9 @@
 /*
  * Konstruktor.
  */
-UVDraw::UVDraw(const UVConf* conf)
+UVDraw::UVDraw()
 {
-	antialiasing = conf->b_get("screen-quality");
+	antialiasing = UVConf::get_instance()->b_get("screen-quality");
 }
 
 

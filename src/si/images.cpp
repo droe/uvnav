@@ -21,6 +21,8 @@
 #include "images.h"
 
 #include "../lib/exceptions.h"
+#include "../lib/sysdep.h"
+#include "../si/conf.h"
 
 /*
  * UVImages - Bilder effizient laden, skalieren und verwalten.
@@ -61,9 +63,11 @@ const string img_files[NUM_IMG] = {
  * Laedt die Bilder als Surface in Originalgroesse.
  * Erledigt auch die Konversion ins passende Bildschirmformat.
  */
-UVImages::UVImages(const UVConf* conf)
+UVImages::UVImages()
 {
-	smoothing = conf->b_get("screen-quality") ? SMOOTHING_ON : SMOOTHING_OFF;
+	smoothing = UVConf::get_instance()->b_get("screen-quality")
+		? SMOOTHING_ON
+		: SMOOTHING_OFF;
 
 	for(int i = 0; i < NUM_IMG; i++)
 	{

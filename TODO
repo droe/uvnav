@@ -1,7 +1,9 @@
 $Id$
 
 - PRI 1: OO-Architecture Redesign
-  - si/* -> Singletons
+  - si/font.* -> Singleton<UVFont> mit HashMap of Font Objs
+  - STL: stl.h -> stl.h string.h (schnelleres compile)
+  - SDL: wech mit hardware surfaces
   - OS/SysDep: lib oder si? static oder Singleton?
   - lib/observer.* benutzen, um ui von pd und dm zu separieren
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
@@ -9,7 +11,7 @@ $Id$
   - parser_txt.* refactoren:
     - abstractparser.*, txtparser.*/xmlparser.*/htmparser.*, parserhandler.*
   - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
-                            ui/root.{h,cpp}
+                            ui/rootpane.{h,cpp}
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)
