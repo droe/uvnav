@@ -55,6 +55,8 @@ uvnav_SOURCES = rev.h rev.cpp \
 	dm/abstractimporter.h \
 	dm/import_txt.h dm/import_txt.cpp \
 	dm/importhandler.h dm/importhandler.cpp \
+	ui/widgets/widget.h ui/widgets/widget.cpp \
+	ui/widgets/compositewidget.h ui/widgets/compositewidget.cpp \
 	ui/map.h ui/map.cpp \
 	ui/progress.h ui/progress.cpp \
 	ui/navigator.h ui/navigator.cpp \

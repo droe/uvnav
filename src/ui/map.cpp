@@ -22,8 +22,12 @@
 
 #include "lib/version.h"
 #include "lib/exceptions.h"
+#include "lib/minmax.h"
 #include "si/conf.h"
 #include "si/fonthandler.h"
+
+#include "ui/widgets/widget.h"
+#include "ui/widgets/compositewidget.h"
 
 #define PI 3.14159265358979323846
 
@@ -695,6 +699,28 @@ void UVMap::draw(SDL_Rect* rect)
 	dst.y = screen->h - debug->h * 2;
 	drw->box(screen, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
 	SDL_BlitSurface(debug, 0, screen, &dst);
+
+	/*
+	 * DEBUG Code fuer Widgets
+	 */
+/*	CompositeWidget* cw1 = new CompositeWidget();
+	CompositeWidget* cw2 = new CompositeWidget(2, CWOVertical);
+	Widget* w1 = new Widget();
+	Widget* w2 = new Widget();
+	Widget* w3 = new Widget();
+	Widget* w4 = new Widget();
+	cw1->set_surface(screen);
+	cw2->add_widget(w2);
+	cw2->add_widget(w3);
+	cw1->add_widget(w1);
+	cw1->add_widget(cw2);
+	cw1->add_widget(w4);
+	cw1->set_eff_rect(&dst);
+	cw1->resize();
+	cw1->draw();
+*/	/*
+	 * END OF DEBUG
+	 */
 
 	SDL_UpdateRect(screen, phys->x, phys->y, phys->w, phys->h);
 

@@ -1,8 +1,13 @@
 $Id$
 
 - OO-Architecture Redesign
-  - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/abstractwidget.{h,cpp}
-                            ui/rootpane.{h,cpp}
+  - Widget-Architetur implementieren
+    - Window
+    - RootWindow
+  - si/UVKeyboard als Singleton implementieren
+    - observer pattern (?)
+    - multiplext keypresses an alle interessierten objekte
+  - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/rootpane.{h,cpp}
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
     - model interface (virtual class)
   - lib/observer.* benutzen, um ui von pd und dm zu separieren
@@ -12,7 +17,7 @@ $Id$
   - Parsing relevanter Daten als nächstes
     - Zonendaten
     - Income-Stats (?)
-- Maushandling: Zoom, Zentrieren, Scrollen, Koordinaten anzeigen.
+- Maushandling: Zoom, Zentrieren, Scrollen, Koordinaten anzeigen, Selection.
   - Hierarchisches Widget-System
     - Widgets und Containers
 
@@ -24,7 +29,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
 == UNSORTED ==
 
 - sidebar mit objektliste als einfaches mittel gegen die unübersichtlichkeit
-  - deaktiviertbar
+  - deaktivierbar
   - evtl zoom-minimap
   - wie mit übersichts-minimap koppeln?
 
@@ -41,6 +46,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Linien mit Koords > 16 bit
     - Eigene Routinen mit 32bit Arithmetik implementieren
     - oder allen Linien zeichnenden Code mit "dirty Rect"-Correctness versehen
+  - AGG Code klauen
 
 - Geschwindigkeit / Usability optimieren
   - SDL_Surface temp als zweiten buffer führen,
@@ -113,12 +119,10 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - parse_nachrichten implementieren
   - UVWelt erweitern
 
-- DEBUG / PRINT_DEBUG einführen und generell sauber managen
-  - debuglevels?
-  - debugcategories? [<-]
-
-- UVGUIWidgets
-  - ...
+- Logging-Klasse mit Verbosity Levels einfuehren
+  - Makros fuer Deaktivierbarbeit via --enable-debug
+  - Log-Levels
+  - Debug-Categories
 
 - detailansicht menuliste (depends on UVGUIWidgets)
   - auswahlrechteck startet detailansicht mit selektierten objects
@@ -127,7 +131,7 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - sortieren nach ...
   - auswahl eines objekts, gleiche aktionen wie im kartenfenster
 
-- UVWelt
+- UVUniversum
   - Spieler ausbauen. Für jeden Spieler möglichst viele Informationen
     speichern, inklusive Statistik à la wieviele Objekte welchen Typs
     besitzt er.
@@ -210,4 +214,3 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - zentrale WARN(); Facility
 
 - Verbleibende verstreute TODOs und *** und FIXMEs abarbeiten
-
