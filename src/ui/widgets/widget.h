@@ -22,21 +22,14 @@
 #define WIDGET_H
 
 #include "lib/sdl.h"
+#include "ui/widgets/rect.h"
 
-class Widget
+class GUIWidget : public GUIRect
 {
 	public:
-		Widget(unsigned int = 1);
-		~Widget();
+		GUIWidget(int = 1, SDL_Surface* = NULL);
+		~GUIWidget();
 
-		void set_weight(unsigned int);
-		unsigned int get_weight() const;
-		void set_min_rect(const SDL_Rect*);
-		const SDL_Rect* get_min_rect() const;
-		void set_max_rect(const SDL_Rect*);
-		const SDL_Rect* get_max_rect() const;
-		void set_eff_rect(const SDL_Rect*);
-		SDL_Rect* get_eff_rect();
 		virtual void set_surface(SDL_Surface*);
 		SDL_Surface* get_surface() const;
 
@@ -45,18 +38,13 @@ class Widget
 
 		virtual void resize();
 		virtual void draw();
-		virtual void handle_click(SDL_Rect*);
+		virtual void handle_click(int, int);
 
-//		virtual ??? want_events();
-//		virtual void handle_event(???);
-
-		bool contains(SDL_Rect*) const;
+		int weight;
+		GUISize min;
+		GUISize max;
 
 	protected:
-		unsigned int weight;
-		SDL_Rect min_rect;
-		SDL_Rect max_rect;
-		SDL_Rect eff_rect;
 		SDL_Surface* surface;
 
 //		bool enabled;

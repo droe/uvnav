@@ -18,33 +18,24 @@
  * $Id$
  */
 
-#ifndef COMPOSITEWIDGET_H
-#define COMPOSITEWIDGET_H
+#ifndef RECT_H
+#define RECT_H
 
-#include "lib/stl.h"
-#include "ui/widgets/orientation.h"
-#include "ui/widgets/widget.h"
+#include "lib/sdl.h"
+#include "ui/widgets/size.h"
 
-class GUICompositeWidget : public GUIWidget
+class GUIRect : public GUISize
 {
 	public:
-		GUICompositeWidget(int = 1, GUIOrientation = GUIOHorizontal, SDL_Surface* = NULL);
-		~GUICompositeWidget();
+		GUIRect(int = 0, int = 0, int = 0, int = 0);
+		~GUIRect();
 
-		virtual void add_widget(GUIWidget*);
+		bool contains(int, int) const;
+		SDL_Rect* to_sdl_rect() const;
 
-		virtual void resize();
-		virtual void draw();
-		virtual void handle_click(int, int);
-
-		virtual void set_surface(SDL_Surface*);
-
-	protected:
-		vector<GUIWidget*> widgets;
-		bool modified;
-		GUIOrientation orientation;
-		int weight_total;
+		int x;
+		int y;
 };
 
-#endif // COMPOSITEWIDGET_H
+#endif // RECT_H
 

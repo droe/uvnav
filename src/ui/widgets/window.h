@@ -18,20 +18,16 @@
  * $Id$
  */
 
-#ifndef COMPOSITEWIDGET_H
-#define COMPOSITEWIDGET_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
-#include "lib/stl.h"
-#include "ui/widgets/orientation.h"
 #include "ui/widgets/widget.h"
 
-class GUICompositeWidget : public GUIWidget
+class GUIWindow : public GUIWidget
 {
 	public:
-		GUICompositeWidget(int = 1, GUIOrientation = GUIOHorizontal, SDL_Surface* = NULL);
-		~GUICompositeWidget();
-
-		virtual void add_widget(GUIWidget*);
+		GUIWindow(GUIWidget*, SDL_Surface*);
+		~GUIWindow();
 
 		virtual void resize();
 		virtual void draw();
@@ -40,11 +36,9 @@ class GUICompositeWidget : public GUIWidget
 		virtual void set_surface(SDL_Surface*);
 
 	protected:
-		vector<GUIWidget*> widgets;
-		bool modified;
-		GUIOrientation orientation;
-		int weight_total;
+		GUIWidget* widget;
+		SDL_Surface* my_surface;
 };
 
-#endif // COMPOSITEWIDGET_H
+#endif // WINDOW_H
 

@@ -18,33 +18,47 @@
  * $Id$
  */
 
-#ifndef COMPOSITEWIDGET_H
-#define COMPOSITEWIDGET_H
+#include "rect.h"
 
-#include "lib/stl.h"
-#include "ui/widgets/orientation.h"
-#include "ui/widgets/widget.h"
-
-class GUICompositeWidget : public GUIWidget
+/*
+ * Konstruktor.
+ */
+GUIRect::GUIRect(int _x, int _y, int _w, int _h)
+: GUISize(_w, _h), x(_x), y(_y)
 {
-	public:
-		GUICompositeWidget(int = 1, GUIOrientation = GUIOHorizontal, SDL_Surface* = NULL);
-		~GUICompositeWidget();
+}
 
-		virtual void add_widget(GUIWidget*);
+/*
+ * Destruktor.
+ */
+GUIRect::~GUIRect()
+{
+}
 
-		virtual void resize();
-		virtual void draw();
-		virtual void handle_click(int, int);
 
-		virtual void set_surface(SDL_Surface*);
+/*
+ * Enthaelt dieses Rect den Punkt (x, y)?
+ */
+bool GUIRect::contains(int px, int py) const
+{
+	return (px >= x)
+	    && (px <  x + w)
+	    && (py >= y)
+	    && (py <  y + h);
+}
 
-	protected:
-		vector<GUIWidget*> widgets;
-		bool modified;
-		GUIOrientation orientation;
-		int weight_total;
-};
 
-#endif // COMPOSITEWIDGET_H
+/*
+ * Gibt ein SDL_Rect zurueck, das dem GUIRect entspricht.
+ */
+SDL_Rect* GUIRect::to_sdl_rect() const
+{
+	static SDL_Rect r;
+	r.x = x;
+	r.y = y;
+	r.w = w;
+	r.h = h;
+	return &r;
+}
+
 

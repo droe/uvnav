@@ -26,15 +26,15 @@
 /*
  * Konstruktor.
  */
-CompositeWidget::CompositeWidget(unsigned int w, CWOrientation o)
-: Widget(w), modified(false), orientation(o), weight_total(0)
+GUICompositeWidget::GUICompositeWidget(int we, GUIOrientation o, SDL_Surface* s)
+: GUIWidget(we, s), modified(false), orientation(o), weight_total(0)
 {
 }
 
 /*
  * Destruktor.
  */
-CompositeWidget::~CompositeWidget()
+GUICompositeWidget::~GUICompositeWidget()
 {
 	int count = widgets.size();
 	for(int i = 0; i < count; i++)
@@ -47,54 +47,52 @@ CompositeWidget::~CompositeWidget()
 /*
  * Fuegt ein Widget hinzu.  Reihenfolge ist signifikant.
  */
-void CompositeWidget::add_widget(Widget* w)
+void GUICompositeWidget::add_widget(GUIWidget* wi)
 {
-	w->set_surface(surface);
+	wi->set_surface(surface);
 
 	// min/max aktualisieren
-	const SDL_Rect* wmin = w->get_min_rect();
-	const SDL_Rect* wmax = w->get_max_rect();
-	if(orientation == CWOHorizontal)
+	if(orientation == GUIOHorizontal)
 	{
-		min_rect.h = max(min_rect.h, wmin->h);
-		max_rect.h = max(max_rect.h, wmax->h);
-		min_rect.w += wmin->w;
-		max_rect.w += wmax->w;
+		min.h = max(min.h, wi->min.h);
+		max.h = max(max.h, wi->max.h);
+		min.w += wi->min.w;
+		max.w += wi->max.w;
 	}
-	else // CWOVertical
+	else // GUIOVertical
 	{
-		min_rect.h += wmin->h;
-		max_rect.h += wmax->h;
-		min_rect.w = max(min_rect.w, wmin->w);
-		max_rect.w = max(max_rect.w, wmax->w);
+		min.h += wi->min.h;
+		max.h += wi->max.h;
+		min.w = max(min.w, wi->min.w);
+		max.w = max(max.w, wi->max.w);
 	}
-	weight_total += w->get_weight();
+	weight_total += wi->weight;
 
-	widgets.push_back(w);
+	widgets.push_back(wi);
 	modified = true;
 }
 
 
 /*
  * Berechnet das Layout des CompositeWidget und aller enthaltenen Widgets
- * und aktualisiert min_rect / max_rect.
+ * und aktualisiert min/max.
  */
-void CompositeWidget::resize()
+void GUICompositeWidget::resize()
 {
 /*
-cerr << "===> CompositeWidget::resize()" << endl;
-cerr << "eff_rect.x=" << eff_rect.x << endl;
-cerr << "eff_rect.y=" << eff_rect.y << endl;
-cerr << "eff_rect.w=" << eff_rect.w << endl;
-cerr << "eff_rect.h=" << eff_rect.h << endl;
-cerr << "min_rect.x=" << min_rect.x << endl;
-cerr << "min_rect.y=" << min_rect.y << endl;
-cerr << "min_rect.w=" << min_rect.w << endl;
-cerr << "min_rect.h=" << min_rect.h << endl;
-cerr << "max_rect.x=" << max_rect.x << endl;
-cerr << "max_rect.y=" << max_rect.y << endl;
-cerr << "max_rect.w=" << max_rect.w << endl;
-cerr << "max_rect.h=" << max_rect.h << endl;
+cerr << "===> GUICompositeWidget::resize()" << endl;
+cerr << "x=" << x << endl;
+cerr << "y=" << y << endl;
+cerr << "w=" << w << endl;
+cerr << "h=" << h << endl;
+cerr << "min.x=" << min.x << endl;
+cerr << "min.y=" << min.y << endl;
+cerr << "min.w=" << min.w << endl;
+cerr << "min.h=" << min.h << endl;
+cerr << "max.x=" << max.x << endl;
+cerr << "max.y=" << max.y << endl;
+cerr << "max.w=" << max.w << endl;
+cerr << "max.h=" << max.h << endl;
 */
 	int count = widgets.size();
 
@@ -103,14 +101,14 @@ cerr << "max_rect.h=" << max_rect.h << endl;
 	 */
 
 	int dyn = 0;
-	if(orientation == CWOHorizontal) { dyn = eff_rect.w - min_rect.w; }
-	else /* CWOVertical */           { dyn = eff_rect.h - min_rect.h; }
+	if(orientation == GUIOHorizontal) { dyn = w - min.w; }
+	else /* GUIOVertical */           { dyn = h - min.h; }
 	dyn = max(0, dyn);
 /*
 cerr << "dyn=" << dyn << endl;
 */
-	int last_x = eff_rect.x;
-	int last_y = eff_rect.y;
+	int last_x = x;
+	int last_y = y;
 
 	// loop all contained widgets
 	for(int i = 0; i < count; i++)
@@ -121,35 +119,33 @@ cerr << "===> widget[" << i << "]" << endl;
 cerr << "last_x=" << last_x << endl;
 cerr << "last_y=" << last_y << endl;
 */
-		SDL_Rect* r = widgets[i]->get_eff_rect();
+		GUIWidget* widget = widgets[i];
 
-		if(orientation == CWOHorizontal)
+		if(orientation == GUIOHorizontal)
 		{
-			r->x = last_x;
-			r->y = last_y;
-			r->w = min(dyn * widgets[i]->get_weight() / weight_total
-			           + widgets[i]->get_min_rect()->w,
-			           widgets[i]->get_max_rect()->w);
-			r->h = min(eff_rect.h, widgets[i]->get_max_rect()->h);
-			last_x += r->w;
+			widget->x = last_x;
+			widget->y = last_y;
+			widget->w = min(dyn * widget->weight / weight_total + widget->min.w,
+			                widget->max.w);
+			widget->h = min(h, widget->max.h);
+			last_x += widget->w;
 		}
-		else // CWOVertical
+		else // GUIOVertical
 		{
-			r->x = last_x;
-			r->y = last_y;
-			r->h = min(dyn * widgets[i]->get_weight() / weight_total
-			           + widgets[i]->get_min_rect()->h,
-			           widgets[i]->get_max_rect()->h);
-			r->w = min(eff_rect.w, widgets[i]->get_max_rect()->w);
-			last_y += r->h;
+			widget->x = last_x;
+			widget->y = last_y;
+			widget->h = min(dyn * widget->weight / weight_total + widget->min.h,
+			                widget->max.h);
+			widget->w = min(w, widget->max.w);
+			last_y += widget->h;
 		}
 /*
-cerr << "widgets[" << i << "]->eff_rect.x=" << r->x << endl;
-cerr << "widgets[" << i << "]->eff_rect.y=" << r->y << endl;
-cerr << "widgets[" << i << "]->eff_rect.w=" << r->w << endl;
-cerr << "widgets[" << i << "]->eff_rect.h=" << r->h << endl;
+cerr << "widgets[" << i << "]->x=" << widget->x << endl;
+cerr << "widgets[" << i << "]->y=" << widget->y << endl;
+cerr << "widgets[" << i << "]->w=" << widget->w << endl;
+cerr << "widgets[" << i << "]->h=" << widget->h << endl;
 */
-		widgets[i]->resize();
+		widget->resize();
 	}
 
 	// clear modified flag
@@ -158,9 +154,9 @@ cerr << "widgets[" << i << "]->eff_rect.h=" << r->h << endl;
 
 
 /*
- * Zeichnet das CompositeWidget und alle enthaltenen Widgets.
+ * Zeichnet das GUICompositeWidget und alle enthaltenen Widgets.
  */
-void CompositeWidget::draw()
+void GUICompositeWidget::draw()
 {
 	static UVDraw* drw = UVDraw::get_instance();
 
@@ -168,9 +164,7 @@ void CompositeWidget::draw()
 		resize();
 
 	// *** FIXME
-	drw->box(surface, eff_rect.x, eff_rect.y,
-		eff_rect.x + eff_rect.w, eff_rect.y + eff_rect.h,
-		0x00, 0xFF, 0x00, 0x7F);
+	drw->box(surface, x, y, x + w, y + h, 0x00, 0xFF, 0x00, 0x7F);
 
 	int count = widgets.size();
 	for(int i = 0; i < count; i++)
@@ -182,17 +176,17 @@ void CompositeWidget::draw()
 
 /*
  * Mausklick-Event wird aufgerufen wenn der Benutzer auf die Flaeche des
- * CompositeWidgets klickt.  Der Event muss verarbeitet und ans richtige
- * Widget weitergegeben werden.
+ * GUICompositeWidgets klickt.  Der Event muss verarbeitet und ans richtige
+ * GUIWidget weitergegeben werden.
  */
-void CompositeWidget::handle_click(SDL_Rect* pos)
+void GUICompositeWidget::handle_click(int posx, int posy)
 {
 	int count = widgets.size();
 	for(int i = 0; i < count; i++)
 	{
-		if(widgets[i]->contains(pos))
+		if(widgets[i]->contains(posx, posy))
 		{
-			widgets[i]->handle_click(pos);
+			widgets[i]->handle_click(posx, posy);
 			break;
 		}
 	}
@@ -206,7 +200,7 @@ void CompositeWidget::handle_click(SDL_Rect* pos)
  * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
  * die Surface gesetzt wird.
  */
-void CompositeWidget::set_surface(SDL_Surface* s)
+void GUICompositeWidget::set_surface(SDL_Surface* s)
 {
 	surface = s;
 

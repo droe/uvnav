@@ -28,6 +28,7 @@
 
 #include "ui/widgets/widget.h"
 #include "ui/widgets/compositewidget.h"
+#include "ui/widgets/window.h"
 
 #define PI 3.14159265358979323846
 
@@ -703,21 +704,25 @@ void UVMap::draw(SDL_Rect* rect)
 	/*
 	 * DEBUG Code fuer Widgets
 	 */
-/*	CompositeWidget* cw1 = new CompositeWidget();
-	CompositeWidget* cw2 = new CompositeWidget(2, CWOVertical);
-	Widget* w1 = new Widget();
-	Widget* w2 = new Widget();
-	Widget* w3 = new Widget();
-	Widget* w4 = new Widget();
+/*	GUICompositeWidget* cw1 = new GUICompositeWidget();
+	GUICompositeWidget* cw2 = new GUICompositeWidget(2, GUIOVertical);
+	GUIWidget* w1 = new GUIWidget();
+	GUIWidget* w2 = new GUIWidget();
+	GUIWidget* w3 = new GUIWidget();
+	GUIWidget* w4 = new GUIWidget();
 	cw1->set_surface(screen);
 	cw2->add_widget(w2);
 	cw2->add_widget(w3);
 	cw1->add_widget(w1);
 	cw1->add_widget(cw2);
 	cw1->add_widget(w4);
-	cw1->set_eff_rect(&dst);
-	cw1->resize();
-	cw1->draw();
+	GUIWindow* win = new GUIWindow(cw1, screen);
+	win->x = dst.x;
+	win->y = dst.y;
+	win->w = dst.w;
+	win->h = dst.h;
+	win->resize();
+	win->draw();
 */	/*
 	 * END OF DEBUG
 	 */

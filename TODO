@@ -2,15 +2,14 @@ $Id$
 
 - OO-Architecture Redesign
   - Widget-Architetur implementieren
-    - Window
     - RootWindow
   - si/UVKeyboard als Singleton implementieren
     - observer pattern (?)
     - multiplext keypresses an alle interessierten objekte
+  - si/UVMouse ?
   - ui/navigator.{h,cpp} -> ui/splash.{h,cpp} ui/rootpane.{h,cpp}
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
     - model interface (virtual class)
-  - lib/observer.* benutzen, um ui von pd und dm zu separieren
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)

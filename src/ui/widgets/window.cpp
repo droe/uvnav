@@ -18,72 +18,79 @@
  * $Id$
  */
 
-#include "widget.h"
+#include "window.h"
 
 #include "si/draw.h"
 
 /*
  * Konstruktor.
  */
-GUIWidget::GUIWidget(int we, SDL_Surface* s)
-: weight(we), surface(s)
+GUIWindow::GUIWindow(GUIWidget* wi, SDL_Surface* s)
+: GUIWidget(1, s), widget(wi)
 {
-	min.w = 0;
-	min.h = 0;
-	max.w = 10000;
-	max.h = 10000;
+	widget->set_surface(s);
 }
 
 /*
  * Destruktor.
  */
-GUIWidget::~GUIWidget()
+GUIWindow::~GUIWindow()
 {
+	delete widget;
 }
 
 
 /*
- * Signalisiert dem GUIWidget, dass seine effektive Groesse geaendert hat.
- * Wird vom umgebenden GUICompositeWidget aufgerufen.
+ * Berechnet das Layout des GUIWindow neu.
  */
-void GUIWidget::resize()
+void GUIWindow::resize()
 {
-	// ignore
+	widget->x = x + 2;
+	widget->y = y + 2;
+	widget->w = w - 4;
+	widget->h = h - 4;
+	widget->resize();
 }
 
 
 /*
- * Zeichnet das GUIWidget auf die SDL_Surface surface.
+ * Zeichnet das GUIWindow und alle enthaltenen Widgets.
  */
-void GUIWidget::draw()
+void GUIWindow::draw()
 {
 	static UVDraw* drw = UVDraw::get_instance();
 
-	// *** FIXME
-	drw->box(surface, x+2, y+2, x+w-2, y+h-2, 0xFF, 0x00, 0x00, 0x7F);
+	drw->box(surface, x, y, x + w, y + h, 0x00, 0x00, 0xFF, 0x7F);
+	widget->draw();
 }
 
 
 /*
- * Einen Mausklick auf das GUIWidget behandeln.
+ * Mausklick-Event wird aufgerufen wenn der Benutzer auf die Flaeche des
+ * Window klickt.  Der Event muss verarbeitet und ans richtige
+ * Widget weitergegeben werden.
  */
-void GUIWidget::handle_click(int, int)
+void GUIWindow::handle_click(int posx, int posy)
 {
-	// ignore
+	if(widget->contains(posx, posy))
+	{
+		widget->handle_click(posx, posy);
+	}
 }
 
 
 /*
- * Setzt / holt die Zeichenflaeche, auf welche gezeichnet werden soll.
+ * Setzt die Zeichenflaeche, auf welche gezeichnet werden soll.
  * Alle Koordinaten beziehen sich auf diese Surface.
+ *
+ * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
+ * die Surface gesetzt wird.
  */
-void GUIWidget::set_surface(SDL_Surface* s)
+void GUIWindow::set_surface(SDL_Surface* s)
 {
 	surface = s;
-}
-SDL_Surface* GUIWidget::get_surface() const
-{
-	return surface;
+
+	widget->set_surface(s);
 }
 
 
