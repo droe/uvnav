@@ -1,7 +1,31 @@
 $Id$
 
 
+== 0.0.1 ==
+
+- Event Loop während Auswertung Laden
+  - Abbrechen
+  - Redraw
+  - Enter für weiter
+  - Während parsen abbrechen können
+  - Während parsen redraw können
+    (beides in progressbar realisierbar -- mini SDL event loop?)
+
+- Map Eye-Candy
+  - Grid
+    - Linien mit Maschengrösse in Abhängigkeit vom Zoomfaktor
+    - Coole Windrose
+    - Grob-Koordinaten am Bildschirmrand
+
+
+== 0.2.0 ==
+
+- Alles andere.
+
+
 == HOHE PRIORITAET ==
+
+- BUG: gfxPrimitives zeichnen daneben für sehr kleinen Zoomfaktor
 
 - Intelligentes auto-scaling / positioning
   - in UVWelt::set_* die groessten und kleinsten koordinaten verwalten
@@ -36,11 +60,10 @@ $Id$
     - von min/max objektgroessen auf schoene funktion umsteigen
 
 - UVMap
-  - Eye-Candy ...
-    - Objekte anschreiben
-    - Objekte verschönern
-    - Laengenangaben (Masstab)
-    - Minimap
+  - Statusinformationen in ein Konzept überführen
+  - Mehr Informationen zeichnen
+  - Schlaues System um die gezeichneten Infos individuell zu kontrollieren
+  - Minimap
   - Maushandling einführen
 
 - Fonts cachen und blitten anstatt immer neu rendern und blitten
@@ -73,9 +96,6 @@ $Id$
   - ...
 
 - Parser
-  - Während parsen abbrechen können
-  - Während parsen redraw können
-    (beides in progressbar realisierbar -- mini SDL event loop?)
   - Parser optimieren
     - regexps zentralisieren
 

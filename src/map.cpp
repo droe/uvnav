@@ -405,7 +405,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 		// *** konfigurierbar: groesse des planeten beruecksichtigen
 		// *** benoetigt aber besseres caching sonst ist performance im arsch
 		long h = long(rint(1.0 * size / zoom));
-		h = (h < 3) ? 3 : h;
+		h = (h < 5) ? 5 : h;
 		SDL_Surface* surface = images->get_surface(planet->image, 0, h);
 
 		SDL_Rect dst;
@@ -418,7 +418,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 
 		SDL_BlitSurface(surface, 0, screen, &dst);
 
-		if(h > 3)
+		if(h > 5)
 		{
 			// *** Alternative: statt kreis ein rechteck zeichnen, in farbe, mit zahl.
 
@@ -452,7 +452,7 @@ void UVMap::draw_planet(UVPlanet* planet)
  */
 void UVMap::draw_schiff(UVSchiff* schiff)
 {
-	static const long size = 50;
+	static const long size = 100;
 
 	if(((virt_x - size - schiff->v * 100 < schiff->x) && (virt_x + virt_w + size + schiff->v * 100 >= schiff->x))
 	&& ((virt_y - size - schiff->v * 100 < schiff->y) && (virt_y + virt_h + size + schiff->v * 100 >= schiff->y)))
@@ -463,8 +463,25 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 		double center_x = 1.0 * (schiff->x - offset_x) / zoom;
 		double center_y = 1.0 * (schiff->y - offset_y) / zoom;
 
-		double target_x = center_x - sin(PI * schiff->w / 180.0) * schiff->v * 100.0 / zoom;
-		double target_y = center_y - cos(PI * schiff->w / 180.0) * schiff->v * 100.0 / zoom;
+		/*
+		 *
+		 *           ¦      .
+		 *           ¦     /|
+		 *           ¦    / |
+		 *           ¦ v /  | dy
+		 *           ¦  /   |
+		 *        ..-¦ /.   |
+		 *       /   ¦/  \  |    w° = PI * w / 180 rad
+		 *      |    o----|-+
+		 *       \ w     / dx
+		 *        ''---''
+		 *
+		 *       dy = v * sin( w - 270 )
+		 *       dx = v * cos( w - 270 )
+		 */
+
+		double target_x = center_x + cos(PI * (schiff->w - 270) / 180.0) * schiff->v * 100.0 / zoom;
+		double target_y = center_y - sin(PI * (schiff->w - 270) / 180.0) * schiff->v * 100.0 / zoom;
 
 //		cout << "draw Schiff (" << center_x << "/" << center_y << ")" << endl;
 
@@ -488,13 +505,13 @@ void UVMap::draw_schiff(UVSchiff* schiff)
  */
 void UVMap::draw_container(UVContainer* container)
 {
-	static const long size = 20;
+	static const long size = 50;
 
 	if(((virt_x - size < container->x) && (virt_x + virt_w + size >= container->x))
 	&& ((virt_y - size < container->y) && (virt_y + virt_h + size >= container->y)))
 	{
 		long h = long(rint(1.0 * size / zoom));
-		h = (h < 5) ? 5 : h;
+		h = (h < 1) ? 1 : h;
 
 		double center_x = 1.0 * (container->x - offset_x) / zoom;
 		double center_y = 1.0 * (container->y - offset_y) / zoom;
