@@ -435,8 +435,6 @@ void UVMap::draw_grid()
 	while(i < d) { i *= 2; }
 	d = 125 * i;
 
-//	cout << "gridsize=" << d << endl;
-
 	SDL_Rect dst = { 0, 0, 0, 0 };
 
 	// Abszissen-Linien (senkrechte Linien)
