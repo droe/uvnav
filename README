@@ -111,7 +111,7 @@ hässlich verpixelter Anzeige leben. Wie bei PoN, AMAP und ToVU halt :)
 Mit CPU auf 350 MHz gedrosselt, bewegen sich die Renderzeiten bei
 grösseren Datenmengen im schlimmsten Fall um die 250 ms = 4 fps,
 im weniger rechenintensiven Modus bei 125 = 8 fps.  Damit lässt sich
-immer noch arbeiten.  Auf schnelleren Maschinen dürfe die
+immer noch arbeiten.  Auf schnelleren Maschinen dürfte die
 Geschwindigkeit bereits jetzt kaum zum Problem werden.
 
 
