@@ -93,7 +93,8 @@ AC_ARG_ENABLE([tools],
 AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
 
 AC_CONFIG_FILES([Makefile
-                 tools/Makefile
+                 aux/Makefile
+                 share/Makefile
                  src/Makefile
-                 share/Makefile])
+                 tools/Makefile])
 AC_OUTPUT

@@ -26,7 +26,7 @@ uvnav_SOURCES = rev.h global.h stl.h debug.h sysdep.h sysdep.cpp \
 uvnav_CXXFLAGS = @X_CFLAGS@ @SDL_CFLAGS@ @PCREPP_CFLAGS@
 uvnav_LDFLAGS = @X_LIBS@ @SDL_LIBS@ @PCREPP_LIBS@
 
-MAINTAINERCLEANFILES = rev.h .rev .rev-str Makefile.in
+MAINTAINERCLEANFILES = rev.h .rev-str Makefile.in
 
 #
 # rev.h Hack -- Subversion Revision im Code einbetten.

@@ -16,31 +16,7 @@
 #
 # $Id$
 
-if COND_TOOLS
-  MAYBE_TOOLS = tools
-endif
-SUBDIRS = aux share src $(MAYBE_TOOLS)
+noinst_SCRIPTS = svn2log.sh
 
-EXTRA_DIST = \
-    autogen.sh \
-    docs
-
-# entfernt .svn/ aus docs/ - noetig weil EXTRA_DIST rekursiv docs durchsucht
-dist-hook:
-	rm -rf `find $(distdir)/docs -name .svn`
-
-# gehoert zu rev.h Hack, siehe src/Makefile.am
-distcleancheck_listfiles = \
-    find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
-
-# maintainer-clean etwas erweitern ... verhindert bugs
-MAINTAINERCLEANFILES = \
-    Makefile.in configure aclocal.m4 config.h.in ChangeLog INSTALL \
-    config.guess config.sub depcomp install-sh missing mkinstalldirs
-
-ChangeLog: FORCE
-	touch ChangeLog
-	tools/svn2log.sh
-
-FORCE:
+MAINTAINERCLEANFILES = Makefile.in
 
