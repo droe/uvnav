@@ -63,6 +63,18 @@ UVNavigator::UVNavigator(UVConf* c)
 
 	font_splash = new UVFont(conf, FNT_SANS, screen->h / 32);
 	images = new UVImages(conf);
+
+	if(conf->b_get("screen-quality"))
+	{
+		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
+		cout << "Dies wird auf lahmen Maschinen zu merklich langsamerer Grafik-Ausgabe fuehren." << endl;
+	}
+	else
+	{
+		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
+		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
+	}
+	cout << "------------------------------------------------------------------------------" << endl;
 }
 
 
@@ -87,7 +99,6 @@ void UVNavigator::init_video()
 {
 	int flags = 0;
 
-	cout << "------------------------------------------------------------------------------" << endl;
 	cout << "Angeforderte Bildschirmoptionen:";
 	SDL_Rect r = { 0, 0, 0, 0 };
 	if(conf->b_get("screen-fullscreen"))
@@ -156,17 +167,6 @@ void UVNavigator::init_video()
 		cout << " SWSurface";
 	}
 	cout << "." << endl;
-
-	if(conf->b_get("screen-quality"))
-	{
-		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
-		cout << "Dies wird auf lahmen Maschinen zu merklich langsamerer Grafik-Ausgabe fuehren." << endl;
-	}
-	else
-	{
-		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
-		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
-	}
 	cout << "------------------------------------------------------------------------------" << endl;
 }
 

@@ -49,6 +49,9 @@ class UVParserTXT
 		unsigned long bytecount;
 		bool verbose;
 
+		long stats_schiffe;
+		long stats_planeten;
+
 		bool good() const;
 		string getline();
 

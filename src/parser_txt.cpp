@@ -51,6 +51,7 @@
  */
 UVParserTXT::UVParserTXT(UVConf* c, UVWelt* w)
 : conf(c), welt(w), progress(NULL), verbose(false)
+, stats_schiffe(0), stats_planeten(0)
 {
 	if(welt == NULL)
 	{
@@ -169,6 +170,9 @@ void UVParserTXT::parse(const string& file, UVProgress* pro)
 	line = 0;
 	bytecount = 0;
 
+	stats_schiffe = 0;
+	stats_planeten = 0;
+
 	try
 	{
 		parse_auswertung();
@@ -181,7 +185,10 @@ void UVParserTXT::parse(const string& file, UVProgress* pro)
 
 	stream.clear();
 	stream.close();
-	cout << "Auswertung erfolgreich geladen." << endl;
+
+	cout << "Auswertung erfolgreich geladen:" << endl;
+	cout << "Total " << stats_schiffe << " Schiffe und " << stats_planeten << " Planeten." << endl;
+	cout << "------------------------------------------------------------------------------" << endl;
 }
 
 
@@ -253,7 +260,7 @@ void UVParserTXT::parse_header()
 		getline();
 	}
 	debug("header", &hdr_re);
-	welt->set_partie(hdr_re.sub(1));
+	welt->partie = hdr_re.sub(1);
 	welt->copyright = hdr_re.sub(2);
 	getline();
 
@@ -1022,6 +1029,7 @@ void UVParserTXT::parse_schiff(UVPlanet* p)
 	}
 
 	welt->set_schiff(s, p);
+	stats_schiffe++;
 }
 
 
@@ -1141,6 +1149,7 @@ void UVParserTXT::parse_planet()
 	}
 
 	welt->set_planet(p);
+	stats_planeten++;
 
 	// Zone  (3) (Niemand) (278 FUs)
 	static UVRegExp zone_re("^Zone ");
@@ -1301,6 +1310,7 @@ void UVParserTXT::parse_oldschool_planet()
 	}
 
 	welt->set_planet(p);
+	stats_planeten++;
 
 	// Handelsstation 'Paradysse'
 	static UVRegExp hs_re("^Handelsstation ");
@@ -1714,6 +1724,7 @@ void UVParserTXT::parse_report_schiff()
 	}
 
 	welt->set_schiff(s);
+	stats_schiffe++;
 }
 
 

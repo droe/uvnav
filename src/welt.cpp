@@ -1059,20 +1059,6 @@ UVWelt::~UVWelt()
 
 
 /*
- * Partie setzen, und ueberpruefen, ob bestehende Daten zur selben Partie
- * gehoeren.
- */
-void UVWelt::set_partie(const string& s)
-{
-	if((partie != "") && (partie != s))
-	{
-		throw EXCEPTION("Auswertung gehoert zu einer anderen Partie!");
-	}
-	partie = s;
-}
-
-
-/*
  * Name einer Dimension setzen/holen.
  */
 void UVWelt::set_dim(const long d, const string& s)

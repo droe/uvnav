@@ -439,8 +439,6 @@ class UVWelt
 		~UVWelt();
 
 		string partie;
-		void set_partie(const string&);
-
 		string copyright;
 		string galaxie;
 		string motu;

@@ -97,6 +97,11 @@ int main(int argc, char* argv[])
 		{ 0,				0,					0,	0 }
 	};
 
+	cout << PACKAGE_STRING << " (" << revision << ")" << endl;
+	cout << COPYRIGHT << endl;
+	cout << "https://projects.roe.ch/trac/uvnav/" << endl;
+	cout << "------------------------------------------------------------------------------" << endl;
+
 	try
 	{
 		int w = 0;
