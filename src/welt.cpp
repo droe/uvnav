@@ -395,21 +395,15 @@ string UVZone::get_klimazone() const
 	// 2: Sommerregen
 	// 1: ohne Regenperiode
 	// 0: Winterregen
-	double toleranz = 0.2;
+	double toleranz = 0.25;
 	double faktor = 1;
-	if(N_sommer > N_winter)
+	if(N_sommer > N_winter * (1 + toleranz))
 	{
-		if((N_sommer - N_winter) > (N_winter * toleranz))
-		{
-			faktor = 2;
-		}
+		faktor = 2;
 	}
-	else if(N_winter > N_sommer)
+	else if(N_winter > N_sommer * (1 + toleranz))
 	{
-		if((N_winter - N_sommer) + (N_sommer * toleranz))
-		{
-			faktor = 0;
-		}
+		faktor = 0;
 	}
 
 	// Algorithmus Seite 11 uv292.pdf
