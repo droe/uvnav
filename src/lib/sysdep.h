@@ -21,7 +21,7 @@
 #ifndef SYSDEP_H
 #define SYSDEP_H
 
-#include "../lib/stl.h"
+#include "../lib/stlstring.h"
 #include "../lib/sdl.h"
 
 void sysdep_mkdir(const string& path, int mode = 0755);

@@ -21,7 +21,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "../lib/stl.h"
+#include "../lib/stlstring.h"
 #include "../lib/sdl.h"
 
 #define FNT_SANS "FreeSans.ttf"

@@ -18,16 +18,52 @@
  * $Id$
  */
 
-#ifndef EXCEPTIONS_H
-#define EXCEPTIONS_H
+#ifndef STLSTRING_H
+#define STLSTRING_H
 
 /*
- * Exceptions.
+ * STL-Strings.
  */
 
-#include <exception>
-#include <stdexcept>
+#include <string>
+#include <sstream>
 
-#define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
+using namespace std;
 
-#endif // EXCEPTIONS_H
+/*
+ * Einfache Stream-maessige Konversion aller Datentypen nach string.
+ *
+ * string blah = str_stream() << "n=" << 123;
+ */
+/*
+struct str_stream
+{
+	std::stringstream& get_stream() const
+	{
+		return s;
+	}
+	operator std::string() const
+	{
+		return s.str();
+	}
+	private:
+		mutable std::stringstream s;
+};
+
+template<class type>
+const str_stream& operator<< (const str_stream& out, const type& value)
+{
+    out.get_stream() << value;
+    return out;
+}
+*/
+
+template<class type>
+inline std::string to_string(const type & value)
+{
+    std::ostringstream streamOut;
+    streamOut << value;
+    return streamOut.str();
+}
+
+#endif // STLSTRING_H

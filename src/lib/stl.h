@@ -27,18 +27,14 @@
  * Dieser Header sorgt dafuer, dass wir die STL auf allen Plattformen
  * auf die gleiche Art und Weise benutzen koennen, und definiert einige
  * praktische Helfer.
- *
- * Dieser Header muss nach "config.h" eingebunden werden.
  */
 
-#include <cstdlib>
-#include <string>
+#include "../lib/stlstring.h"
+
+//#include <cstdlib>
 #include <vector>
 #include <fstream>
-#include <sstream>
 #include <iostream>
-#include <exception>
-#include <stdexcept>
 
 #include "config.h"
 
@@ -107,42 +103,5 @@
 #endif
 
 using namespace std;
-
-
-/*
- * Einfache Stream-maessige Konversion aller Datentypen nach string.
- *
- * string blah = str_stream() << "n=" << 123;
- */
-/*
-struct str_stream
-{
-	std::stringstream& get_stream() const
-	{
-		return s;
-	}
-	operator std::string() const
-	{
-		return s.str();
-	}
-	private:
-		mutable std::stringstream s;
-};
-
-template<class type>
-const str_stream& operator<< (const str_stream& out, const type& value)
-{
-    out.get_stream() << value;
-    return out;
-}
-*/
-
-template<class type>
-inline std::string to_string(const type & value)
-{
-    std::ostringstream streamOut;
-    streamOut << value;
-    return streamOut.str();
-}
 
 #endif // STL_H

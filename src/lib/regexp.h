@@ -21,7 +21,7 @@
 #ifndef REGEXP_H
 #define REGEXP_H
 
-#include "../lib/stl.h"
+#include "../lib/stlstring.h"
 
 #include <pcre.h>
 

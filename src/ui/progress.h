@@ -23,7 +23,7 @@
 
 #include "../si/font.h"
 #include "../lib/sdl.h"
-#include "../lib/stl.h"
+#include "../lib/stlstring.h"
 #include "../lib/observer.h"
 
 class UVProgress : public Observer

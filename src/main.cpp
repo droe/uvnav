@@ -21,6 +21,7 @@
 #include "lib/version.h"
 #include "lib/sysexits.h"
 #include "lib/sysdep.h"
+#include "lib/exceptions.h"
 
 #include "si/conf.h"
 #include "ui/navigator.h"
