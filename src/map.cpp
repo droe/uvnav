@@ -123,7 +123,7 @@ UVMapQuadrant::~UVMapQuadrant()
  */
 
 
-#define LABEL_RGB 0xCC,0xCC,0xCC
+#define LABEL_RGB 0xDD,0xDD,0xDD
 
 
 /*
@@ -880,11 +880,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			// Beschriftung
 			// *** provisorisch
 			string label_text = "";
-			if(welt->galaxie != "")
-			{
-				label_text = str_stream() << planet->name << " (" << planet->nummer << ")";
-			}
-			else if(zoom < 10.0)
+			if(zoom < 10.0)
 			{
 				label_text = str_stream() << planet->nummer << " " << planet->name;
 			}
