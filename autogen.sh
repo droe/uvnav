@@ -36,10 +36,14 @@
 #   config.h.in  ---[configure]--> config.h
 #   Makefile.in  ---[configure]--> Makefile
 #
-# automake --add-missing generiert ausserdem eine Reihe von Helper-Files
-# wie das missing Script.
+# automake --add-missing generiert ausserdem eine Reihe von Helper-Scripts
+# und weitere Ueberbleibsel:
+# config.guess, config.sub, depcomp, install-sh, missing, mkinstalldirs,
+# autom4te.cache/
 #
-# configure generiert ebenso einige Helper-Scripts und Log-/Cache-Files.
+# configure generiert ebenso einige Logfiles, Helper-Scripts und andere
+# Ueberbleibsel:
+# config.log, config.status, stamp-h1
 #
 
 am="1.7"
