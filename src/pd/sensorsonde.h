@@ -21,7 +21,7 @@
 #ifndef SENSORSONDE_H
 #define SENSORSONDE_H
 
-//#include "../lib/stl.h"
+//#include "../lib/stlstring.h"
 
 class UVSensorsonde
 {

@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "werft.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVWerft - Stellt eine Werft dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVWerft::UVWerft(long n, long z)
+: nummer(n), zone(z), name(""), groesse(0), formel(""), erzlager(0), beschreibung("")
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVWerft::~UVWerft()
+{
+}
+*/
+
 

@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "ladung.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVLadung - Stellt ein Posten geladener Gueter dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVLadung::UVLadung(long n, string s, long gr, string be)
+: nummer(n), name(s), groesse(gr), besitzer(be)
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVLadung::~UVLadung()
+{
+}
+*/
+
 

@@ -18,22 +18,26 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef FORSCHUNGSSTATION_H
+#define FORSCHUNGSSTATION_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVForschungsstation
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVForschungsstation(long, long);
+//		~UVForschungsstation();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		string name;
+		long groesse;			// in FUs
+		long wissenspunkte;
+		string beschreibung;
 };
 
-#endif // CONTAINER_H
+#endif // FORSCHUNGSSTATION_H
 

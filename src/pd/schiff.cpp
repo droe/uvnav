@@ -20,60 +20,6 @@
 
 #include "schiff.h"
 
-//#include <math.h>
-
-/*
- * UVLadung - Stellt ein Posten geladener Gueter dar.
- */
-
-
-/*
- * Konstruktor.
- */
-UVLadung::UVLadung(long n, string s, long gr, string be)
-: nummer(n), name(s), groesse(gr), besitzer(be)
-{
-}
-
-
-/*
- * Destruktor.
- */
-/*
-UVLadung::~UVLadung()
-{
-}
-*/
-
-
-//============================================================================
-
-/*
- * UVKomponente - Stellt eine Schiffs-Komponente dar.
- */
-
-
-/*
- * Konstruktor.
- */
-UVKomponente::UVKomponente(string s, long zs, long hp, long gr, long n, double l)
-: nummer(n), name(s), zustand(zs), hitpoints(hp), groesse(gr), leistung(l)
-{
-}
-
-
-/*
- * Destruktor.
- */
-/*
-UVKomponente::~UVKomponente()
-{
-}
-*/
-
-
-//============================================================================
-
 /*
  * UVSchiff - Stellt ein Schiff dar.
  */

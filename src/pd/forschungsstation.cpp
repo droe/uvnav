@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "forschungsstation.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVForschungsstation - Stellt eine Forschungsstation dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVForschungsstation::UVForschungsstation(long n, long z)
+: nummer(n), zone(z), name(""), groesse(0), wissenspunkte(0), beschreibung("")
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVForschungsstation::~UVForschungsstation()
+{
+}
+*/
+
 

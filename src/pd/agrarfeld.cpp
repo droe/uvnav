@@ -18,22 +18,31 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "agrarfeld.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVAgrarfeld - Stellt ein Agrarfeld dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ *
+ * Nummer n ist Key, Zone z ist Kontext.
+ */
+UVAgrarfeld::UVAgrarfeld(long n, long z, long gr, string pr, long er)
+: nummer(n), zone(z), groesse(gr), produkt(pr), ertrag(er)
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVAgrarfeld::~UVAgrarfeld()
+{
+}
+*/
+
 

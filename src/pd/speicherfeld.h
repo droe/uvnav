@@ -18,22 +18,26 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef SPEICHERFELD_H
+#define SPEICHERFELD_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVSpeicherfeld
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVSpeicherfeld(long n, long z, long gr = 0, long sp = 0, long me = 0, string wa = "");
+//		~UVSpeicherfeld();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		long groesse;			// in FUs
+		long speicherplatz;		// in BRT
+		long menge;				// in BRT
+		string ware;
 };
 
-#endif // CONTAINER_H
+#endif // SPEICHERFELD_H
 

@@ -18,22 +18,25 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef MINENFELD_H
+#define MINENFELD_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVMinenfeld
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVMinenfeld(long n, long z, long gr = 0, string ro = "", long er = 0);
+//		~UVMinenfeld();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		long groesse;			// in FUs
+		string rohstoff;
+		long ertrag;			// in BRT
 };
 
-#endif // CONTAINER_H
+#endif // MINENFELD_H
 

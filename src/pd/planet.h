@@ -22,153 +22,8 @@
 #define PLANET_H
 
 #include "../lib/stl.h"
-
-class UVZone; // FIXME
-class UVPlanet;
-
-// ===========================================================================
-
-class UVAgrarfeld
-{
-	public:
-		UVAgrarfeld(long n, UVZone* z, long gr = 0, string pr = "", long er = 0);
-//		~UVAgrarfeld();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		long groesse;			// in FUs
-		string produkt;
-		long ertrag;			// in BRT
-};
-
-class UVSpeicherfeld
-{
-	public:
-		UVSpeicherfeld(long n, UVZone* z, long gr = 0, long sp = 0, long me = 0, string wa = "");
-//		~UVSpeicherfeld();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		long groesse;			// in FUs
-		long speicherplatz;		// in BRT
-		long menge;				// in BRT
-		string ware;
-};
-
-class UVMinenfeld
-{
-	public:
-		UVMinenfeld(long n, UVZone* z, long gr = 0, string ro = "", long er = 0);
-//		~UVMinenfeld();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		long groesse;			// in FUs
-		string rohstoff;
-		long ertrag;			// in BRT
-};
-
-class UVWerft
-{
-	public:
-		UVWerft(long, UVZone*);
-//		~UVWerft();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		string name;
-		long groesse;			// in FUs
-		string formel;
-		long erzlager;			// in BRT
-		string beschreibung;
-};
-
-class UVForschungsstation
-{
-	public:
-		UVForschungsstation(long, UVZone*);
-//		~UVForschungsstation();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		string name;
-		long groesse;			// in FUs
-		long wissenspunkte;
-		string beschreibung;
-};
-
-class UVStadt
-{
-	public:
-		UVStadt(long, UVZone*);
-//		~UVStadt();
-
-		long nummer;			// key in UVPlanet
-
-		long zone;				// key: UVZone in UVPlanet
-
-		string name;
-		long groesse;			// in FUs
-		long einwohner;
-		string beschreibung;
-};
-
-// ===========================================================================
-
-class UVZone
-{
-	public:
-		UVZone(long);
-//		~UVZone();
-
-		long nummer;			// key in UVPlanet
-
-		string name;
-		string besitzer;
-		long groesse;			// in FUs
-		string beschreibung;
-
-		double T;					// Durchschnittstemperatur in °C
-		double N;					// Jahresniederschlag in cm
-		double temperatur[12];		// Monatstemperatur in °C
-		double niederschlag[12];	// Monstsniederschlag in mm
-
-		vector<long> agrarfelder;		// key: UVAgrarfeld in UVPlanet
-		vector<long> speicherfelder;	// key: UVSpeicherfeld in UVPlanet
-		vector<long> minenfelder;		// key: UVMine in UVPlanet
-		vector<long> werften;			// key: UVWerft in UVPlanet
-		vector<long> forschungsstationen;	// key: UVForschungsstationen in UVPlanet
-		vector<long> staedte;			// key: UVStadt in UVPlanet
-
-		string get_klimazone() const;
-		double get_T() const;
-		double get_N() const;
-
-		string to_string_terse() const;
-};
-
-class UVHandelsstation
-{
-	public:
-		UVHandelsstation(string, UVPlanet*);
-//		~UVHandelsstation();
-
-		string name;			// key in UVWelt
-
-		long planet;			// key: UVPlanet in UVWelt
-
-		string beschreibung;
-};
+#include "zone.h"
+#include "handelsstation.h"
 
 class UVPlanet
 {
@@ -176,7 +31,7 @@ class UVPlanet
 		UVPlanet(long, string, string, long, long, long);
 //		~UVPlanet();
 
-		long nummer;			// key in UVWelt
+		long nummer;			// key in UVUniversum
 
 		string name;
 		string besitzer;
@@ -184,7 +39,7 @@ class UVPlanet
 		long y;
 		long dim;
 
-		vector<long> nachbarn;	// key: UVPlanet in UVWelt
+		vector<long> nachbarn;	// key: UVPlanet in UVUniversum
 		bool drawflag;			// fuer UVMap::draw_planet
 
 		string beschreibung;

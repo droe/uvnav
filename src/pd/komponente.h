@@ -18,22 +18,26 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef KOMPONENTE_H
+#define KOMPONENTE_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVKomponente
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVKomponente(string s, long zs, long hp, long gr, long n = 1, double l = 0.0);
+//		~UVKomponente();
 
+		long nummer;			// key in UVSchiff
+
+		string name;
+		long zustand;
+		long hitpoints;
 		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+
+		double leistung;
 };
 
-#endif // CONTAINER_H
+#endif // KOMPONENTE_H
 

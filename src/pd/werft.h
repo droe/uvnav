@@ -18,22 +18,27 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef WERFT_H
+#define WERFT_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVWerft
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVWerft(long, long);
+//		~UVWerft();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		string name;
+		long groesse;			// in FUs
+		string formel;
+		long erzlager;			// in BRT
+		string beschreibung;
 };
 
-#endif // CONTAINER_H
+#endif // WERFT_H
 

@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "speicherfeld.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVSpeicherfeld - Stellt ein Speicherfeld dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVSpeicherfeld::UVSpeicherfeld(long n, long z, long gr, long sp, long me, string wa)
+: nummer(n), zone(z), groesse(gr), speicherplatz(sp), menge(me), ware(wa)
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVSpeicherfeld::~UVSpeicherfeld()
+{
+}
+*/
+
 

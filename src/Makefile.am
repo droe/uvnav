@@ -39,7 +39,17 @@ uvnav_SOURCES = rev.h rev.cpp \
 	pd/container.h pd/container.cpp \
 	pd/infosonde.h pd/infosonde.cpp \
 	pd/sensorsonde.h pd/sensorsonde.cpp \
+	pd/agrarfeld.h pd/agrarfeld.cpp \
+	pd/speicherfeld.h pd/speicherfeld.cpp \
+	pd/minenfeld.h pd/minenfeld.cpp \
+	pd/werft.h pd/werft.cpp \
+	pd/forschungsstation.h pd/forschungsstation.cpp \
+	pd/stadt.h pd/stadt.cpp \
+	pd/zone.h pd/zone.cpp \
+	pd/handelsstation.h pd/handelsstation.cpp \
 	pd/planet.h pd/planet.cpp \
+	pd/ladung.h pd/ladung.cpp \
+	pd/komponente.h pd/komponente.cpp \
 	pd/schiff.h pd/schiff.cpp \
 	pd/universum.h pd/universum.cpp \
 	dm/abstractimporter.h \

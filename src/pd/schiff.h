@@ -22,35 +22,8 @@
 #define SCHIFF_H
 
 #include "../lib/stl.h"
-
-class UVLadung
-{
-	public:
-		UVLadung(long, string, long, string);
-//		~UVLadung();
-
-		long nummer;			// key in UVSchiff
-
-		string name;
-		long groesse;			// in BRT
-		string besitzer;
-};
-
-class UVKomponente
-{
-	public:
-		UVKomponente(string s, long zs, long hp, long gr, long n = 1, double l = 0.0);
-//		~UVKomponente();
-
-		long nummer;			// key in UVSchiff
-
-		string name;
-		long zustand;
-		long hitpoints;
-		long groesse;			// in BRT
-
-		double leistung;
-};
+#include "ladung.h"
+#include "komponente.h"
 
 typedef vector<UVKomponente*>::iterator komponenten_iterator;
 typedef vector<UVLadung*>::iterator ladung_iterator;

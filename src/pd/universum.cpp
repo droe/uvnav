@@ -20,8 +20,6 @@
 
 #include "universum.h"
 
-//#include <math.h>
-
 /*
  * UVUniversum - Repraesentation eines Universum Spielstandes.
  */

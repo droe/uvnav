@@ -18,22 +18,23 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef LADUNG_H
+#define LADUNG_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVLadung
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVLadung(long, string, long, string);
+//		~UVLadung();
 
+		long nummer;			// key in UVSchiff
+
+		string name;
 		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		string besitzer;
 };
 
-#endif // CONTAINER_H
+#endif // LADUNG_H
 

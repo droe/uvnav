@@ -18,22 +18,25 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef AGRARFELD_H
+#define AGRARFELD_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVAgrarfeld
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVAgrarfeld(long n, long z, long gr = 0, string pr = "", long er = 0);
+//		~UVAgrarfeld();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		long groesse;			// in FUs
+		string produkt;
+		long ertrag;			// in BRT
 };
 
-#endif // CONTAINER_H
+#endif // AGRARFELD_H
 

@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "handelsstation.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVHandelsstation - Stellt eine Handelsstation dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVHandelsstation::UVHandelsstation(string n, long p)
+: name(n), planet(p), beschreibung("")
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVHandelsstation::~UVHandelsstation()
+{
+}
+*/
+
 

@@ -18,22 +18,23 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef HANDELSSTATION_H
+#define HANDELSSTATION_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVHandelsstation
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVHandelsstation(string, long);
+//		~UVHandelsstation();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		string name;			// key in UVUniversum
+
+		long planet;			// key: UVPlanet in UVUniversum
+
+		string beschreibung;
 };
 
-#endif // CONTAINER_H
+#endif // HANDELSSTATION_H
 

@@ -18,22 +18,26 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#ifndef STADT_H
+#define STADT_H
 
-//#include "../lib/stlstring.h"
+#include "../lib/stlstring.h"
 
-class UVContainer
+class UVStadt
 {
 	public:
-		UVContainer();
-//		~UVContainer();
+		UVStadt(long, long);
+//		~UVStadt();
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
+		long nummer;			// key in UVPlanet
+
+		long zone;				// key: UVZone in UVPlanet
+
+		string name;
+		long groesse;			// in FUs
+		long einwohner;
+		string beschreibung;
 };
 
-#endif // CONTAINER_H
+#endif // STADT_H
 

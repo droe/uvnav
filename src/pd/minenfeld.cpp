@@ -18,22 +18,31 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "minenfeld.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVMinenfeld - Stellt ein Minenfeld dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ *
+ * Nummer n ist Key, Zone z ist Kontext.
+ */
+UVMinenfeld::UVMinenfeld(long n, long z, long gr, string ro, long er)
+: nummer(n), zone(z), groesse(gr), rohstoff(ro), ertrag(er)
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVMinenfeld::~UVMinenfeld()
+{
+}
+*/
+
 

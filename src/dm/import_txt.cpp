@@ -2921,14 +2921,14 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 		{
 			p->set_agrarfeld(new UVAgrarfeld(
 				agrar_re.subtol(1),
-				z,
+				z->nummer,
 				agrar_re.subtol(2)), z);
 		}
 		else
 		{
 			p->set_agrarfeld(new UVAgrarfeld(
 				agrar_re.subtol(1),
-				z,
+				z->nummer,
 				agrar_re.subtol(2),
 				agrar_re.sub(3),
 				agrar_re.subtol(4)), z);
@@ -2947,14 +2947,14 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
 				speicher_re.subtol(1),
-				z,
+				z->nummer,
 				speicher_re.subtol(2)), z);
 		}
 		else if(speicher_re.subs() == 3)
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
 				speicher_re.subtol(1),
-				z,
+				z->nummer,
 				speicher_re.subtol(2),
 				speicher_re.subtol(3)), z);
 		}
@@ -2962,7 +2962,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 		{
 			p->set_speicherfeld(new UVSpeicherfeld(
 				speicher_re.subtol(1),
-				z,
+				z->nummer,
 				speicher_re.subtol(2),
 				speicher_re.subtol(3),
 				speicher_re.subtol(4),
@@ -2982,14 +2982,14 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 		{
 			p->set_minenfeld(new UVMinenfeld(
 				mine_re.subtol(1),
-				z,
+				z->nummer,
 				mine_re.subtol(2)), z);
 		}
 		else if(mine_re.subs() == 3)
 		{
 			p->set_minenfeld(new UVMinenfeld(
 				mine_re.subtol(1),
-				z,
+				z->nummer,
 				mine_re.subtol(2),
 				mine_re.sub(3),
 				0), z);
@@ -2998,7 +2998,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 		{
 			p->set_minenfeld(new UVMinenfeld(
 				mine_re.subtol(1),
-				z,
+				z->nummer,
 				mine_re.subtol(2),
 				mine_re.sub(4),
 				mine_re.subtol(5)), z);
@@ -3043,7 +3043,7 @@ UVWerft* UVImportTXT::parse_werft(UVZone* z)
 		throw EXCEPTION("Fehler in Werft!");
 	}
 	debug("werft", &werft_re);
-	w = new UVWerft(werft_re.subtol(2), z);
+	w = new UVWerft(werft_re.subtol(2), z->nummer);
 	w->name = werft_re.sub(1);
 	w->groesse = werft_re.subtol(3);
 	if(werft_re.subs() != 3)
@@ -3096,7 +3096,7 @@ UVForschungsstation* UVImportTXT::parse_forschungsstation(UVZone* z)
 		throw EXCEPTION("Fehler in Forschungsstation!");
 	}
 	debug("forschungsstation", &fs_re);
-	f = new UVForschungsstation(fs_re.subtol(2), z);
+	f = new UVForschungsstation(fs_re.subtol(2), z->nummer);
 	f->name = fs_re.sub(1);
 	f->groesse = fs_re.subtol(3);
 	if(fs_re.subs() != 3)
@@ -3133,7 +3133,7 @@ UVStadt* UVImportTXT::parse_stadt(UVZone* z)
 		throw EXCEPTION("Fehler in Stadt!");
 	}
 	debug("stadt", &stadt_re);
-	s = new UVStadt(stadt_re.subtol(2), z);
+	s = new UVStadt(stadt_re.subtol(2), z->nummer);
 	s->name = stadt_re.sub(1);
 	s->groesse = stadt_re.subtol(3);
 	if(stadt_re.subs() != 3)
@@ -3170,7 +3170,7 @@ void UVImportTXT::parse_handelsstation(UVPlanet* p)
 		throw EXCEPTION("Fehler in Handelsstation!");
 	}
 	debug("handelsstation", &hs_re);
-	h = new UVHandelsstation(hs_re.sub(1), p);
+	h = new UVHandelsstation(hs_re.sub(1), p->nummer);
 	getline();
 
 	//   Beschreibung

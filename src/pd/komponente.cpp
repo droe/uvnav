@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "komponente.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVKomponente - Stellt eine Schiffs-Komponente dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVKomponente::UVKomponente(string s, long zs, long hp, long gr, long n, double l)
+: nummer(n), name(s), zustand(zs), hitpoints(hp), groesse(gr), leistung(l)
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVKomponente::~UVKomponente()
+{
+}
+*/
+
 

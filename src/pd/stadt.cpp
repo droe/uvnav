@@ -18,22 +18,29 @@
  * $Id$
  */
 
-#ifndef CONTAINER_H
-#define CONTAINER_H
+#include "stadt.h"
 
-//#include "../lib/stlstring.h"
+/*
+ * UVStadt - Stellt eine Stadt dar.
+ */
 
-class UVContainer
+
+/*
+ * Konstruktor.
+ */
+UVStadt::UVStadt(long n, long z)
+: nummer(n), zone(z), name(""), groesse(0), einwohner(0), beschreibung("")
 {
-	public:
-		UVContainer();
-//		~UVContainer();
+}
 
-		long groesse;			// in BRT
-		long x;
-		long y;
-		long dim;
-};
 
-#endif // CONTAINER_H
+/*
+ * Destruktor.
+ */
+/*
+UVStadt::~UVStadt()
+{
+}
+*/
+
 
