@@ -268,14 +268,16 @@ void UVParserTXT::parse_oldschool_header()
 {
 	UVSpieler* s = new UVSpieler();
 
-	// Busy Eagle der Kämpfer
-	static UVRegExp name_re("^Name: +(.*) der (.*)$");
+	// Name: Pflocky der Erzkönig
+	// Name: Busy Eagle der Kämpfer
+	// Name: Ritter der Kokosnuss der Diplomat
+	static UVRegExp name_re("^Name: +(.*?) der (Diplomat|K.mpfer|H.ndler|Freibeuter|Spion|Killer|Erzk.nig)$");
 	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
 	}
 	s->name = name_re.sub(1);
-	s->imp_typ = name_re.sub(2);
+	s->talent = name_re.sub(2);
 	getline();
 
 	// Spieler: Daniel Röthlisberger
@@ -394,8 +396,10 @@ void UVParserTXT::parse_spielerinfos()
 	UVSpieler* s = new UVSpieler();
 
 	// Name: Doctor Who
-	// Name: Doctor Who der Erzkönig
-	static UVRegExp name_re("^Name: +(.*?)(?: der (.*))?$");
+	// Name: Pflocky der Erzkönig
+	// Name: Busy Eagle der Kämpfer
+	// Name: Ritter der Kokosnuss der Diplomat
+	static UVRegExp name_re("^Name: +(.*?)(?: der (Diplomat|K.mpfer|H.ndler|Freibeuter|Spion|Killer|Erzk.nig))?$");
 	if(!name_re.match(cur))
 	{
 		throw EXCEPTION("Name: fehlt!");
@@ -403,7 +407,7 @@ void UVParserTXT::parse_spielerinfos()
 	s->name = name_re.sub(1);
 	if(name_re.subs() > 1)
 	{
-		s->imp_typ = name_re.sub(2);
+		s->talent = name_re.sub(2);
 	}
 	getline();
 

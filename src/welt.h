@@ -39,7 +39,7 @@ class UVSpieler
 		string spieler;
 		string status;
 		string gesellschaft;
-		string imp_typ;
+		string talent;
 		long long legal;
 		long long punkte;
 		long long konto;		// in Credits

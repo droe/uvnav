@@ -449,10 +449,9 @@ void UVMap::set_dim(long d)
 {
 	dim = d;
 	jump_init();
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
-	draw(&rect);
+	jump_alle();
 }
-long UVMap::get_dim()
+long UVMap::get_dim() const
 {
 	return dim;
 }
@@ -613,9 +612,11 @@ void UVMap::draw(SDL_Rect* rect)
 	SDL_Rect dst;
 
 	// Status-Overlay
+	static UVSpieler* spieler = welt->get_spieler();
 	SDL_Surface* status = debug_font->get_surface(
 		str_stream() << dim << " - " << welt->get_dim(dim) << ", "
-		             << welt->get_spieler()->name
+		             << spieler->name
+		             << ((spieler->talent != "") ? " der " + spieler->talent : "")
 		             << ", Sternzeit " << welt->sternzeit, LABEL_RGB);
 	dst.x = screen->w - status->w - status->h * 2;
 	dst.y = status->h;

@@ -56,7 +56,7 @@ class UVMap
 		~UVMap();
 
 		void set_dim(long);
-		long get_dim();
+		long get_dim() const;
 		void scroll(long, long);
 		void zoom_in();
 		void zoom_out();
