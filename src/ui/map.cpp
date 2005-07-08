@@ -950,12 +950,11 @@ void UVMap::draw_planet(UVPlanet* planet)
 			// *** Alternative: statt kreis ein rechteck zeichnen, in farbe, mit zahl.
 
 			// 10:  00 ff 00
-			// 7-9: 00 00 ff
-			// 4-6: ff ff 00
-			// 1-3: ff 00 00
-			short r = (tl > 6) ? 0x00 : 0xFF;
-			short g = ((tl == 10) || ((tl >= 4) && (tl <= 6))) ? 0xFF : 0x00;
-			short b = ((tl >= 7) && (tl <= 9)) ? 0xFF : 0x00;
+			// 7-9: ff ff 00
+			// 1-6: ff 00 00
+			short r = (tl >= 10) ? 0x00 : 0xFF;
+			short g = (tl >= 7) ? 0xFF : 0x00;
+			short b = 0x00;
 
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2 + 2, r, g, b, 0xFF);
