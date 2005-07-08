@@ -57,7 +57,7 @@ void UVPlanet::set_zone(UVZone* z)
 	{
 		zonen.push_back(NULL);
 	}
-	if(zonen.at(z->nummer - 1) != NULL)
+	if(zonen.at(z->nummer - 1) != NULL && zonen.at(z->nummer - 1) != z) // TODO: port fix to other structures
 	{
 		delete zonen.at(z->nummer - 1);
 	}
