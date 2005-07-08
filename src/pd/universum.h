@@ -66,6 +66,7 @@ class UVUniversum
 
 		void set_planet(UVPlanet*);
 		UVPlanet* get_planet(const long) const;
+		UVPlanet* create_planet(const long, const string, const string, const long, const long, const long);
 		planeten_iterator first_planet();
 		planeten_iterator last_planet();
 

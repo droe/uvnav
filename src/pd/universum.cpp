@@ -131,6 +131,16 @@ UVPlanet* UVUniversum::get_planet(const long n) const
 		return NULL;
 	}
 }
+UVPlanet* UVUniversum::create_planet(const long n, const string name, const string besitzer, const long x, const long y, const long d)
+{
+	UVPlanet* p = get_planet(n);
+	if(p == NULL)
+	{
+		p = new UVPlanet(n, name, besitzer, x, y, d);
+		set_planet(p);
+	}
+	return p;
+}
 planeten_iterator UVUniversum::first_planet()
 {
 	return planeten.begin();

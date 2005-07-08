@@ -978,8 +978,8 @@ void UVImportTXT::parse_nachrichten()
 	// - 1234 BRT Erz wurden an ihre Werft Yehaa auf Planet Shubito (1234) von Doctor Who geliefert.
 	static UVRegExp wz_i_re("^- ([0-9]+) BRT Erz wurden an ihre Werft (.*?) auf Planet (.*?) \\(([0-9]+)\\) von (.+) geliefert\\.$");
 	// WC - Schiff bauen
-	// - Die Cristina (Doctor Who) wurde fertig gebaut und ausgeliefert. Kostenpunkt: 1234567 Cr (und das entsprechende Erz)
-	static UVRegExp wc_o_re("^- Die (.+) \\(.+\\) wurde fertig gebaut und ausgeliefert\\. Kostenpunkt: ([0-9]+) Cr \\(und das entsprechende Erz\\)$");
+	// - Die Cristina (Doctor Who) wurde fertig gebaut und ausgeliefert. Kostenpunkt: 1234567.5 Cr (und das entsprechende Erz)
+	static UVRegExp wc_o_re("^- Die (.+) \\(.+\\) wurde fertig gebaut und ausgeliefert\\. Kostenpunkt: ([0-9.]+) Cr \\(und das entsprechende Erz\\)$");
 	// - Der Schiffsbau kam aufgrund kompetenter Leute 5% billiger als geplant.
 	static UVRegExp wc2_re("^- Der Schiffsbau kam aufgrund kompetenter Leute ([0-9]+)% billiger als geplant\\.$");
 	// - Schiffsnamen PiPaPo gibt es schon, es wurde automatisch ein neuer ausgewählt.
@@ -1884,7 +1884,50 @@ void UVImportTXT::parse_nachrichten()
 		else if(zd_re.match(cur))
 		{
 			debug("nachricht-zd", &zd_re);
-			// ***
+
+			UVPlanet* p = universum->create_planet(
+				zd_re.subtol(3),
+				zd_re.sub(2),
+				"", 0, 0, 0
+			);
+			long n = zd_re.subtol(4);
+			UVZone* z = p->get_zone(n);
+			if(z == NULL)
+			{
+				z = new UVZone(zd_re.subtol(2));
+				z->nummer = n;
+			}
+			z->name = zd_re.sub(1);
+			z->besitzer = zd_re.sub(5);
+			z->groesse = zd_re.subtol(6);
+
+			for(int i = 0; i < 12; i++)
+			{
+				z->temperatur[i] = zd_re.subtof(i + 7);
+			}
+			for(int i = 0; i < 12; i++)
+			{
+				z->niederschlag[i] = zd_re.subtof(i + 19);
+			}
+			z->T = zd_re.subtof(31);
+			z->N = zd_re.subtof(32) / 10.0;
+
+			if(abs((long int)(z->N - z->get_N())) > 0.11)
+			{
+				cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (N:" << z->N << "!=" << z->get_N() << ")" << endl;
+			}
+			if(abs((long int)(z->T - z->get_T())) > 0.11)
+			{
+				cerr << "Warnung: Klimadaten inkonsistent auf Zeile " << line << " (T:" << z->T << "!=" << z->get_T() << ")" << endl;
+			}
+
+			if(V_INFO)
+			{
+				cout << "  " << p->to_string_terse() << endl;
+				cout << "    " << z->to_string_terse() << endl;
+			}
+
+			p->set_zone(z);
 		}
 		else
 		{
