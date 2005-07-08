@@ -27,6 +27,7 @@
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
 #include "si/draw.h"
+#include "si/events.h"
 
 /*
  * UVVideo - Verwaltet den SDL Bildschirm.
@@ -82,6 +83,7 @@ void UVVideo::dispose()
 	UVImageHandler::get_instance()->dispose();
 	UVFontHandler::get_instance()->dispose();
 	UVDraw::get_instance()->dispose();
+	UVEvents::get_instance()->dispose();
 	SDL_Quit();
 }
 

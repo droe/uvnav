@@ -30,11 +30,12 @@ uvnav_SOURCES = rev.h rev.cpp \
 	lib/regexp.h lib/regexp.cpp \
 	lib/sdl.h \
 	si/conf.h si/conf.cpp \
-	si/video.h si/video.cpp \
 	si/draw.h si/draw.cpp \
-	si/imagehandler.h si/imagehandler.cpp \
+	si/events.h si/events.cpp \
 	si/font.h si/font.cpp \
 	si/fonthandler.h si/fonthandler.cpp \
+	si/imagehandler.h si/imagehandler.cpp \
+	si/video.h si/video.cpp \
 	pd/spieler.h pd/spieler.cpp \
 	pd/anomalie.h pd/anomalie.cpp \
 	pd/container.h pd/container.cpp \
