@@ -53,7 +53,7 @@ am_suffix=`echo "$am" | sed 's/[^0-9]//g'`
 ac_suffix=`echo "$ac" | sed 's/[^0-9]//g'`
 
 # Updating / creating ChangeLog
-aux/svn2log.sh
+util/svn2log.sh
 
 # Gentoo fix
 which emerge 2>&1 >/dev/null

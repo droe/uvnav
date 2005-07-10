@@ -111,12 +111,12 @@ CXXFLAGS="$CXXFLAGS -fno-rtti -Wno-non-virtual-dtor -DDATADIR=\\\"\$(datadir)\\\
 CFLAGS="$CFLAGS -DDATADIR=\\\"\$(datadir)\\\""
 
 # Option: Tools
-AC_MSG_CHECKING([whether to build developer tools])
-AC_ARG_ENABLE([tools],
-              AC_HELP_STRING([--enable-tools], [Also build (but not install) useful tools for developers or porters]),
-              [ want_tools="yes" ], [ want_tools="no" ])
-AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
-AC_MSG_RESULT([$want_tools])
+#AC_MSG_CHECKING([whether to build developer tools])
+#AC_ARG_ENABLE([tools],
+#              AC_HELP_STRING([--enable-tools], [Also build (but not install) useful tools for developers or porters]),
+#              [ want_tools="yes" ], [ want_tools="no" ])
+#AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
+#AC_MSG_RESULT([$want_tools])
 
 # Option: Debug
 AC_MSG_CHECKING([whether to use debug code])
@@ -132,11 +132,10 @@ AC_MSG_CHECKING([which dimension we are building in])
 AC_MSG_RESULT([0 - Real Life])
 
 AC_CONFIG_FILES([Makefile
-                 aux/Makefile
+                 util/Makefile
                  share/Makefile
                  lib/Makefile
                  lib/pcre/Makefile
                  lib/pcre/include/Makefile
-                 src/Makefile
-                 tools/Makefile])
+                 src/Makefile])
 AC_OUTPUT
