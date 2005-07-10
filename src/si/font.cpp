@@ -20,8 +20,8 @@
 
 #include "font.h"
 
-#include "lib/exceptions.h"
-#include "lib/sysdep.h"
+#include "util/exceptions.h"
+#include "util/sysdep.h"
 #include "si/conf.h"
 
 /*

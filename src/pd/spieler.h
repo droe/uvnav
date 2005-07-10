@@ -21,7 +21,7 @@
 #ifndef SPIELER_H
 #define SPIELER_H
 
-#include "lib/stlstring.h"
+#include "util/stlstring.h"
 
 class UVSpieler
 {

@@ -29,9 +29,8 @@
  * praktische Helfer.
  */
 
-#include "lib/stlstring.h"
+#include "util/stlstring.h"
 
-//#include <cstdlib>
 #include <vector>
 #include <fstream>
 #include <iostream>

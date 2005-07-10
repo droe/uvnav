@@ -20,9 +20,9 @@
 
 #include "map.h"
 
-#include "lib/version.h"
-#include "lib/exceptions.h"
-#include "lib/minmax.h"
+#include "util/version.h"
+#include "util/exceptions.h"
+#include "util/minmax.h"
 #include "si/conf.h"
 #include "si/fonthandler.h"
 

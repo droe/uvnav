@@ -20,9 +20,9 @@
 
 #include "conf.h"
 
-#include "lib/version.h"
-#include "lib/sysdep.h"
-#include "lib/exceptions.h"
+#include "util/version.h"
+#include "util/sysdep.h"
+#include "util/exceptions.h"
 
 /*
  * UVConf - Verwaltet die persistente Konfiguration.

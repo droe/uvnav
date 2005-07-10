@@ -21,7 +21,7 @@
 #ifndef ZONE_H
 #define ZONE_H
 
-#include "lib/stl.h"
+#include "util/stl.h"
 #include "pd/agrarfeld.h"
 #include "pd/speicherfeld.h"
 #include "pd/minenfeld.h"

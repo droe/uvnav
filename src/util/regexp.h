@@ -18,22 +18,37 @@
  * $Id$
  */
 
-#ifndef SYSDEP_H
-#define SYSDEP_H
+#ifndef REGEXP_H
+#define REGEXP_H
 
-#include "../lib/stlstring.h"
-#include "../lib/sdl.h"
+#include "util/stlstring.h"
 
-void sysdep_mkdir(const string& path, int mode = 0755);
-unsigned long sysdep_filesize(const string&);
-bool sysdep_file_exists(const string&);
+#include <pcre.h>
 
-void sysdep_screensize(SDL_Rect*);
+class UVRegExp
+{
+	public:
+		UVRegExp(const string&);
+		~UVRegExp();
 
-string sysdep_homedir();
-string sysdep_confdir();
-string sysdep_datadir();
-string sysdep_fontfile(const string&);
-string sysdep_imagefile(const string&);
+		bool match(const string&);
+		int subs();
+		string sub(int = 0);
+		long subtol(int = 0);
+		long long subtoll(int = 0);
+		double subtof(int = 0);
+		int get_match_end();
 
-#endif // SYSDEP_H
+	private:
+		pcre* re;
+		int sub_count;
+		int* sub_vector;
+		const char** sub_list;
+		const char* last_subject;
+
+		inline const char* sub_c_str(int = 0);
+		inline void free_sub_list();
+};
+
+#endif // REGEXP_H
+

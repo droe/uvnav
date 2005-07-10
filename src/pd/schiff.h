@@ -21,7 +21,7 @@
 #ifndef SCHIFF_H
 #define SCHIFF_H
 
-#include "lib/stl.h"
+#include "util/stl.h"
 #include "pd/ladung.h"
 #include "pd/komponente.h"
 

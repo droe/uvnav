@@ -20,7 +20,7 @@
 
 #include "import_txt.h"
 
-#include "lib/sysdep.h"
+#include "util/sysdep.h"
 #include "si/imagehandler.h"
 
 /*

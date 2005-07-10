@@ -21,8 +21,8 @@
 #ifndef FONTHANDLER_H
 #define FONTHANDLER_H
 
-#include "lib/singleton.h"
-#include "lib/stl.h"
+#include "util/singleton.h"
+#include "util/stl.h"
 #include "si/font.h"
 
 #define FNT_SANS "FreeSans.ttf"

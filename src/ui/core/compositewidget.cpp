@@ -20,7 +20,7 @@
 
 #include "compositewidget.h"
 
-#include "lib/minmax.h"
+#include "util/minmax.h"
 #include "si/draw.h"
 
 /*

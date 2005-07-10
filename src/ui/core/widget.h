@@ -21,7 +21,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "lib/sdl.h"
+#include "util/sdl.h"
 #include "ui/core/rect.h"
 
 class UVWidget : public UVRect

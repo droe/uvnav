@@ -21,7 +21,7 @@
 #ifndef UNIVERSUM_H
 #define UNIVERSUM_H
 
-#include "lib/stl.h"
+#include "util/stl.h"
 #include "pd/spieler.h"
 #include "pd/anomalie.h"
 #include "pd/container.h"

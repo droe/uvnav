@@ -19,16 +19,16 @@
 bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp \
-	lib/version.h \
-	lib/stl.h lib/stlstring.h \
-	lib/exceptions.h \
-	lib/sysexits.h \
-	lib/sysdep.h lib/sysdep.cpp \
-	lib/observer.h lib/observer.cpp \
-	lib/singleton.h \
-	lib/minmax.h \
-	lib/regexp.h lib/regexp.cpp \
-	lib/sdl.h \
+	util/version.h \
+	util/stl.h util/stlstring.h \
+	util/exceptions.h \
+	util/sysexits.h \
+	util/sysdep.h util/sysdep.cpp \
+	util/observer.h util/observer.cpp \
+	util/singleton.h \
+	util/minmax.h \
+	util/regexp.h util/regexp.cpp \
+	util/sdl.h \
 	si/conf.h si/conf.cpp \
 	si/draw.h si/draw.cpp \
 	si/events.h si/events.cpp \

@@ -20,7 +20,7 @@
 
 #include "progress.h"
 
-#include "lib/exceptions.h"
+#include "util/exceptions.h"
 #include "si/fonthandler.h"
 #include "dm/abstractimporter.h"
 

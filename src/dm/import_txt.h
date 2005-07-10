@@ -21,8 +21,8 @@
 #ifndef IMPORT_TXT_H
 #define IMPORT_TXT_H
 
-#include "lib/observer.h"
-#include "lib/regexp.h"
+#include "util/observer.h"
+#include "util/regexp.h"
 #include "pd/universum.h"
 #include "dm/abstractimporter.h"
 

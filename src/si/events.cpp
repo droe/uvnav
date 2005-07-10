@@ -20,7 +20,7 @@
 
 #include "events.h"
 
-#include "lib/exceptions.h"
+#include "util/exceptions.h"
 #include "si/conf.h"
 
 /*

@@ -20,9 +20,9 @@
 
 #include "navigator.h"
 
-#include "lib/version.h"
-#include "lib/exceptions.h"
-#include "lib/sysdep.h"
+#include "util/version.h"
+#include "util/exceptions.h"
+#include "util/sysdep.h"
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
 #include "si/video.h"

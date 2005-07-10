@@ -21,9 +21,9 @@
 #ifndef PROGRESS_H
 #define PROGRESS_H
 
-#include "lib/observer.h"
-#include "lib/sdl.h"
-#include "lib/stlstring.h"
+#include "util/observer.h"
+#include "util/sdl.h"
+#include "util/stlstring.h"
 #include "si/font.h"
 
 class UVProgress : public Observer

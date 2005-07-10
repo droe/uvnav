@@ -18,10 +18,10 @@
  * $Id$
  */
 
-#include "lib/version.h"
-#include "lib/sysexits.h"
-#include "lib/sysdep.h"
-#include "lib/exceptions.h"
+#include "util/version.h"
+#include "util/sysexits.h"
+#include "util/sysdep.h"
+#include "util/exceptions.h"
 #include "si/conf.h"
 #include "ui/navigator.h"
 

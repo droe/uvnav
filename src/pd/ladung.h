@@ -21,7 +21,7 @@
 #ifndef LADUNG_H
 #define LADUNG_H
 
-#include "lib/stlstring.h"
+#include "util/stlstring.h"
 
 class UVLadung
 {

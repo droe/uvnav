@@ -21,7 +21,7 @@
 #ifndef COMPOSITEWIDGET_H
 #define COMPOSITEWIDGET_H
 
-#include "lib/stl.h"
+#include "util/stl.h"
 #include "ui/core/orientation.h"
 #include "ui/core/widget.h"
 

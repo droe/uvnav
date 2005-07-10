@@ -21,7 +21,7 @@
 #ifndef STADT_H
 #define STADT_H
 
-#include "lib/stlstring.h"
+#include "util/stlstring.h"
 
 class UVStadt
 {

@@ -21,7 +21,7 @@
 #ifndef PLANET_H
 #define PLANET_H
 
-#include "lib/stl.h"
+#include "util/stl.h"
 #include "pd/zone.h"
 #include "pd/handelsstation.h"
 

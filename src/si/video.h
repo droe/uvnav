@@ -21,8 +21,8 @@
 #ifndef VIDEO_H
 #define VIDEO_H
 
-#include "lib/sdl.h"
-#include "lib/singleton.h"
+#include "util/sdl.h"
+#include "util/singleton.h"
 #include "si/conf.h"
 
 class UVVideo : public Singleton<UVVideo>

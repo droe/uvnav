@@ -20,7 +20,7 @@
 
 #include "regexp.h"
 
-#include "lib/exceptions.h"
+#include "util/exceptions.h"
 
 /*
  * UVRegExp - Regulaere Ausdruecke.

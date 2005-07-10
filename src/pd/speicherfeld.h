@@ -21,7 +21,7 @@
 #ifndef SPEICHERFELD_H
 #define SPEICHERFELD_H
 
-#include "lib/stlstring.h"
+#include "util/stlstring.h"
 
 class UVSpeicherfeld
 {

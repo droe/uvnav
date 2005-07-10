@@ -21,7 +21,7 @@
 #ifndef RECT_H
 #define RECT_H
 
-#include "lib/sdl.h"
+#include "util/sdl.h"
 #include "ui/core/size.h"
 
 class UVRect : public UVSize
