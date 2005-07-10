@@ -35,7 +35,7 @@
  * }
  */
 
-template <class T>
+template <typename T>
 class Singleton
 {
 	public:
@@ -44,13 +44,14 @@ class Singleton
 
 	protected:
 		Singleton() {}
+		virtual ~Singleton() {}
 
 	private:
 		Singleton(const Singleton&);
 		Singleton& operator=(Singleton const&);
 };
 
-template <class T>
+template <typename T>
 T* Singleton<T>::get_instance()
 {
 	static T instance;
