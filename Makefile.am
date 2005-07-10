@@ -16,10 +16,11 @@
 #
 # $Id$
 
-if COND_TOOLS
-  MAYBE_TOOLS = tools
-endif
-SUBDIRS = aux share lib src $(MAYBE_TOOLS)
+#if COND_TOOLS
+#  MAYBE_TOOLS = tools
+#endif
+SUBDIRS = util share lib src
+#$(MAYBE_TOOLS)
 
 EXTRA_DIST = \
     autogen.sh \
@@ -38,9 +39,9 @@ MAINTAINERCLEANFILES = \
     install-sh missing mkinstalldirs compile
 
 ChangeLog: FORCE
-	@if [ -d .svn -a -x aux/svn2log.sh ]; then \
+	@if [ -d .svn -a -x util/svn2log.sh ]; then \
 		touch ChangeLog ; \
-		aux/svn2log.sh ; \
+		util/svn2log.sh ; \
 	fi
 
 FORCE:
