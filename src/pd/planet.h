@@ -22,8 +22,14 @@
 #define PLANET_H
 
 #include "util/stl.h"
-#include "pd/zone.h"
-#include "pd/handelsstation.h"
+
+class UVZone;
+class UVSpeicherfeld;
+class UVAgrarfeld;
+class UVStadt;
+class UVMinenfeld;
+class UVForschungsstation;
+class UVWerft;
 
 class UVPlanet
 {

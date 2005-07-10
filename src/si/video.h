@@ -23,7 +23,8 @@
 
 #include "util/sdl.h"
 #include "util/singleton.h"
-#include "si/conf.h"
+
+class UVConf;
 
 class UVVideo : public Singleton<UVVideo>
 {

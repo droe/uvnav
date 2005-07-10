@@ -20,6 +20,15 @@
 
 #include "planet.h"
 
+#include "pd/zone.h"
+#include "pd/handelsstation.h"
+#include "pd/agrarfeld.h"
+#include "pd/speicherfeld.h"
+#include "pd/minenfeld.h"
+#include "pd/werft.h"
+#include "pd/forschungsstation.h"
+#include "pd/stadt.h"
+
 /*
  * UVPlanet - Stellt einen Planeten dar.
  */

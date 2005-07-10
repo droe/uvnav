@@ -20,6 +20,7 @@
 
 #include "importhandler.h"
 
+#include "dm/abstractimporter.h"
 #include "dm/import_txt.h"
 
 /*

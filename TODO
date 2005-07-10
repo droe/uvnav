@@ -1,5 +1,9 @@
 $Id$
 
+- Header-Cleanup
+  - STL Header Cleanup
+  - SDL Header Cleanup
+- C++ Redesign
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren
     - interface base class UVKeydownListener mit ::handle_keydown()

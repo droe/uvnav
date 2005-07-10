@@ -20,6 +20,9 @@
 
 #include "schiff.h"
 
+#include "pd/ladung.h"
+#include "pd/komponente.h"
+
 /*
  * UVSchiff - Stellt ein Schiff dar.
  */

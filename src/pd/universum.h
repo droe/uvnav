@@ -22,13 +22,15 @@
 #define UNIVERSUM_H
 
 #include "util/stl.h"
-#include "pd/spieler.h"
-#include "pd/anomalie.h"
-#include "pd/container.h"
-#include "pd/infosonde.h"
-#include "pd/sensorsonde.h"
-#include "pd/planet.h"
-#include "pd/schiff.h"
+
+class UVSpieler;
+class UVSchiff;
+class UVPlanet;
+class UVHandelsstation;
+class UVAnomalie;
+class UVContainer;
+class UVSensorsonde;
+class UVInfosonde;
 
 typedef ext::hash_map<long, string>::iterator dim_iterator;
 typedef ext::hash_map<string, UVSchiff*>::iterator schiffe_iterator;

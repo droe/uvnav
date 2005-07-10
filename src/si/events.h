@@ -22,7 +22,8 @@
 #define EVENTS_H
 
 #include "util/singleton.h"
-#include "si/conf.h"
+
+class UVConf;
 
 class UVEvents : public Singleton<UVEvents>
 {

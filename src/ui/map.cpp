@@ -20,15 +20,26 @@
 
 #include "map.h"
 
-#include "util/version.h"
-#include "util/exceptions.h"
-#include "util/minmax.h"
-#include "si/conf.h"
-#include "si/fonthandler.h"
-
 #include "ui/core/widget.h"
 #include "ui/core/compositewidget.h"
 #include "ui/core/window.h"
+#include "util/version.h"
+#include "util/exceptions.h"
+#include "util/minmax.h"
+#include "si/font.h"
+#include "si/draw.h"
+#include "si/conf.h"
+#include "si/fonthandler.h"
+#include "si/imagehandler.h"
+#include "pd/universum.h"
+#include "pd/spieler.h"
+#include "pd/planet.h"
+#include "pd/schiff.h"
+#include "pd/anomalie.h"
+#include "pd/container.h"
+#include "pd/sensorsonde.h"
+#include "pd/infosonde.h"
+#include "pd/zone.h"
 
 #define PI 3.14159265358979323846
 

@@ -23,7 +23,8 @@
 
 #include "util/singleton.h"
 #include "util/stl.h"
-#include "si/font.h"
+
+class UVFont;
 
 #define FNT_SANS "FreeSans.ttf"
 

@@ -22,6 +22,7 @@
 
 #include "util/exceptions.h"
 #include "si/fonthandler.h"
+#include "si/font.h"
 #include "dm/abstractimporter.h"
 
 /*

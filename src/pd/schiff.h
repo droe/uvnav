@@ -22,8 +22,9 @@
 #define SCHIFF_H
 
 #include "util/stl.h"
-#include "pd/ladung.h"
-#include "pd/komponente.h"
+
+class UVKomponente;
+class UVLadung;
 
 typedef vector<UVKomponente*>::iterator komponenten_iterator;
 typedef vector<UVLadung*>::iterator ladung_iterator;

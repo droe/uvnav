@@ -21,6 +21,7 @@
 #include "fonthandler.h"
 
 #include "util/exceptions.h"
+#include "si/font.h"
 
 /*
  * UVFontHandler - TTF-Schriftarten laden und UVFont-Objekte verwalten.

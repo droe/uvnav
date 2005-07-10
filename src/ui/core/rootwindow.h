@@ -21,10 +21,11 @@
 #ifndef ROOTWINDOW_H
 #define ROOTWINDOW_H
 
-#include "si/conf.h"
-#include "si/video.h"
-//#include "si/keyboard.h"
 #include "ui/core/window.h"
+
+class UVConf;
+class UVVideo;
+//class UVKeyboard;
 
 class UVRootWindow : public UVWindow
 {

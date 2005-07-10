@@ -22,8 +22,8 @@
 #define COMPOSITEWIDGET_H
 
 #include "util/stl.h"
-#include "ui/core/orientation.h"
 #include "ui/core/widget.h"
+#include "ui/core/orientation.h"
 
 class UVCompositeWidget : public UVWidget
 {

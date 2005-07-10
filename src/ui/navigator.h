@@ -21,10 +21,13 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "si/conf.h"
-#include "si/font.h"
-#include "pd/universum.h"
-#include "ui/map.h"
+#include "util/sdl.h"
+#include "util/stlstring.h"
+
+class UVConf;
+class UVFont;
+class UVMap;
+class UVUniversum;
 
 class UVNavigator
 {

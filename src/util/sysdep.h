@@ -21,7 +21,6 @@
 #ifndef SYSDEP_H
 #define SYSDEP_H
 
-// .. ?
 #include "util/stlstring.h"
 #include "util/sdl.h"
 

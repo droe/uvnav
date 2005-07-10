@@ -20,14 +20,20 @@
 
 #include "navigator.h"
 
+#include "ui/progress.h"
+#include "ui/map.h"
 #include "util/version.h"
 #include "util/exceptions.h"
 #include "util/sysdep.h"
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
 #include "si/video.h"
+#include "si/conf.h"
+#include "si/font.h"
+#include "dm/abstractimporter.h"
 #include "dm/importhandler.h"
-#include "ui/progress.h"
+#include "pd/universum.h"
+#include "pd/spieler.h"
 
 /*
  * UVNavigator - Hauptklasse von UVNav

@@ -20,6 +20,15 @@
 
 #include "universum.h"
 
+#include "pd/spieler.h"
+#include "pd/anomalie.h"
+#include "pd/container.h"
+#include "pd/infosonde.h"
+#include "pd/sensorsonde.h"
+#include "pd/planet.h"
+#include "pd/schiff.h"
+#include "pd/handelsstation.h"
+
 /*
  * UVUniversum - Repraesentation eines Universum Spielstandes.
  */

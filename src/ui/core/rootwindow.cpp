@@ -20,6 +20,10 @@
 
 #include "rootwindow.h"
 
+#include "si/conf.h"
+#include "si/video.h"
+//#include "si/keyboard.h"
+
 /*
  * Konstruktor.
  */

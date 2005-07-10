@@ -22,12 +22,13 @@
 #define ZONE_H
 
 #include "util/stl.h"
-#include "pd/agrarfeld.h"
-#include "pd/speicherfeld.h"
-#include "pd/minenfeld.h"
-#include "pd/werft.h"
-#include "pd/forschungsstation.h"
-#include "pd/stadt.h"
+
+class UVAgrarfeld;
+class UVSpeicherfeld;
+class UVMinenfeld;
+class UVWerft;
+class UVForschungsstation;
+class UVStadt;
 
 class UVZone
 {

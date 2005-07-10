@@ -21,7 +21,27 @@
 #include "import_txt.h"
 
 #include "util/sysdep.h"
+#include "util/regexp.h"
 #include "si/imagehandler.h"
+#include "pd/universum.h"
+#include "pd/sensorsonde.h"
+#include "pd/infosonde.h"
+#include "pd/anomalie.h"
+#include "pd/container.h"
+#include "pd/schiff.h"
+#include "pd/stadt.h"
+#include "pd/handelsstation.h"
+#include "pd/forschungsstation.h"
+#include "pd/werft.h"
+#include "pd/zone.h"
+#include "pd/planet.h"
+#include "pd/spieler.h"
+#include "pd/komponente.h"
+#include "pd/ladung.h"
+#include "pd/agrarfeld.h"
+#include "pd/speicherfeld.h"
+#include "pd/minenfeld.h"
+
 
 /*
  * UVImportTXT - Importer fuer Text-Auswertungen
@@ -46,6 +66,7 @@
 #define V_RE	verbosity >= 3
 #define V_DEBUG	verbosity >= 2
 #define V_INFO	verbosity >= 1
+
 
 /*
  * Konstruktor.

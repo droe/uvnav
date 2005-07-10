@@ -22,7 +22,9 @@
 #define IMPORTHANDLER_H
 
 #include "util/singleton.h"
-#include "dm/abstractimporter.h"
+#include "util/stlstring.h"
+
+class UVAbstractImporter;
 
 class UVImportHandler : public Singleton<UVImportHandler>
 {

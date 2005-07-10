@@ -24,7 +24,8 @@
 #include "util/observer.h"
 #include "util/sdl.h"
 #include "util/stlstring.h"
-#include "si/font.h"
+
+class UVFont;
 
 class UVProgress : public Observer
 {
