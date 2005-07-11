@@ -21,7 +21,7 @@
 #ifndef SCHIFF_H
 #define SCHIFF_H
 
-#include "util/stl.h"
+#include "util/stl_hash_map.h"
 #include "util/stl_string.h"
 
 class UVKomponente;

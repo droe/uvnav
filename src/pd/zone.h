@@ -21,7 +21,7 @@
 #ifndef ZONE_H
 #define ZONE_H
 
-#include "util/stl.h"
+#include "util/stl_hash_map.h"
 #include "util/stl_string.h"
 
 class UVAgrarfeld;

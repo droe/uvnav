@@ -22,7 +22,7 @@
 #define CONF_H
 
 #include "util/singleton.h"
-#include "util/stl.h"
+#include "util/stl_hash_map.h"
 #include "util/stl_string.h"
 
 /*

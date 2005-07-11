@@ -1,12 +1,8 @@
 $Id$
 
 - Header-Cleanup
-  - STL Header Cleanup Phase 2+
-    - kill all instances of stl.h, include <vector> etc directly
-    - move hash_map -> stl_hash_map
-    - move from math.h -> cmath etc
-    - reorder includes
   - SDL Header Cleanup
+  - Reorder Includes
 - C++ Redesign
   - Destruktoren virtual
 - OO-Architecture Redesign

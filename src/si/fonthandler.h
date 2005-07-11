@@ -22,7 +22,7 @@
 #define FONTHANDLER_H
 
 #include "util/singleton.h"
-#include "util/stl.h"
+#include "util/stl_hash_map.h"
 #include "util/stl_string.h"
 
 class UVFont;
@@ -46,5 +46,5 @@ class UVFontHandler : public Singleton<UVFontHandler>
 		ext::hash_map<std::string, UVFont*> fonts;
 };
 
-#endif // FONT_H
+#endif // FONTHANDLER_H
 

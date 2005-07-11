@@ -18,15 +18,14 @@
  * $Id$
  */
 
-#ifndef STL_H
-#define STL_H
+#ifndef STL_HASH_MAP_H
+#define STL_HASH_MAP_H
 
 /*
- * STL-Kompatibilitaet und Helfer.
+ * STL Hash Map
  *
- * Dieser Header sorgt dafuer, dass wir die STL auf allen Plattformen
- * auf die gleiche Art und Weise benutzen koennen, und definiert einige
- * praktische Helfer.
+ * Dieser Header sorgt dafuer, dass wir die STL hash_map auf allen
+ * Plattformen auf die gleiche Art und Weise benutzen koennen.
  */
 
 #include <string>
@@ -36,10 +35,6 @@
   #error Require namespaces. Sorry.
 #endif
 
-
-/*
- * C++ STL Extensions von SGI
- */
 #if defined(HAVE_STD_EXT_HASH_MAP)
 	#include <ext/hash_map>
 	namespace ext = std;
@@ -96,4 +91,4 @@
 	#error Require hash_map. Sorry.
 #endif
 
-#endif // STL_H
+#endif // STL_HASH_MAP_H

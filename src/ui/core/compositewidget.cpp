@@ -20,8 +20,8 @@
 
 #include "compositewidget.h"
 
-#include "util/minmax.h"
 #include "si/draw.h"
+#include "util/minmax.h"
 
 /*
  * Konstruktor.

@@ -21,7 +21,7 @@
 #ifndef UNIVERSUM_H
 #define UNIVERSUM_H
 
-#include "util/stl.h"
+#include "util/stl_hash_map.h"
 #include "util/stl_string.h"
 
 class UVSpieler;
