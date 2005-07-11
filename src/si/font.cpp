@@ -24,6 +24,8 @@
 #include "util/sysdep.h"
 #include "si/conf.h"
 
+using namespace std;
+
 /*
  * UVFont - Eine TTF-Schriftart laden und Strings rendern.
  *

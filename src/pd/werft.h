@@ -21,7 +21,7 @@
 #ifndef WERFT_H
 #define WERFT_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVWerft
 {
@@ -33,11 +33,11 @@ class UVWerft
 
 		long zone;				// key: UVZone in UVPlanet
 
-		string name;
+		std::string name;
 		long groesse;			// in FUs
-		string formel;
+		std::string formel;
 		long erzlager;			// in BRT
-		string beschreibung;
+		std::string beschreibung;
 };
 
 #endif // WERFT_H

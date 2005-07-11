@@ -22,22 +22,23 @@
 #define SCHIFF_H
 
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 class UVKomponente;
 class UVLadung;
 
-typedef vector<UVKomponente*>::iterator komponenten_iterator;
-typedef vector<UVLadung*>::iterator ladung_iterator;
+typedef std::vector<UVKomponente*>::iterator komponenten_iterator;
+typedef std::vector<UVLadung*>::iterator ladung_iterator;
 
 class UVSchiff
 {
 	public:
-		UVSchiff(string, string, long);
+		UVSchiff(std::string, std::string, long);
 //		~UVSchiff();
 
-		string name;			// key in UVWelt
+		std::string name;			// key in UVWelt
 
-		string besitzer;
+		std::string besitzer;
 		long groesse;			// in BRT
 
 		long x;
@@ -46,7 +47,7 @@ class UVSchiff
 		long planet;			// key: UVPlanet in UVWelt
 		bool zonenstatus;		// true = verteidigt allierte Zonen
 		long werft;				// key: UVWerft in UVPlanet
-		string beschreibung;
+		std::string beschreibung;
 		double v;				// in KpZ
 		long w;					// in °
 		long waffenstatus;		// 1..3
@@ -89,10 +90,10 @@ class UVSchiff
 		ladung_iterator last_ladung();
 
 	private:
-		vector<UVKomponente*> energiekanonen;
-		vector<UVKomponente*> raketen;
-		vector<UVKomponente*> triebwerke;
-		vector<UVLadung*> ladung;
+		std::vector<UVKomponente*> energiekanonen;
+		std::vector<UVKomponente*> raketen;
+		std::vector<UVKomponente*> triebwerke;
+		std::vector<UVLadung*> ladung;
 };
 
 #endif // SCHIFF_H

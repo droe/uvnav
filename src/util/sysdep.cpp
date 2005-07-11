@@ -21,7 +21,10 @@
 #include "sysdep.h"
 
 #include "config.h"
+
 #include "util/exceptions.h"
+
+using namespace std;
 
 /*
  * Globale betriebssystemabhaengige Hilfsroutinen.

@@ -22,6 +22,8 @@
 
 #include "util/exceptions.h"
 
+using namespace std;
+
 /*
  * UVRegExp - Regulaere Ausdruecke.
  *

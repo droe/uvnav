@@ -22,18 +22,22 @@
 
 #include "ui/progress.h"
 #include "ui/map.h"
-#include "util/version.h"
-#include "util/exceptions.h"
-#include "util/sysdep.h"
+#include "dm/abstractimporter.h"
+#include "dm/importhandler.h"
+#include "pd/universum.h"
+#include "pd/spieler.h"
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
 #include "si/video.h"
 #include "si/conf.h"
 #include "si/font.h"
-#include "dm/abstractimporter.h"
-#include "dm/importhandler.h"
-#include "pd/universum.h"
-#include "pd/spieler.h"
+#include "util/version.h"
+#include "util/exceptions.h"
+#include "util/sysdep.h"
+
+#include <iostream>
+
+using namespace std;
 
 /*
  * UVNavigator - Hauptklasse von UVNav

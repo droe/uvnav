@@ -21,19 +21,19 @@
 #ifndef LADUNG_H
 #define LADUNG_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVLadung
 {
 	public:
-		UVLadung(long, string, long, string);
+		UVLadung(long, std::string, long, std::string);
 //		~UVLadung();
 
 		long nummer;			// key in UVSchiff
 
-		string name;
+		std::string name;
 		long groesse;			// in BRT
-		string besitzer;
+		std::string besitzer;
 };
 
 #endif // LADUNG_H

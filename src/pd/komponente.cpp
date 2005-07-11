@@ -20,6 +20,8 @@
 
 #include "komponente.h"
 
+using namespace std;
+
 /*
  * UVKomponente - Stellt eine Schiffs-Komponente dar.
  */

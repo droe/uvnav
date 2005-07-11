@@ -24,6 +24,11 @@
 #include "util/sysdep.h"
 #include "util/exceptions.h"
 
+#include <iostream>
+#include <fstream>
+
+using namespace std;
+
 /*
  * UVConf - Verwaltet die persistente Konfiguration.
  *

@@ -20,6 +20,8 @@
 
 #include "agrarfeld.h"
 
+using namespace std;
+
 /*
  * UVAgrarfeld - Stellt ein Agrarfeld dar.
  */

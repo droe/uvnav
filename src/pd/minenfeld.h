@@ -21,12 +21,12 @@
 #ifndef MINENFELD_H
 #define MINENFELD_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVMinenfeld
 {
 	public:
-		UVMinenfeld(long n, long z, long gr = 0, string ro = "", long er = 0);
+		UVMinenfeld(long n, long z, long gr = 0, std::string ro = "", long er = 0);
 //		~UVMinenfeld();
 
 		long nummer;			// key in UVPlanet
@@ -34,7 +34,7 @@ class UVMinenfeld
 		long zone;				// key: UVZone in UVPlanet
 
 		long groesse;			// in FUs
-		string rohstoff;
+		std::string rohstoff;
 		long ertrag;			// in BRT
 };
 

@@ -22,6 +22,9 @@
 
 #include "si/conf.h"
 
+#include <iostream>
+using namespace std;
+
 /*
  * UVDraw - Grafische Formen zeichnen.
  *

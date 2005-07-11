@@ -21,19 +21,19 @@
 #ifndef HANDELSSTATION_H
 #define HANDELSSTATION_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVHandelsstation
 {
 	public:
-		UVHandelsstation(string, long);
+		UVHandelsstation(std::string, long);
 //		~UVHandelsstation();
 
-		string name;			// key in UVUniversum
+		std::string name;			// key in UVUniversum
 
 		long planet;			// key: UVPlanet in UVUniversum
 
-		string beschreibung;
+		std::string beschreibung;
 };
 
 #endif // HANDELSSTATION_H

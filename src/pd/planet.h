@@ -22,6 +22,7 @@
 #define PLANET_H
 
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 class UVZone;
 class UVSpeicherfeld;
@@ -34,29 +35,29 @@ class UVWerft;
 class UVPlanet
 {
 	public:
-		UVPlanet(long, string, string, long, long, long);
+		UVPlanet(long, std::string, std::string, long, long, long);
 //		~UVPlanet();
 
 		long nummer;			// key in UVUniversum
 
-		string name;
-		string besitzer;
+		std::string name;
+		std::string besitzer;
 		long x;
 		long y;
 		long dim;
 
-		vector<long> nachbarn;	// key: UVPlanet in UVUniversum
+		std::vector<long> nachbarn;	// key: UVPlanet in UVUniversum
 		bool drawflag;			// fuer UVMap::draw_planet
 
-		string beschreibung;
+		std::string beschreibung;
 		double bevoelkerung;	// in Millionen
-		string zustand;
+		std::string zustand;
 		long minen;
 		long minen_max;
 		long fabriken;
 		long fabriken_max;
 		long produktion;		// in %
-		string klima;
+		std::string klima;
 		long image;				// #defined in si/imagehandler.h
 		long diameter;			// in km
 		long techlevel;			// 0..10
@@ -66,8 +67,8 @@ class UVPlanet
 		long ybatts;
 		long zbatts;
 
-		string handelsstation;	// key: UVHandelsstation in UVWelt
-		vector<string> schiffe;	// key: UVSchiff in UVWelt
+		std::string handelsstation;	// key: UVHandelsstation in UVWelt
+		std::vector<std::string> schiffe;	// key: UVSchiff in UVWelt
 
 		void set_zone(UVZone*);
 		UVZone* get_zone(const long) const;
@@ -97,16 +98,16 @@ class UVPlanet
 		UVStadt* get_stadt(const long) const;
 		long max_stadt() const;
 
-		string to_string_terse() const;
+		std::string to_string_terse() const;
 
 	private:
-		vector<UVZone*> zonen;
-		vector<UVAgrarfeld*> agrarfelder;
-		vector<UVSpeicherfeld*> speicherfelder;
-		vector<UVMinenfeld*> minenfelder;
-		vector<UVWerft*> werften;
-		vector<UVForschungsstation*> forschungsstationen;
-		vector<UVStadt*> staedte;
+		std::vector<UVZone*> zonen;
+		std::vector<UVAgrarfeld*> agrarfelder;
+		std::vector<UVSpeicherfeld*> speicherfelder;
+		std::vector<UVMinenfeld*> minenfelder;
+		std::vector<UVWerft*> werften;
+		std::vector<UVForschungsstation*> forschungsstationen;
+		std::vector<UVStadt*> staedte;
 };
 
 #endif // PLANET_H

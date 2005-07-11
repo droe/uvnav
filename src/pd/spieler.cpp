@@ -20,6 +20,8 @@
 
 #include "spieler.h"
 
+using namespace std;
+
 /*
  * UVSpieler - Stellt einen Spieler dar.
  */

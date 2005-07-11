@@ -21,19 +21,19 @@
 #ifndef SYSDEP_H
 #define SYSDEP_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 #include "util/sdl.h"
 
-void sysdep_mkdir(const string& path, int mode = 0755);
-unsigned long sysdep_filesize(const string&);
-bool sysdep_file_exists(const string&);
+void sysdep_mkdir(const std::string& path, int mode = 0755);
+unsigned long sysdep_filesize(const std::string&);
+bool sysdep_file_exists(const std::string&);
 
 void sysdep_screensize(SDL_Rect*);
 
-string sysdep_homedir();
-string sysdep_confdir();
-string sysdep_datadir();
-string sysdep_fontfile(const string&);
-string sysdep_imagefile(const string&);
+std::string sysdep_homedir();
+std::string sysdep_confdir();
+std::string sysdep_datadir();
+std::string sysdep_fontfile(const std::string&);
+std::string sysdep_imagefile(const std::string&);
 
 #endif // SYSDEP_H

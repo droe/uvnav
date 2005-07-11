@@ -21,17 +21,17 @@
 #ifndef KOMPONENTE_H
 #define KOMPONENTE_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVKomponente
 {
 	public:
-		UVKomponente(string s, long zs, long hp, long gr, long n = 1, double l = 0.0);
+		UVKomponente(std::string s, long zs, long hp, long gr, long n = 1, double l = 0.0);
 //		~UVKomponente();
 
 		long nummer;			// key in UVSchiff
 
-		string name;
+		std::string name;
 		long zustand;
 		long hitpoints;
 		long groesse;			// in BRT

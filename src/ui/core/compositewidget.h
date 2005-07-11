@@ -40,7 +40,7 @@ class UVCompositeWidget : public UVWidget
 		virtual void set_surface(SDL_Surface*);
 
 	protected:
-		vector<UVWidget*> widgets;
+		std::vector<UVWidget*> widgets;
 		bool modified;
 		UVOrientation orientation;
 		int weight_total;

@@ -29,6 +29,8 @@
 #include "pd/forschungsstation.h"
 #include "pd/stadt.h"
 
+using namespace std;
+
 /*
  * UVPlanet - Stellt einen Planeten dar.
  */

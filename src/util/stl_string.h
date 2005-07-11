@@ -18,8 +18,8 @@
  * $Id$
  */
 
-#ifndef STLSTRING_H
-#define STLSTRING_H
+#ifndef STL_STRING_H
+#define STL_STRING_H
 
 /*
  * STL-Strings.
@@ -27,8 +27,6 @@
 
 #include <string>
 #include <sstream>
-
-using namespace std;
 
 /*
  * Einfache Stream-maessige Konversion aller Datentypen nach string.
@@ -58,12 +56,12 @@ const str_stream& operator<< (const str_stream& out, const type& value)
 }
 */
 
-template<class type>
-inline std::string to_string(const type & value)
+template<typename T>
+inline std::string to_string(const T& value)
 {
     std::ostringstream streamOut;
     streamOut << value;
     return streamOut.str();
 }
 
-#endif // STLSTRING_H
+#endif // STL_STRING_H

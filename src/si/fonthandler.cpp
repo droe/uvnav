@@ -23,6 +23,8 @@
 #include "util/exceptions.h"
 #include "si/font.h"
 
+using namespace std;
+
 /*
  * UVFontHandler - TTF-Schriftarten laden und UVFont-Objekte verwalten.
  */

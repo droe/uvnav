@@ -22,7 +22,7 @@
 #define NAVIGATOR_H
 
 #include "util/sdl.h"
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVConf;
 class UVFont;
@@ -36,7 +36,7 @@ class UVNavigator
 		~UVNavigator();
 
 		void splash();
-		void load(const string&, int = 0);
+		void load(const std::string&, int = 0);
 		void wait();
 		void run();
 
@@ -50,7 +50,7 @@ class UVNavigator
 		SDL_Surface* screen;
 
 		long status_y;
-		void splash_status(const string&);
+		void splash_status(const std::string&);
 
 		void init_video();
 };

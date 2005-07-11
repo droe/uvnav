@@ -20,9 +20,6 @@
 
 #include "import_txt.h"
 
-#include "util/sysdep.h"
-#include "util/regexp.h"
-#include "si/imagehandler.h"
 #include "pd/universum.h"
 #include "pd/sensorsonde.h"
 #include "pd/infosonde.h"
@@ -41,7 +38,13 @@
 #include "pd/agrarfeld.h"
 #include "pd/speicherfeld.h"
 #include "pd/minenfeld.h"
+#include "si/imagehandler.h"
+#include "util/sysdep.h"
+#include "util/regexp.h"
 
+#include <iostream>
+
+using namespace std;
 
 /*
  * UVImportTXT - Importer fuer Text-Auswertungen

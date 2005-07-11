@@ -22,7 +22,7 @@
 #define IMPORTHANDLER_H
 
 #include "util/singleton.h"
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVAbstractImporter;
 
@@ -31,7 +31,7 @@ class UVImportHandler : public Singleton<UVImportHandler>
 	friend class Singleton<UVImportHandler>;
 
 	public:
-		UVAbstractImporter* get_importer(const string& file);
+		UVAbstractImporter* get_importer(const std::string& file);
 
 		void dispose();
 

@@ -18,15 +18,17 @@
  * $Id$
  */
 
+#include "ui/navigator.h"
+#include "si/conf.h"
 #include "util/version.h"
 #include "util/sysexits.h"
 #include "util/sysdep.h"
 #include "util/exceptions.h"
-#include "si/conf.h"
-#include "ui/navigator.h"
 
 #include <getopt.h>
 #include <pcre.h>
+#include <iostream>
+using namespace std;
 
 /*
  * Hauptroutine.

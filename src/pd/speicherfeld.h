@@ -21,12 +21,12 @@
 #ifndef SPEICHERFELD_H
 #define SPEICHERFELD_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVSpeicherfeld
 {
 	public:
-		UVSpeicherfeld(long n, long z, long gr = 0, long sp = 0, long me = 0, string wa = "");
+		UVSpeicherfeld(long n, long z, long gr = 0, long sp = 0, long me = 0, std::string wa = "");
 //		~UVSpeicherfeld();
 
 		long nummer;			// key in UVPlanet
@@ -36,7 +36,7 @@ class UVSpeicherfeld
 		long groesse;			// in FUs
 		long speicherplatz;		// in BRT
 		long menge;				// in BRT
-		string ware;
+		std::string ware;
 };
 
 #endif // SPEICHERFELD_H

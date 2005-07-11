@@ -22,6 +22,7 @@
 #define UNIVERSUM_H
 
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 class UVSpieler;
 class UVSchiff;
@@ -32,12 +33,12 @@ class UVContainer;
 class UVSensorsonde;
 class UVInfosonde;
 
-typedef ext::hash_map<long, string>::iterator dim_iterator;
-typedef ext::hash_map<string, UVSchiff*>::iterator schiffe_iterator;
+typedef ext::hash_map<long, std::string>::iterator dim_iterator;
+typedef ext::hash_map<std::string, UVSchiff*>::iterator schiffe_iterator;
 typedef ext::hash_map<long, UVPlanet*>::iterator planeten_iterator;
-typedef ext::hash_map<string, UVHandelsstation*>::iterator handelsstationen_iterator;
-typedef ext::vector<UVAnomalie*>::iterator anomalien_iterator;
-typedef ext::vector<UVContainer*>::iterator container_iterator;
+typedef ext::hash_map<std::string, UVHandelsstation*>::iterator handelsstationen_iterator;
+typedef std::vector<UVAnomalie*>::iterator anomalien_iterator;
+typedef std::vector<UVContainer*>::iterator container_iterator;
 typedef ext::hash_map<long, UVSensorsonde*>::iterator sensorsonden_iterator;
 typedef ext::hash_map<long, UVInfosonde*>::iterator infosonden_iterator;
 
@@ -47,14 +48,14 @@ class UVUniversum
 		UVUniversum();
 		~UVUniversum();
 
-		string partie;
-		string copyright;
-		string galaxie;
-		string motu;
+		std::string partie;
+		std::string copyright;
+		std::string galaxie;
+		std::string motu;
 		long sternzeit;
 
-		void   set_dim(const long, const string&);
-		string get_dim(const long) const;
+		void   set_dim(const long, const std::string&);
+		std::string get_dim(const long) const;
 		dim_iterator first_dim();
 		dim_iterator last_dim();
 
@@ -62,18 +63,18 @@ class UVUniversum
 		UVSpieler* get_spieler() const;
 
 		void set_schiff(UVSchiff* s, UVPlanet* p = NULL);
-		UVSchiff* get_schiff(const string&) const;
+		UVSchiff* get_schiff(const std::string&) const;
 		schiffe_iterator first_schiff();
 		schiffe_iterator last_schiff();
 
 		void set_planet(UVPlanet*);
 		UVPlanet* get_planet(const long) const;
-		UVPlanet* create_planet(const long, const string, const string, const long, const long, const long);
+		UVPlanet* create_planet(const long, const std::string, const std::string, const long, const long, const long);
 		planeten_iterator first_planet();
 		planeten_iterator last_planet();
 
 		void set_handelsstation(UVHandelsstation*, UVPlanet*);
-		UVHandelsstation* get_handelsstation(const string&) const;
+		UVHandelsstation* get_handelsstation(const std::string&) const;
 		handelsstationen_iterator first_handelsstation();
 		handelsstationen_iterator last_handelsstation();
 
@@ -98,13 +99,13 @@ class UVUniversum
 		infosonden_iterator last_infosonde();
 
 	private:
-		mutable ext::hash_map<long, string> dim;
+		mutable ext::hash_map<long, std::string> dim;
 		UVSpieler* spieler;
-		mutable ext::hash_map<string, UVSchiff*> schiffe;
+		mutable ext::hash_map<std::string, UVSchiff*> schiffe;
 		mutable ext::hash_map<long, UVPlanet*> planeten;
-		mutable ext::hash_map<string, UVHandelsstation*> handelsstationen;
-		vector<UVAnomalie*> anomalien;
-		vector<UVContainer*> container;
+		mutable ext::hash_map<std::string, UVHandelsstation*> handelsstationen;
+		std::vector<UVAnomalie*> anomalien;
+		std::vector<UVContainer*> container;
 		mutable ext::hash_map<long, UVSensorsonde*> sensorsonden;
 		mutable ext::hash_map<long, UVInfosonde*> infosonden;
 };

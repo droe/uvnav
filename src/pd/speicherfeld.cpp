@@ -20,6 +20,8 @@
 
 #include "speicherfeld.h"
 
+using namespace std;
+
 /*
  * UVSpeicherfeld - Stellt ein Speicherfeld dar.
  */

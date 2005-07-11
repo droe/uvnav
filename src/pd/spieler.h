@@ -21,7 +21,7 @@
 #ifndef SPIELER_H
 #define SPIELER_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVSpieler
 {
@@ -29,12 +29,12 @@ class UVSpieler
 		UVSpieler();
 //		~UVSpieler();
 
-		string name;			// key in UVWelt
+		std::string name;			// key in UVWelt
 
-		string spieler;
-		string status;
-		string gesellschaft;
-		string talent;
+		std::string spieler;
+		std::string status;
+		std::string gesellschaft;
+		std::string talent;
 		long long legal;
 		long long punkte;
 		long long konto;		// in Credits

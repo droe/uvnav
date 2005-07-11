@@ -23,6 +23,7 @@
 
 #include "util/singleton.h"
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 /*
  * Version der Konfigurationsdatenbank.
@@ -41,20 +42,20 @@ class UVConf : public Singleton<UVConf>
 		~UVConf();
 
 	public:
-		void set_auswertung(string, long);
+		void set_auswertung(std::string, long);
 
-		string s_get(const string&, bool = false) const;
-		void   s_set(const string&, string, bool = false);
-		void   s_del(const string&, bool = false);
-		long   l_get(const string&, bool = false) const;
-		void   l_set(const string&, long, bool = false);
-		void   l_del(const string&, bool = false);
-		double f_get(const string&, bool = false) const;
-		void   f_set(const string&, double, bool = false);
-		void   f_del(const string&, bool = false);
-		bool   b_get(const string&, bool = false) const;
-		void   b_set(const string&, bool, bool = false);
-		void   b_del(const string&, bool = false);
+		std::string s_get(const std::string&, bool = false) const;
+		void        s_set(const std::string&, std::string, bool = false);
+		void        s_del(const std::string&, bool = false);
+		long        l_get(const std::string&, bool = false) const;
+		void        l_set(const std::string&, long, bool = false);
+		void        l_del(const std::string&, bool = false);
+		double      f_get(const std::string&, bool = false) const;
+		void        f_set(const std::string&, double, bool = false);
+		void        f_del(const std::string&, bool = false);
+		bool        b_get(const std::string&, bool = false) const;
+		void        b_set(const std::string&, bool, bool = false);
+		void        b_del(const std::string&, bool = false);
 
 		bool have_data() const;
 
@@ -64,13 +65,13 @@ class UVConf : public Singleton<UVConf>
 		void dispose();
 
 	private:
-		string aw_besitzer;
+		std::string aw_besitzer;
 		long aw_sternzeit;
 
-		mutable ext::hash_map<string, string> s_conf;
-		mutable ext::hash_map<string, long>   l_conf;
-		mutable ext::hash_map<string, double> f_conf;
-		mutable ext::hash_map<string, bool>   b_conf;
+		mutable ext::hash_map<std::string, std::string> s_conf;
+		mutable ext::hash_map<std::string, long>        l_conf;
+		mutable ext::hash_map<std::string, double>      f_conf;
+		mutable ext::hash_map<std::string, bool>        b_conf;
 
 		void convert();
 };

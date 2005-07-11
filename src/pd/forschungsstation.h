@@ -21,7 +21,7 @@
 #ifndef FORSCHUNGSSTATION_H
 #define FORSCHUNGSSTATION_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVForschungsstation
 {
@@ -33,10 +33,10 @@ class UVForschungsstation
 
 		long zone;				// key: UVZone in UVPlanet
 
-		string name;
+		std::string name;
 		long groesse;			// in FUs
 		long wissenspunkte;
-		string beschreibung;
+		std::string beschreibung;
 };
 
 #endif // FORSCHUNGSSTATION_H

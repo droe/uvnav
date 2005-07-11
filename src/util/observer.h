@@ -21,7 +21,7 @@
 #ifndef OBSERVER_H
 #define OBSERVER_H
 
-#include "util/stl.h"
+#include <vector>
 
 class Subject;
 
@@ -39,7 +39,7 @@ class Subject
 		void notify();
 
 	private:
-		vector<Observer*> observers;
+		std::vector<Observer*> observers;
 };
 
 #endif // OBSERVER_H

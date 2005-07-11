@@ -21,12 +21,12 @@
 #ifndef AGRARFELD_H
 #define AGRARFELD_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVAgrarfeld
 {
 	public:
-		UVAgrarfeld(long n, long z, long gr = 0, string pr = "", long er = 0);
+		UVAgrarfeld(long n, long z, long gr = 0, std::string pr = "", long er = 0);
 //		~UVAgrarfeld();
 
 		long nummer;			// key in UVPlanet
@@ -34,7 +34,7 @@ class UVAgrarfeld
 		long zone;				// key: UVZone in UVPlanet
 
 		long groesse;			// in FUs
-		string produkt;
+		std::string produkt;
 		long ertrag;			// in BRT
 };
 

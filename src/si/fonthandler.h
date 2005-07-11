@@ -23,6 +23,7 @@
 
 #include "util/singleton.h"
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 class UVFont;
 
@@ -33,7 +34,7 @@ class UVFontHandler : public Singleton<UVFontHandler>
 	friend class Singleton<UVFontHandler>;
 
 	public:
-		UVFont* get_font(const string& file, int size);
+		UVFont* get_font(const std::string& file, int size);
 
 		void dispose();
 
@@ -42,7 +43,7 @@ class UVFontHandler : public Singleton<UVFontHandler>
 		~UVFontHandler();
 
 	private:
-		ext::hash_map<string, UVFont*> fonts;
+		ext::hash_map<std::string, UVFont*> fonts;
 };
 
 #endif // FONT_H

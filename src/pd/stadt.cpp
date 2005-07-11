@@ -20,6 +20,8 @@
 
 #include "stadt.h"
 
+using namespace std;
+
 /*
  * UVStadt - Stellt eine Stadt dar.
  */

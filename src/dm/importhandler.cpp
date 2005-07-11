@@ -23,6 +23,8 @@
 #include "dm/abstractimporter.h"
 #include "dm/import_txt.h"
 
+using namespace std;
+
 /*
  * UVImportHandler - Verwaltet die Importer fuer Auswertungen
  */

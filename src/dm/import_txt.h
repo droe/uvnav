@@ -22,6 +22,9 @@
 #define IMPORT_TXT_H
 
 #include "dm/abstractimporter.h"
+#include "util/stl_string.h"
+#include <fstream>
+#include "config.h"
 
 class UVUniversum;
 class UVZone;
@@ -38,15 +41,15 @@ class UVImportTXT : public UVAbstractImporter
 //		~UVImportTXT();
 
 		void set_verbosity(int v);
-		UVUniversum* import(const string& file);
+		UVUniversum* import(const std::string& file);
 		unsigned long get_filesize() const;
 		unsigned long get_bytecount() const;
 
 	private:
 		UVUniversum* universum;
 
-		ifstream stream;
-		string cur;
+		std::ifstream stream;
+		std::string cur;
 		unsigned long line;
 		unsigned long filesize;
 		unsigned long bytecount;
@@ -56,15 +59,15 @@ class UVImportTXT : public UVAbstractImporter
 		long stats_planeten;
 
 		bool good() const;
-		string getline();
+		std::string getline();
 
 		void shiftline(UVRegExp*);
 
-		string strip(string&) const;
+		std::string strip(std::string&) const;
 
-		string get_exception(const string&, const string&, const int, const string&) const;
+		std::string get_exception(const std::string&, const std::string&, const int, const std::string&) const;
 #ifdef DEBUG
-		void parse_debug(const string&, UVRegExp*) const;
+		void parse_debug(const std::string&, UVRegExp*) const;
 #endif
 
 		void parse_auswertung();
@@ -100,8 +103,8 @@ class UVImportTXT : public UVAbstractImporter
 
 		void parse_leerzeile();
 
-		long get_image_planet(const string&) const;
-		long get_sichtweite(const string&) const;
+		long get_image_planet(const std::string&) const;
+		long get_sichtweite(const std::string&) const;
 };
 
 #endif // IMPORT_TXT_H

@@ -21,19 +21,19 @@
 #ifndef REGEXP_H
 #define REGEXP_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 #include <pcre.h>
 
 class UVRegExp
 {
 	public:
-		UVRegExp(const string&);
+		UVRegExp(const std::string&);
 		~UVRegExp();
 
-		bool match(const string&);
+		bool match(const std::string&);
 		int subs();
-		string sub(int = 0);
+		std::string sub(int = 0);
 		long subtol(int = 0);
 		long long subtoll(int = 0);
 		double subtof(int = 0);

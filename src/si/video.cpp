@@ -29,6 +29,10 @@
 #include "si/draw.h"
 #include "si/events.h"
 
+#include <iostream>
+
+using namespace std;
+
 /*
  * UVVideo - Verwaltet den SDL Bildschirm.
  */

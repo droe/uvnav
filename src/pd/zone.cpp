@@ -27,7 +27,9 @@
 #include "pd/forschungsstation.h"
 #include "pd/stadt.h"
 
-#include <math.h>
+#include <cmath>
+
+using namespace std;
 
 /*
  * UVZone - Stellt eine Zone dar.

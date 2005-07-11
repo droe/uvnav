@@ -23,9 +23,6 @@
 #include "ui/core/widget.h"
 #include "ui/core/compositewidget.h"
 #include "ui/core/window.h"
-#include "util/version.h"
-#include "util/exceptions.h"
-#include "util/minmax.h"
 #include "si/font.h"
 #include "si/draw.h"
 #include "si/conf.h"
@@ -40,6 +37,11 @@
 #include "pd/sensorsonde.h"
 #include "pd/infosonde.h"
 #include "pd/zone.h"
+#include "util/version.h"
+#include "util/exceptions.h"
+#include "util/minmax.h"
+
+using namespace std;
 
 #define PI 3.14159265358979323846
 

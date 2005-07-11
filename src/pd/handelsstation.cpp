@@ -20,6 +20,8 @@
 
 #include "handelsstation.h"
 
+using namespace std;
+
 /*
  * UVHandelsstation - Stellt eine Handelsstation dar.
  */

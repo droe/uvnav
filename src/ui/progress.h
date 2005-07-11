@@ -23,7 +23,7 @@
 
 #include "util/observer.h"
 #include "util/sdl.h"
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVFont;
 
@@ -40,7 +40,7 @@ class UVProgress : public Observer
 		UVFont* font;
 		SDL_Surface* screen;
 		SDL_Rect rect;
-		string message;
+		std::string message;
 		unsigned long total;
 		long ticks;
 };

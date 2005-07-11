@@ -20,6 +20,8 @@
 
 #include "werft.h"
 
+using namespace std;
+
 /*
  * UVWerft - Stellt eine Werft dar.
  */

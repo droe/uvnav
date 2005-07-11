@@ -29,6 +29,8 @@
 #include "pd/schiff.h"
 #include "pd/handelsstation.h"
 
+using namespace std;
+
 /*
  * UVUniversum - Repraesentation eines Universum Spielstandes.
  */

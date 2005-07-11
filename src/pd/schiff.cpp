@@ -23,6 +23,8 @@
 #include "pd/ladung.h"
 #include "pd/komponente.h"
 
+using namespace std;
+
 /*
  * UVSchiff - Stellt ein Schiff dar.
  */

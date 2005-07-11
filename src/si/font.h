@@ -21,7 +21,7 @@
 #ifndef FONT_H
 #define FONT_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 #include "util/sdl.h"
 
 class UVFont
@@ -29,12 +29,12 @@ class UVFont
 	friend class UVFontHandler;
 
 	public:
-		SDL_Surface* get_surface(const string& text, const SDL_Color& color) const;
-		SDL_Surface* get_surface(const string& text, int r, int g, int b, int a = 0xFF) const;
-		SDL_Surface* get_surface(const string& text) const;
+		SDL_Surface* get_surface(const std::string& text, const SDL_Color& color) const;
+		SDL_Surface* get_surface(const std::string& text, int r, int g, int b, int a = 0xFF) const;
+		SDL_Surface* get_surface(const std::string& text) const;
 
 	protected:
-		UVFont(const string& file, int size);
+		UVFont(const std::string& file, int size);
 		~UVFont();
 
 	private:

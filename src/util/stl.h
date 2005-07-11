@@ -29,12 +29,7 @@
  * praktische Helfer.
  */
 
-#include "util/stlstring.h"
-
-#include <vector>
-#include <fstream>
-#include <iostream>
-
+#include <string>
 #include "config.h"
 
 #if !defined(HAVE_NAMESPACES)
@@ -100,7 +95,5 @@
 #else
 	#error Require hash_map. Sorry.
 #endif
-
-using namespace std;
 
 #endif // STL_H

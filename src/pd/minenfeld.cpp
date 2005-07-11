@@ -20,6 +20,8 @@
 
 #include "minenfeld.h"
 
+using namespace std;
+
 /*
  * UVMinenfeld - Stellt ein Minenfeld dar.
  */

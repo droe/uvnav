@@ -21,7 +21,7 @@
 #ifndef STADT_H
 #define STADT_H
 
-#include "util/stlstring.h"
+#include "util/stl_string.h"
 
 class UVStadt
 {
@@ -33,10 +33,10 @@ class UVStadt
 
 		long zone;				// key: UVZone in UVPlanet
 
-		string name;
+		std::string name;
 		long groesse;			// in FUs
 		long einwohner;
-		string beschreibung;
+		std::string beschreibung;
 };
 
 #endif // STADT_H

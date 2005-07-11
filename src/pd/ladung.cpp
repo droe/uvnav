@@ -20,6 +20,8 @@
 
 #include "ladung.h"
 
+using namespace std;
+
 /*
  * UVLadung - Stellt ein Posten geladener Gueter dar.
  */

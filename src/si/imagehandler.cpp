@@ -24,6 +24,8 @@
 #include "util/sysdep.h"
 #include "si/conf.h"
 
+using namespace std;
+
 /*
  * UVImageHandler - Bilder effizient laden, skalieren und verwalten.
  *

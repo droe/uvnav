@@ -22,6 +22,7 @@
 #define ZONE_H
 
 #include "util/stl.h"
+#include "util/stl_string.h"
 
 class UVAgrarfeld;
 class UVSpeicherfeld;
@@ -38,28 +39,28 @@ class UVZone
 
 		long nummer;			// key in UVPlanet
 
-		string name;
-		string besitzer;
+		std::string name;
+		std::string besitzer;
 		long groesse;			// in FUs
-		string beschreibung;
+		std::string beschreibung;
 
 		double T;					// Durchschnittstemperatur in °C
 		double N;					// Jahresniederschlag in cm
 		double temperatur[12];		// Monatstemperatur in °C
 		double niederschlag[12];	// Monstsniederschlag in mm
 
-		vector<long> agrarfelder;		// key: UVAgrarfeld in UVPlanet
-		vector<long> speicherfelder;	// key: UVSpeicherfeld in UVPlanet
-		vector<long> minenfelder;		// key: UVMine in UVPlanet
-		vector<long> werften;			// key: UVWerft in UVPlanet
-		vector<long> forschungsstationen;	// key: UVForschungsstationen in UVPlanet
-		vector<long> staedte;			// key: UVStadt in UVPlanet
+		std::vector<long> agrarfelder;		// key: UVAgrarfeld in UVPlanet
+		std::vector<long> speicherfelder;	// key: UVSpeicherfeld in UVPlanet
+		std::vector<long> minenfelder;		// key: UVMine in UVPlanet
+		std::vector<long> werften;			// key: UVWerft in UVPlanet
+		std::vector<long> forschungsstationen;	// key: UVForschungsstationen in UVPlanet
+		std::vector<long> staedte;			// key: UVStadt in UVPlanet
 
-		string get_klimazone() const;
+		std::string get_klimazone() const;
 		double get_T() const;
 		double get_N() const;
 
-		string to_string_terse() const;
+		std::string to_string_terse() const;
 };
 
 #endif // ZONE_H

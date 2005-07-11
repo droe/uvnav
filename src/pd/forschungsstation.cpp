@@ -20,6 +20,8 @@
 
 #include "forschungsstation.h"
 
+using namespace std;
+
 /*
  * UVForschungsstation - Stellt eine Forschungsstation dar.
  */
