@@ -21,6 +21,8 @@
 #ifndef VERSION_H
 #define VERSION_H
 
+#include "util/ac_config.h"
+
 #define TITLE			"Universum V Navigator"
 #define COPYRIGHT		"Copyright (C) 2004-2005 Daniel Roethlisberger"
 

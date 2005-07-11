@@ -110,21 +110,14 @@ AC_SUBST(CXXFLAGS_PEDANTIC)
 CXXFLAGS="$CXXFLAGS -fno-rtti -Wno-non-virtual-dtor -DDATADIR=\\\"\$(datadir)\\\""
 CFLAGS="$CFLAGS -DDATADIR=\\\"\$(datadir)\\\""
 
-# Option: Tools
-#AC_MSG_CHECKING([whether to build developer tools])
-#AC_ARG_ENABLE([tools],
-#              AC_HELP_STRING([--enable-tools], [Also build (but not install) useful tools for developers or porters]),
-#              [ want_tools="yes" ], [ want_tools="no" ])
-#AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
-#AC_MSG_RESULT([$want_tools])
-
 # Option: Debug
 AC_MSG_CHECKING([whether to use debug code])
 AC_ARG_ENABLE([debug],
               AC_HELP_STRING([--enable-debug], [Enable debugging code]),
               [ want_debug="yes" ], [ want_debug="no" ])
 if test "x$want_debug" == "xyes" ; then
-	AC_DEFINE(DEBUG, , [define if you want debugging code to be compiled])
+    CXXFLAGS="$CXXFLAGS -DDEBUG"
+    CFLAGS="$CFLAGS -DDEBUG"
 fi
 AC_MSG_RESULT([$want_debug])
 

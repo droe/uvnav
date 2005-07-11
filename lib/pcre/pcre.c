@@ -1,3 +1,7 @@
+#ifdef DEBUG
+#undef DEBUG
+#endif
+
 /*************************************************
 *      Perl-Compatible Regular Expressions       *
 *************************************************/
