@@ -633,7 +633,9 @@ void UVMap::draw(SDL_Rect* rect)
 		}
 	}
 
+#ifdef DEBUG
 	long ticks = SDL_GetTicks();
+#endif
 
 	SDL_FillRect(screen, phys, SDL_MapRGB(screen->format, 0, 0, 0));
 
