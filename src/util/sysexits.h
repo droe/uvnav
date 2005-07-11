@@ -21,6 +21,8 @@
 #ifndef SYSEXITS_H
 #define SYSEXITS_H
 
+#include "util/ac_config.h"
+
 #if defined(HAVE_SYSEXITS_H)
 	#include <sysexits.h>
 #endif

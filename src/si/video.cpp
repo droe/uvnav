@@ -20,17 +20,16 @@
 
 #include "video.h"
 
-#include "util/version.h"
-#include "util/sysdep.h"
-#include "util/exceptions.h"
 #include "si/conf.h"
 #include "si/imagehandler.h"
 #include "si/fonthandler.h"
 #include "si/draw.h"
 #include "si/events.h"
+#include "util/version.h"
+#include "util/sysdep.h"
+#include "util/exceptions.h"
 
 #include <iostream>
-
 using namespace std;
 
 /*

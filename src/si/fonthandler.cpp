@@ -20,8 +20,8 @@
 
 #include "fonthandler.h"
 
-#include "util/exceptions.h"
 #include "si/font.h"
+#include "util/exceptions.h"
 
 using namespace std;
 

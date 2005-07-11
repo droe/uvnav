@@ -28,8 +28,8 @@
  * Plattformen auf die gleiche Art und Weise benutzen koennen.
  */
 
+#include "util/ac_config.h"
 #include <string>
-#include "config.h"
 
 #if !defined(HAVE_NAMESPACES)
   #error Require namespaces. Sorry.

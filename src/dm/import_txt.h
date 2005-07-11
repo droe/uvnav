@@ -22,9 +22,9 @@
 #define IMPORT_TXT_H
 
 #include "dm/abstractimporter.h"
+#include "util/ac_config.h"
 #include "util/stl_string.h"
 #include <fstream>
-#include "config.h"
 
 class UVUniversum;
 class UVZone;

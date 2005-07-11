@@ -7,27 +7,27 @@ Architektur
 
 UV Navigator ist in einer Vierschichtenarchitektur strukturiert:
 User Interface (UI), Data Management (DM), Problem Domain (PD), und
-System Interface (SI).  Zusaetzlich existiert eine Library (Lib)
+System Interface (SI).  Zusaetzlich existiert eine Utility (Util)
 Pseudoschicht.
 
 
 
      +-----------------------------+     +---+     +------+
      | UI - User Interface Layer   |---->|   |---->| PCRE |
-     +-----------------------------+     | L |     +------+
-         |        |           |          | i |
-         V        |           |          | b |     +------+
-     +-----------------------------+     | r |---->| SDL: |
-     | DM - Data Management Layer  |---->| a |---->| _img |
-     +-----------------------------+     | r |---->| _ttf |
+     +-----------------------------+     | U |     +------+
+         |        |           |          | t |
+         V        |           |          | i |     +------+
+     +-----------------------------+     | l |---->| SDL: |
+     | DM - Data Management Layer  |---->| i |---->| _img |
+     +-----------------------------+     | t |---->| _ttf |
                 | |         | |          | y |---->| _gfx |
                 V V         | |          |   |     +------+
-     +-----------------------------+     |   |
-     | PD - Problem Domain Layer   |---->| L |     +------+
-     +-----------------------------+     | a |---->| X11  |
-                          | | |          | y |     +------+
-                          V V V          | e |
-     +-----------------------------+     | r |     +------+
+     +-----------------------------+     | L |
+     | PD - Problem Domain Layer   |---->| a |     +------+
+     +-----------------------------+     | y |---->| X11  |
+                          | | |          | e |     +------+
+                          V V V          | r |
+     +-----------------------------+     |   |     +------+
      | SI - System Interface Layer |---->|   |---->| STL  |
      +-----------------------------+     +---+     +------+
 
@@ -70,8 +70,8 @@ einlesen, Konfigurationsverwaltung, Logging etc.
 
 
 
-Lib: Library
-------------
+Util: Utility Pseudo-Layer
+--------------------------
 
 Dies ist eigentlich keine richtige Schicht, sondern die Sammlung aller
 allgemeinen Hilfsheader und Klassen.  Dinge wie abstrakte Basisklassen

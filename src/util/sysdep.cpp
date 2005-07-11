@@ -20,9 +20,8 @@
 
 #include "sysdep.h"
 
-#include "config.h"
-
 #include "util/exceptions.h"
+#include "util/ac_config.h"
 
 using namespace std;
 

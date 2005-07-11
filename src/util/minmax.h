@@ -21,6 +21,10 @@
 #ifndef MINMAX_H
 #define MINMAX_H
 
+#if defined(min) || defined(max)
+ #error min/max already defined!
+#endif
+
 #define min(x,y) (((x) < (y)) ? (x) : (y))
 #define max(x,y) (((x) > (y)) ? (x) : (y))
 

@@ -5,6 +5,7 @@ $Id$
                            strukturiert, und benutzt diverse bekannte
                            Standard-Patterns (MVC, Observer, Singleton,
                            Composite, ...)
+                         * Kompilierzeit ist dank Header-Cleanups geschrumpft
                          * Eigene Widget-Klassenhierarchie implementiert
                          * Der Parser wurde um rudimentaeres Handling der
                            Messages erweitert

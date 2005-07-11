@@ -18,38 +18,9 @@
  * $Id$
  */
 
-#include "events.h"
+#ifndef AC_CONFIG_H
+#define AC_CONFIG_H
 
-#include "si/conf.h"
-#include "util/exceptions.h"
+#include "config.h"
 
-/*
- * UVEvents - Verwaltet die SDL Events.
- */
-
-
-/*
- * Konstruktor.
- */
-UVEvents::UVEvents()
-{
-	conf = UVConf::get_instance();
-}
-
-
-/*
- * Destruktor.
- */
-UVEvents::~UVEvents()
-{
-}
-
-
-/*
- * Befreit alle belegten Ressourcen.
- */
-void UVEvents::dispose()
-{
-}
-
-
+#endif // AC_CONFIG_H

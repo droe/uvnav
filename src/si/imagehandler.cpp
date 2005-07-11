@@ -20,9 +20,9 @@
 
 #include "imagehandler.h"
 
+#include "si/conf.h"
 #include "util/exceptions.h"
 #include "util/sysdep.h"
-#include "si/conf.h"
 
 using namespace std;
 

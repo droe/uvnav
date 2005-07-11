@@ -20,7 +20,7 @@ bin_PROGRAMS = uvnav
 
 uvnav_SOURCES = rev.h rev.cpp \
 	util/version.h \
-	util/stl.h util/stlstring.h \
+	util/stl_hash_map.h util/stl_string.h \
 	util/exceptions.h \
 	util/sysexits.h \
 	util/sysdep.h util/sysdep.cpp \
@@ -29,6 +29,7 @@ uvnav_SOURCES = rev.h rev.cpp \
 	util/minmax.h \
 	util/regexp.h util/regexp.cpp \
 	util/sdl.h \
+	util/ac_config.h \
 	si/conf.h si/conf.cpp \
 	si/draw.h si/draw.cpp \
 	si/events.h si/events.cpp \
