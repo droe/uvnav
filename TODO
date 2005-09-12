@@ -132,10 +132,6 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - Sämtliche je gerenderten Bilder cachen (hash_map)
   - von double Faktor auf long Höhe umstellen, konsequent beim Caching
 
-- Nachrichten parsen
-  - parse_nachrichten implementieren
-  - UVWelt erweitern
-
 - Logging-Klasse mit Verbosity Levels einfuehren
   - Makros fuer Deaktivierbarbeit via --enable-debug
   - Log-Levels

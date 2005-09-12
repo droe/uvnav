@@ -31,7 +31,7 @@
  * CONF_VERSION wird inkrementiert, wenn Keys geloescht oder
  * umbenannt werden, aber nicht, wenn Keys hinzugefuegt werden.
  */
-#define CONF_VERSION 2
+#define CONF_VERSION 3
 
 class UVConf : public Singleton<UVConf>
 {
@@ -46,16 +46,16 @@ class UVConf : public Singleton<UVConf>
 
 		std::string s_get(const std::string&, bool = false) const;
 		void        s_set(const std::string&, std::string, bool = false);
-		void        s_del(const std::string&, bool = false);
+		void        s_del(const std::string&);
 		long        l_get(const std::string&, bool = false) const;
 		void        l_set(const std::string&, long, bool = false);
-		void        l_del(const std::string&, bool = false);
+		void        l_del(const std::string&);
 		double      f_get(const std::string&, bool = false) const;
 		void        f_set(const std::string&, double, bool = false);
-		void        f_del(const std::string&, bool = false);
+		void        f_del(const std::string&);
 		bool        b_get(const std::string&, bool = false) const;
 		void        b_set(const std::string&, bool, bool = false);
-		void        b_del(const std::string&, bool = false);
+		void        b_del(const std::string&);
 
 		bool have_data() const;
 
@@ -75,6 +75,10 @@ class UVConf : public Singleton<UVConf>
 
 		void convert();
 };
+typedef ext::hash_map<std::string, std::string>::iterator s_conf_iter;
+typedef ext::hash_map<std::string, long>::iterator        l_conf_iter;
+typedef ext::hash_map<std::string, double>::iterator      f_conf_iter;
+typedef ext::hash_map<std::string, bool>::iterator        b_conf_iter;
 
 #endif // CONF_H
 

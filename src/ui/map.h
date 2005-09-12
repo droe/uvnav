@@ -76,13 +76,25 @@ class UVMap
 		void jump_alle();
 		void jump_eigene();
 
-		bool get_sichtradien() const;
-		void set_sichtradien(const bool);
-		void toggle_sichtradien();
+		long get_opt_sichtradien() const;
+		void set_opt_sichtradien(const long);
+		void toggle_opt_sichtradien();
 
-		bool get_kaufradien() const;
-		void set_kaufradien(const bool);
-		void toggle_kaufradien();
+		bool get_opt_kaufradien() const;
+		void set_opt_kaufradien(const bool);
+		void toggle_opt_kaufradien();
+
+		bool get_opt_schiffe() const;
+		void set_opt_schiffe(const bool);
+		void toggle_opt_schiffe();
+
+		bool get_opt_container() const;
+		void set_opt_container(const bool);
+		void toggle_opt_container();
+
+		bool get_opt_verbindungen() const;
+		void set_opt_verbindungen(const bool);
+		void toggle_opt_verbindungen();
 
 		void redraw();
 		void draw(SDL_Rect*);
@@ -117,8 +129,11 @@ class UVMap
 		void draw_sensorsonde(UVSensorsonde*);
 		void draw_infosonde(UVInfosonde*);
 
-		bool opt_sichtradien;
+		long opt_sichtradien;
 		bool opt_kaufradien;
+		bool opt_schiffe;
+		bool opt_container;
+		bool opt_verbindungen;
 };
 
 #endif // MAP_H

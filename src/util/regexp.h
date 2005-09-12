@@ -22,17 +22,19 @@
 #define REGEXP_H
 
 #include "util/stl_string.h"
+#include <functional>
 
 #include <pcre.h>
 
-class UVRegExp
+class UVRegExp : public std::unary_function<std::string, bool>
 {
 	public:
 		UVRegExp(const std::string&);
 		~UVRegExp();
 
+		bool operator()(const std::string&);
 		bool match(const std::string&);
-		int subs();
+		int subs() const;
 		std::string sub(int = 0);
 		long subtol(int = 0);
 		long long subtoll(int = 0);

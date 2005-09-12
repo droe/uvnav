@@ -172,14 +172,16 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 
 	UVConf* conf = UVConf::get_instance();
 
-	opt_sichtradien = conf->b_get("map-sichtradien", true);
-	opt_kaufradien = conf->b_get("map-kaufradien", true);
-
 	bool have_conf_data = conf->have_data();
-	offset_x = conf->l_get("map-offset-x", true);
-	offset_y = conf->l_get("map-offset-y", true);
-	zoom = conf->f_get("map-zoom", true);
-	dim = conf->l_get("map-dim", true);
+	opt_sichtradien  = conf->l_get("map-sichtradien",  true);
+	opt_kaufradien   = conf->b_get("map-kaufradien",   true);
+	opt_schiffe      = conf->b_get("map-schiffe",      true);
+	opt_container    = conf->b_get("map-container",    true);
+	opt_verbindungen = conf->b_get("map-verbindungen", true);
+	offset_x         = conf->l_get("map-offset-x",     true);
+	offset_y         = conf->l_get("map-offset-y",     true);
+	zoom             = conf->f_get("map-zoom",         true);
+	dim              = conf->l_get("map-dim",          true);
 
 	// Sinnvolle Dimension waehlen, falls keine Daten in dim.
 	if(universum->get_dim(dim) == "")
@@ -228,12 +230,15 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 UVMap::~UVMap()
 {
 	UVConf* conf = UVConf::get_instance();
-	conf->l_set("map-offset-x", offset_x, true);
-	conf->l_set("map-offset-y", offset_y, true);
-	conf->f_set("map-zoom", zoom, true);
-	conf->l_set("map-dim", dim, true);
-	conf->b_set("map-sichtradien", opt_sichtradien, true);
-	conf->b_set("map-kaufradien", opt_kaufradien, true);
+	conf->l_set("map-offset-x",     offset_x,         true);
+	conf->l_set("map-offset-y",     offset_y,         true);
+	conf->f_set("map-zoom",         zoom,             true);
+	conf->l_set("map-dim",          dim,              true);
+	conf->l_set("map-sichtradien",  opt_sichtradien,  true);
+	conf->b_set("map-kaufradien",   opt_kaufradien,   true);
+	conf->b_set("map-container",    opt_container,    true);
+	conf->b_set("map-schiffe",      opt_schiffe,      true);
+	conf->b_set("map-verbindungen", opt_verbindungen, true);
 }
 
 
@@ -566,19 +571,22 @@ void UVMap::resize(SDL_Surface* s)
 
 /*
  * Sichtradien set/get/toggle.
+ * 0: keine Sichtradien
+ * 1: nur Sonden
+ * 2: Sonden + Schiffe
  */
-bool UVMap::get_sichtradien() const
+long UVMap::get_opt_sichtradien() const
 {
 	return opt_sichtradien;
 }
-void UVMap::set_sichtradien(const bool s)
+void UVMap::set_opt_sichtradien(const long o)
 {
-	opt_sichtradien = s;
+	opt_sichtradien = o;
 	redraw();
 }
-void UVMap::toggle_sichtradien()
+void UVMap::toggle_opt_sichtradien()
 {
-	opt_sichtradien = !opt_sichtradien;
+	++opt_sichtradien %= 3;
 	redraw();
 }
 
@@ -586,18 +594,75 @@ void UVMap::toggle_sichtradien()
 /*
  * Kaufradien set/get/toggle.
  */
-bool UVMap::get_kaufradien() const
+bool UVMap::get_opt_kaufradien() const
 {
 	return opt_kaufradien;
 }
-void UVMap::set_kaufradien(const bool k)
+void UVMap::set_opt_kaufradien(const bool o)
 {
-	opt_kaufradien = k;
+	opt_kaufradien = o;
 	redraw();
 }
-void UVMap::toggle_kaufradien()
+void UVMap::toggle_opt_kaufradien()
 {
 	opt_kaufradien = !opt_kaufradien;
+	redraw();
+}
+
+
+/*
+ * Schiffe set/get/toggle.
+ */
+bool UVMap::get_opt_schiffe() const
+{
+	return opt_schiffe;
+}
+void UVMap::set_opt_schiffe(const bool o)
+{
+	opt_schiffe = o;
+	redraw();
+}
+void UVMap::toggle_opt_schiffe()
+{
+	opt_schiffe = !opt_schiffe;
+	redraw();
+}
+
+
+/*
+ * Container set/get/toggle.
+ */
+bool UVMap::get_opt_container() const
+{
+	return opt_container;
+}
+void UVMap::set_opt_container(const bool o)
+{
+	opt_container = o;
+	redraw();
+}
+void UVMap::toggle_opt_container()
+{
+	opt_container = !opt_container;
+	redraw();
+}
+
+
+/*
+ * Verbindungen set/get/toggle.
+ */
+bool UVMap::get_opt_verbindungen() const
+{
+	return opt_verbindungen;
+}
+void UVMap::set_opt_verbindungen(const bool o)
+{
+	opt_verbindungen = o;
+	redraw();
+}
+void UVMap::toggle_opt_verbindungen()
+{
+	opt_verbindungen = !opt_verbindungen;
 	redraw();
 }
 
@@ -671,18 +736,24 @@ void UVMap::draw(SDL_Rect* rect)
 			draw_infosonde((*iter).second);
 		}
 	}
-	for(container_iterator iter = universum->first_container(); iter != universum->last_container(); iter++)
+	if(opt_container)
 	{
-		if((*iter)->dim == dim)
+		for(container_iterator iter = universum->first_container(); iter != universum->last_container(); iter++)
 		{
-			draw_container(*iter);
+			if((*iter)->dim == dim)
+			{
+				draw_container(*iter);
+			}
 		}
 	}
-	for(schiffe_iterator iter = universum->first_schiff(); iter != universum->last_schiff(); iter++)
+	if(opt_schiffe)
 	{
-		if((*iter).second->dim == dim)
+		for(schiffe_iterator iter = universum->first_schiff(); iter != universum->last_schiff(); iter++)
 		{
-			draw_schiff((*iter).second);
+			if((*iter).second->dim == dim)
+			{
+				draw_schiff((*iter).second);
+			}
 		}
 	}
 
@@ -917,18 +988,20 @@ void UVMap::draw_planet(UVPlanet* planet)
 	double center_y = double(planet->y - offset_y) / zoom;
 
 	// Verbindungen
-	// *** optional
-	for(vector<long>::iterator iter = planet->nachbarn.begin(); iter != planet->nachbarn.end(); iter++)
+	if(opt_verbindungen)
 	{
-		UVPlanet* p = universum->get_planet((*iter));
-		// *** Verbindungen zu unbekannten Planeten auch zeichnen!
-		if((p != NULL) && (p->dim > 0) && (p->drawflag != planet->drawflag))
+		for(vector<long>::iterator iter = planet->nachbarn.begin(); iter != planet->nachbarn.end(); iter++)
 		{
-			double target_x = double(p->x - offset_x) / zoom;
-			double target_y = double(p->y - offset_y) / zoom;
-			drw->line(screen, long(rint(center_x)), long(rint(center_y)),
-			                  long(rint(target_x)), long(rint(target_y)),
-			                  0x88, 0x88, 0x88);
+			UVPlanet* p = universum->get_planet((*iter));
+			// *** Verbindungen zu unbekannten Planeten auch zeichnen!
+			if((p != NULL) && (p->dim > 0) && (p->drawflag != planet->drawflag))
+			{
+				double target_x = double(p->x - offset_x) / zoom;
+				double target_y = double(p->y - offset_y) / zoom;
+				drw->line(screen, long(rint(center_x)), long(rint(center_y)),
+				                  long(rint(target_x)), long(rint(target_y)),
+				                  0x88, 0x88, 0x88);
+			}
 		}
 	}
 
@@ -937,19 +1010,21 @@ void UVMap::draw_planet(UVPlanet* planet)
 	if(((virt_x - dist < planet->x) && (virt_x + virt_w + dist >= planet->x))
 	&& ((virt_y - dist < planet->y) && (virt_y + virt_h + dist >= planet->y)))
 	{
+		SDL_Rect dst;
 		long tl = planet->techlevel;
 
 		// Planetenbild
 		// *** konfigurierbar: groesse des planeten beruecksichtigen
 		// *** benoetigt aber besseres caching sonst ist performance im arsch
-		SDL_Surface* surface = imagehandler->get_surface(planet->image, 0, h);
-		SDL_Rect dst;
-		dst.x = long(rint(center_x - h / 2));
-		dst.y = long(rint(center_y - h / 2));
-		SDL_BlitSurface(surface, 0, screen, &dst);
-		// Kein SDL_FreeSurface!
-
-		if((h > 5) && (tl > 0))
+		if((h > 5) || (tl <= 0))
+		{
+			SDL_Surface* surface = imagehandler->get_surface(planet->image, 0, h);
+			dst.x = long(rint(center_x - h / 2));
+			dst.y = long(rint(center_y - h / 2));
+			SDL_BlitSurface(surface, 0, screen, &dst);
+			// Kein SDL_FreeSurface!
+		}
+		if(tl > 0)
 		{
 			// *** provisorisch
 			// *** Alternative: statt kreis ein rechteck zeichnen, in farbe, mit zahl.
@@ -960,9 +1035,10 @@ void UVMap::draw_planet(UVPlanet* planet)
 			short r = (tl >= 10) ? 0x00 : 0xFF;
 			short g = (tl >= 7) ? 0xFF : 0x00;
 			short b = 0x00;
+			long radius = (h > 5) ? (h / 2 + 2) : h/2;
 
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			                    h / 2 + 2, r, g, b, 0xFF);
+			                    radius, r, g, b, 0xFF);
 		}
 
 		if((zoom < 100.0) && (planet->handelsstation != ""))
@@ -1084,7 +1160,7 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 	if(schiff->besitzer == spieler->name)
 	{
 		// Sensoren
-		if(opt_sichtradien)
+		if(opt_sichtradien == 2)
 		{
 			long sensor_rad = schiff->sichtweite;
 			if(((virt_x - sensor_rad < schiff->x) && (virt_x + virt_w + sensor_rad >= schiff->x))
@@ -1205,7 +1281,7 @@ void UVMap::draw_sensorsonde(UVSensorsonde* sensorsonde)
 		double center_x = 1.0 * (sensorsonde->x - offset_x) / zoom;
 		double center_y = 1.0 * (sensorsonde->y - offset_y) / zoom;
 
-		if(sensorsonde->lebensdauer)
+		if(sensorsonde->lebensdauer && (opt_sichtradien > 0))
 		{
 			// Kreis
 			long h = long(rint(1.0 * size / zoom));

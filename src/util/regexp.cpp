@@ -37,6 +37,12 @@ using namespace std;
  *   // re->sub(1) == "juhudihui"
  *   // re->sub(2) == EXCEPTION
  *   // re->get_match_end() == 20
+ *
+ * UVRegExp kann auch als Funktor fuer STL-Algorithmen verwendet
+ * werden, wobei operator() mit match() aequivalent ist.
+ *
+ *   // remove all strings from container c which match /^prefix/
+ *   remove_if(c.begin, c.end, new UVRegExp("^prefix"));
  */
 
 
@@ -74,6 +80,15 @@ UVRegExp::~UVRegExp()
 	free_sub_list();
 	delete sub_vector;
 	pcre_free(re);
+}
+
+
+/*
+ * Einen String mit der RegExp matchen.
+ */
+inline bool UVRegExp::operator()(const string& subject)
+{
+	return match(subject);
 }
 
 
@@ -140,7 +155,7 @@ double UVRegExp::subtof(int index)
 /*
  * Anzahl der Substrings.
  */
-int UVRegExp::subs()
+int UVRegExp::subs() const
 {
 	return sub_count;
 }

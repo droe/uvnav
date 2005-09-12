@@ -261,10 +261,19 @@ void UVNavigator::run()
 						break;
 
 					case SDLK_s:
-						map->toggle_sichtradien();
+						map->toggle_opt_sichtradien();
 						break;
 					case SDLK_k:
-						map->toggle_kaufradien();
+						map->toggle_opt_kaufradien();
+						break;
+					case SDLK_c:
+						map->toggle_opt_container();
+						break;
+					case SDLK_x:
+						map->toggle_opt_schiffe();
+						break;
+					case SDLK_v:
+						map->toggle_opt_verbindungen();
 						break;
 
 					case SDLK_LEFT:

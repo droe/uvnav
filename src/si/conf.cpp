@@ -23,6 +23,7 @@
 #include "util/version.h"
 #include "util/sysdep.h"
 #include "util/exceptions.h"
+#include "util/regexp.h"
 
 #include <iostream>
 #include <fstream>
@@ -71,8 +72,11 @@ UVConf::UVConf()
 	b_set("screen-quality", true);
 
 	// Optionen der Kartenanzeige
-	b_set("map-kaufradien", false);
-	b_set("map-sichtradien", false);
+	l_set("map-sichtradien", 2);
+	b_set("map-kaufradien", true);
+	b_set("map-schiffe", true);
+	b_set("map-container", true);
+	b_set("map-verbindungen", true);
 	l_set("map-offset-x", 0);
 	l_set("map-offset-y", 0);
 	f_set("map-zoom", 200.0);
@@ -146,6 +150,8 @@ void UVConf::convert()
 	}
 	stream_in.close();
 
+	bool old_bool = false;
+
 	// Fallthrough: Schrittweise Aktualisierung auf aktuelle Version.
 	switch(version)
 	{
@@ -154,6 +160,10 @@ void UVConf::convert()
 		case 1:
 			b_del("screen-double-buf");
 			b_del("screen-software");
+		case 2:
+			old_bool = b_get("map-sichtradien");
+			b_del("map-sichtradien");
+			l_set("map-sichtradien", (old_bool ? 2 : 0));
 		case CONF_VERSION:
 		default:
 			break;
@@ -249,29 +259,25 @@ void UVConf::save() const
 	stream << "# Aenderungen koennen gemacht werden, aber Kommentare gehen verloren." << endl;
 
 	// string
-	ext::hash_map<string, string>::const_iterator s_iter;
-	for(s_iter = s_conf.begin(); s_iter != s_conf.end(); s_iter++)
+	for(s_conf_iter s_iter = s_conf.begin(); s_iter != s_conf.end(); s_iter++)
 	{
 		stream << "s " << (*s_iter).first << "\t" << (*s_iter).second << endl;
 	}
 
 	// long
-	ext::hash_map<string, long>::const_iterator l_iter;
-	for(l_iter = l_conf.begin(); l_iter != l_conf.end(); l_iter++)
+	for(l_conf_iter l_iter = l_conf.begin(); l_iter != l_conf.end(); l_iter++)
 	{
 		stream << "l " << (*l_iter).first << "\t" << (*l_iter).second << endl;
 	}
 
 	// float
-	ext::hash_map<string, double>::const_iterator f_iter;
-	for(f_iter = f_conf.begin(); f_iter != f_conf.end(); f_iter++)
+	for(f_conf_iter f_iter = f_conf.begin(); f_iter != f_conf.end(); f_iter++)
 	{
 		stream << "f " << (*f_iter).first << "\t" << (*f_iter).second << endl;
 	}
 
 	// bool
-	ext::hash_map<string, bool>::const_iterator b_iter;
-	for(b_iter = b_conf.begin(); b_iter != b_conf.end(); b_iter++)
+	for(b_conf_iter b_iter = b_conf.begin(); b_iter != b_conf.end(); b_iter++)
 	{
 		stream << "b " << (*b_iter).first << "\t" << (*b_iter).second << endl;
 	}
@@ -331,18 +337,16 @@ void UVConf::s_set(const string& key, string value, bool aw)
 	}
 	s_conf[key] = value;
 }
-void UVConf::s_del(const string& key, bool aw)
+void UVConf::s_del(const string& key)
 {
-	if(aw)
+	UVRegExp* re = new UVRegExp(key + "$");
+	for(s_conf_iter iter = s_conf.begin(); iter != s_conf.end(); iter++)
 	{
-		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		if(re->match(iter->first))
 		{
-			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+			s_conf.erase(iter);
 		}
-		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
-		s_conf.erase(k);
 	}
-	s_conf.erase(key);
 }
 
 
@@ -389,18 +393,16 @@ void UVConf::l_set(const string& key, long value, bool aw)
 	}
 	l_conf[key] = value;
 }
-void UVConf::l_del(const string& key, bool aw)
+void UVConf::l_del(const string& key)
 {
-	if(aw)
+	UVRegExp* re = new UVRegExp(key + "$");
+	for(l_conf_iter iter = l_conf.begin(); iter != l_conf.end(); iter++)
 	{
-		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		if(re->match(iter->first))
 		{
-			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+			l_conf.erase(iter);
 		}
-		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
-		l_conf.erase(k);
 	}
-	l_conf.erase(key);
 }
 
 
@@ -447,18 +449,16 @@ void UVConf::f_set(const string& key, double value, bool aw)
 	}
 	f_conf[key] = value;
 }
-void UVConf::f_del(const string& key, bool aw)
+void UVConf::f_del(const string& key)
 {
-	if(aw)
+	UVRegExp* re = new UVRegExp(key + "$");
+	for(f_conf_iter iter = f_conf.begin(); iter != f_conf.end(); iter++)
 	{
-		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		if(re->match(iter->first))
 		{
-			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+			f_conf.erase(iter);
 		}
-		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
-		f_conf.erase(k);
 	}
-	f_conf.erase(key);
 }
 
 
@@ -505,18 +505,16 @@ void UVConf::b_set(const string& key, bool value, bool aw)
 	}
 	b_conf[key] = value;
 }
-void UVConf::b_del(const string& key, bool aw)
+void UVConf::b_del(const string& key)
 {
-	if(aw)
+	UVRegExp* re = new UVRegExp(key + "$");
+	for(b_conf_iter iter = b_conf.begin(); iter != b_conf.end(); iter++)
 	{
-		if((aw_besitzer == "") || (aw_sternzeit == 0))
+		if(re->match(iter->first))
 		{
-			throw EXCEPTION("Interner Fehler: set_auswertung() nie aufgerufen!");
+			b_conf.erase(iter);
 		}
-		string k = aw_besitzer + "@" + to_string(aw_sternzeit) + ":" + key;
-		b_conf.erase(k);
 	}
-	b_conf.erase(key);
 }
 
 

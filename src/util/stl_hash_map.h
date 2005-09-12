@@ -60,6 +60,13 @@
 				return hash< const char* >()( x.c_str() );
 			}
 		};
+		template<> struct hash< const std::string >
+		{
+			size_t operator()( const std::string& x ) const
+			{
+				return hash< const char* >()( x.c_str() );
+			}
+		};
 	}
 #elif defined(HAVE_GLOBAL_HASH_MAP)
 	#include <hash_map>
