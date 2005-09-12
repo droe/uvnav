@@ -1,12 +1,11 @@
 $Id$
 
-- Header-Cleanup
-  - SDL Header Cleanup
-  - Reorder Includes
 - C++ Redesign
   - Destruktoren virtual
 - OO-Architecture Redesign
-  - si/UVKeyboard als Singleton implementieren
+  - si/UVKeyboard als Singleton implementieren (od. UVEvents)
+    - MULTITHREADED !!! yehaa :-)
+      Event-Thread pollt SDL Events auch wenn anderer Thread am parsen ist
     - interface base class UVKeydownListener mit ::handle_keydown()
     - multiplext keypresses an alle interessierten objekte
     - kann ich das noch irgendwie filtern, damit nicht 10 objekte alle

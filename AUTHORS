@@ -1,11 +1,13 @@
 $Id$
 
-UV Navigator - Auswertungsvisualisierung fuer Universum V
-Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
-Lizenz: GNU GPL
-https://projects.roe.ch/trac/uvnav/
+/*
+ * UV Navigator - Auswertungsvisualisierung fuer Universum V
+ * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Lizenz: GNU GPL
+ * https://projects.roe.ch/trac/uvnav/
+ */
 
-lib/pcre/:
+lib/pcre/
 /*
  * PCRE-Library von Philip Hazel <ph10@cam.ac.uk>
  * Copyright (C) 1997-2003 University of Cambridge
@@ -13,7 +15,7 @@ lib/pcre/:
  * ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/
  */
 
-share/fonts/FreeSans.tty:
+share/fonts/FreeSans.tty
 /*
  * Aus Freefont, der Sammlung freier Universal Character Set Outline Fonts
  * Copyright (C) 2002 Free Software Foundation
