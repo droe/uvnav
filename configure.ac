@@ -121,7 +121,16 @@ if test "x$want_debug" == "xyes" ; then
 fi
 AC_MSG_RESULT([$want_debug])
 
+# Option: Tools
+AC_MSG_CHECKING([whether to build developer tools])
+AC_ARG_ENABLE([tools],
+              AC_HELP_STRING([--enable-tools], [Also install some additional useful tools]),
+              [ want_tools="yes" ], [ want_tools="no" ])
+AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
+AC_MSG_RESULT([$want_tools])
+
 AC_MSG_CHECKING([which dimension we are building in])
+sleep 1
 AC_MSG_RESULT([0 - Real Life])
 
 AC_CONFIG_FILES([Makefile
@@ -130,5 +139,6 @@ AC_CONFIG_FILES([Makefile
                  lib/Makefile
                  lib/pcre/Makefile
                  lib/pcre/include/Makefile
-                 src/Makefile])
+                 src/Makefile
+                 tools/Makefile])
 AC_OUTPUT

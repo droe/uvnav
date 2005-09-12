@@ -16,32 +16,7 @@
 #
 # $Id$
 
-if COND_TOOLS
-  MAYBE_TOOLS = tools
-endif
-SUBDIRS = util share lib src $(MAYBE_TOOLS)
+bin_SCRIPTS = uv-navigate.pl uv-stats.pl uv-pp.pl
+dist_pkgdata_DATA = navigation.ods
 
-EXTRA_DIST = \
-    autogen.sh \
-    docs
-
-dist-hook:
-	rm -rf `find $(distdir)/docs -name .svn`
-
-# gehoert zu rev.h Hack, siehe src/Makefile.am
-distcleancheck_listfiles = \
-    find . -type f -print | grep -v '\.rev' | grep -v 'rev\.h'
-
-MAINTAINERCLEANFILES = \
-    Makefile.in configure configure.lineno aclocal.m4 config.h.in \
-    config.h.in~ ChangeLog INSTALL config.guess config.sub depcomp \
-    install-sh missing mkinstalldirs compile
-
-ChangeLog: FORCE
-	@if [ -d .svn -a -x util/svn2log.sh ]; then \
-		touch ChangeLog ; \
-		util/svn2log.sh ; \
-	fi
-
-FORCE:
-
+MAINTAINERCLEANFILES = Makefile.in
