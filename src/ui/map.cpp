@@ -922,7 +922,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 	{
 		UVPlanet* p = universum->get_planet((*iter));
 		// *** Verbindungen zu unbekannten Planeten auch zeichnen!
-		if((p != NULL) && (p->drawflag != planet->drawflag))
+		if((p != NULL) && (p->dim > 0) && (p->drawflag != planet->drawflag))
 		{
 			double target_x = double(p->x - offset_x) / zoom;
 			double target_y = double(p->y - offset_y) / zoom;
@@ -937,6 +937,8 @@ void UVMap::draw_planet(UVPlanet* planet)
 	if(((virt_x - dist < planet->x) && (virt_x + virt_w + dist >= planet->x))
 	&& ((virt_y - dist < planet->y) && (virt_y + virt_h + dist >= planet->y)))
 	{
+		long tl = planet->techlevel;
+
 		// Planetenbild
 		// *** konfigurierbar: groesse des planeten beruecksichtigen
 		// *** benoetigt aber besseres caching sonst ist performance im arsch
@@ -946,18 +948,6 @@ void UVMap::draw_planet(UVPlanet* planet)
 		dst.y = long(rint(center_y - h / 2));
 		SDL_BlitSurface(surface, 0, screen, &dst);
 		// Kein SDL_FreeSurface!
-
-		long tl = planet->techlevel;
-
-		if((zoom < 100.0) && (planet->handelsstation != ""))
-		{
-			// Handelsstation
-			long dr = (tl > 0) ? 4 : 2;
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			                    (h / 2) + dr, 0xFF, 0x00, 0xFF, 0xFF);
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
-			                    (h / 2) + ++dr, 0xFF, 0x00, 0xFF, 0xFF);
-		}
 
 		if((h > 5) && (tl > 0))
 		{
@@ -973,6 +963,16 @@ void UVMap::draw_planet(UVPlanet* planet)
 
 			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2 + 2, r, g, b, 0xFF);
+		}
+
+		if((zoom < 100.0) && (planet->handelsstation != ""))
+		{
+			// Handelsstation
+			long dr = (tl > 0) ? 4 : 2;
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    (h / 2) + dr, 0xFF, 0x00, 0xFF, 0xFF);
+			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			                    (h / 2) + ++dr, 0xFF, 0x00, 0xFF, 0xFF);
 		}
 
 		if(zoom < 40.0)
