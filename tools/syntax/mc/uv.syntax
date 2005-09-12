@@ -18,7 +18,7 @@
 
 # Midnight Commander Editor Syntax File fuer Universum V Zugfiles
 #
-# Installieren als /usr/local/lib/mc/syntax/uv.syntax
+# Installieren als /usr/local/share/mc/syntax/uv.syntax
 #
 # Aktivieren in ~/.cedit/Syntax mit
 #   file ..\*\\.(uv|uvzug)$ UV\sZug
