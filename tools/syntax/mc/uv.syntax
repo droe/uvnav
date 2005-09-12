@@ -1,0 +1,229 @@
+# UV Navigator - Auswertungsvisualisierung fuer Universum V
+# Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, see http://www.gnu.org/copyleft/
+#
+# $Id$
+
+# Midnight Commander Editor Syntax File fuer Universum V Zugfiles
+#
+# Installieren als /usr/local/lib/mc/syntax/uv.syntax
+#
+# Aktivieren in ~/.cedit/Syntax mit
+#   file ..\*\\.(uv|uvzug)$ UV\sZug
+#   include uv.syntax
+
+context default
+    keyword whole AL yellow/24
+    keyword whole ALLIANZ yellow/24
+    keyword whole NE yellow/24
+    keyword whole NEUTRAL yellow/24
+    keyword whole KR yellow/24
+    keyword whole KRIEG yellow/24
+    keyword whole NG yellow/24
+    keyword whole NEUTRAL\sGESELLSCHAFT yellow/24
+    keyword whole KG yellow/24
+    keyword whole KRIEG\sGESELLSCHAFT yellow/24
+    keyword whole GS yellow/24
+    keyword whole GELD\sSCHICKEN yellow/24
+    keyword whole MSG yellow/24
+    keyword whole NACHRICHT yellow/24
+    keyword whole IN yellow/24
+    keyword whole INFO yellow/24
+    keyword whole FN yellow/24
+    keyword whole FINGER yellow/24
+    keyword whole GX yellow/24
+    keyword whole GESELLSCHAFT\sEINTRAGEN yellow/24
+    keyword whole KS yellow/24
+    keyword whole KOPFGELD\sSETZEN yellow/24
+    keyword whole ZK yellow/24
+    keyword whole ZONE\sKAUFEN yellow/24
+    keyword whole WA yellow/24
+    keyword whole WERFT\sANDOCKEN yellow/24
+    keyword whole ZV yellow/24
+    keyword whole ZONE\s‹BERTRAGEN yellow/24
+    keyword whole ZB yellow/24
+    keyword whole ZONE\sBENENNEN yellow/24
+    keyword whole AP yellow/24
+    keyword whole AGRARFELD\sBAUEN yellow/24
+    keyword whole AB yellow/24
+    keyword whole AGRARFELD\sABBAUEN yellow/24
+    keyword whole AT yellow/24
+    keyword whole AGRARFELD\sABSPALTEN yellow/24
+    keyword whole AZ yellow/24
+    keyword whole AGRARFELD\sZUSAMMENLEGEN yellow/24
+    keyword whole MU yellow/24
+    keyword whole MINE\sBAUEN yellow/24
+    keyword whole ME yellow/24
+    keyword whole MINE\sERWEITERN yellow/24
+    keyword whole MN yellow/24
+    keyword whole MINE\sABBAUEN yellow/24
+    keyword whole AI yellow/24
+    keyword whole SPEICHER\sBAUEN yellow/24
+    keyword whole AK yellow/24
+    keyword whole SPEICHER\sABSPALTEN yellow/24
+    keyword whole AM yellow/24
+    keyword whole SPEICHER\sVERSCHIEBEN yellow/24
+    keyword whole AR yellow/24
+    keyword whole SPEICHER\sZUSAMMENLEGEN yellow/24
+    keyword whole AU yellow/24
+    keyword whole SPEICHER\sABBAUEN yellow/24
+    keyword whole WB yellow/24
+    keyword whole WERFT\sBAUEN yellow/24
+    keyword whole WE yellow/24
+    keyword whole WERFT\sABBAUEN yellow/24
+    keyword whole WZ yellow/24
+    keyword whole SCHIFF\sERZ\sENTLADEN yellow/24
+    keyword whole WC yellow/24
+    keyword whole WERFT\sSCHIFF\sBAUEN yellow/24
+    keyword whole WL yellow/24
+    keyword whole WERFT\sKOMPONENTE\sLIEFERN yellow/24
+    keyword whole WO yellow/24
+    keyword whole WERFT\sKOMPONENTE\sEINBAUEN yellow/24
+    keyword whole WU yellow/24
+    keyword whole WERFT\sKOMPONENTE\sAUSBAUEN yellow/24
+    keyword whole WK yellow/24
+    keyword whole WERFT\sKOMPONENTE\sLAGER yellow/24
+    keyword whole WR yellow/24
+    keyword whole WERFT\sSCHIFF\sREPARIEREN yellow/24
+    keyword whole FS yellow/24
+    keyword whole FORSCHUNGSSTATION\sBAUEN yellow/24
+    keyword whole FE yellow/24
+    keyword whole FORSCHUNGSSTATION\sABBAUEN yellow/24
+    keyword whole FO yellow/24
+    keyword whole FORSCHUNGSSTATION\sFORSCHEN yellow/24
+    keyword whole FW yellow/24
+    keyword whole FORSCHUNGSSTATION\sWERFTDOKU yellow/24
+    keyword whole FT yellow/24
+    keyword whole FORSCHUNGSSTATION\sPLANETDOKU yellow/24
+    keyword whole FP yellow/24
+    keyword whole PLANETDOKU\sANWENDEN yellow/24
+    keyword whole FF yellow/24
+    keyword whole WERFTDOKU\sANWENDEN yellow/24
+    keyword whole SC yellow/24
+    keyword whole STADT\sBAUEN yellow/24
+    keyword whole WT yellow/24
+    keyword whole WERFT\sTANKEN yellow/24
+    keyword whole WS yellow/24
+    keyword whole WERFT\sAUSKLINKEN yellow/24
+    keyword whole BI yellow/24
+    keyword whole WERDE\sIMPERATOR yellow/24
+    keyword whole BN yellow/24
+    keyword whole PLANET\sBENENNEN yellow/24
+    keyword whole SW yellow/24
+    keyword whole SCHIFF\sWAFFENSTATUS yellow/24
+    keyword whole SO yellow/24
+    keyword whole SCHIFF\sOFFENSIVBEREICH yellow/24
+    keyword whole SF yellow/24
+    keyword whole SCHIFF\sFLUCHTWERT yellow/24
+    keyword whole SR yellow/24
+    keyword whole SCHIFF\sTRAKTORSTRAHL yellow/24
+    keyword whole SU yellow/24
+    keyword whole SCHIFF\sSCANNEN yellow/24
+    keyword whole SE yellow/24
+    keyword whole SCHIFF\sEINLADEN yellow/24
+    keyword whole SY yellow/24
+    keyword whole SCHIFF\sAUSLADEN yellow/24
+    keyword whole SD yellow/24
+    keyword whole SCHIFF\sZONE\sVERTEIDIGEN yellow/24
+    keyword whole LA yellow/24
+    keyword whole LAGER\sAUFSPALTEN yellow/24
+    keyword whole LB yellow/24
+    keyword whole LAGER\s‹BERTRAGEN yellow/24
+    keyword whole CA yellow/24
+    keyword whole LAGER\sABWERFEN yellow/24
+    keyword whole CU yellow/24
+    keyword whole LAGER\s‹BERGEBEN yellow/24
+    keyword whole CW yellow/24
+    keyword whole LAGER\sANWENDEN yellow/24
+    keyword whole MA yellow/24
+    keyword whole AUFTRAG\sANNEHMEN yellow/24
+    keyword whole MF yellow/24
+    keyword whole AUFTRAG\sABSCHLIESSEN yellow/24
+    keyword whole BU yellow/24
+    keyword whole SCHIFF\sERZ\sLADEN yellow/24
+    keyword whole OS yellow/24
+    keyword whole SPEICHER\sENTLADEN yellow/24
+    keyword whole OG yellow/24
+    keyword whole SPEICHER\sF‹LLEN yellow/24
+    keyword whole OV yellow/24
+    keyword whole STATION\sVERKAUF yellow/24
+    keyword whole OK yellow/24
+    keyword whole STATION\sANKAUF yellow/24
+    keyword whole SK yellow/24
+    keyword whole STATION\sTANKEN yellow/24
+    keyword whole PI yellow/24
+    keyword whole PLANET\sBESCHREIBEN yellow/24
+    keyword whole ZI yellow/24
+    keyword whole ZONE\sBESCHREIBEN yellow/24
+    keyword whole WI yellow/24
+    keyword whole WERFT\sBESCHREIBEN yellow/24
+    keyword whole TI yellow/24
+    keyword whole STADT\sBESCHREIBEN yellow/24
+    keyword whole FI yellow/24
+    keyword whole FORSCHUNGSSTATION\sBESCHREIBEN yellow/24
+    keyword whole SI yellow/24
+    keyword whole SCHIFF\sBESCHREIBEN yellow/24
+    keyword whole SL yellow/24
+    keyword whole AUSWERTUNG\sSPALTEN yellow/24
+    keyword whole FR yellow/24
+    keyword whole AUSWERTUNG\sFARBSET yellow/24
+    keyword whole AY yellow/24
+    keyword whole AUSWERTUNG\sTYP yellow/24
+    keyword whole AS yellow/24
+    keyword whole ARTIKEL\sANMELDEN yellow/24
+    keyword whole AW yellow/24
+    keyword whole ARTIKEL\sBEWERTEN yellow/24
+    keyword whole SV yellow/24
+    keyword whole SCHIFF\sGESCHWINDIGKEIT yellow/24
+    keyword whole ST yellow/24
+    keyword whole SCHIFF\sRICHTUNG yellow/24
+    keyword whole SP yellow/24
+    keyword whole SCHIFF\sSPRUNG yellow/24
+    keyword whole SH yellow/24
+    keyword whole SCHIFF\sHYPERSPRUNG yellow/24
+    keyword whole VM yellow/24
+    keyword whole SCHIFF\sVERFOLGUNGSMODUS yellow/24
+    keyword whole IA yellow/24
+    keyword whole SCHIFF\sINFOSONDE yellow/24
+    keyword whole RA yellow/24
+    keyword whole SCHIFF\sSENSORSONDE yellow/24
+    keyword whole SZ yellow/24
+    keyword whole SCHIFF\sZONE\sANGREIFEN yellow/24
+    keyword whole PL yellow/24
+    keyword whole SCHIFF\sZONE\sPL‹NDERN yellow/24
+    keyword whole SG yellow/24
+    keyword whole SCHIFF\s‹BERTRAGEN yellow/24
+    keyword whole PP yellow/24
+    keyword whole STATION\sPREISLISTE yellow/24
+    keyword whole ZD yellow/24
+    keyword whole ZONE\sABFRAGEN yellow/24
+
+    keyword , brightcyan/14
+
+    keyword %\[0123456789\] brightmagenta/19
+
+	keyword linestart ---? red/19
+
+context ---! \n brightred/18
+
+context ---- \n yellow/24
+
+context --- \n brown/22
+    keyword \*\*\* brightred/18
+    keyword TODO red/19
+    keyword %\[0123456789\] brightmagenta/19
+
+context " " brightgreen/16
+

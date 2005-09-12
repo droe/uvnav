@@ -17,6 +17,8 @@
 # $Id$
 
 bin_SCRIPTS = uv-navigate.pl uv-stats.pl uv-pp.pl
-dist_pkgdata_DATA = navigation.ods
+dist_pkgdata_DATA = \
+	navigation.ods \
+	syntax/mc/uv.syntax
 
 MAINTAINERCLEANFILES = Makefile.in

@@ -1,0 +1,92 @@
+Allianz eingehen=AL, "Spielername", welche Klasse (1-3)=ALLIANZ, "Spielername", welche Klasse (1-3)
+Neutralität gegenüber Spieler=NE, "Spielername"=NEUTRAL, "Spielername"
+Krieg =KR, "Spielername"=KRIEG, "Spielername"
+Neutralität gegenüber Gesellschaft =NG, "Gesellschaftsname"=NEUTRAL GESELLSCHAFT, "Gesellschaftsname"
+Krieg mit Gesellschaft =KG, "Gesellschaftsname"=KRIEG GESELLSCHAFT, "Gesellschaftsname"
+Geld schicken =GS, "wem", wieviel=GELD SCHICKEN, "wem", wieviel
+Nachricht verschicken =MSG, "Spielername", "Nachricht"=NACHRICHT, "Spielername", "Nachricht"
+Spielerinformation eingeben =IN, "Text"=INFO, "Text"
+Spielerinformation abfragen =FN, "Spielername"=FINGER, "Spielername"
+Gesellschaft gründen/beitreten =GX, "Name der Gesellschaft"=GESELLSCHAFT EINTRAGEN, "Name der Gesellschaft"
+Kopfgeld setzen =KS, "Spielername", wieviel=KOPFGELD SETZEN, "Spielername", wieviel
+Zone kaufen =ZK, PlanetNr, ZonenNr=ZONE KAUFEN, PlanetNr, ZonenNr
+An Werft andocken =WA, "Schiffsname", WerftNr=WERFT ANDOCKEN, "Schiffsname", WerftNr
+Zone übertragen=ZV, PlanetNr, ZonenNr, "Neuer Besitzer"=ZONE ÜBERTRAGEN, PlanetNr, ZonenNr, "Neuer Besitzer"
+Zone benennen =ZB, PlanetNr, ZonenNr, "Name"=ZONE BENENNEN, PlanetNr, ZonenNr, "Name"
+Agrarfeld anbauen =AP, PlanetNr, ZonenNr, Produktname, wieviele FUs=AGRARFELD BAUEN, PlanetNr, ZonenNr, Produktname, wieviele FUs
+Agrarfeld abbauen =AB, PlanetNr, FeldNr=AGRARFELD ABBAUEN, PlanetNr, FeldNr
+Agrarfelder abspalten  =AT, PlanetNr, FeldNr, Anzahl FUs=AGRARFELD ABSPALTEN, PlanetNr, FeldNr, Anzahl FUs
+Agrarfelder zusammenlegen =AZ, PlanetNr, FeldNr, FeldNr=AGRARFELD ZUSAMMENLEGEN, PlanetNr, FeldNr, FeldNr
+Mine bauen =MU, PlanetNr, ZonenNr=MINE BAUEN, PlanetNr, ZonenNr
+Mine erweitern =ME, PlanetNr, MinenNr, Anzahl FUs=MINE ERWEITERN, PlanetNr, MinenNr, Anzahl FUs
+Mine abreissen =MN, PlanetNr, MinenNr=MINE ABBAUEN, PlanetNr, MinenNr
+Speicherfeld bauen  =AI, PlanetNr, ZonenNr, wieviele FUs=SPEICHER BAUEN, PlanetNr, ZonenNr, wieviele FUs
+Speicherfelder abspalten =AK, PlanetNr, FeldNr, Anzahl FUs, Anzahl BRT=SPEICHER ABSPALTEN, PlanetNr, FeldNr, Anzahl FUs, Anzahl BRT
+Speicherinhalt verschieben =AM, PlanetNr, UrsprungsspeicherNr , ZielspeicherNr, Anzahl BRT=SPEICHER VERSCHIEBEN, PlanetNr, UrsprungsspeicherNr , ZielspeicherNr, Anzahl BRT
+Speicherfelder zusammenlegen =AR, PlanetNr, FeldNr, FeldNr=SPEICHER ZUSAMMENLEGEN, PlanetNr, FeldNr, FeldNr
+Speicher abbauen =AU, PlanetNr, FeldNr=SPEICHER ABBAUEN, PlanetNr, FeldNr
+Werft bauen =WB, PlanetNr, ZonenNr, "Name der Werft"=WERFT BAUEN, PlanetNr, ZonenNr, "Name der Werft"
+Werft einreissen =WE, PlanetNr, WerftNr=WERFT ABBAUEN, PlanetNr, WerftNr
+Erz zur Werft übertragen=WZ, "Schiffsname", LagerNr, WerftNr=SCHIFF ERZ ENTLADEN, "Schiffsname", LagerNr, WerftNr
+Schiff bauen=WC, PlanetNr, WerftNr, "Schiffsname", "Besitzername", Schiffshülle (BRT), Tanks (in BRT), Lager (BRT), EnergiegeneratorNr, BordcomputerNr, TriebwerksNr=WERFT SCHIFF BAUEN, PlanetNr, WerftNr, "Schiffsname", "Besitzername", Schiffshülle (BRT), Tanks (in BRT), Lager (BRT), EnergiegeneratorNr, BordcomputerNr, TriebwerksNr
+Komponenten ins Lager liefern =WL, "Schiffsname", WerftNr, ArtikelNr=WERFT KOMPONENTE LIEFERN, "Schiffsname", WerftNr, ArtikelNr
+Komponenten einbauen =WO, "Schiffsname", ArtikelNr=WERFT KOMPONENTE EINBAUEN, "Schiffsname", ArtikelNr
+Komponenten ausbauen=WU, "Schiffsname", ArtikelNr, SubNr=WERFT KOMPONENTE AUSBAUEN, "Schiffsname", ArtikelNr, SubNr
+Komponenten ausbauen und ins Lager =WK, "Schiffsname", ArtikelNr, SubNr, "Schiffsname"=WERFT KOMPONENTE LAGER, "Schiffsname", ArtikelNr, SubNr, "Schiffsname"
+Komponenten reparieren =WR, "Schiffsname", ArtikelNr, SubNr, Anzahl HP=WERFT SCHIFF REPARIEREN, "Schiffsname", ArtikelNr, SubNr, Anzahl HP
+Forschungsstation bauen=FS, PlanetNr, ZonenNr, "Name der Station"=FORSCHUNGSSTATION BAUEN, PlanetNr, ZonenNr, "Name der Station"
+Forschungsstation einreissen  =FE, PlanetNr, ForschungsstationNr=FORSCHUNGSSTATION ABBAUEN, PlanetNr, ForschungsstationNr
+Forschen =FO, PlanetNr, ForschungsstationNr, Wissenspunkte=FORSCHUNGSSTATION FORSCHEN, PlanetNr, ForschungsstationNr, Wissenspunkte
+Forschungsdokument Werft herstellen =FW, PlanetNr, ForschungsstationNr, "Schiffsname", Dokumenttyp=FORSCHUNGSSTATION WERFTDOKU, PlanetNr, ForschungsstationNr, "Schiffsname", Dokumenttyp
+Forschungsdokument Techlevel herstellen  =FT, PlanetNr, ForschungsstationNr, "Schiffsname", Dokumenttyp=FORSCHUNGSSTATION PLANETDOKU, PlanetNr, ForschungsstationNr, "Schiffsname", Dokumenttyp
+Forschungsdokument auf Planet anwenden =FP, "Schiffsname", LagerNr=PLANETDOKU ANWENDEN, "Schiffsname", LagerNr
+Forschungsdokument auf Werft anwenden  =FF, "Schiffsname", LagerNr, WerftNr, Formelstelle (Nr)=WERFTDOKU ANWENDEN, "Schiffsname", LagerNr, WerftNr, Formelstelle (Nr)
+Stadt bauen =SC, PlanetNr, ZonenNr, wieviele FUs, "Stadtname"=STADT BAUEN, PlanetNr, ZonenNr, wieviele FUs, "Stadtname"
+Schiff auftanken =WT, "Schiffsname", Treibstoffmenge (in BRT)=WERFT TANKEN, "Schiffsname", Treibstoffmenge (in BRT)
+Aus Werft ausklinken =WS, "Schiffsname"=WERFT AUSKLINKEN, "Schiffsname"
+Sich zum Imperator ernennen  =BI, "Schiffsname", Talent=WERDE IMPERATOR, "Schiffsname", Talent
+Planet benennen =BN, PlanetenNr, "Name"=PLANET BENENNEN, PlanetenNr, "Name"
+Waffenstatus eingeben =SW, "Schiffsname", Waffenstatus=SCHIFF WAFFENSTATUS, "Schiffsname", Waffenstatus
+Offensivbereich eingeben =SO, "Schiffsname", Offensivbereich=SCHIFF OFFENSIVBEREICH, "Schiffsname", Offensivbereich
+Fluchtwert eingeben  =SF, "Schiffsname", Fluchtwert=SCHIFF FLUCHTWERT, "Schiffsname", Fluchtwert
+Traktorstrahl ein- oder ausschalten =SR, "Schiffsname"=SCHIFF TRAKTORSTRAHL, "Schiffsname"
+Schiff scannen =SU, "Schiffsname", "zu überprüfendes Schiff"=SCHIFF SCANNEN, "Schiffsname", "zu überprüfendes Schiff"
+Schiff in ein anderes Schiff einladen  =SE, "Schiffsname", "Name des Transporter-Schiffs"=SCHIFF EINLADEN, "Schiffsname", "Name des Transporter-Schiffs"
+Schiff aus Schiff ausladen  =SY, "Schiffsname"=SCHIFF AUSLADEN, "Schiffsname"
+Zone verteidigen =SD, "Schiffsname", Zonenverteidigungsstatus=SCHIFF ZONE VERTEIDIGEN, "Schiffsname", Zonenverteidigungsstatus
+Lagercontainer aufspalten =LA, "Schiffsname", LagerNr, abgetrennte Menge=LAGER AUFSPALTEN, "Schiffsname", LagerNr, abgetrennte Menge
+Besitzer eines Lagers ändern  =LB, "Schiffsname", LagerNr, "Neuer Besitzer"=LAGER ÜBERTRAGEN, "Schiffsname", LagerNr, "Neuer Besitzer"
+Lagercontainer abwerfen=CA, "Schiffsname", LagerNr=LAGER ABWERFEN, "Schiffsname", LagerNr
+Lagercontainer übergeben =CU, "gebendes Schiff", LagerNr, "nehmendes Schiff"=LAGER ÜBERGEBEN, "gebendes Schiff", LagerNr, "nehmendes Schiff"
+Lagercontainer auf Schiff anwenden =CW, "Schiffsname", LagerNr=LAGER ANWENDEN, "Schiffsname", LagerNr
+Auftrag annehmen=MA, "Schiffsname", Auftragsnummer=AUFTRAG ANNEHMEN, "Schiffsname", Auftragsnummer
+Auftrag abschliessen =MF, Auftragsnummer=AUFTRAG ABSCHLIESSEN, Auftragsnummer
+Erz aus Basis auf Schiff laden =BU, "Schiffsname", wieviel=SCHIFF ERZ LADEN, "Schiffsname", wieviel
+Speicherinhalt auf Schiff laden =OS, Welcher Speicher, Anzahl, "Schiffsname"=SPEICHER ENTLADEN, Welcher Speicher, Anzahl, "Schiffsname"
+Schiffslager in Speicher laden =OG, "Schiffsname", LagerNr, SpeicherNr=SPEICHER FÜLLEN, "Schiffsname", LagerNr, SpeicherNr
+Ware an Handelsstation verkaufen =OV, "Schiffsname", Welche Ware (LagerNr)=STATION VERKAUF, "Schiffsname", Welche Ware (LagerNr)
+Ware von der Handelsstation kaufen =OK, "Schiffsname", Produktname, wieviel=STATION ANKAUF, "Schiffsname", Produktname, wieviel
+Schiff an Handelsstation auftanken =SK, "Schiffsname", Treibstoffmenge (in BRT)=STATION TANKEN, "Schiffsname", Treibstoffmenge (in BRT)
+Planet beschreiben  =PI, PlanetenNr, "Beschreibung"=PLANET BESCHREIBEN, PlanetenNr, "Beschreibung"
+Zone beschreiben  =ZI, PlanetNr, ZonenNr, "Beschreibung"=ZONE BESCHREIBEN, PlanetNr, ZonenNr, "Beschreibung"
+Werft beschreiben =WI, PlanetNr, WerftNr, "Beschreibung"=WERFT BESCHREIBEN, PlanetNr, WerftNr, "Beschreibung"
+Stadt beschreiben  =TI, PlanetNr, StadtNr, "Beschreibung"=STADT BESCHREIBEN, PlanetNr, StadtNr, "Beschreibung"
+Forschungsstation beschreiben  =FI, PlanetNr, ForschungsstationsNr, "Beschreibung"=FORSCHUNGSSTATION BESCHREIBEN, PlanetNr, ForschungsstationsNr, "Beschreibung"
+Schiff beschreiben  =SI, "Schiffsname", "Beschreibung"=SCHIFF BESCHREIBEN, "Schiffsname", "Beschreibung"
+Anzahl Spalten für Auswertung=SL, Anzahl (1 oder 2)=AUSWERTUNG SPALTEN, Anzahl (1 oder 2)
+Farbset für Auswertung einstellen  =FR, FarbsetNr (1 - 3)=AUSWERTUNG FARBSET, FarbsetNr (1 - 3)
+Typ der Auswertung einstellen =AY, Auswertungstyp (0 - 2)=AUSWERTUNG TYP, Auswertungstyp (0 - 2)
+Artikel anmelden =AS, "Titel des Artikels"=ARTIKEL ANMELDEN, "Titel des Artikels"
+Artikel bewerten =AW, Nummer, Anzahl Punkte=ARTIKEL BEWERTEN, Nummer, Anzahl Punkte
+Triebwerksgeschwindigkeit ändern =SV, "Schiffsname", Zeitpunkt (1-100stes Zentichron), TriebwerksNr, neue Betriebsgeschwindigkeit=SCHIFF GESCHWINDIGKEIT, "Schiffsname", Zeitpunkt (1-100stes Zentichron), TriebwerksNr, neue Betriebsgeschwindigkeit
+Schiffsausrichtung ändern  =ST, "Schiffsname", Zeitpunkt (1-100stes Zentichron), Ziel X, Ziel Y=SCHIFF RICHTUNG, "Schiffsname", Zeitpunkt (1-100stes Zentichron), Ziel X, Ziel Y
+Sprung starten  =SP, "Schiffsname", ZielX, ZielY, TriebwerksNr, Zündzeitpunkt (1-100stes Zentichron)=
+Hyperdimensionssprung =SH, "WelchesSchiff", ZielDimension, TriebwerksNr, Zündzeitpunkt (1-100stes Zentichron)=SCHIFF HYPERSPRUNG, "WelchesSchiff", ZielDimension, TriebwerksNr, Zündzeitpunkt (1-100stes Zentichron)
+Verfolgungsmodus einstellen =VM, "Welches Schiff", ZielSchiff, Startzeitpunkt (1-100stes Zentichron)=SCHIFF VERFOLGUNGSMODUS, "Welches Schiff", ZielSchiff, Startzeitpunkt (1-100stes Zentichron)
+Infosonde absetzen  =IA, "Schiffsname", Lebensdauer (in Jahren), "Nachricht", Zeitpunkt (1-100stes Zentichron)=SCHIFF INFOSONDE, "Schiffsname", Lebensdauer (in Jahren), "Nachricht", Zeitpunkt (1-100stes Zentichron)
+Sensorsonde absetzen=RA, "Schiffsname", Lebensdauer (in Jahren), Zeitpunkt (1-100stes Zentichron)=SCHIFF SENSORSONDE, "Schiffsname", Lebensdauer (in Jahren), Zeitpunkt (1-100stes Zentichron)
+Zone angreifen =SZ, "Schiffsname", Welche Zone=SCHIFF ZONE ANGREIFEN, "Schiffsname", Welche Zone
+Zone plündern  =PL, "Schiffsname", ZonenNr=SCHIFF ZONE PLÜNDERN, "Schiffsname", ZonenNr
+Schiff an neuen Besitzer übertragen=SG, "Schiffsname", "neuer Besitzer"=SCHIFF ÜBERTRAGEN, "Schiffsname", "neuer Besitzer"
+Preisliste der Handelsstation abrufen =PP, "Handelsstationsname"=STATION PREISLISTE, "Handelsstationsname"
+Zonendaten abrufen =ZD, PlanetNr, ZonenNr=ZONE ABFRAGEN, PlanetNr, ZonenNr
