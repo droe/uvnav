@@ -140,7 +140,7 @@ void UVConf::set_auswertung(string besitzer, long sternzeit)
  */
 void UVConf::convert()
 {
-	long version = 0;
+	long version = CONF_VERSION;
 
 	ifstream stream_in;
 	stream_in.open((sysdep_confdir() + "version").c_str());
