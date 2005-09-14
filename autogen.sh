@@ -49,55 +49,65 @@
 am="1.9"
 ac="2.59"
 
+bsd_autotools_prefix="/usr/local/gnu-autotools"
+
 am_suffix=`echo "$am" | sed 's/[^0-9]//g'`
 ac_suffix=`echo "$ac" | sed 's/[^0-9]//g'`
 
 # Updating / creating ChangeLog
 util/svn2log.sh
 
-# Gentoo fix
-which emerge 2>&1 >/dev/null
-if [ $? -eq 0 ]; then
-	echo "Using Gentoo WANT_AUTOCONF=$ac / WANT_AUTOMAKE=$am hack."
-	WANT_AUTOCONF="$ac"
-	export WANT_AUTOCONF
-	WANT_AUTOMAKE="$am"
-	export WANT_AUTOMAKE
-fi
-
 # Multiplatform autotools invocation
 AM_WARN="-Wportability"
 
 sysver=`uname -s`
-echo -n "Running autotools toolchain"
+echo -n "Running autotools toolchain, "
 case "$sysver" in
 *BSD)
-	echo ", BSD style..."
+	echo -n "BSD"
+	if ! which -s autoconf ; then
+		if [ -d "$bsd_autotools_prefix" ]; then
+			PATH=$bsd_autotools_prefix/bin:$PATH
+			export PATH
+		else
+			echo
+			echo " *** An error occured!" >&2
+			echo " *** Could not find autoconf in PATH or at $bsd_autotools_prefix!" >&2
+			echo " *** Make sure you install the devel/gnu-* ports." >&2
+			exit 1
+		fi
+	fi
 	make=gmake
-	aclocal$am_suffix 2>&1 \
-		| (grep -v 'aclocal.*warning.*underquoted definition of ' || true) \
-		| (grep -v 'Extending.*aclocal' || true) &&
-	autoheader$ac_suffix &&
-	autoconf$ac_suffix &&
-	automake$am_suffix --gnu $AM_WARN --add-missing
+	;;
+Linux)
+	echo -n "Linux"
+	make=make
+	# Gentoo
+	if which -s emerge ; then
+		WANT_AUTOCONF="$ac"
+		export WANT_AUTOCONF
+		WANT_AUTOMAKE="$am"
+		export WANT_AUTOMAKE
+	fi
 	;;
 *)
-	echo ", generic style..."
-	make=make
-	aclocal &&
-	autoheader &&
-	autoconf &&
-	automake --gnu $AM_WARN --add-missing
+	echo -n "generic non-GNU Unix"
+	make=gmake
 	;;
 esac
+echo " style... ($sysver)"
+aclocal &&
+autoheader &&
+autoconf &&
+automake --gnu $AM_WARN --add-missing
 
 if [ $? -eq 0 ]; then
-	echo "Done. To build and install now, run:"
+	echo "Done. To configure, build and install now, run:"
 	echo -e "\t./configure"
 	echo -e "\t$make"
 	echo -e "\t$make install"
 else
-	echo " *** An error occured!"
-	echo " *** Before sending in a bug report, check that you have appropriate"
-	echo " *** versions of both Autoconf ($ac) and Automake ($am) available."
+	echo " *** An error occured!" >&2
+	echo " *** Before sending in a bug report, check that you have appropriate" >&2
+	echo " *** versions of both autoconf ($ac) and automake ($am) available." >&2
 fi

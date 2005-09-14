@@ -130,7 +130,6 @@ AM_CONDITIONAL([COND_TOOLS], [test "$want_tools" = "yes"])
 AC_MSG_RESULT([$want_tools])
 
 AC_MSG_CHECKING([which dimension we are building in])
-sleep 1
 AC_MSG_RESULT([0 - Real Life])
 
 AC_CONFIG_FILES([Makefile
@@ -142,3 +141,13 @@ AC_CONFIG_FILES([Makefile
                  src/Makefile
                  tools/Makefile])
 AC_OUTPUT
+
+# The end
+if test "`uname -s`" = "Linux" ; then
+	make=make
+else
+	make=gmake
+fi
+echo "Done. To build and install now, run:"
+echo -e "\t$make"
+echo -e "\t$make install"
