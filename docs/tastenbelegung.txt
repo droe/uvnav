@@ -10,8 +10,11 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  Home          Alle eigenen Objekte in sichtbarem Kartenausschnitt
  End           Alle existierenden Objekte in sichtbarem Kartenausschitt
 
- s             Sichtradien eigener Schiffe ein- / ausschalten
- k             Kaufradien eigener Schiffe ein- / ausschalten
+ s             Sichtradien-Toggle: Schiffe+Sonden, nur Sonden, oder keine
+ k             Kaufradien eigener Schiffe ein- / ausblenden
+ x             Schiffe ein- / ausblenden
+ c             Container ein- / ausblenden
+ v             Verbindungen zwischen Planeten ein- / ausblenden
 
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
  q, ESC        Beenden
