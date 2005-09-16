@@ -25,10 +25,10 @@ UV Navigator ist ein weiteres Tool fuer Universum V.  ToVU passte
 mir aus technischen Gruenden nicht so wirklich (browserbasiert,
 Java), und AMAP / PoN / ZugComposer laufen nur unter Windows, werden
 nicht mehr weiterentwickelt, und sind nicht Open Source, womit die
-Moeglichkeit für Bugfixes und Erweiterungen nicht gegeben ist.
+Moeglichkeit fuer Bugfixes und Erweiterungen nicht gegeben ist.
 
 Ergo musste was ``Richtiges'' her, und das hier ist das Resultat.
-Ich habe UVNav primaer für mich selber entwickelt, und momentan gibt
+Ich habe UVNav primaer fuer mich selber entwickelt, und momentan gibt
 UVNav sicher auch noch nicht genug Features her, um die anderen Tools
 ernsthaft zu konkurrenzieren.
 
@@ -59,41 +59,42 @@ leitet die Standardausgabe / Standardfehlerausgabe aber in
 Textfiles um, wo die Ausgabe bequem nachgelesen werden kann,
 auch wenn UVNav per Doppelklick im Explorer gestartet wurde.
 
-UVMap hat noch keine Mausunterstuetzung!  Wie die Bedienung
-ueber die Tastatur derzeit funktioniert, kann in der Datei
-docs/tastenbelegung.txt nachgelesen werden.
+Die Kartenansicht hat noch keine Mausunterstuetzung!  Wie
+die Bedienung ueber die Tastatur derzeit funktioniert, kann
+in der Datei docs/tastenbelegung.txt nachgelesen werden.
 
 
 
 Stand der Entwicklung
 ---------------------
 
-UV Navigator befindet sich in der Frühphase der Entwicklung.
+UV Navigator befindet sich in der Fruehphase der Entwicklung.
 
-Der Parser ist mittlerwile stabil und kann die allermeisten
+Der Parser ist mittlerwile stabil und kann so ziemlich alle
 Auswertungen korrekt einlesen, inklusive alte und uralte
-Auswertungen (getestet wurden derzeit Sternzeit 55, 128,
-144-152, 154-162, 211-228).
-Was hier noch fehlt ist das Parsen der Nachrichten, speziell
-der Resultate von Zonendaten-Abfragen.
+Auswertungen (bisher getestet wurden Sternzeit 55, 128,
+144-152, 154-162, 211-240).
+
+Das Parsen der Nachrichten ist erst in den Grundzuegen
+implementiert.
 
 Imperatoren-Spielzeug wird zwar korrekt verarbeitet, aber noch
-groesstenteils ignoriert.  Für Imperatoren gibt UVNav demnach
+groesstenteils ignoriert.  Fuer Imperatoren gibt UVNav demnach
 noch nicht viel her.
 
 Die Kartendarstellung ist noch sehr experimentell.  Grafik und
-Benutzerführung stecken noch in den Kinderschuhen.  Viele
+Benutzerfuehrung stecken noch in den Kinderschuhen.  Viele
 Verbesserungen sind vorbereitet, aber noch nicht fertig
 implementiert.  Performance und Benutzbarkeit sind noch weit
 vom Ziel entfernt!
 
-Diverse Hilfsmodule für Konfiguration, Image-Caching, Font-
+Diverse Hilfsmodule fuer Konfiguration, Image-Caching, Font-
 Renderer, Zeichenhilfen etc sind stabil und funktionieren
-zuverlaessig.  Was da noch fehlt ist ein Datenbankmodul für
+zuverlaessig.  Was da noch fehlt ist ein Datenbankmodul fuer
 die Ablage von persistenten Daten.  Momentan kann daher auch
 nur eine Auswertung aufs Mal eingelesen und angeschaut werden.
 
-Fazit: Momentan noch nicht für produktive Arbeiten geeignet!
+Fazit: Momentan noch nicht fuer produktive Arbeiten geeignet!
 
 
 
@@ -107,9 +108,9 @@ sind um einzeln erkannt zu werden. Das bedingt eine baumartige
 Strukturierung dieser Objekte, und ist daher nicht ganz einfach
 zu implementieren.
 
-Die Karte wird bei vielen Objekten sehr unübersichtlich.
+Die Karte wird bei vielen Objekten sehr unuebersichtlich.
 Die momentane Art, wie Planeten und Schiffe dargestellt werden,
-muss gründlich überarbeitet werden.
+muss gruendlich ueberarbeitet werden.
 
 
 
@@ -119,17 +120,18 @@ Performance
 Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
 
 Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
-Workstation 2-3 MB/s, auf meinem alten 700 MHz Thinkpad 700-800 KB/s,
+Workstation 4 MB/s, auf meinem alten 700 MHz Thinkpad ca 800 KB/s,
 und auf meinem neuen 1.2 GHz Centrino Thinkpad ca 4 MB/s, je nach
-Komplexitaet der Auswertungsdaten.
+Komplexitaet der Auswertungsdaten.  Unter Windows ist die Performance
+etwa 30% schlechter (mit identischem Quellcode und Compiler).
 
 Zum Vergleich:  ToVU 4.13 ist ca um einen Faktor von 20 langsamer,
 AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
 
 Die Anzeige ist sogar auf meinem alten Thinkpad mit grossen Auswertungen
-noch einigermassen flüssig.  Notfalls kann man das rechenintensive
+noch einigermassen fluessig.  Notfalls kann man das rechenintensive
 Anti-Aliasing und die Interpolation im Zoom-Code mit -Q deaktivieren,
-muss dafür aber mit haesslich verpixelter Anzeige leben.  Wie bei PoN,
+muss dafuer aber mit haesslich verpixelter Anzeige leben.  Wie bei PoN,
 AMAP und ToVU halt :)
 
 UVNav frisst ca 10 MB Grundbedarf plus das 3-4fache der Dateigroesse der
@@ -146,28 +148,32 @@ UVNav wird mit GCC 3.3.x und den C/C++-Libs von FreeBSD entwickelt,
 sollte aber auch mit anderen Compilern und Libs kompilieren.
 Probleme in diesem Zusammenhang bitte melden; es ist gut moeglich,
 dass es noch kleine Veraenderungen an configure.ac und den relevanten
-Header-Files braucht, um andere Systeme zu unterstützen.
+Header-Files braucht, um andere Systeme zu unterstuetzen.
 
 Folgende Bibliotheken werden benoetigt:
  - SDL        Simple Directmedia Layer
               http://www.libsdl.org/
- - SDL_ttf    TrueType Font Library für SDL
+ - SDL_ttf    TrueType Font Library fuer SDL
               http://www.libsdl.org/projects/SDL_ttf/
- - SDL_image  Image Loading Library für SDL
+ - SDL_image  Image Loading Library fuer SDL
               http://www.libsdl.org/projects/SDL_image/
- - SDL_gfx    Erweiterte Grafiklibrary für SDL
+ - SDL_gfx    Erweiterte Grafiklibrary fuer SDL
               http://www.ferzkopp.net/~aschiffler/Software/SDL_gfx-2.0/
 
 UVNav kann auf allem was sich POSIX-kompatibel schimpft mit der
-üblichen ``magischen Dreifaltigkeit'' kompiliert und installiert
+ueblichen ``magischen Dreifaltigkeit'' kompiliert und installiert
 werden:
 
  $ ./configure
  $ make
  # make install
 
-Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss ziemlich
-sicher `gmake' (GNU Make) statt `make' verwendet werden.
+Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss `gmake'
+(GNU Make) statt `make' verwendet werden.
+
+Optional kann ./configure mit Parametern aufgerufen werden, um die
+Installationseinstellungen anzupassen oder zusaetzliche Tools zu
+installieren, siehe ./configure --help fuer Details.
 
 
 
@@ -188,30 +194,27 @@ Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
  $ make
  # make install
 
-Auf nicht-GNU-Systemen (z.B. BSD, Solaris, MacOS X) muss ziemlich
-sicher `gmake' (GNU Make) statt `make' verwendet werden.
-
 
 
 Kompilieren mit MinGW32 Cross-Compiler
 --------------------------------------
 
-UVNav kann direkt unter Linux oder BSD für Windows kompiliert werden.
-Es wird eine MinGW32/GCC-Installation benoetigt.
+UVNav kann direkt unter Linux oder BSD fuer Windows kompiliert werden.
+Es wird eine MinGW32/GCC-Cross-Compiler-Installation benoetigt.
 
-Die benoetigten DLLs stehen bereits vorkompiliert zu Verfügung, aber
-die eigentlichen SDL-Bibliotheken müssen zum Kompilieren in der
+Die benoetigten DLLs stehen bereits vorkompiliert zu Verfuegung, aber
+die eigentlichen SDL-Bibliotheken muessen zum Kompilieren in der
 MinGW32-Umgebung vorhanden sein.
 
 Um einen Cross-Compiler-Build ab Subversion Repo zu starten:
 
  $ svn checkout svn://projects.roe.ch/repos/uvnav/trunk/ uvnav
  $ cd uvnav
- $ aux/build-cross-mingw32.sh
- $ aux/make-binary-dist.sh
+ $ util/build-cross-mingw32.sh
+ $ util/make-binary-dist.sh
 
 Vorher sollte build-cross-mingw32.sh noch an die lokalen Gegebenheiten
-angepasst werden.  Der Default passt für eine FreeBSD Installation der
+angepasst werden.  Der Default passt fuer eine FreeBSD Installation der
 devel/mingw32-* Ports (GCC 3.x).
 
 

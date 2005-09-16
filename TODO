@@ -1,5 +1,9 @@
 $Id$
 
+- PCRE Update (SECURITY)
+  - Update to latest upstream
+  - maybe introduce vendor branch (?)
+  - check on maketables.c
 - C++ Redesign
   - Destruktoren virtual
 - OO-Architecture Redesign
