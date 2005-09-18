@@ -1,6 +1,6 @@
 $Id$
 
-2005-09-18  0.0.3  r131  * Einige Zusatztools integriert (--enable-tools)
+2005-09-18  0.0.3  r132  * Einige Zusatztools integriert (--enable-tools)
                          * Kartenansicht ist konfigurierbarer (Tasten x/c/v)
                          * Grosses OO-Architektur-Refactoring; UV Navigator
                            ist nun in einer Vierschichtenarchitektur
