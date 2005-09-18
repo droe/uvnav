@@ -25,4 +25,4 @@ noinst_LIBRARIES = libpcre.a
 libpcre_a_CFLAGS = @PCRE_CFLAGS@
 
 libpcre_a_SOURCES = config.h internal.h chartables.h \
-                    maketables.c get.c study.c pcre.c
+                    get.c study.c pcre.c
