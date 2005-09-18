@@ -46,7 +46,7 @@ class UVUniversum
 {
 	public:
 		UVUniversum();
-		~UVUniversum();
+		virtual ~UVUniversum();
 
 		std::string partie;
 		std::string copyright;

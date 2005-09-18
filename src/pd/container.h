@@ -25,7 +25,7 @@ class UVContainer
 {
 	public:
 		UVContainer();
-//		~UVContainer();
+		virtual ~UVContainer();
 
 		long groesse;			// in BRT
 		long x;

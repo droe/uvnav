@@ -29,9 +29,9 @@ class UVUniversum;
 class UVAbstractImporter : public Subject
 {
 	public:
-//		UVAbstractImporter() { };
-//		virtual ~UVAbstractImporter() { };
-//
+		UVAbstractImporter() { };
+		virtual ~UVAbstractImporter() { };
+
 		virtual void set_verbosity(int v) = 0;
 		virtual UVUniversum* import(const std::string& file) = 0;
 		virtual unsigned long get_filesize() const = 0;

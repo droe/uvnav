@@ -59,7 +59,7 @@ class UVMap
 {
 	public:
 		UVMap(UVUniversum*, SDL_Surface*);
-		~UVMap();
+		virtual ~UVMap();
 
 		void set_dim(long);
 		long get_dim() const;

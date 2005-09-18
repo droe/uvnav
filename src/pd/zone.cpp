@@ -48,11 +48,9 @@ UVZone::UVZone(long n)
 /*
  * Destruktor.
  */
-/*
 UVZone::~UVZone()
 {
 }
-*/
 
 
 /*

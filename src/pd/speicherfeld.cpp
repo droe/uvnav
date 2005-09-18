@@ -39,10 +39,8 @@ UVSpeicherfeld::UVSpeicherfeld(long n, long z, long gr, long sp, long me, string
 /*
  * Destruktor.
  */
-/*
 UVSpeicherfeld::~UVSpeicherfeld()
 {
 }
-*/
 
 

@@ -37,7 +37,7 @@ class UVVideo : public Singleton<UVVideo>
 
 	protected:
 		UVVideo();
-		~UVVideo();
+		virtual ~UVVideo();
 
 	private:
 		SDL_Surface* screen;

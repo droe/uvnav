@@ -27,7 +27,7 @@ class UVMinenfeld
 {
 	public:
 		UVMinenfeld(long n, long z, long gr = 0, std::string ro = "", long er = 0);
-//		~UVMinenfeld();
+		virtual ~UVMinenfeld();
 
 		long nummer;			// key in UVPlanet
 

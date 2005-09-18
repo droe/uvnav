@@ -39,10 +39,8 @@ UVLadung::UVLadung(long n, string s, long gr, string be)
 /*
  * Destruktor.
  */
-/*
 UVLadung::~UVLadung()
 {
 }
-*/
 
 

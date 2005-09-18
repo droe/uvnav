@@ -39,10 +39,8 @@ UVWerft::UVWerft(long n, long z)
 /*
  * Destruktor.
  */
-/*
 UVWerft::~UVWerft()
 {
 }
-*/
 
 

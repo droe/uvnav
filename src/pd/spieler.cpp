@@ -39,10 +39,8 @@ UVSpieler::UVSpieler()
 /*
  * Destruktor.
  */
-/*
 UVSpieler::~UVSpieler()
 {
 }
-*/
 
 

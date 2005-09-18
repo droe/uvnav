@@ -25,7 +25,7 @@ class UVSize
 {
 	public:
 		UVSize(int = 0, int = 0);
-		~UVSize();
+		virtual ~UVSize();
 
 		int w;
 		int h;

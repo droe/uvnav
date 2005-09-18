@@ -39,10 +39,8 @@ UVForschungsstation::UVForschungsstation(long n, long z)
 /*
  * Destruktor.
  */
-/*
 UVForschungsstation::~UVForschungsstation()
 {
 }
-*/
 
 

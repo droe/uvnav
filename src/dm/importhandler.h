@@ -37,7 +37,7 @@ class UVImportHandler : public Singleton<UVImportHandler>
 
 	protected:
 		UVImportHandler();
-		~UVImportHandler();
+		virtual ~UVImportHandler();
 };
 
 #endif // IMPORTHANDLER_H

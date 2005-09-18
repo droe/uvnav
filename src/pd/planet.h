@@ -36,7 +36,7 @@ class UVPlanet
 {
 	public:
 		UVPlanet(long, std::string, std::string, long, long, long);
-//		~UVPlanet();
+		virtual ~UVPlanet();
 
 		long nummer;			// key in UVUniversum
 

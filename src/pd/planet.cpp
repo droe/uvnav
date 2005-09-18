@@ -52,11 +52,9 @@ UVPlanet::UVPlanet(long n, string na, string be, long x_, long y_, long d)
 /*
  * Destruktor.
  */
-/*
 UVPlanet::~UVPlanet()
 {
 }
-*/
 
 
 /*

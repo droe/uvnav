@@ -34,7 +34,7 @@ class UVSchiff
 {
 	public:
 		UVSchiff(std::string, std::string, long);
-//		~UVSchiff();
+		virtual ~UVSchiff();
 
 		std::string name;			// key in UVWelt
 

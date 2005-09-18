@@ -27,7 +27,7 @@ class UVWindow : public UVWidget
 {
 	public:
 		UVWindow(UVWidget*, SDL_Surface*);
-		~UVWindow();
+		virtual ~UVWindow();
 
 		virtual void resize();
 		virtual void draw();

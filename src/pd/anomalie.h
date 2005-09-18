@@ -25,7 +25,7 @@ class UVAnomalie
 {
 	public:
 		UVAnomalie();
-//		~UVAnomalie();
+		virtual ~UVAnomalie();
 
 		long radius;
 		long x;

@@ -46,11 +46,9 @@ UVProgress::UVProgress(SDL_Surface* s, SDL_Rect* r)
 /*
  * Destruktor.
  */
-/*
 UVProgress::~UVProgress()
 {
 }
-*/
 
 
 /*

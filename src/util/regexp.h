@@ -30,7 +30,7 @@ class UVRegExp : public std::unary_function<std::string, bool>
 {
 	public:
 		UVRegExp(const std::string&);
-		~UVRegExp();
+		virtual ~UVRegExp();
 
 		bool operator()(const std::string&);
 		bool match(const std::string&);

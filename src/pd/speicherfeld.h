@@ -27,7 +27,7 @@ class UVSpeicherfeld
 {
 	public:
 		UVSpeicherfeld(long n, long z, long gr = 0, long sp = 0, long me = 0, std::string wa = "");
-//		~UVSpeicherfeld();
+		virtual ~UVSpeicherfeld();
 
 		long nummer;			// key in UVPlanet
 

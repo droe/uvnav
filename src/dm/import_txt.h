@@ -37,7 +37,7 @@ class UVImportTXT : public UVAbstractImporter
 {
 	public:
 		UVImportTXT();
-//		~UVImportTXT();
+		virtual ~UVImportTXT();
 
 		void set_verbosity(int v);
 		UVUniversum* import(const std::string& file);

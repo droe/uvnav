@@ -39,10 +39,8 @@ UVStadt::UVStadt(long n, long z)
 /*
  * Destruktor.
  */
-/*
 UVStadt::~UVStadt()
 {
 }
-*/
 
 

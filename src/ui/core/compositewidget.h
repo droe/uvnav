@@ -29,7 +29,7 @@ class UVCompositeWidget : public UVWidget
 {
 	public:
 		UVCompositeWidget(int = 1, UVOrientation = UVOHorizontal, SDL_Surface* = NULL);
-		~UVCompositeWidget();
+		virtual ~UVCompositeWidget();
 
 		virtual void add_widget(UVWidget*);
 

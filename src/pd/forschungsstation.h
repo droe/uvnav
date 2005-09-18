@@ -27,7 +27,7 @@ class UVForschungsstation
 {
 	public:
 		UVForschungsstation(long, long);
-//		~UVForschungsstation();
+		virtual ~UVForschungsstation();
 
 		long nummer;			// key in UVPlanet
 

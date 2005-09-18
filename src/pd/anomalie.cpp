@@ -36,10 +36,8 @@ UVAnomalie::UVAnomalie() : radius(0), x(0), y(0), dim(0)
 /*
  * Destruktor.
  */
-/*
 UVAnomalie::~UVAnomalie()
 {
 }
-*/
 
 

@@ -27,7 +27,7 @@ class UVKomponente
 {
 	public:
 		UVKomponente(std::string s, long zs, long hp, long gr, long n = 1, double l = 0.0);
-//		~UVKomponente();
+		virtual ~UVKomponente();
 
 		long nummer;			// key in UVSchiff
 

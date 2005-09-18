@@ -35,7 +35,7 @@ class UVZone
 {
 	public:
 		UVZone(long);
-//		~UVZone();
+		virtual ~UVZone();
 
 		long nummer;			// key in UVPlanet
 

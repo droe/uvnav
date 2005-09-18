@@ -27,7 +27,7 @@ class UVHandelsstation
 {
 	public:
 		UVHandelsstation(std::string, long);
-//		~UVHandelsstation();
+		virtual ~UVHandelsstation();
 
 		std::string name;			// key in UVUniversum
 

@@ -28,12 +28,18 @@ class Subject;
 class Observer
 {
 	public:
+		Observer() {}
+		virtual ~Observer() {}
+
 		virtual void update(Subject*) = 0;
 };
 
 class Subject
 {
 	public:
+		Subject() {}
+		virtual ~Subject() {}
+
 		void attach(Observer*);
 		void detach(Observer*);
 		void notify();

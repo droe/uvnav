@@ -25,7 +25,7 @@ class UVInfosonde
 {
 	public:
 		UVInfosonde(long);
-//		~UVInfosonde();
+		virtual ~UVInfosonde();
 
 		long nummer;			// key in UVWelt
 

@@ -39,7 +39,7 @@ class UVConf : public Singleton<UVConf>
 
 	private:
 		UVConf();
-		~UVConf();
+		virtual ~UVConf();
 
 	public:
 		void set_auswertung(std::string, long);

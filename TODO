@@ -1,7 +1,7 @@
 $Id$
 
 - C++ Redesign
-  - Destruktoren virtual
+  - Namespaces einführen
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)

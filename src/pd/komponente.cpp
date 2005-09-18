@@ -39,10 +39,8 @@ UVKomponente::UVKomponente(string s, long zs, long hp, long gr, long n, double l
 /*
  * Destruktor.
  */
-/*
 UVKomponente::~UVKomponente()
 {
 }
-*/
 
 

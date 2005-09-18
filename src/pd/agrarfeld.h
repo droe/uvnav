@@ -27,7 +27,7 @@ class UVAgrarfeld
 {
 	public:
 		UVAgrarfeld(long n, long z, long gr = 0, std::string pr = "", long er = 0);
-//		~UVAgrarfeld();
+		virtual ~UVAgrarfeld();
 
 		long nummer;			// key in UVPlanet
 

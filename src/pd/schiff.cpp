@@ -49,11 +49,9 @@ UVSchiff::UVSchiff(string na, string be, long gr)
 /*
  * Destruktor.
  */
-/*
 UVSchiff::~UVSchiff()
 {
 }
-*/
 
 
 /*

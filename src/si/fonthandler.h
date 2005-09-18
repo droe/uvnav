@@ -40,7 +40,7 @@ class UVFontHandler : public Singleton<UVFontHandler>
 
 	protected:
 		UVFontHandler();
-		~UVFontHandler();
+		virtual ~UVFontHandler();
 
 	private:
 		ext::hash_map<std::string, UVFont*> fonts;

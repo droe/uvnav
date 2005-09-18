@@ -41,10 +41,8 @@ UVMinenfeld::UVMinenfeld(long n, long z, long gr, string ro, long er)
 /*
  * Destruktor.
  */
-/*
 UVMinenfeld::~UVMinenfeld()
 {
 }
-*/
 
 

@@ -39,10 +39,8 @@ UVHandelsstation::UVHandelsstation(string n, long p)
 /*
  * Destruktor.
  */
-/*
 UVHandelsstation::~UVHandelsstation()
 {
 }
-*/
 
 

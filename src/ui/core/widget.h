@@ -28,7 +28,7 @@ class UVWidget : public UVRect
 {
 	public:
 		UVWidget(int = 1, SDL_Surface* = NULL);
-		~UVWidget();
+		virtual ~UVWidget();
 
 		virtual void set_surface(SDL_Surface*);
 		SDL_Surface* get_surface() const;

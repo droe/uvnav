@@ -37,10 +37,8 @@ UVInfosonde::UVInfosonde(long n) : lebensdauer(0), x(0), y(0), dim(0)
 /*
  * Destruktor.
  */
-/*
 UVInfosonde::~UVInfosonde()
 {
 }
-*/
 
 

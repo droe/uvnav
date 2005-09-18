@@ -41,10 +41,7 @@ UVAgrarfeld::UVAgrarfeld(long n, long z, long gr, string pr, long er)
 /*
  * Destruktor.
  */
-/*
 UVAgrarfeld::~UVAgrarfeld()
 {
 }
-*/
-
 

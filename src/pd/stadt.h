@@ -27,7 +27,7 @@ class UVStadt
 {
 	public:
 		UVStadt(long, long);
-//		~UVStadt();
+		virtual ~UVStadt();
 
 		long nummer;			// key in UVPlanet
 

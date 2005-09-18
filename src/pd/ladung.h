@@ -27,7 +27,7 @@ class UVLadung
 {
 	public:
 		UVLadung(long, std::string, long, std::string);
-//		~UVLadung();
+		virtual ~UVLadung();
 
 		long nummer;			// key in UVSchiff
 

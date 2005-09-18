@@ -34,7 +34,7 @@ class UVEvents : public Singleton<UVEvents>
 
 	protected:
 		UVEvents();
-		~UVEvents();
+		virtual ~UVEvents();
 
 	private:
 		UVConf* conf;

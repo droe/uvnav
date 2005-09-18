@@ -31,7 +31,7 @@ class UVRootWindow : public UVWindow
 {
 	public:
 		UVRootWindow(UVWidget*, SDL_Surface*);
-		~UVRootWindow();
+		virtual ~UVRootWindow();
 
 		virtual void resize();
 		virtual void draw();

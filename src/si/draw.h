@@ -37,7 +37,7 @@ class UVDraw : public Singleton<UVDraw>
 
 	protected:
 		UVDraw();
-		~UVDraw();
+		virtual ~UVDraw();
 
 	private:
 		bool antialiasing;

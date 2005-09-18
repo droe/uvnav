@@ -33,7 +33,7 @@ class UVNavigator
 {
 	public:
 		UVNavigator();
-		~UVNavigator();
+		virtual ~UVNavigator();
 
 		void splash();
 		void load(const std::string&, int = 0);

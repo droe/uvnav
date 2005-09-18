@@ -27,7 +27,7 @@ class UVSpieler
 {
 	public:
 		UVSpieler();
-//		~UVSpieler();
+		virtual ~UVSpieler();
 
 		std::string name;			// key in UVWelt
 

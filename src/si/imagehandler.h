@@ -57,7 +57,7 @@ class UVImageHandler : public Singleton<UVImageHandler>
 
 	protected:
 		UVImageHandler();
-		~UVImageHandler();
+		virtual ~UVImageHandler();
 
 	private:
 		uv_img images[NUM_IMG];

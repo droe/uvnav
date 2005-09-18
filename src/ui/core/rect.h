@@ -28,7 +28,7 @@ class UVRect : public UVSize
 {
 	public:
 		UVRect(int = 0, int = 0, int = 0, int = 0);
-		~UVRect();
+		virtual ~UVRect();
 
 		bool contains(int, int) const;
 		SDL_Rect* to_sdl_rect() const;

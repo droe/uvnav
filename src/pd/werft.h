@@ -27,7 +27,7 @@ class UVWerft
 {
 	public:
 		UVWerft(long, long);
-//		~UVWerft();
+		virtual ~UVWerft();
 
 		long nummer;			// key in UVPlanet
 

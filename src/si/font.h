@@ -35,7 +35,7 @@ class UVFont
 
 	protected:
 		UVFont(const std::string& file, int size);
-		~UVFont();
+		virtual ~UVFont();
 
 	private:
 		TTF_Font* font;

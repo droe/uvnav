@@ -31,7 +31,7 @@ class UVProgress : public Observer
 {
 	public:
 		UVProgress(SDL_Surface*, SDL_Rect*);
-//		~UVProgress();
+		virtual ~UVProgress();
 
 		void init(unsigned long);
 		void update(Subject*);

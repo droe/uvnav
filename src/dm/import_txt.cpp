@@ -84,11 +84,9 @@ UVImportTXT::UVImportTXT()
 /*
  * Destruktor.
  */
-/*
 UVImportTXT::~UVImportTXT()
 {
 }
-*/
 
 
 /*
