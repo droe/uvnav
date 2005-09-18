@@ -1,7 +1,6 @@
 $Id$
 
-- C++ Redesign
-  - Namespaces einführen
+- wxWidgets statt pure SDL
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)
@@ -28,6 +27,8 @@ $Id$
   - Mausklick handling einklinken
     - wie doppelklick und drag behandeln?
   - GUI Architektur verfeinern ...
+- C++ Redesign
+  - Namespaces einführen
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)
