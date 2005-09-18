@@ -16,8 +16,8 @@
 #
 # $Id$
 
-AC_PREREQ(2.57)
-AC_INIT([UV Navigator], [0.0.3], [uvnav-bugs@projects.roe.ch], [uvnav])
+AC_PREREQ(2.59)
+AC_INIT([UV Navigator], [0.0.3-current], [uvnav-bugs@projects.roe.ch], [uvnav])
 AC_REVISION([[$Rev$]])
 AC_CANONICAL_TARGET
 AM_INIT_AUTOMAKE([gnu std-options check-news dist-bzip2 dist-zip])
