@@ -1,3 +1,9 @@
+/*
+ * Modified version of PCRE-4.5 for inclusion in
+ * UV Navigator: https://projects.roe.ch/trac/uvnav
+ * See the file lib/pcre/README for details.
+ * $Id$
+ */
 
 /* On Unix systems config.in is converted by configure into config.h. PCRE is
 written in Standard C, but there are a few non-standard things it can cope

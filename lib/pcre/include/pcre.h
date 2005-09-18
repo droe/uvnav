@@ -1,3 +1,10 @@
+/*
+ * Modified version of PCRE-4.5 for inclusion in
+ * UV Navigator: https://projects.roe.ch/trac/uvnav
+ * See the file lib/pcre/README for details.
+ * $Id$
+ */
+
 #define PCRE_STATIC
 
 /*************************************************
