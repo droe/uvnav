@@ -24,7 +24,7 @@
 
 my $sz = shift() || die "Usage: $0 <sternzeit>\n";
 
-open(INPUT, "<$sz.uv");
+open(INPUT, "<$sz.uvzug");
 my @in = <INPUT>;
 close(INPUT);
 
@@ -45,7 +45,7 @@ while(@in)
 	{
 		my $date = `date +%Y-%m-%d`; chomp $date;
 		my $id = `id -un`; chomp $id;
-		push(@out, "--- Generiert aus $sz.uv ($date/$id)\n");
+		push(@out, "--- Generiert aus $sz.uvzug ($date/$id)\n");
 	}
 	else
 	{
@@ -59,7 +59,7 @@ while(@in)
 	}
 }
 
-open(OUTPUT, ">$sz.uv.out");
+open(OUTPUT, ">$sz.uvzug.pp");
 while(@out)
 {
 	print OUTPUT shift(@out);
