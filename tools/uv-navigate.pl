@@ -32,7 +32,7 @@ while ( defined ($_ = $term->readline($prompt)) )
 	if(/help/i)
 	{
 		print $OUT <<EOF;
-	waypoint coords    123123,12345
+	waypoint coords    -123123,12345
 	fixed velocity     v=12
 	maximum velocity   vmax=123
 EOF
@@ -72,7 +72,7 @@ sub navigate
 
 	foreach my $token (@tok)
 	{
-		if($token =~ /^(\d+)[,:;-_](\d+)$/)
+		if($token =~ /^(-?\d+)[,:;-_](-?\d+)$/)
 		{
 			$x[$n] = $1;
 			$y[$n] = $2;
