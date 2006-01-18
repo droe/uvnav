@@ -55,7 +55,8 @@ sub pad2
 sub navigate
 {
 	my ($data) = @_;
-
+	$data =~ s/^\s+//g
+	$data =~ s/\s+$//g
 	my @tok = split(/\s/, $data);
 
 	my $n = 0;		# number of waypoints
