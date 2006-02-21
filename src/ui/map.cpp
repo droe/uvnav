@@ -1123,16 +1123,21 @@ void UVMap::draw_planet(UVPlanet* planet)
 				}
 			}
 
-			if(eigene_zonen > 0) {
+			if(eigene_zonen > 0 || freie_zonen > 0) {
+				bool pot_z = ((eigene_zonen + 1) * 3 <= max_zone) && (freie_zonen > 0);
+				bool pot_f = freie_fus > 0;
 				zonen_text = "Z=" + to_string(eigene_zonen) + "/" + to_string(max_zone);
+				if(freie_zonen > 0) {
+					zonen_text += "+" + to_string(freie_zonen);
+				}
 				if(freie_fus > 0 && opt_zonen > 1) {
 					zonen_text += " " + to_string(freie_fus) + " FUs frei";
 				}
-				bool pot_z = ((eigene_zonen + 1) * 3 <= max_zone) && (freie_zonen > 0);
-				bool pot_f = freie_fus > 0;
-				short r = pot_z ? 0xFF : 0x77;
-				short g = (pot_z || pot_f) ? 0x77 : 0xFF;
-				short b = (pot_f && !pot_z) ? 0xFF : 0x77;
+				short rgb_lo = eigene_zonen > 0 ? 0x77 : 0x44;
+				short rgb_hi = eigene_zonen > 0 ? 0xFF : 0xAA;
+				short r =  pot_z            ? rgb_hi : rgb_lo;
+				short g = (pot_z ||  pot_f) ? rgb_lo : rgb_hi;
+				short b = (pot_f && !pot_z) ? rgb_hi : rgb_lo;
 				SDL_Surface* zonen_label = zonen_font->get_surface(zonen_text, r, g, b);
 				dst.x = long(rint(center_x + h / 2)) + 4;
 				dst.y = long(rint(center_y + label_offset - zonen_label->h / 2));
