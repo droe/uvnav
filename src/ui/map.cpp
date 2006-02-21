@@ -1111,12 +1111,15 @@ void UVMap::draw_planet(UVPlanet* planet)
 			string zonen_text = "";
 			long max_zone = planet->max_zone();
 			long eigene_zonen = 0;
+			long freie_zonen = 0;
 			long freie_fus = 0;
 			for(long i = 1; i <= max_zone; i++) {
 				UVZone* zone = planet->get_zone(i);
 				if(zone->besitzer == spieler->name) {
 					eigene_zonen++;
 					freie_fus += zone->freie_fus;
+				} else if(zone->besitzer == "Niemand") {
+					freie_zonen++;
 				}
 			}
 
@@ -1125,7 +1128,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 				if(freie_fus > 0 && opt_zonen > 1) {
 					zonen_text += " " + to_string(freie_fus) + " FUs frei";
 				}
-				bool pot_z = ((eigene_zonen + 1) * 3 <= max_zone);
+				bool pot_z = ((eigene_zonen + 1) * 3 <= max_zone) && (freie_zonen > 0);
 				bool pot_f = freie_fus > 0;
 				short r = pot_z ? 0xFF : 0x77;
 				short g = (pot_z || pot_f) ? 0x77 : 0xFF;
