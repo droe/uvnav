@@ -2902,6 +2902,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 	z->name = zone_re.sub(1);
 	z->besitzer = zone_re.sub(3);
 	z->groesse = zone_re.subtol(4);
+	z->freie_fus = z->groesse;
 	getline();
 
 	// Beschreibung
@@ -2988,6 +2989,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				agrar_re.subtol(1),
 				z->nummer,
 				agrar_re.subtol(2)), z);
+			z->freie_fus -= agrar_re.subtol(2);
 		}
 		else
 		{
@@ -2997,6 +2999,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				agrar_re.subtol(2),
 				agrar_re.sub(3),
 				agrar_re.subtol(4)), z);
+			z->freie_fus -= agrar_re.subtol(2);
 		}
 		getline();
 	}
@@ -3014,6 +3017,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				speicher_re.subtol(1),
 				z->nummer,
 				speicher_re.subtol(2)), z);
+			z->freie_fus -= speicher_re.subtol(2);
 		}
 		else if(speicher_re.subs() == 3)
 		{
@@ -3022,6 +3026,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				z->nummer,
 				speicher_re.subtol(2),
 				speicher_re.subtol(3)), z);
+			z->freie_fus -= speicher_re.subtol(2);
 		}
 		else
 		{
@@ -3032,6 +3037,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				speicher_re.subtol(3),
 				speicher_re.subtol(4),
 				speicher_re.sub(5)), z);
+			z->freie_fus -= speicher_re.subtol(2);
 		}
 		getline();
 	}
@@ -3049,6 +3055,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				mine_re.subtol(1),
 				z->nummer,
 				mine_re.subtol(2)), z);
+			z->freie_fus -= mine_re.subtol(2);
 		}
 		else if(mine_re.subs() == 3)
 		{
@@ -3058,6 +3065,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				mine_re.subtol(2),
 				mine_re.sub(3),
 				0), z);
+			z->freie_fus -= mine_re.subtol(2);
 		}
 		else
 		{
@@ -3067,6 +3075,7 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 				mine_re.subtol(2),
 				mine_re.sub(4),
 				mine_re.subtol(5)), z);
+			z->freie_fus -= mine_re.subtol(2);
 		}
 		getline();
 	}
@@ -3075,18 +3084,22 @@ UVZone* UVImportTXT::parse_zone(UVPlanet* p)
 	while(werft_re.match(cur))
 	{
 		p->set_werft(parse_werft(z), z);
+		z->freie_fus -= 200;
 	}
 
 	static UVRegExp fs_re("^# Forschungsstation ");
 	while(fs_re.match(cur))
 	{
 		p->set_forschungsstation(parse_forschungsstation(z), z);
+		z->freie_fus -= 200;
 	}
 
 	static UVRegExp stadt_re("^# Stadt ");
 	while(stadt_re.match(cur))
 	{
-		p->set_stadt(parse_stadt(z), z);
+		UVStadt *stadt = parse_stadt(z);
+		p->set_stadt(stadt, z);
+		z->freie_fus -= stadt->groesse;
 	}
 
 	return z;

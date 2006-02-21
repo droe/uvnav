@@ -178,6 +178,7 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 	opt_schiffe      = conf->b_get("map-schiffe",      true);
 	opt_container    = conf->b_get("map-container",    true);
 	opt_verbindungen = conf->b_get("map-verbindungen", true);
+	opt_zonen        = conf->l_get("map-zonen",        true);
 	offset_x         = conf->l_get("map-offset-x",     true);
 	offset_y         = conf->l_get("map-offset-y",     true);
 	zoom             = conf->f_get("map-zoom",         true);
@@ -221,6 +222,8 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 			conf->l_get("map-grid-font-size"));
 	label_font = UVFontHandler::get_instance()->get_font(FNT_SANS,
 			conf->l_get("map-label-font-size"));
+	zonen_font = UVFontHandler::get_instance()->get_font(FNT_SANS,
+			conf->l_get("map-zonen-font-size"));
 }
 
 
@@ -239,6 +242,7 @@ UVMap::~UVMap()
 	conf->b_set("map-container",    opt_container,    true);
 	conf->b_set("map-schiffe",      opt_schiffe,      true);
 	conf->b_set("map-verbindungen", opt_verbindungen, true);
+	conf->l_set("map-zonen",        opt_zonen,        true);
 }
 
 
@@ -668,6 +672,28 @@ void UVMap::toggle_opt_verbindungen()
 
 
 /*
+ * Zonen set/get/toggle.
+ * 0: keine Zoneninfos
+ * 1: nur Zonen
+ * 2: Zonen + Städte
+ */
+long UVMap::get_opt_zonen() const
+{
+	return opt_zonen;
+}
+void UVMap::set_opt_zonen(const long o)
+{
+	opt_zonen = o;
+	redraw();
+}
+void UVMap::toggle_opt_zonen()
+{
+	++opt_zonen %= 3;
+	redraw();
+}
+
+
+/*
  * Zeichnet alles neu.
  */
 void UVMap::redraw()
@@ -958,8 +984,8 @@ void UVMap::draw_grid()
  *
  *
  *    ,--.
- *   (    )
- *   (    )
+ *   (    ) 3456 Pleitengeier
+ *   (    ) Z=3/7 S=1/1 W=1/1 F=1/1
  *    `--'
  *
  * - wohin mit Name, Nummer?
@@ -1051,6 +1077,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			                    (h / 2) + ++dr, 0xFF, 0x00, 0xFF, 0xFF);
 		}
 
+		long label_offset = 0;
 		if(zoom < 40.0)
 		{
 			// Beschriftung
@@ -1073,7 +1100,43 @@ void UVMap::draw_planet(UVPlanet* planet)
 			dst.y = long(rint(center_y - label->h / 2));
 			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
 			SDL_BlitSurface(label, 0, screen, &dst);
+			label_offset = label->h;
 			SDL_FreeSurface(label);
+		}
+
+		if(zoom < 80.0 && opt_zonen > 0)
+		{
+			// Zoneninfos: Z=3/7 S=1/1 W=1/1 F=1/1
+			// *** provisorisch
+			string zonen_text = "";
+			long max_zone = planet->max_zone();
+			long eigene_zonen = 0;
+			long freie_fus = 0;
+			for(long i = 1; i <= max_zone; i++) {
+				UVZone* zone = planet->get_zone(i);
+				if(zone->besitzer == spieler->name) {
+					eigene_zonen++;
+					freie_fus += zone->freie_fus;
+				}
+			}
+
+			if(eigene_zonen > 0) {
+				zonen_text = "Z=" + to_string(eigene_zonen) + "/" + to_string(max_zone);
+				if(freie_fus > 0 && opt_zonen > 1) {
+					zonen_text += " " + to_string(freie_fus) + " FUs frei";
+				}
+				bool pot_z = ((eigene_zonen + 1) * 3 <= max_zone);
+				bool pot_f = freie_fus > 0;
+				short r = pot_z ? 0xFF : 0x77;
+				short g = (pot_z || pot_f) ? 0x77 : 0xFF;
+				short b = (pot_f && !pot_z) ? 0xFF : 0x77;
+				SDL_Surface* zonen_label = zonen_font->get_surface(zonen_text, r, g, b);
+				dst.x = long(rint(center_x + h / 2)) + 4;
+				dst.y = long(rint(center_y + label_offset - zonen_label->h / 2));
+				drw->box(screen, dst.x - zonen_label->h / 4, dst.y, dst.x + zonen_label->w + zonen_label->h / 4, dst.y + zonen_label->h, 0, 0, 0, 0x88);
+				SDL_BlitSurface(zonen_label, 0, screen, &dst);
+				SDL_FreeSurface(zonen_label);
+			}
 		}
 
 //		cout << "draw Planet (" << center_x << "/" << center_y << ")" << endl;

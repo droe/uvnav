@@ -96,6 +96,10 @@ class UVMap
 		void set_opt_verbindungen(const bool);
 		void toggle_opt_verbindungen();
 
+		long get_opt_zonen() const;
+		void set_opt_zonen(const long);
+		void toggle_opt_zonen();
+
 		void redraw();
 		void draw(SDL_Rect*);
 
@@ -119,6 +123,7 @@ class UVMap
 		UVFont* debug_font;
 		UVFont* grid_font;
 		UVFont* label_font;
+		UVFont* zonen_font;
 
 		void draw_grid();
 
@@ -130,6 +135,7 @@ class UVMap
 		void draw_infosonde(UVInfosonde*);
 
 		long opt_sichtradien;
+		long opt_zonen;
 		bool opt_kaufradien;
 		bool opt_schiffe;
 		bool opt_container;

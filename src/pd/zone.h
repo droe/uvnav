@@ -61,6 +61,8 @@ class UVZone
 		double get_N() const;
 
 		std::string to_string_terse() const;
+
+		long freie_fus;
 };
 
 #endif // ZONE_H

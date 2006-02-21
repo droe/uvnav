@@ -77,6 +77,7 @@ UVConf::UVConf()
 	b_set("map-schiffe", true);
 	b_set("map-container", true);
 	b_set("map-verbindungen", true);
+	l_set("map-zonen", 2);
 	l_set("map-offset-x", 0);
 	l_set("map-offset-y", 0);
 	f_set("map-zoom", 200.0);
@@ -84,6 +85,7 @@ UVConf::UVConf()
 	l_set("map-debug-font-size", 14);
 	l_set("map-grid-font-size", 10);
 	l_set("map-label-font-size", 10);
+	l_set("map-zonen-font-size", 9);
 
 	// Konfigurationsdatei drueberladen
 	load();
@@ -163,7 +165,11 @@ void UVConf::convert()
 		case 2:
 			old_bool = b_get("map-sichtradien");
 			b_del("map-sichtradien");
-			l_set("map-sichtradien", (old_bool ? 2 : 0));
+			l_set("map-sichtradien", old_bool ? 2 : 0);
+		case 3:
+			old_bool = b_get("map-zonen");
+			b_del("map-zonen");
+			l_set("map-zonen", old_bool ? 2 : 0);
 		case CONF_VERSION:
 		default:
 			break;

@@ -248,3 +248,4 @@ string UVZone::to_string_terse() const
 	               + get_klimazone() + ")";
 }
 
+

@@ -1,6 +1,5 @@
 $Id$
 
-- wxWidgets statt pure SDL
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)

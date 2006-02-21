@@ -275,6 +275,9 @@ void UVNavigator::run()
 					case SDLK_v:
 						map->toggle_opt_verbindungen();
 						break;
+					case SDLK_z:
+						map->toggle_opt_zonen();
+						break;
 
 					case SDLK_LEFT:
 						map->scroll(-screen->w / 16, 0);
