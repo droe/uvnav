@@ -35,7 +35,7 @@ distcleancheck_listfiles = \
 MAINTAINERCLEANFILES = \
     Makefile.in configure configure.lineno aclocal.m4 config.h.in \
     config.h.in~ ChangeLog INSTALL config.guess config.sub depcomp \
-    install-sh missing mkinstalldirs compile
+    install-sh missing mkinstalldirs compile \[config.h\].in
 
 ChangeLog: FORCE
 	@if [ -d .svn -a -x util/svn2log.sh ]; then \
