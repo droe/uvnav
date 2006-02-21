@@ -985,7 +985,7 @@ void UVMap::draw_grid()
  *
  *    ,--.
  *   (    ) 3456 Pleitengeier
- *   (    ) Z=3/7 S=1/1 W=1/1 F=1/1
+ *   (    ) Z=3/7 1234 FUs frei
  *    `--'
  *
  * - wohin mit Name, Nummer?
@@ -1106,7 +1106,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 
 		if(zoom < 80.0 && opt_zonen > 0)
 		{
-			// Zoneninfos: Z=3/7 S=1/1 W=1/1 F=1/1
+			// Zoneninfos: Z=4/12 1234 FUs frei
 			// *** provisorisch
 			string zonen_text = "";
 			long max_zone = planet->max_zone();
