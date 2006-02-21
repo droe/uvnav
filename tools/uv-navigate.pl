@@ -34,7 +34,8 @@ while ( defined ($_ = $term->readline($prompt)) )
 		print $OUT <<EOF;
 	waypoint coords    -123123,12345
 	fixed velocity     v=12
-	maximum velocity   vmax=123
+	maximum velocity   vmax=120
+	multiple engines   vmax=2x60
 EOF
 	}
 	elsif(/\S/)
@@ -66,6 +67,7 @@ sub navigate
 	my @y = ();		# waypoint y coords
 	my @v = ();		# fixed velocity to waypoint
 	my $vmax = 0;	# maximum velocity in KpZ (global)
+	my $engs = 1;	# number of engines
 	my @d = ();		# distance from last waypoint
 	my $sdyn = 0;	# total dynamically speed-adjusted distance
 	my $tdyn = 100;	# total dynamically speed-adjusted time
@@ -93,13 +95,19 @@ sub navigate
 			}
 			$n++;
 		}
-		elsif($token =~ /^vmax=([\d.]+)$/i)
+		elsif($token =~ /^vmax=((?:\d+x)?)([\d.]+)$/i)
 		{
-			$vmax = $1;
+			my $engs_catch = $1;
+			chop($engs_catch) if($engs_catch);
+			$engs = $engs_catch || 1;
+			$vmax = $engs * $2;
 		}
-		elsif($token =~ /^v=([\d.]+)$/i)
+		elsif($token =~ /^v=((?:\d+x)?)([\d.]+)$/i)
 		{
-			$v = $1;
+			my $engs_catch = $1;
+			chop($engs_catch) if($engs_catch);
+			$engs = $engs_catch || 1;
+			$v = $engs * $2;
 		}
 		else
 		{
@@ -132,9 +140,11 @@ sub navigate
 			if($v[$i])
 			{
 				print $OUT "--- Ziel $i:  ". $x[$i] .",". $y[$i]
-			              ."  d=". round($d[$i])
+				          ."  d=". round($d[$i])
 				          ."  t=". pad2($time) ."..". pad2($time+$dt[$i]-1)
-				          ."  v=". nearest(0.001, $v[$i])
+				          ."  v=". (($engs > 1) ? $engs . "x" .
+				                    nearest(0.001, $v[$i]/$engs) :
+				                    nearest(0.001, $v[$i]) )
 				          ."  s=". round($v[$i]*$dt[$i])
 				          ."  D=". round($v[$i]*$dt[$i] - $d[$i])
 				          ."\n";
