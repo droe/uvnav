@@ -675,7 +675,7 @@ void UVMap::toggle_opt_verbindungen()
  * Zonen set/get/toggle.
  * 0: keine Zoneninfos
  * 1: nur Zonen
- * 2: Zonen + Städte
+ * 2: Zonen + freie FUs
  */
 long UVMap::get_opt_zonen() const
 {
