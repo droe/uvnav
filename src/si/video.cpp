@@ -54,6 +54,7 @@ UVVideo::UVVideo()
 	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
 	SDL_EnableUNICODE(1);
 
+	// TODO: rework into general config print facility
 	if(conf->b_get("screen-quality"))
 	{
 		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
@@ -99,28 +100,39 @@ void UVVideo::dispose()
  */
 void UVVideo::init()
 {
-	int flags = SDL_SWSURFACE;
-
+#ifdef DEBUG
 	cout << "Angeforderte Bildschirmoptionen:";
+#endif
+
+	int flags = SDL_SWSURFACE;
 	SDL_Rect r = { 0, 0, 0, 0 };
+
 	if(conf->b_get("screen-fullscreen"))
 	{
 		sysdep_screensize(&r);
+#ifdef DEBUG
 		cout << " Fullscreen(" << r.w << "x" << r.h << "x?)";
+#endif
 		flags |= SDL_FULLSCREEN;
 	}
 	else
 	{
 		r.w = conf->l_get("screen-width");
 		r.h = conf->l_get("screen-height");
+#ifdef DEBUG
 		cout << " Windowed(" << r.w << "x" << r.h << "x?)";
+#endif
 	}
 	if(conf->b_get("screen-resizable"))
 	{
+#ifdef DEBUG
 		cout << " Resizable";
+#endif
 		flags |= SDL_RESIZABLE;
 	}
+#ifdef DEBUG
 	cout << "." << endl;
+#endif
 
 	screen = SDL_SetVideoMode(r.w, r.h, 0, flags);
 	if(screen == NULL)
@@ -128,6 +140,7 @@ void UVVideo::init()
 		throw EXCEPTION(string("SDL: ") + SDL_GetError());
 	}
 
+#ifdef DEBUG
 	cout << "Effektiv erhaltene Optionen:";
 	if((screen->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN)
 	{
@@ -143,6 +156,7 @@ void UVVideo::init()
 	}
 	cout << "." << endl;
 	cout << "------------------------------------------------------------------------------" << endl;
+#endif
 }
 
 

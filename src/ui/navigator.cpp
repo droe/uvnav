@@ -326,8 +326,11 @@ void UVNavigator::run()
 				break;
 
 			default:
+#ifdef DEBUG
 				cout << "SDL_KEYDOWN: "
 					 << SDL_GetKeyName(event.key.keysym.sym) << endl;
+#endif
+				break;
 			}
 			break;
 		case SDL_QUIT:

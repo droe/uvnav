@@ -138,17 +138,21 @@ void UVDraw::box(SDL_Surface* surface, Sint16 x1, Sint16 y1, Sint16 x2, Sint16 y
  */
 void UVDraw::circle(SDL_Surface* surface, Sint16 x, Sint16 y, Sint16 rad, Uint8 r, Uint8 g, Uint8 b, Uint8 a) const
 {
+#ifdef DEBUG
 	static bool warned = false;
 	// cout << "DEBUG: circle x=" << long(x) << " y=" << long(y) << " r=" << long(rad) << endl;
+#endif
 	if(antialiasing)
 	{
 		if(rad > 1000)
 		{
+#ifdef DEBUG
 			if(!warned)
 			{
 				cerr << "Interne Warnung in UVDraw: Kreis zu gross fuer aacircle(), verwende circle()!" << endl;
 				warned = true;
 			}
+#endif
 			circleRGBA(surface, x, y, rad, r, g, b, a);
 		}
 		else
