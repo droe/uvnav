@@ -215,56 +215,67 @@ int main(int argc, char* argv[])
 			conf->b_set("screen-quality", false);
 		}
 
-		UVNavigator* nav = new UVNavigator();
-		nav->splash();
-		nav->load(argv[0], v);
-		nav->wait();
-		nav->run();
-
-		delete nav;
+		try
+		{
+			UVNavigator nav;
+			nav.splash();
+			nav.load(argv[0], v);
+			nav.wait();
+			nav.run();
+		}
+		catch(quit_application e)
+		{
+			// ignore
+		}
 		exit(EX_OK);
 	}
 	catch(bad_alloc e)
 	{
-		cerr << "*** STL Bad Allocation:" << endl;
+		cerr << "*** Bad Allocation:" << endl;
 		cerr << e.what() << endl;
 		exit(EX_OSERR);
 	}
 	catch(invalid_argument e)
 	{
-		cerr << "*** STL Invalid Argument:" << endl;
+		cerr << "*** Invalid Argument:" << endl;
 		cerr << e.what() << endl;
 		exit(EX_SOFTWARE);
 	}
 	catch(logic_error e)
 	{
-		cerr << "*** STL Logic Error:" << endl;
+		cerr << "*** Logic Error:" << endl;
 		cerr << e.what() << endl;
 		exit(EX_SOFTWARE);
 	}
 	catch(runtime_error e)
 	{
-		cerr << "*** STL Runtime Error:" << endl;
+		cerr << "*** Runtime Error:" << endl;
+		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
+	}
+	catch(exception e)
+	{
+		cerr << "*** Exception:" << endl;
 		cerr << e.what() << endl;
 		exit(EX_SOFTWARE);
 	}
 	catch(string e)
 	{
-		cerr << "*** Exception:" << endl;
+		cerr << "*** Exception [string]:" << endl;
 		cerr << e << endl;
-		exit(EX_DATAERR); // FIXME
+		exit(EX_SOFTWARE);
 	}
 	catch(char* e)
 	{
 		cerr << "*** Exception [char*]:" << endl;
 		cerr << e << endl;
-		exit(EX_SOFTWARE); // FIXME
+		exit(EX_SOFTWARE);
 	}
 	catch(const char* e)
 	{
 		cerr << "*** Exception [const char*]:" << endl;
 		cerr << e << endl;
-		exit(EX_SOFTWARE); // FIXME
+		exit(EX_SOFTWARE);
 	}
 	catch(...)
 	{

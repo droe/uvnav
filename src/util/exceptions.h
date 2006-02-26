@@ -23,10 +23,25 @@
 
 /*
  * Exceptions.
+ *
+ * std::exception
+ *   std::logic_error
+ *     std::domain_error
+ *     std::invalid_argument
+ *     std::length_error
+ *     std::out_of_range
+ *   std::runtime_error
+ *     std::range_error
+ *     std::overflow_error
+ *     std::underflow_error
+ *   quit_application
  */
 
 #include <exception>
 #include <stdexcept>
+#include <string>
+
+class quit_application {};
 
 #define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
 

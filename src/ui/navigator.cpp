@@ -193,10 +193,13 @@ void UVNavigator::wait()
 		switch(event.type)
 		{
 			case SDL_KEYDOWN:
-				waiting = false;
+				if(event.key.keysym.sym == SDLK_q)
+					throw quit_application();
+				else
+					waiting = false;
 				break;
 			case SDL_QUIT:
-				throw EXCEPTION("Abgebrochen.");
+				throw quit_application();
 		}
 	}
 }
