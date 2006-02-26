@@ -231,6 +231,10 @@ void UVNavigator::run()
 		SDL_SWSURFACE, screen->w, screen->h);
 	UVMap *map = new UVMap(universum, mapsurface);
 	map->redraw();
+	LOCK(screen);
+	SDL_BlitSurface(mapsurface, NULL, screen, NULL);
+	SDL_UpdateRect(screen, 0, 0, screen->w, screen->h);
+	UNLOCK(screen);
 
 	SDL_Event event;
 	bool running = true;
