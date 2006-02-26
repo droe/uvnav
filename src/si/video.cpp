@@ -155,3 +155,14 @@ SDL_Surface* UVVideo::get_screen()
 }
 
 
+/*
+ * Erzeugt eine neue SDL_Surface im selben Pixelformat wie screen.
+ */
+SDL_Surface* UVVideo::create_surface(Uint32 flags, int width, int height)
+{
+	SDL_PixelFormat *fmt = screen->format;
+	return SDL_CreateRGBSurface(flags, width, height, fmt->BitsPerPixel,
+		fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+}
+
+

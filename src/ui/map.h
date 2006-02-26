@@ -107,10 +107,9 @@ class UVMap
 		UVImageHandler* imagehandler;
 		UVUniversum* universum;
 		UVSpieler* spieler;
-		SDL_Surface* screen;
-		SDL_Rect screen_size;
+		SDL_Surface* canvas;
+		SDL_Rect old_canvas_size;
 
-		SDL_Rect* phys;
 		long virt_x, virt_y, virt_w, virt_h;
 		long offset_x, offset_y;
 		double zoom;

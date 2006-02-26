@@ -1,5 +1,13 @@
 $Id$
 
+===> Mouse handling
+---> Move overlays from map to navigator
+---> Allow mouse overlays on screen and/or on map
+---> Add mouse coordinate overlay, continuously updated
+---> Add drag and drop meter tool
+---> Add mouse center / move map tool
+---> left for select, right for meter, middle for drag
+
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)

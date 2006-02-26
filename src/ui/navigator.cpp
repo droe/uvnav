@@ -48,7 +48,7 @@ using namespace std;
  * Konstruktor.
  */
 UVNavigator::UVNavigator()
-: universum(NULL), map(NULL)
+: universum(NULL)
 {
 	conf = UVConf::get_instance();
 	screen = UVVideo::get_instance()->get_screen();
@@ -222,115 +222,163 @@ void UVNavigator::wait()
 
 
 /*
+ * Reinitialisiert den Screen und die Map aufgrund geänderten Einstellungen.
+ */
+void UVNavigator::vid_reinit(UVMap *map, SDL_Surface **mapsfcptr)
+{
+	UVVideo *vid = UVVideo::get_instance();
+	vid->init();
+	screen = vid->get_screen();
+	SDL_FreeSurface(*mapsfcptr);
+	*mapsfcptr = vid->create_surface(
+		SDL_SWSURFACE, screen->w, screen->h);
+	map->resize(*mapsfcptr);
+}
+
+
+/*
  * SDL Message Loop.
  */
 void UVNavigator::run()
 {
-	SDL_Rect rect = { 0, 0, screen->w, screen->h };
+	UVVideo *vid = UVVideo::get_instance();
 
-	map = new UVMap(universum, screen);
-	map->draw(&rect);
+	SDL_Surface *mapsurface = vid->create_surface(
+		SDL_SWSURFACE, screen->w, screen->h);
+	UVMap *map = new UVMap(universum, mapsurface);
+	map->redraw();
 
 	SDL_Event event;
 	bool running = true;
+	bool dirty = false;
 	while(running)
 	{
+		dirty = true;
 		SDL_WaitEvent(&event);
 		switch(event.type)
 		{
-			case SDL_VIDEORESIZE:
-				conf->l_set("screen-width", event.resize.w);
-				conf->l_set("screen-height", event.resize.h);
-				UVVideo::get_instance()->init();
-				screen = UVVideo::get_instance()->get_screen();
-				map->resize(screen);
-				break;
-			case SDL_KEYDOWN:
-				switch(event.key.keysym.sym)
-				{
-					case SDLK_ESCAPE:
-					case SDLK_q:
-						running = false;
-						break;
-
-					case SDLK_f:
-						conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
-						UVVideo::get_instance()->init();
-						screen = UVVideo::get_instance()->get_screen();
-						map->resize(screen);
-						break;
-
-					case SDLK_s:
-						map->toggle_opt_sichtradien();
-						break;
-					case SDLK_k:
-						map->toggle_opt_kaufradien();
-						break;
-					case SDLK_c:
-						map->toggle_opt_container();
-						break;
-					case SDLK_x:
-						map->toggle_opt_schiffe();
-						break;
-					case SDLK_v:
-						map->toggle_opt_verbindungen();
-						break;
-					case SDLK_z:
-						map->toggle_opt_zonen();
-						break;
-
-					case SDLK_LEFT:
-						map->scroll(-screen->w / 16, 0);
-						break;
-					case SDLK_RIGHT:
-						map->scroll(screen->w / 16, 0);
-						break;
-					case SDLK_UP:
-						map->scroll(0, -screen->w / 16);
-						break;
-					case SDLK_DOWN:
-						map->scroll(0, screen->w / 16);
-						break;
-
-					case SDLK_HOME:
-						map->jump_eigene();
-						break;
-					case SDLK_END:
-						map->jump_alle();
-						break;
-
-					case SDLK_PAGEUP:
-						map->zoom_in();
-						break;
-					case SDLK_PAGEDOWN:
-						map->zoom_out();
-						break;
-
-					case SDLK_1:
-						map->set_dim(1);
-						break;
-					case SDLK_2:
-						map->set_dim(2);
-						break;
-					case SDLK_3:
-						map->set_dim(3);
-						break;
-					case SDLK_4:
-						map->set_dim(4);
-						break;
-					case SDLK_5:
-						map->set_dim(5);
-						break;
-
-					default:
-						cout << "SDL_KEYDOWN: "
-							 << SDL_GetKeyName(event.key.keysym.sym) << endl;
-				}
-				break;
-			case SDL_QUIT:
+		case SDL_VIDEORESIZE:
+			conf->l_set("screen-width", event.resize.w);
+			conf->l_set("screen-height", event.resize.h);
+			vid_reinit(map, &mapsurface);
+			break;
+		case SDL_KEYDOWN:
+			switch(event.key.keysym.sym)
+			{
+			case SDLK_ESCAPE:
+			case SDLK_q:
 				running = false;
+				break;
+
+			case SDLK_f:
+				conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
+				vid_reinit(map, &mapsurface);
+				break;
+
+			case SDLK_s:
+				map->toggle_opt_sichtradien();
+				break;
+			case SDLK_k:
+				map->toggle_opt_kaufradien();
+				break;
+			case SDLK_c:
+				map->toggle_opt_container();
+				break;
+			case SDLK_x:
+				map->toggle_opt_schiffe();
+				break;
+			case SDLK_v:
+				map->toggle_opt_verbindungen();
+				break;
+			case SDLK_z:
+				map->toggle_opt_zonen();
+				break;
+
+			case SDLK_LEFT:
+				map->scroll(-screen->w / 16, 0);
+				break;
+			case SDLK_RIGHT:
+				map->scroll(screen->w / 16, 0);
+				break;
+			case SDLK_UP:
+				map->scroll(0, -screen->w / 16);
+				break;
+			case SDLK_DOWN:
+				map->scroll(0, screen->w / 16);
+				break;
+
+			case SDLK_HOME:
+				map->jump_eigene();
+				break;
+			case SDLK_END:
+				map->jump_alle();
+				break;
+
+			case SDLK_PAGEUP:
+				map->zoom_in();
+				break;
+			case SDLK_PAGEDOWN:
+				map->zoom_out();
+				break;
+
+			case SDLK_1:
+				map->set_dim(1);
+				break;
+			case SDLK_2:
+				map->set_dim(2);
+				break;
+			case SDLK_3:
+				map->set_dim(3);
+				break;
+			case SDLK_4:
+				map->set_dim(4);
+				break;
+			case SDLK_5:
+				map->set_dim(5);
+				break;
+
+			default:
+				cout << "SDL_KEYDOWN: "
+					 << SDL_GetKeyName(event.key.keysym.sym) << endl;
+			}
+			break;
+		case SDL_QUIT:
+			running = false;
+			break;
+		case SDL_MOUSEMOTION: /* TODO: handle mouse events */
+			dirty = false;
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			dirty = false;
+			break;
+		case SDL_MOUSEBUTTONUP:
+			dirty = false;
+			break;
+		default:
+			dirty = false;
+			break;
+		}
+		if(dirty)
+		{
+			if(SDL_MUSTLOCK(screen))
+			{
+				if(SDL_LockSurface(screen) < 0)
+				{
+					throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
+				}
+			}
+
+			/*SDL_Rect rect = { 0, 0, screen->w, screen->h };*/
+			SDL_BlitSurface(mapsurface, NULL, screen, NULL);
+			SDL_UpdateRect(screen, 0, 0, screen->w, screen->h);
+
+			if(SDL_MUSTLOCK(screen))
+			{
+				SDL_UnlockSurface(screen);
+			}
 		}
 	}
+	SDL_FreeSurface(mapsurface);
 	delete map;
 }
 

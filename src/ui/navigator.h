@@ -41,18 +41,19 @@ class UVNavigator
 		void run();
 
 	private:
-		UVUniversum* universum;
-		UVMap* map;
+		UVUniversum *universum;
 		// *** GUI
-		UVConf* conf;
-		UVFont* font_splash;
+		UVConf *conf;
+		UVFont *font_splash;
 
-		SDL_Surface* screen;
+		SDL_Surface *screen;
 
 		long status_y;
 		void splash_status(const std::string&);
 
 		void init_video();
+
+		void vid_reinit(UVMap*, SDL_Surface**);
 };
 
 #endif // NAVIGATOR_H

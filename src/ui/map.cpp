@@ -136,9 +136,9 @@ UVMapQuadrant::~UVMapQuadrant()
  *    ¦                ¦    Koordinaten            ¦
  *    ¦                ¦    (Pixel)                ¦
  *    ¦                ¦                           ¦
- *    ¦                ¦       (screen_w/screen_h) ¦
+ *    ¦                ¦       (canvas_w/canvas_h) ¦
  *    ¦                +---------------------------+
- *    ¦                     (offset_x+screen_w*zoom/offset_y+screen_h*zoom)
+ *    ¦                     (offset_x+canvas_w*zoom/offset_y+canvas_h*zoom)
  *    ¦
  *    V +y
  *
@@ -158,15 +158,15 @@ UVMapQuadrant::~UVMapQuadrant()
  * d.h. wenn keine Daten sichtbar waeren.
  */
 UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
-: universum(u), spieler(NULL), screen(s), phys(NULL)
+: universum(u), spieler(NULL), canvas(s)
 , virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
 	imagehandler = UVImageHandler::get_instance();
 
-	screen_size.w = s->w;
-	screen_size.h = s->h;
+	old_canvas_size.w = s->w;
+	old_canvas_size.h = s->h;
 
 	spieler = universum->get_spieler();
 
@@ -207,11 +207,11 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 	jump_init();
 	if(!have_conf_data)
 	{
-		zoom = max(double(alle_x2 - alle_x1) / double(screen_size.w),
-		           double(alle_y2 - alle_y1) / double(screen_size.h));
-		offset_x = alle_x1 - (long(rint(double(screen_size.w) * zoom))
+		zoom = max(double(alle_x2 - alle_x1) / double(s->w),
+		           double(alle_y2 - alle_y1) / double(s->h));
+		offset_x = alle_x1 - (long(rint(double(s->w) * zoom))
 		                      - (alle_x2 - alle_x1)) / 2;
-		offset_y = alle_y1 - (long(rint(double(screen_size.h) * zoom))
+		offset_y = alle_y1 - (long(rint(double(s->h) * zoom))
 		                      - (alle_y2 - alle_y1)) / 2;
 	}
 
@@ -456,11 +456,11 @@ void UVMap::jump_init()
  */
 void UVMap::jump_alle()
 {
-	zoom = max(double(alle_x2 - alle_x1) / double(screen_size.w),
-	           double(alle_y2 - alle_y1) / double(screen_size.h));
-	offset_x = alle_x1 - (long(rint(double(screen_size.w) * zoom))
+	zoom = max(double(alle_x2 - alle_x1) / double(canvas->w),
+	           double(alle_y2 - alle_y1) / double(canvas->h));
+	offset_x = alle_x1 - (long(rint(double(canvas->w) * zoom))
 	                      - (alle_x2 - alle_x1)) / 2;
-	offset_y = alle_y1 - (long(rint(double(screen_size.h) * zoom))
+	offset_y = alle_y1 - (long(rint(double(canvas->h) * zoom))
 	                      - (alle_y2 - alle_y1)) / 2;
 
 	redraw();
@@ -472,11 +472,11 @@ void UVMap::jump_alle()
  */
 void UVMap::jump_eigene()
 {
-	zoom = max(double(eigene_x2 - eigene_x1) / double(screen_size.w),
-	           double(eigene_y2 - eigene_y1) / double(screen_size.h));
-	offset_x = eigene_x1 - (long(rint(double(screen_size.w) * zoom))
+	zoom = max(double(eigene_x2 - eigene_x1) / double(canvas->w),
+	           double(eigene_y2 - eigene_y1) / double(canvas->h));
+	offset_x = eigene_x1 - (long(rint(double(canvas->w) * zoom))
 	                        - (eigene_x2 - eigene_x1)) / 2;
-	offset_y = eigene_y1 - (long(rint(double(screen_size.h) * zoom))
+	offset_y = eigene_y1 - (long(rint(double(canvas->h) * zoom))
 	                        - (eigene_y2 - eigene_y1)) / 2;
 
 	redraw();
@@ -543,8 +543,8 @@ void UVMap::zoom_by(double f)
 		f = 1000000.0 / zoom;
 	}
 
-	offset_x -= long(rint(double(screen->w) * zoom * (f - 1.0) / 2.0));
-	offset_y -= long(rint(double(screen->h) * zoom * (f - 1.0) / 2.0));
+	offset_x -= long(rint(double(canvas->w) * zoom * (f - 1.0) / 2.0));
+	offset_y -= long(rint(double(canvas->h) * zoom * (f - 1.0) / 2.0));
 	zoom *= f;
 
 	redraw();
@@ -556,16 +556,16 @@ void UVMap::zoom_by(double f)
  */
 void UVMap::resize(SDL_Surface* s)
 {
-	screen = s;
+	canvas = s;
 
-//	cout << "resize from w=" << screen_size.w << " h=" << screen_size.h << endl;
-//	cout << "resize to w=" << screen->w << " h=" << screen->h << endl;
-	double wf = double(screen_size.w) / double(screen->w);
-//	double hf = double(screen_size.h) / double(screen->h);
+//	cout << "resize from w=" << old_canvas_size.w << " h=" << old_canvas_size.h << endl;
+//	cout << "resize to w=" << canvas->w << " h=" << canvas->h << endl;
+	double wf = double(old_canvas_size.w) / double(canvas->w);
+//	double hf = double(old_canvas_size.h) / double(canvas->h);
 //	cout << "factors wf=" << wf << " hf=" << hf << endl;
 
-	screen_size.w = screen->w;
-	screen_size.h = screen->h;
+	old_canvas_size.w = canvas->w;
+	old_canvas_size.h = canvas->h;
 
 	zoom *= wf;
 
@@ -698,7 +698,7 @@ void UVMap::toggle_opt_zonen()
  */
 void UVMap::redraw()
 {
-	SDL_Rect rect = { 0, 0, screen_size.w, screen_size.h };
+	SDL_Rect rect = { 0, 0, canvas->w, canvas->h };
 	draw(&rect);
 }
 
@@ -706,21 +706,18 @@ void UVMap::redraw()
 /*
  * Zeichnet die Welt.
  */
-void UVMap::draw(SDL_Rect* rect)
+void UVMap::draw(SDL_Rect* phys)
 {
-	phys = rect;
-
 	virt_x = long(rint(phys->x * zoom + offset_x));
 	virt_y = long(rint(phys->y * zoom + offset_y));
 	virt_w = long(rint(phys->w * zoom));
 	virt_h = long(rint(phys->h * zoom));
 
-
-	if(SDL_MUSTLOCK(screen))
+	if(SDL_MUSTLOCK(canvas))
 	{
-		if(SDL_LockSurface(screen) < 0)
+		if(SDL_LockSurface(canvas) < 0)
 		{
-			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
+			throw EXCEPTION("Kann Surface nicht reservieren!");
 		}
 	}
 
@@ -728,7 +725,7 @@ void UVMap::draw(SDL_Rect* rect)
 	long ticks = SDL_GetTicks();
 #endif
 
-	SDL_FillRect(screen, phys, SDL_MapRGB(screen->format, 0, 0, 0));
+	SDL_FillRect(canvas, phys, SDL_MapRGB(canvas->format, 0, 0, 0));
 
 	// Grid zeichnen
 	draw_grid();
@@ -793,10 +790,10 @@ void UVMap::draw(SDL_Rect* rect)
 		             + spieler->name
 		             + ((spieler->talent != "") ? " der " + spieler->talent : "")
 		             + ", Sternzeit " + to_string(universum->sternzeit), LABEL_RGB);
-	dst.x = screen->w - status->w - status->h * 2;
+	dst.x = canvas->w - status->w - status->h * 2;
 	dst.y = status->h;
-	drw->box(screen, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
-	SDL_BlitSurface(status, 0, screen, &dst);
+	drw->box(canvas, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
+	SDL_BlitSurface(status, 0, canvas, &dst);
 	SDL_FreeSurface(status);
 
 #ifdef DEBUG
@@ -810,10 +807,10 @@ void UVMap::draw(SDL_Rect* rect)
 		             + to_string(1000 / dticks) + " fps  /  uvnav-"
 	                 + PACKAGE_VERSION + " (" + to_string(revision) + ")"
 		, LABEL_RGB);
-	dst.x = screen->w - debug->w - debug->h * 2;
-	dst.y = screen->h - debug->h * 2;
-	drw->box(screen, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
-	SDL_BlitSurface(debug, 0, screen, &dst);
+	dst.x = canvas->w - debug->w - debug->h * 2;
+	dst.y = canvas->h - debug->h * 2;
+	drw->box(canvas, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
+	SDL_BlitSurface(debug, 0, canvas, &dst);
 	SDL_FreeSurface(debug);
 #endif
 
@@ -826,13 +823,13 @@ void UVMap::draw(SDL_Rect* rect)
 	UVWidget* w2 = new UVWidget();
 	UVWidget* w3 = new UVWidget();
 	UVWidget* w4 = new UVWidget();
-	cw1->set_surface(screen);
+	cw1->set_surface(canvas);
 	cw2->add_widget(w2);
 	cw2->add_widget(w3);
 	cw1->add_widget(w1);
 	cw1->add_widget(cw2);
 	cw1->add_widget(w4);
-	UVWindow* win = new UVWindow(cw1, screen);
+	UVWindow* win = new UVWindow(cw1, canvas);
 	win->x = dst.x;
 	win->y = dst.y;
 	win->w = dst.w;
@@ -843,11 +840,13 @@ void UVMap::draw(SDL_Rect* rect)
 	 * END OF DEBUG
 	 */
 
-	SDL_UpdateRect(screen, phys->x, phys->y, phys->w, phys->h);
+	/*SDL_UpdateRect(canvas, phys->x, phys->y, phys->w, phys->h);*/
 
-	if(SDL_MUSTLOCK(screen))
+	/* TODO: phys/dirty nach aussen verfuegbar machen */
+
+	if(SDL_MUSTLOCK(canvas))
 	{
-		SDL_UnlockSurface(screen);
+		SDL_UnlockSurface(canvas);
 	}
 }
 
@@ -893,17 +892,17 @@ void UVMap::draw_grid()
 	// Abszissen-Linien (senkrechte Linien)
 	long first_x = long(rint(ceil(double(offset_x) / d) * d));
 	long last_x = first_x;
-	for(long x = first_x; x < offset_x + long(rint(screen->w * zoom)); x += d)
+	for(long x = first_x; x < offset_x + long(rint(canvas->w * zoom)); x += d)
 	{
 		long p_x = long(rint(double(x - offset_x) / zoom));
-		drw->line(screen, p_x, 0, p_x, screen->h - 1, 0x22, 0x22, 0x22);
+		drw->line(canvas, p_x, 0, p_x, canvas->h - 1, 0x22, 0x22, 0x22);
 
 		// Beschriftung
 		SDL_Surface* abszisse = grid_font->get_surface(to_string(x), 0x44, 0x44, 0x44);
 		dst.x = p_x + 2; dst.y = 0;
-		SDL_BlitSurface(abszisse, 0, screen, &dst);
-		dst.x = p_x + 2; dst.y = screen->h - 1 - abszisse->h;
-		SDL_BlitSurface(abszisse, 0, screen, &dst);
+		SDL_BlitSurface(abszisse, 0, canvas, &dst);
+		dst.x = p_x + 2; dst.y = canvas->h - 1 - abszisse->h;
+		SDL_BlitSurface(abszisse, 0, canvas, &dst);
 		SDL_FreeSurface(abszisse);
 
 		last_x = x;
@@ -912,17 +911,17 @@ void UVMap::draw_grid()
 	// Ordinaten-Linien (waagrechte Linien)
 	long first_y = long(rint(ceil(double(offset_y) / d) * d));
 	long last_y = first_y;
-	for(long y = first_y; y < offset_y + long(rint(screen->h * zoom)); y += d)
+	for(long y = first_y; y < offset_y + long(rint(canvas->h * zoom)); y += d)
 	{
 		long p_y = long(rint(double(y - offset_y) / zoom));
-		drw->line(screen, 0, p_y, screen->w - 1, p_y, 0x22, 0x22, 0x22);
+		drw->line(canvas, 0, p_y, canvas->w - 1, p_y, 0x22, 0x22, 0x22);
 
 		// Beschriftung
 		SDL_Surface* ordinate = grid_font->get_surface(to_string(y), 0x44, 0x44, 0x44);
 		dst.x = 0; dst.y = p_y + 2;
-		SDL_BlitSurface(ordinate, 0, screen, &dst);
-		dst.x = screen->w - 1 - ordinate->w; dst.y = p_y + 2;
-		SDL_BlitSurface(ordinate, 0, screen, &dst);
+		SDL_BlitSurface(ordinate, 0, canvas, &dst);
+		dst.x = canvas->w - 1 - ordinate->w; dst.y = p_y + 2;
+		SDL_BlitSurface(ordinate, 0, canvas, &dst);
 		SDL_FreeSurface(ordinate);
 
 		last_y = y;
@@ -935,20 +934,20 @@ void UVMap::draw_grid()
 	long m_x1 = long(rint(double(first_x - offset_x) / zoom));
 	long m_x2 = long(rint(double(first_x + d - offset_x) / zoom));
 	long m_d = long(rint(double(d) / zoom));
-	if(screen->h - m_y < massstab->h + 2)
+	if(canvas->h - m_y < massstab->h + 2)
 	{
 		m_y = long(rint(double(last_y - d - offset_y) / zoom));
 	}
-	drw->line(screen, m_x1, m_y, m_x2, m_y, 0x66, 0x66, 0x66);
-	drw->line(screen, m_x1, m_y - tick, m_x1, m_y + tick, 0x66, 0x66, 0x66);
-	drw->line(screen, m_x2, m_y - tick, m_x2, m_y + tick, 0x66, 0x66, 0x66);
+	drw->line(canvas, m_x1, m_y, m_x2, m_y, 0x66, 0x66, 0x66);
+	drw->line(canvas, m_x1, m_y - tick, m_x1, m_y + tick, 0x66, 0x66, 0x66);
+	drw->line(canvas, m_x2, m_y - tick, m_x2, m_y + tick, 0x66, 0x66, 0x66);
 	dst.x = m_x1 + m_d / 2 - distanz->w / 2;
 	dst.y = m_y - 2 - distanz->h;
-	SDL_BlitSurface(distanz, 0, screen, &dst);
+	SDL_BlitSurface(distanz, 0, canvas, &dst);
 	SDL_FreeSurface(distanz);
 	dst.x = m_x1 + m_d / 2 - massstab->w / 2;
 	dst.y = m_y + 2;
-	SDL_BlitSurface(massstab, 0, screen, &dst);
+	SDL_BlitSurface(massstab, 0, canvas, &dst);
 	SDL_FreeSurface(massstab);
 
 	// System-Pfeile mit Dimensionsangabe
@@ -959,21 +958,21 @@ void UVMap::draw_grid()
 	// nur zeichnen, falls Pfeilsystem oberhalb des Massstabs zu liegen kommt
 	if(s_y1 < m_y)
 	{
-		drw->line(screen, s_x1, s_y1, s_x2, s_y1, 0x66, 0x66, 0x66);
-		drw->line(screen, s_x1, s_y1, s_x1, s_y2, 0x66, 0x66, 0x66);
-		drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 - tick, 0x66, 0x66, 0x66);
-		drw->line(screen, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
-		drw->line(screen, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
-		drw->line(screen, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x1, s_y1, s_x2, s_y1, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x1, s_y1, s_x1, s_y2, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x2, s_y1, s_x2 - tick, s_y1 - tick, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x2, s_y1, s_x2 - tick, s_y1 + tick, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x1, s_y2, s_x1 - tick, s_y2 - tick, 0x66, 0x66, 0x66);
+		drw->line(canvas, s_x1, s_y2, s_x1 + tick, s_y2 - tick, 0x66, 0x66, 0x66);
 		SDL_Surface* x_label = grid_font->get_surface("X", 0x88, 0x88, 0x88);
 		dst.x = s_x2 + tick;
 		dst.y = s_y1 - x_label->h / 2;
-		SDL_BlitSurface(x_label, 0, screen, &dst);
+		SDL_BlitSurface(x_label, 0, canvas, &dst);
 		SDL_FreeSurface(x_label);
 		SDL_Surface* y_label = grid_font->get_surface("Y", 0x88, 0x88, 0x88);
 		dst.x = s_x1 - y_label->w / 2;
 		dst.y = s_y2;
-		SDL_BlitSurface(y_label, 0, screen, &dst);
+		SDL_BlitSurface(y_label, 0, canvas, &dst);
 		SDL_FreeSurface(y_label);
 	}
 }
@@ -1024,7 +1023,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			{
 				double target_x = double(p->x - offset_x) / zoom;
 				double target_y = double(p->y - offset_y) / zoom;
-				drw->line(screen, long(rint(center_x)), long(rint(center_y)),
+				drw->line(canvas, long(rint(center_x)), long(rint(center_y)),
 				                  long(rint(target_x)), long(rint(target_y)),
 				                  0x88, 0x88, 0x88);
 			}
@@ -1047,7 +1046,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			SDL_Surface* surface = imagehandler->get_surface(planet->image, 0, h);
 			dst.x = long(rint(center_x - h / 2));
 			dst.y = long(rint(center_y - h / 2));
-			SDL_BlitSurface(surface, 0, screen, &dst);
+			SDL_BlitSurface(surface, 0, canvas, &dst);
 			// Kein SDL_FreeSurface!
 		}
 		if(tl > 0)
@@ -1063,7 +1062,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 			short b = 0x00;
 			long radius = (h > 5) ? (h / 2 + 2) : h/2;
 
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    radius, r, g, b, 0xFF);
 		}
 
@@ -1071,9 +1070,9 @@ void UVMap::draw_planet(UVPlanet* planet)
 		{
 			// Handelsstation
 			long dr = (tl > 0) ? 4 : 2;
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    (h / 2) + dr, 0xFF, 0x00, 0xFF, 0xFF);
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    (h / 2) + ++dr, 0xFF, 0x00, 0xFF, 0xFF);
 		}
 
@@ -1098,8 +1097,8 @@ void UVMap::draw_planet(UVPlanet* planet)
 			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
-			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
-			SDL_BlitSurface(label, 0, screen, &dst);
+			drw->box(canvas, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
+			SDL_BlitSurface(label, 0, canvas, &dst);
 			label_offset = label->h;
 			SDL_FreeSurface(label);
 		}
@@ -1141,8 +1140,8 @@ void UVMap::draw_planet(UVPlanet* planet)
 				SDL_Surface* zonen_label = zonen_font->get_surface(zonen_text, r, g, b);
 				dst.x = long(rint(center_x + h / 2)) + 4;
 				dst.y = long(rint(center_y + label_offset - zonen_label->h / 2));
-				drw->box(screen, dst.x - zonen_label->h / 4, dst.y, dst.x + zonen_label->w + zonen_label->h / 4, dst.y + zonen_label->h, 0, 0, 0, 0x88);
-				SDL_BlitSurface(zonen_label, 0, screen, &dst);
+				drw->box(canvas, dst.x - zonen_label->h / 4, dst.y, dst.x + zonen_label->w + zonen_label->h / 4, dst.y + zonen_label->h, 0, 0, 0, 0x88);
+				SDL_BlitSurface(zonen_label, 0, canvas, &dst);
 				SDL_FreeSurface(zonen_label);
 			}
 		}
@@ -1199,9 +1198,9 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 		double target_y = center_y - cos(PI * (schiff->w) / 180.0) * schiff->v * 100.0 / zoom;
 
 		// *** provisorisch
-		drw->circle(screen, long(rint(center_x)), long(rint(center_y)), h/2,
+		drw->circle(canvas, long(rint(center_x)), long(rint(center_y)), h/2,
 		                    0xFF, 0xFF, 0xFF);
-		drw->line(screen, long(rint(center_x)), long(rint(center_y)),
+		drw->line(canvas, long(rint(center_x)), long(rint(center_y)),
 		                  long(rint(target_x)), long(rint(target_y)),
 		                  0xFF, 0xFF, 0xFF);
 		if(zoom < 30.0)
@@ -1221,8 +1220,8 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
 			dst.x = long(rint(center_x + h / 2)) + 4;
 			dst.y = long(rint(center_y - label->h / 2));
-			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
-			SDL_BlitSurface(label, 0, screen, &dst);
+			drw->box(canvas, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
+			SDL_BlitSurface(label, 0, canvas, &dst);
 			SDL_FreeSurface(label);
 		}
 	}
@@ -1239,7 +1238,7 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			{
 				// Kreis
 				long r = long(rint(double(sensor_rad) / zoom));
-				drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+				drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 				                    r, 0x00, 0xFF, 0x00, 0xFF);
 			}
 		}
@@ -1253,7 +1252,7 @@ void UVMap::draw_schiff(UVSchiff* schiff)
 			{
 				// Kreis
 				long r = long(rint(double(kauf_rad) / zoom));
-				drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+				drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 				                    r, 0xFF, 0xFF, 0x00, 0xFF);
 			}
 		}
@@ -1285,7 +1284,7 @@ void UVMap::draw_container(UVContainer* container)
 		double center_x = double(container->x - offset_x) / zoom;
 		double center_y = double(container->y - offset_y) / zoom;
 
-		drw->box(screen, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
+		drw->box(canvas, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
 		                 long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
 		                 0xFF, 0xFF, 0xFF);
 
@@ -1316,17 +1315,17 @@ void UVMap::draw_anomalie(UVAnomalie* anomalie)
 			// Kreis
 			long h = long(rint(double(size) / zoom));
 			h = (h < 10) ? 10 : h;
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2, 0xFF, 0x00, 0x00, 0xFF);
 		}
 
 		// Zentrum
 		long mitte_r = long(rint(double(mitte_size) / zoom));
 		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
-		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		drw->line(canvas, long(rint(center_x)) - mitte_r, long(rint(center_y)),
 		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
 		                  0xFF, 0x00, 0x00, 0xFF);
-		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		drw->line(canvas, long(rint(center_x)), long(rint(center_y)) - mitte_r,
 		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
 		                  0xFF, 0x00, 0x00, 0xFF);
 
@@ -1357,17 +1356,17 @@ void UVMap::draw_sensorsonde(UVSensorsonde* sensorsonde)
 			// Kreis
 			long h = long(rint(1.0 * size / zoom));
 			h = (h < 10) ? 10 : h;
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2, 0x00, 0xFF, 0x00, 0xFF);
 		}
 
 		// Zentrum
 		long mitte_r = long(rint(1.0 * mitte_size / zoom));
 		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
-		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		drw->line(canvas, long(rint(center_x)) - mitte_r, long(rint(center_y)),
 		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
 		                  0x00, 0xFF, 0x00, 0xFF);
-		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		drw->line(canvas, long(rint(center_x)), long(rint(center_y)) - mitte_r,
 		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
 		                  0x00, 0xFF, 0x00, 0xFF);
 
@@ -1398,17 +1397,17 @@ void UVMap::draw_infosonde(UVInfosonde* infosonde)
 			// Kreis
 			long h = long(rint(1.0 * size / zoom));
 			h = (h < 10) ? 10 : h;
-			drw->circle(screen, long(rint(center_x)), long(rint(center_y)),
+			drw->circle(canvas, long(rint(center_x)), long(rint(center_y)),
 			                    h / 2, 0x00, 0x00, 0xFF, 0xFF);
 		}
 
 		// Zentrum
 		long mitte_r = long(rint(1.0 * mitte_size / zoom));
 		mitte_r = (mitte_r < 2) ? 2 : mitte_r;
-		drw->line(screen, long(rint(center_x)) - mitte_r, long(rint(center_y)),
+		drw->line(canvas, long(rint(center_x)) - mitte_r, long(rint(center_y)),
 		                  long(rint(center_x)) + mitte_r, long(rint(center_y)),
 		                  0x00, 0x00, 0xFF, 0xFF);
-		drw->line(screen, long(rint(center_x)), long(rint(center_y)) - mitte_r,
+		drw->line(canvas, long(rint(center_x)), long(rint(center_y)) - mitte_r,
 		                  long(rint(center_x)), long(rint(center_y)) + mitte_r,
 		                  0x00, 0x00, 0xFF, 0xFF);
 

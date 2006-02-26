@@ -33,6 +33,7 @@ class UVVideo : public Singleton<UVVideo>
 	public:
 		void init();
 		SDL_Surface* get_screen();
+		SDL_Surface* create_surface(Uint32 flags, int width, int height);
 		void dispose();
 
 	protected:
