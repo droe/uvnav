@@ -76,13 +76,7 @@ void UVNavigator::splash()
 
 	UVImageHandler* imagehandler = UVImageHandler::get_instance();
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		if(SDL_LockSurface(screen) < 0)
-		{
-			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
-		}
-	}
+	LOCK(screen);
 
 	// Bildschirm loeschen.
 	dst.w = screen->w;
@@ -124,11 +118,7 @@ void UVNavigator::splash()
 	//SDL_UpdateRects(screen, nupdates, updates);
 	// with SDL_Rect* updates
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		SDL_UnlockSurface(screen);
-	}
-
+	UNLOCK(screen);
 }
 
 
@@ -140,13 +130,7 @@ void UVNavigator::splash_status(const string& text)
 	SDL_Surface* surface = font_splash->get_surface(text);
 	SDL_Rect bounds = { 0, status_y, screen->w, surface->h };
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		if(SDL_LockSurface(screen) < 0)
-		{
-			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
-		}
-	}
+	LOCK(screen);
 
 	SDL_FillRect(screen, &bounds, SDL_MapRGB(screen->format, 0, 0, 0));
 	bounds.x = screen->w / 2 - surface->w / 2;
@@ -156,10 +140,7 @@ void UVNavigator::splash_status(const string& text)
 	//SDL_UpdateRects(screen, nupdates, updates);
 	// with SDL_Rect* updates
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		SDL_UnlockSurface(screen);
-	}
+	UNLOCK(screen);
 
 	SDL_FreeSurface(surface);
 }
@@ -360,22 +341,11 @@ void UVNavigator::run()
 		}
 		if(dirty)
 		{
-			if(SDL_MUSTLOCK(screen))
-			{
-				if(SDL_LockSurface(screen) < 0)
-				{
-					throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
-				}
-			}
-
+			LOCK(screen);
 			/*SDL_Rect rect = { 0, 0, screen->w, screen->h };*/
 			SDL_BlitSurface(mapsurface, NULL, screen, NULL);
 			SDL_UpdateRect(screen, 0, 0, screen->w, screen->h);
-
-			if(SDL_MUSTLOCK(screen))
-			{
-				SDL_UnlockSurface(screen);
-			}
+			UNLOCK(screen);
 		}
 	}
 	SDL_FreeSurface(mapsurface);

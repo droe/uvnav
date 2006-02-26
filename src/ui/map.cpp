@@ -713,13 +713,7 @@ void UVMap::draw(SDL_Rect* phys)
 	virt_w = long(rint(phys->w * zoom));
 	virt_h = long(rint(phys->h * zoom));
 
-	if(SDL_MUSTLOCK(canvas))
-	{
-		if(SDL_LockSurface(canvas) < 0)
-		{
-			throw EXCEPTION("Kann Surface nicht reservieren!");
-		}
-	}
+	LOCK(canvas);
 
 #ifdef DEBUG
 	long ticks = SDL_GetTicks();
@@ -844,10 +838,7 @@ void UVMap::draw(SDL_Rect* phys)
 
 	/* TODO: phys/dirty nach aussen verfuegbar machen */
 
-	if(SDL_MUSTLOCK(canvas))
-	{
-		SDL_UnlockSurface(canvas);
-	}
+	UNLOCK(canvas);
 }
 
 

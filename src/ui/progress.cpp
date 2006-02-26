@@ -117,13 +117,7 @@ void UVProgress::update(Subject* s)
 //*** DEBUG
 //	cerr << "progress update current=" << current << " total=" << total << " progress=" << progress << endl;
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		if(SDL_LockSurface(screen) < 0)
-		{
-			throw EXCEPTION("Kann Bildschirm-Surface nicht reservieren!");
-		}
-	}
+	LOCK(screen);
 
 	SDL_FillRect(screen, &rect, SDL_MapRGB(screen->format, 0, 0, 0));
 
@@ -139,10 +133,7 @@ void UVProgress::update(Subject* s)
 
 	SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
 
-	if(SDL_MUSTLOCK(screen))
-	{
-		SDL_UnlockSurface(screen);
-	}
+	UNLOCK(screen);
 }
 
 

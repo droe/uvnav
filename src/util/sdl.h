@@ -28,4 +28,19 @@
 #include "SDL_rotozoom.h"		// SDL_gfx
 #include "SDL_gfxPrimitives.h"	// SDL_gfx
 
+#ifdef WITH_SURFACE_LOCKING
+#define LOCK(X) \
+	if(SDL_MUSTLOCK(X)) { \
+	if(SDL_LockSurface(X) < 0) { \
+		throw EXCEPTION("Kann Surface nicht reservieren!"); \
+	}}
+#define UNLOCK(X) \
+	if(SDL_MUSTLOCK(X)) { \
+		SDL_UnlockSurface(X); \
+	}
+#else // WITH_SURFACE_LOCKING
+#define LOCK(X) 
+#define UNLOCK(X) 
+#endif // WITH_SURFACE_LOCKING
+
 #endif // SDL_H

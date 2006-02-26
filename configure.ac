@@ -121,6 +121,17 @@ if test "x$want_debug" == "xyes" ; then
 fi
 AC_MSG_RESULT([$want_debug])
 
+# Option: SDL Surface Locking
+AC_MSG_CHECKING([whether to use surface locking])
+AC_ARG_ENABLE([locking],
+              AC_HELP_STRING([--enable-locking], [Enable SDL surface locking]),
+              [ want_locking="yes" ], [ want_locking="no" ])
+if test "x$want_locking" == "xyes" ; then
+    CXXFLAGS="$CXXFLAGS -DWITH_SURFACE_LOCKING"
+    CFLAGS="$CFLAGS -DWITH_SURFACE_LOCKING"
+fi
+AC_MSG_RESULT([$want_locking])
+
 # Option: Tools
 AC_MSG_CHECKING([whether to build developer tools])
 AC_ARG_ENABLE([tools],
