@@ -102,13 +102,13 @@ void UVProgress::update(Subject* s)
 	{
 		switch(event.type)
 		{
-			case SDL_KEYDOWN:
-				if(event.key.keysym.sym != SDLK_ESCAPE)
-				{
-					break;
-				}
-			case SDL_QUIT:
-				throw EXCEPTION("Abgebrochen.");
+		case SDL_KEYDOWN:
+			if(event.key.keysym.sym == SDLK_q)
+				throw quit_application();
+			if(event.key.keysym.sym != SDLK_ESCAPE)
+				break;
+		case SDL_QUIT:
+			throw quit_application();
 		}
 	}
 
