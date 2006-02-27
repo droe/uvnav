@@ -272,7 +272,7 @@ void UVNavigator::run()
 		title_label, 40, 20, 0, 0, UVHARight, UVVATop, true);
 	windows.push_back(title_overlay);
 
-	UVLabel *status_label = new UVLabel("XXXXXXXX");
+	UVLabel *status_label = new UVLabel("(?,?)");
 	UVWindow *status_overlay = new UVWindow(
 		status_label, 40, 20, 0, 0, UVHARight, UVVABottom, true);
 	windows.push_back(status_overlay);
@@ -298,6 +298,8 @@ void UVNavigator::run()
 	SDL_Event event;
 	bool running = true;
 	bool dirty = false;
+	long meter_ticks = 0;
+	long ticks = 0;
 	while(running)
 	{
 		dirty = true;
@@ -307,6 +309,7 @@ void UVNavigator::run()
 		dirty_rect.h = screen->h;
 
 		SDL_WaitEvent(&event);
+		ticks = SDL_GetTicks();
 		switch(event.type)
 		{
 		case SDL_VIDEORESIZE:
@@ -402,7 +405,7 @@ void UVNavigator::run()
 			default:
 #ifdef DEBUG
 				cout << "SDL_KEYDOWN: "
-					 << SDL_GetKeyName(event.key.keysym.sym) << endl;
+				     << SDL_GetKeyName(event.key.keysym.sym) << endl;
 #endif
 				break;
 			}
@@ -410,15 +413,42 @@ void UVNavigator::run()
 		case SDL_QUIT:
 			running = false;
 			break;
-		case SDL_MOUSEMOTION: /* TODO: handle mouse events */
-//			dirty = false;
+		case SDL_MOUSEMOTION:
 			status_label->set_text("(" + to_string(map->p2virt_x(event.motion.x)) + "," + to_string(map->p2virt_y(event.motion.y)) + ")");
 			status_overlay->resize();
+			if(!meter_ticks)
+				dirty_rect = *status_overlay->to_sdl_rect();
 			break;
 		case SDL_MOUSEBUTTONDOWN:
-			dirty = false;
+			switch(event.button.button)
+			{
+			case 1:
+				// TODO: select object
+				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
+				break;
+			case 2:
+				// TODO: meter tool
+				//meter_x = event.button.x;
+				//meter_y = event.button.y;
+				meter_ticks = ticks;
+				dirty = false;
+				break;
+			case 3:
+				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
+				break;
+			}
 			break;
 		case SDL_MOUSEBUTTONUP:
+			switch(event.button.button)
+			{
+			case 1:
+				break;
+			case 2:
+				meter_ticks = 0;
+				break;
+			case 3:
+				break;
+			}
 			dirty = false;
 			break;
 		default:
