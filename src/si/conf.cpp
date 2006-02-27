@@ -87,6 +87,9 @@ UVConf::UVConf()
 	l_set("map-label-font-size", 10);
 	l_set("map-zonen-font-size", 9);
 
+	// Optionen der Widgets
+	l_set("label-font-size", 14);
+
 	// Konfigurationsdatei drueberladen
 	load();
 }

@@ -23,7 +23,7 @@
 #include "si/conf.h"
 #include "si/video.h"
 //#include "si/keyboard.h"
-
+#if 0
 /*
  * Konstruktor.
  */
@@ -142,3 +142,4 @@ void UVRootWindow::handle_event()
 }
 
 
+#endif

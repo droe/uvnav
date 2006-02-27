@@ -36,6 +36,7 @@ class UVWidget : public UVRect
 //		virtual bool is_enabled() const;
 //		virtual void set_enabled(bool);
 
+// TODO KILL		virtual void autosize();
 		virtual void resize();
 		virtual void draw();
 		virtual void handle_click(int, int);

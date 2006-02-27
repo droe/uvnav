@@ -18,27 +18,32 @@
  * $Id$
  */
 
-#include "widget.h"
+#include "label.h"
 
-#include "si/draw.h"
+#include "si/fonthandler.h"
+#include "si/font.h"
+#include "si/conf.h"
+
+using namespace std;
 
 /*
  * Konstruktor.
  */
-UVWidget::UVWidget(int we, SDL_Surface* s)
-: weight(we), surface(s)
+UVLabel::UVLabel(string txt, int we, SDL_Surface* s)
+: UVWidget(we, s), text(NULL)
 {
-	min.w = 0;
-	min.h = 0;
-	max.w = 10000;
-	max.h = 10000;
+	font = UVFontHandler::get_instance()->get_font(FNT_SANS,
+			UVConf::get_instance()->l_get("label-font-size"));
+	set_text(txt);
 }
 
 /*
  * Destruktor.
  */
-UVWidget::~UVWidget()
+UVLabel::~UVLabel()
 {
+	if(text)
+		SDL_FreeSurface(text);
 }
 
 
@@ -46,7 +51,7 @@ UVWidget::~UVWidget()
  * Signalisiert dem UVWidget, dass seine effektive Groesse geaendert hat.
  * Wird vom umgebenden UVCompositeWidget aufgerufen.
  */
-void UVWidget::resize()
+void UVLabel::resize()
 {
 	// ignore
 }
@@ -55,35 +60,24 @@ void UVWidget::resize()
 /*
  * Zeichnet das UVWidget auf die SDL_Surface surface.
  */
-void UVWidget::draw()
+void UVLabel::draw()
 {
-//	static UVDraw* drw = UVDraw::get_instance();
-
-	// *** FIXME
-//	drw->box(surface, x+2, y+2, x+w-5, y+h-5, 0xFF, 0x00, 0x00, 0xFF);
+	SDL_Rect *rect = to_sdl_rect();
+	rect->x += text->h / 4;
+	SDL_BlitSurface(text, 0, surface, rect);
 }
 
 
 /*
- * Einen Mausklick auf das UVWidget behandeln.
+ * Setzt den Text des Labels.
  */
-void UVWidget::handle_click(int, int)
+void UVLabel::set_text(string s)
 {
-	// ignore
-}
-
-
-/*
- * Setzt / holt die Zeichenflaeche, auf welche gezeichnet werden soll.
- * Alle Koordinaten beziehen sich auf diese Surface.
- */
-void UVWidget::set_surface(SDL_Surface* s)
-{
-	surface = s;
-}
-SDL_Surface* UVWidget::get_surface() const
-{
-	return surface;
+	if(text)
+		SDL_FreeSurface(text);
+	text = font->get_surface(s);
+	min.w = text->w + text->h / 4;
+	min.h = text->h;
 }
 
 

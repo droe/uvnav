@@ -20,6 +20,8 @@
 
 #include "navigator.h"
 
+#include "ui/core/compositewidget.h"
+#include "ui/core/label.h"
 #include "ui/progress.h"
 #include "ui/map.h"
 #include "dm/abstractimporter.h"
@@ -48,7 +50,7 @@ using namespace std;
  * Konstruktor.
  */
 UVNavigator::UVNavigator()
-: universum(NULL)
+: universum(NULL), spieler(NULL)
 {
 	conf = UVConf::get_instance();
 	screen = UVVideo::get_instance()->get_screen();
@@ -63,7 +65,6 @@ UVNavigator::~UVNavigator()
 {
 	UVVideo::get_instance()->dispose();
 }
-
 
 
 /*
@@ -166,6 +167,7 @@ void UVNavigator::load(const string& file, int v)
 		UVProgress* progress = new UVProgress(screen, &dest);
 		importer->attach(progress);
 		universum = importer->import(file);
+		spieler = universum->get_spieler();
 		importer->detach(progress);
 		delete progress;
 		conf->set_auswertung(universum->get_spieler()->name, universum->sternzeit);
@@ -195,8 +197,8 @@ void UVNavigator::wait()
 			case SDL_KEYDOWN:
 				if(event.key.keysym.sym == SDLK_q)
 					throw quit_application();
-				else
-					waiting = false;
+			case SDL_MOUSEBUTTONDOWN:
+				waiting = false;
 				break;
 			case SDL_QUIT:
 				throw quit_application();
@@ -208,15 +210,45 @@ void UVNavigator::wait()
 /*
  * Reinitialisiert den Screen und die Map aufgrund geänderten Einstellungen.
  */
-void UVNavigator::vid_reinit(UVMap *map, SDL_Surface **mapsfcptr)
+void UVNavigator::vid_reinit(UVMap *map, SDL_Surface *&mapsurface, SDL_Rect &rect)
 {
 	UVVideo *vid = UVVideo::get_instance();
 	vid->init();
 	screen = vid->get_screen();
-	SDL_FreeSurface(*mapsfcptr);
-	*mapsfcptr = vid->create_surface(
+	SDL_FreeSurface(mapsurface);
+	mapsurface = vid->create_surface(
 		SDL_SWSURFACE, screen->w, screen->h);
-	map->resize(*mapsfcptr);
+	map->resize(mapsurface);
+	rect.w = screen->w;
+	rect.h = screen->h;
+}
+
+
+/*
+ * Die Map und die Fenster neu zeichnen.
+ */
+void UVNavigator::vid_redraw(SDL_Surface *&mapsurface, vector<UVWindow*> &windows, SDL_Rect &rect)
+{
+	LOCK(screen);
+	SDL_BlitSurface(mapsurface, &rect, screen, &rect);
+	for(vector<UVWindow*>::iterator i = windows.begin(); i != windows.end(); i++)
+	{
+		(*i)->draw(screen);
+	}
+	SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
+	UNLOCK(screen);
+}
+
+
+/*
+ * Gibt den Text des Title-Overlay zurueck.
+ */
+string UVNavigator::title_string(int dim)
+{
+	return to_string(dim) + " - " + universum->get_dim(dim) + ", "
+		+ spieler->name
+		+ ((spieler->talent != "") ? " der " + spieler->talent : "")
+		+ ", Sternzeit " + to_string(universum->sternzeit);
 }
 
 
@@ -226,15 +258,42 @@ void UVNavigator::vid_reinit(UVMap *map, SDL_Surface **mapsfcptr)
 void UVNavigator::run()
 {
 	UVVideo *vid = UVVideo::get_instance();
+	SDL_Rect dirty_rect = { 0, 0, screen->w, screen->h };
+	vector<UVWindow*> windows;
 
 	SDL_Surface *mapsurface = vid->create_surface(
 		SDL_SWSURFACE, screen->w, screen->h);
 	UVMap *map = new UVMap(universum, mapsurface);
 	map->redraw();
-	LOCK(screen);
-	SDL_BlitSurface(mapsurface, NULL, screen, NULL);
-	SDL_UpdateRect(screen, 0, 0, screen->w, screen->h);
-	UNLOCK(screen);
+
+	UVLabel *title_label = new UVLabel(
+		title_string(conf->l_get("map-dim", true)));
+	UVWindow *title_overlay = new UVWindow(
+		title_label, 40, 20, 0, 0, UVHARight, UVVATop, true);
+	windows.push_back(title_overlay);
+
+	UVLabel *status_label = new UVLabel("XXXXXXXX");
+	UVWindow *status_overlay = new UVWindow(
+		status_label, 40, 20, 0, 0, UVHARight, UVVABottom, true);
+	windows.push_back(status_overlay);
+
+/*
+	UVCompositeWidget* cw1 = new UVCompositeWidget();
+	UVCompositeWidget* cw2 = new UVCompositeWidget(2, UVOVertical);
+	UVWidget* w1 = new UVWidget();
+	UVWidget* w2 = new UVWidget();
+	UVWidget* w3 = new UVWidget();
+	UVWidget* w4 = new UVWidget();
+	cw2->add_widget(w2);
+	cw2->add_widget(w3);
+	cw1->add_widget(w1);
+	cw1->add_widget(cw2);
+	cw1->add_widget(w4);
+	UVWindow* win = new UVWindow(cw1, 40, 30, 400, 300);
+	windows.push_back(win);
+*/
+
+	vid_redraw(mapsurface, windows, dirty_rect);
 
 	SDL_Event event;
 	bool running = true;
@@ -242,13 +301,18 @@ void UVNavigator::run()
 	while(running)
 	{
 		dirty = true;
+		dirty_rect.x = 0;
+		dirty_rect.y = 0;
+		dirty_rect.w = screen->w;
+		dirty_rect.h = screen->h;
+
 		SDL_WaitEvent(&event);
 		switch(event.type)
 		{
 		case SDL_VIDEORESIZE:
 			conf->l_set("screen-width", event.resize.w);
 			conf->l_set("screen-height", event.resize.h);
-			vid_reinit(map, &mapsurface);
+			vid_reinit(map, mapsurface, dirty_rect);
 			break;
 		case SDL_KEYDOWN:
 			switch(event.key.keysym.sym)
@@ -260,7 +324,7 @@ void UVNavigator::run()
 
 			case SDLK_f:
 				conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
-				vid_reinit(map, &mapsurface);
+				vid_reinit(map, mapsurface, dirty_rect);
 				break;
 
 			case SDLK_s:
@@ -311,18 +375,28 @@ void UVNavigator::run()
 
 			case SDLK_1:
 				map->set_dim(1);
+				title_label->set_text(title_string(1));
+				title_overlay->resize();
 				break;
 			case SDLK_2:
 				map->set_dim(2);
+				title_label->set_text(title_string(2));
+				title_overlay->resize();
 				break;
 			case SDLK_3:
 				map->set_dim(3);
+				title_label->set_text(title_string(3));
+				title_overlay->resize();
 				break;
 			case SDLK_4:
 				map->set_dim(4);
+				title_label->set_text(title_string(4));
+				title_overlay->resize();
 				break;
 			case SDLK_5:
 				map->set_dim(5);
+				title_label->set_text(title_string(5));
+				title_overlay->resize();
 				break;
 
 			default:
@@ -337,7 +411,9 @@ void UVNavigator::run()
 			running = false;
 			break;
 		case SDL_MOUSEMOTION: /* TODO: handle mouse events */
-			dirty = false;
+//			dirty = false;
+			status_label->set_text("(" + to_string(map->p2virt_x(event.motion.x)) + "," + to_string(map->p2virt_y(event.motion.y)) + ")");
+			status_overlay->resize();
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			dirty = false;
@@ -349,17 +425,14 @@ void UVNavigator::run()
 			dirty = false;
 			break;
 		}
+
 		if(dirty)
-		{
-			LOCK(screen);
-			/*SDL_Rect rect = { 0, 0, screen->w, screen->h };*/
-			SDL_BlitSurface(mapsurface, NULL, screen, NULL);
-			SDL_UpdateRect(screen, 0, 0, screen->w, screen->h);
-			UNLOCK(screen);
-		}
+			vid_redraw(mapsurface, windows, dirty_rect);
 	}
 	SDL_FreeSurface(mapsurface);
 	delete map;
+	delete title_overlay;
+	delete status_overlay;
 }
 
 

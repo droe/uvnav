@@ -59,12 +59,14 @@ uvnav_SOURCES = rev.h rev.cpp \
 	dm/import_txt.h dm/import_txt.cpp \
 	dm/importhandler.h dm/importhandler.cpp \
 	ui/core/orientation.h \
+	ui/core/halign.h ui/core/valign.h \
 	ui/core/size.h ui/core/size.cpp \
 	ui/core/rect.h ui/core/rect.cpp \
 	ui/core/widget.h ui/core/widget.cpp \
 	ui/core/compositewidget.h ui/core/compositewidget.cpp \
 	ui/core/window.h ui/core/window.cpp \
 	ui/core/rootwindow.h ui/core/rootwindow.cpp \
+	ui/core/label.h ui/core/label.cpp \
 	ui/map.h ui/map.cpp \
 	ui/progress.h ui/progress.cpp \
 	ui/navigator.h ui/navigator.cpp \

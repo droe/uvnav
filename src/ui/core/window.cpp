@@ -21,21 +21,26 @@
 #include "window.h"
 
 #include "si/draw.h"
+#include "si/video.h"
+#include "util/minmax.h"
 
 /*
  * Konstruktor.
  */
-UVWindow::UVWindow(UVWidget* wi, SDL_Surface* s)
-: UVWidget(1, s), widget(wi)
+UVWindow::UVWindow(UVWidget* wi, int x_, int y_, int w_, int h_, UVHAlign ha, UVVAlign va, bool as)
+: UVRect(x_, y_, w_, h_), widget(wi), canvas(NULL), halign(ha), valign(va), autosize(as), X(x_), Y(y_)
 {
-	widget->set_surface(s);
+	resize();
 }
+
 
 /*
  * Destruktor.
  */
 UVWindow::~UVWindow()
 {
+	if(canvas)
+		SDL_FreeSurface(canvas);
 	delete widget;
 }
 
@@ -45,23 +50,61 @@ UVWindow::~UVWindow()
  */
 void UVWindow::resize()
 {
-	widget->x = x + 2;
-	widget->y = y + 2;
-	widget->w = w - 4;
-	widget->h = h - 4;
-	widget->resize();
+	if(autosize) {
+//		widget->autosize();
+		h = widget->min.h + 4;
+		w = widget->min.w + 4;
+	}
+
+	if(canvas)
+		SDL_FreeSurface(canvas);
+	canvas = UVVideo::get_instance()->create_surface(SDL_SRCALPHA, w, h);
+	widget->set_surface(canvas);
+
+	if(!autosize) {
+		widget->x = 2;
+		widget->y = 2;
+		widget->h = h - 4;
+		widget->w = w - 4;
+		widget->resize();
+	}
 }
 
 
 /*
  * Zeichnet das UVWindow und alle enthaltenen Widgets.
  */
-void UVWindow::draw()
+void UVWindow::draw(SDL_Surface* surface)
 {
-	static UVDraw* drw = UVDraw::get_instance();
-
-	drw->box(surface, x, y, x + w, y + h, 0x00, 0x00, 0xFF, 0x7F);
+	// TODO: separate draw and blit
+	SDL_FillRect(canvas, NULL, SDL_MapRGBA(canvas->format, 0, 0, 0, 0xAF));
 	widget->draw();
+
+	switch(halign) {
+	case UVHALeft:
+		// ignore
+		break;
+	case UVHACenter:
+		x = max(0, X - ((w - 1) / 2));
+		break;
+	case UVHARight:
+		x = max(0, (surface->w - 1) - X - (w - 1));
+		break;
+	}
+	switch(valign) {
+	case UVVATop:
+		// ignore
+		break;
+	case UVVAMiddle:
+		y = max(0, Y - ((h - 1) / 2));
+		break;
+	case UVVABottom:
+		y = max(0, (surface->h - 1) - Y - (h - 1));
+		break;
+	}
+
+	SDL_Rect rect = { x, y, x + w - 1, y + h - 1};
+	SDL_BlitSurface(canvas, NULL, surface, &rect);
 }
 
 
@@ -70,6 +113,7 @@ void UVWindow::draw()
  * Window klickt.  Der Event muss verarbeitet und ans richtige
  * Widget weitergegeben werden.
  */
+/*
 void UVWindow::handle_click(int posx, int posy)
 {
 	if(widget->contains(posx, posy))
@@ -77,20 +121,6 @@ void UVWindow::handle_click(int posx, int posy)
 		widget->handle_click(posx, posy);
 	}
 }
-
-
-/*
- * Setzt die Zeichenflaeche, auf welche gezeichnet werden soll.
- * Alle Koordinaten beziehen sich auf diese Surface.
- *
- * Muss ueberschrieben werden, damit allen enthaltenen Widgets ebenfalls
- * die Surface gesetzt wird.
- */
-void UVWindow::set_surface(SDL_Surface* s)
-{
-	surface = s;
-
-	widget->set_surface(s);
-}
+*/
 
 

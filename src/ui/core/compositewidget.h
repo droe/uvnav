@@ -33,6 +33,7 @@ class UVCompositeWidget : public UVWidget
 
 		virtual void add_widget(UVWidget*);
 
+// TODO KILL		virtual void autosize();
 		virtual void resize();
 		virtual void draw();
 		virtual void handle_click(int, int);

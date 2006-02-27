@@ -20,7 +20,7 @@
 
 #ifndef ROOTWINDOW_H
 #define ROOTWINDOW_H
-
+#if 0
 #include "ui/core/window.h"
 
 class UVConf;
@@ -50,6 +50,6 @@ class UVRootWindow : public UVWindow
 		UVVideo* video;
 //		UVKeyboard* keyboard;
 };
-
+#endif
 #endif // ROOTWINDOW_H
 

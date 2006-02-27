@@ -18,50 +18,10 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef VALIGN_H
+#define VALIGN_H
 
-#include "ui/core/window.h"
-#include "util/sdl.h"
-#include "util/stl_string.h"
-#include <vector>
+enum UVVAlign { UVVATop, UVVAMiddle, UVVABottom };
 
-class UVConf;
-class UVFont;
-class UVMap;
-class UVUniversum;
-class UVSpieler;
-
-class UVNavigator
-{
-	public:
-		UVNavigator();
-		virtual ~UVNavigator();
-
-		void splash();
-		void load(const std::string&, int = 0);
-		void wait();
-		void run();
-
-	private:
-		UVUniversum *universum;
-		UVSpieler *spieler;
-		// *** GUI
-		UVConf *conf;
-		UVFont *font_splash;
-
-		SDL_Surface *screen;
-
-		long status_y;
-		void splash_status(const std::string&);
-
-		void init_video();
-
-		void vid_reinit(UVMap*, SDL_Surface*&, SDL_Rect&);
-		void vid_redraw(SDL_Surface*&, std::vector<UVWindow*>&, SDL_Rect&);
-
-		std::string title_string(int);
-};
-
-#endif // NAVIGATOR_H
+#endif // VALIGN_H
 

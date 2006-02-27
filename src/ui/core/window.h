@@ -21,23 +21,28 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#include "ui/core/rect.h"
 #include "ui/core/widget.h"
+#include "ui/core/halign.h"
+#include "ui/core/valign.h"
+#include "util/sdl.h"
 
-class UVWindow : public UVWidget
+class UVWindow : public UVRect
 {
-	public:
-		UVWindow(UVWidget*, SDL_Surface*);
-		virtual ~UVWindow();
+public:
+	UVWindow(UVWidget*, int = 0, int = 0, int = 0, int = 0, UVHAlign = UVHALeft, UVVAlign = UVVATop, bool = false);
+	virtual ~UVWindow();
 
-		virtual void resize();
-		virtual void draw();
-		virtual void handle_click(int, int);
+	virtual void draw(SDL_Surface*);
+	virtual void resize();
 
-		virtual void set_surface(SDL_Surface*);
-
-	protected:
-		UVWidget* widget;
-		SDL_Surface* my_surface;
+protected:
+	UVWidget* widget;
+	SDL_Surface* canvas;
+	UVHAlign halign;
+	UVVAlign valign;
+	bool autosize;
+	int X, Y;
 };
 
 #endif // WINDOW_H

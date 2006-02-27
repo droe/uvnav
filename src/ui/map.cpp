@@ -247,6 +247,19 @@ UVMap::~UVMap()
 
 
 /*
+ * Konvertierung virt <-> phys.
+ */
+long UVMap::p2virt_x(long px) const
+{
+	return long(rint(px * zoom + offset_x));
+}
+long UVMap::p2virt_y(long py) const
+{
+	return long(rint(py * zoom + offset_y));
+}
+
+
+/*
  * Benutzte Bereiche eigener/aller Objekte finden.
  */
 void UVMap::jump_init()
@@ -708,8 +721,10 @@ void UVMap::redraw()
  */
 void UVMap::draw(SDL_Rect* phys)
 {
-	virt_x = long(rint(phys->x * zoom + offset_x));
-	virt_y = long(rint(phys->y * zoom + offset_y));
+	//virt_x = long(rint(phys->x * zoom + offset_x));
+	//virt_y = long(rint(phys->y * zoom + offset_y));
+	virt_x = p2virt_x(phys->x);
+	virt_y = p2virt_y(phys->y);
 	virt_w = long(rint(phys->w * zoom));
 	virt_h = long(rint(phys->h * zoom));
 
@@ -775,64 +790,25 @@ void UVMap::draw(SDL_Rect* phys)
 	}
 
 
-	// Overlays...
+#ifdef DEBUG
 	SDL_Rect dst;
 
-	// Status-Overlay
-	SDL_Surface* status = debug_font->get_surface(
-		             to_string(dim) + " - " + universum->get_dim(dim) + ", "
-		             + spieler->name
-		             + ((spieler->talent != "") ? " der " + spieler->talent : "")
-		             + ", Sternzeit " + to_string(universum->sternzeit), LABEL_RGB);
-	dst.x = canvas->w - status->w - status->h * 2;
-	dst.y = status->h;
-	drw->box(canvas, dst.x - status->h / 4, dst.y, dst.x + status->w + status->h / 4, dst.y + status->h, 0, 0, 0, 0x88);
-	SDL_BlitSurface(status, 0, canvas, &dst);
-	SDL_FreeSurface(status);
-
-#ifdef DEBUG
 	// Debug-Overlay
 	long dticks = SDL_GetTicks() - ticks;
 	SDL_Surface* debug = debug_font->get_surface(
-		             + "debug  /  zoom=" + to_string(zoom)
-		             + " offset_x=" + to_string(offset_x)
-		             + " offset_y=" + to_string(offset_y)
+		             + "zoom=" + to_string(zoom)
+		             + " offset=" + to_string(offset_x)
+		             + "/" + to_string(offset_y)
 		             + "  /  " + to_string(dticks) + " ms = "
 		             + to_string(1000 / dticks) + " fps  /  uvnav-"
 	                 + PACKAGE_VERSION + " (" + to_string(revision) + ")"
 		, LABEL_RGB);
-	dst.x = canvas->w - debug->w - debug->h * 2;
-	dst.y = canvas->h - debug->h * 2;
-	drw->box(canvas, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0, 0, 0, 0x88);
+	dst.x = debug->h * 2;
+	dst.y = debug->h;
+	drw->box(canvas, dst.x - debug->h / 4, dst.y, dst.x + debug->w + debug->h / 4, dst.y + debug->h, 0x88, 0, 0, 0x88);
 	SDL_BlitSurface(debug, 0, canvas, &dst);
 	SDL_FreeSurface(debug);
 #endif
-
-	/*
-	 * DEBUG Code fuer Widgets
-	 */
-/*	UVCompositeWidget* cw1 = new UVCompositeWidget();
-	UVCompositeWidget* cw2 = new UVCompositeWidget(2, UVOVertical);
-	UVWidget* w1 = new UVWidget();
-	UVWidget* w2 = new UVWidget();
-	UVWidget* w3 = new UVWidget();
-	UVWidget* w4 = new UVWidget();
-	cw1->set_surface(canvas);
-	cw2->add_widget(w2);
-	cw2->add_widget(w3);
-	cw1->add_widget(w1);
-	cw1->add_widget(cw2);
-	cw1->add_widget(w4);
-	UVWindow* win = new UVWindow(cw1, canvas);
-	win->x = dst.x;
-	win->y = dst.y;
-	win->w = dst.w;
-	win->h = dst.h;
-	win->resize();
-	win->draw();
-*/	/*
-	 * END OF DEBUG
-	 */
 
 	/*SDL_UpdateRect(canvas, phys->x, phys->y, phys->w, phys->h);*/
 

@@ -103,6 +103,11 @@ class UVMap
 		void redraw();
 		void draw(SDL_Rect*);
 
+		//long v2phys_x(long) const;
+		//long v2phys_y(long) const;
+		long p2virt_x(long) const;
+		long p2virt_y(long) const;
+
 	private:
 		UVImageHandler* imagehandler;
 		UVUniversum* universum;

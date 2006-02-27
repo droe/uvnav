@@ -96,7 +96,7 @@ SDL_Surface* UVFont::get_surface(const string& text, int r, int g, int b, int a)
 }
 SDL_Surface* UVFont::get_surface(const string& text) const
 {
-	static const SDL_Color color = {255, 255, 255, 0};
+	static const SDL_Color color = {255, 255, 255, 255};
 	return get_surface(text, color);
 }
 

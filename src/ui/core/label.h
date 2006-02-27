@@ -18,50 +18,46 @@
  * $Id$
  */
 
-#ifndef NAVIGATOR_H
-#define NAVIGATOR_H
+#ifndef LABEL_H
+#define LABEL_H
 
-#include "ui/core/window.h"
 #include "util/sdl.h"
+#include "ui/core/widget.h"
 #include "util/stl_string.h"
-#include <vector>
 
-class UVConf;
 class UVFont;
-class UVMap;
-class UVUniversum;
-class UVSpieler;
 
-class UVNavigator
+class UVLabel : public UVWidget
 {
 	public:
-		UVNavigator();
-		virtual ~UVNavigator();
+		UVLabel(std::string = " ", int = 1, SDL_Surface* = NULL);
+		virtual ~UVLabel();
 
-		void splash();
-		void load(const std::string&, int = 0);
-		void wait();
-		void run();
+/*		virtual void set_surface(SDL_Surface*);
+		SDL_Surface* get_surface() const;
+*/
+//		virtual bool is_enabled() const;
+//		virtual void set_enabled(bool);
 
-	private:
-		UVUniversum *universum;
-		UVSpieler *spieler;
-		// *** GUI
-		UVConf *conf;
-		UVFont *font_splash;
+		virtual void resize();
+		virtual void draw();
+/*		virtual void handle_click(int, int);
+*/
 
-		SDL_Surface *screen;
+		virtual void set_text(std::string);
 
-		long status_y;
-		void splash_status(const std::string&);
+/*
+		int weight;
+		UVSize min;
+		UVSize max;
+*/
+	protected:
+//		SDL_Surface* surface;
+		UVFont *font;
+		SDL_Surface *text;
 
-		void init_video();
-
-		void vid_reinit(UVMap*, SDL_Surface*&, SDL_Rect&);
-		void vid_redraw(SDL_Surface*&, std::vector<UVWindow*>&, SDL_Rect&);
-
-		std::string title_string(int);
+//		bool enabled;
 };
 
-#endif // NAVIGATOR_H
+#endif // LABEL_H
 

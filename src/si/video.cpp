@@ -170,13 +170,57 @@ SDL_Surface* UVVideo::get_screen()
 
 
 /*
- * Erzeugt eine neue SDL_Surface im selben Pixelformat wie screen.
+ * Erzeugt eine neue SDL_Surface im selben Pixelformat wie screen,
+ * aber je nach Flags mit zusaetzlichem Alphakanal.
  */
 SDL_Surface* UVVideo::create_surface(Uint32 flags, int width, int height)
 {
-	SDL_PixelFormat *fmt = screen->format;
-	return SDL_CreateRGBSurface(flags, width, height, fmt->BitsPerPixel,
-		fmt->Rmask, fmt->Gmask, fmt->Bmask, fmt->Amask);
+	SDL_PixelFormat fmt = *screen->format;
+/*
+cerr << "R=" << (unsigned long)fmt.Rmask << "/" << (unsigned long)fmt.Rshift
+<< " G=" << (unsigned long)fmt.Gmask << "/" << (unsigned long)fmt.Gshift
+<< " B=" << (unsigned long)fmt.Bmask << "/" << (unsigned long)fmt.Bshift
+<< " A=" << (unsigned long)fmt.Amask << "/" << (unsigned long)fmt.Ashift
+<< endl;
+*/
+	Uint32 rmask, gmask, bmask, amask;
+	if(flags & SDL_SRCALPHA) {
+		if(!fmt.Amask) {
+			fmt.Aloss = fmt.Rloss;
+			if(fmt.Rshift > fmt.Gshift) {
+				// R > G > B > A
+				fmt.Bshift = fmt.Gshift;
+				fmt.Rshift += fmt.Bshift;
+				fmt.Gshift += fmt.Bshift;
+				fmt.Amask = fmt.Bmask;
+				fmt.Rmask <<= fmt.Bshift;
+				fmt.Gmask <<= fmt.Bshift;
+				fmt.Bmask <<= fmt.Bshift;
+			} else {
+				// R < G < B < A
+				fmt.Amask = fmt.Bmask << fmt.Rshift;
+				fmt.Ashift = fmt.Bshift + fmt.Rshift;
+			}
+		}
+		rmask = SDL_MapRGBA(&fmt, 0xFF, 0, 0, 0);
+		gmask = SDL_MapRGBA(&fmt, 0, 0xFF, 0, 0);
+		bmask = SDL_MapRGBA(&fmt, 0, 0, 0xFF, 0);
+		amask = SDL_MapRGBA(&fmt, 0, 0, 0, 0xFF);
+	} else {
+		rmask = SDL_MapRGB(&fmt, 0xFF, 0, 0);
+		gmask = SDL_MapRGB(&fmt, 0, 0xFF, 0);
+		bmask = SDL_MapRGB(&fmt, 0, 0, 0xFF);
+		amask = 0;
+	}
+/*
+cerr << "R=" << (unsigned long)fmt.Rmask << "/" << (unsigned long)fmt.Rshift
+<< " G=" << (unsigned long)fmt.Gmask << "/" << (unsigned long)fmt.Gshift
+<< " B=" << (unsigned long)fmt.Bmask << "/" << (unsigned long)fmt.Bshift
+<< " A=" << (unsigned long)fmt.Amask << "/" << (unsigned long)fmt.Ashift
+<< endl;
+*/
+	return SDL_CreateRGBSurface(flags, width, height, fmt.BitsPerPixel,
+		rmask, gmask, bmask, amask);
 }
 
 
