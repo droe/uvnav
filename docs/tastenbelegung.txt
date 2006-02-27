@@ -10,13 +10,16 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  Home          Alle eigenen Objekte in sichtbarem Kartenausschnitt
  End           Alle existierenden Objekte in sichtbarem Kartenausschitt
 
- s             Sichtradien-Toggle: Schiffe+Sonden, nur Sonden, oder keine
+ s             Sichtradien-Toggle: keine, nur Sonden, Schiffe+Sonden
  k             Kaufradien eigener Schiffe ein- / ausblenden
  x             Schiffe ein- / ausblenden
  c             Container ein- / ausblenden
  v             Verbindungen zwischen Planeten ein- / ausblenden
+ z             Zonen-Potential-Toggle: keine, nur Zonen, Zonen und FUs
 
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
- q, ESC        Beenden
+ q, ESC        Beenden / Abbrechen
 
-Waehrend dem Ladevorgang kann mit ESC abgebrochen und beendet werden.
+ Linke Maust.  Zentrieren (provisorisch)
+ Rechte Mt.    Zentrieren
+ Mittlere Mt.  Messband (nicht implementiert)
