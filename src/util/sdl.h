@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,9 @@
 
 #include "SDL.h"
 #include "SDL_syswm.h"
-#include "SDL_image.h"			// SDL_image
-#include "SDL_ttf.h"			// SDL_ttf
-#include "SDL_rotozoom.h"		// SDL_gfx
+#include "SDL_image.h"		// SDL_image
+#include "SDL_ttf.h"		// SDL_ttf
+#include "SDL_rotozoom.h"	// SDL_gfx
 #include "SDL_gfxPrimitives.h"	// SDL_gfx
 
 #ifdef WITH_SURFACE_LOCKING

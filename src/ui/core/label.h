@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,30 +33,13 @@ class UVLabel : public UVWidget
 		UVLabel(std::string = " ", int = 1, SDL_Surface* = NULL);
 		virtual ~UVLabel();
 
-/*		virtual void set_surface(SDL_Surface*);
-		SDL_Surface* get_surface() const;
-*/
-//		virtual bool is_enabled() const;
-//		virtual void set_enabled(bool);
-
-		virtual void resize();
 		virtual void draw();
-/*		virtual void handle_click(int, int);
-*/
 
 		virtual void set_text(std::string);
 
-/*
-		int weight;
-		UVSize min;
-		UVSize max;
-*/
 	protected:
-//		SDL_Surface* surface;
 		UVFont *font;
 		SDL_Surface *text;
-
-//		bool enabled;
 };
 
 #endif // LABEL_H

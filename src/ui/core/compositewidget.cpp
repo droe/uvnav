@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,37 +72,6 @@ void UVCompositeWidget::add_widget(UVWidget* wi)
 	modified = true;
 }
 
-
-/*
- * Setzt das Layout auf das minimale Autolayout.
- */
-/*
-void UVCompositeWidget::autosize()
-{
-	int count = widgets.size();
-	w = 0;
-	h = 0;
-
-	// loop all contained widgets
-	for(int i = 0; i < count; i++)
-	{
-		UVWidget* widget = widgets[i];
-
-		if(orientation == UVOHorizontal)
-		{
-			w += widget->min.w;
-			h = min(h, widget->min.h);
-		}
-		else // UVOVertical
-		{
-			w = min(w, widget->min.w);
-			h += widget->min.h;
-		}
-	}
-
-	resize();
-}
-*/
 
 /*
  * Berechnet das Layout des CompositeWidget und aller enthaltenen Widgets

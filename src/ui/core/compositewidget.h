@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,7 +33,6 @@ class UVCompositeWidget : public UVWidget
 
 		virtual void add_widget(UVWidget*);
 
-// TODO KILL		virtual void autosize();
 		virtual void resize();
 		virtual void draw();
 		virtual void handle_click(int, int);

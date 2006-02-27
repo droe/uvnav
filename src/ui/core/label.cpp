@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,16 +44,6 @@ UVLabel::~UVLabel()
 {
 	if(text)
 		SDL_FreeSurface(text);
-}
-
-
-/*
- * Signalisiert dem UVWidget, dass seine effektive Groesse geaendert hat.
- * Wird vom umgebenden UVCompositeWidget aufgerufen.
- */
-void UVLabel::resize()
-{
-	// ignore
 }
 
 
