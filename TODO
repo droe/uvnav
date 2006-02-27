@@ -2,8 +2,6 @@ $Id$
 
 ===> Mouse handling
 ---> Add drag and drop meter tool
----> Add mouse center / move map tool
----> left for select, right for meter, middle for drag
 
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
