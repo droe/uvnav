@@ -1,5 +1,8 @@
 $Id$
 
+===> Conf b_get usw throw key_not_found_error statt EXCEPTION
+---> catch in upgrade code
+
 ===> Copyright aktualisieren
 
 ===> Mouse handling
@@ -17,9 +20,7 @@ $Id$
       und UVKeyboard mappt die keydowns zu strings (via conf), und die
       strings zu owners (via registry hash table)
   - map.* -> mapwidget.*
-    - keys registrieren via UVKeyboard
   - progress.* in allgemeines, von PD unabhaengiges Widget refactoren
-    - model interface (virtual class) oder spezialisiertes progress widget
   - navigator.* -> application.* ui/splash/rootwindow.*
                    ui/main/rootwindow.* ui/load/rootwindow.*
     - keys registrieren via UVKeyboard
@@ -27,21 +28,12 @@ $Id$
     - progress extern als widget
       - ui/load/rootwindow ist zweiter observer von importer, um eventqueue
         abzuarbeiten
-        - brauche exception um dem importer abbruch zu signalisieren
-  - Mausklick handling einklinken
-    - wie doppelklick und drag behandeln?
   - GUI Architektur verfeinern ...
-- C++ Redesign
-  - Namespaces einführen
 
 - Nachrichten parsen (für Karte relevante)
   - Tokenizing fertig bis auf letzte Bugs (H220)
   - Parsing relevanter Daten als nächstes
-    - Zonendaten
     - Income-Stats (?)
-- Maushandling: Zoom, Zentrieren, Scrollen, Koordinaten anzeigen, Selection.
-  - Hierarchisches Widget-System
-    - Widgets und Containers
 
 Weiter gemäss RoadMap im Wiki:
 https://projects.roe.ch/trac/uvnav/wiki/RoadMap
@@ -229,10 +221,9 @@ https://projects.roe.ch/trac/uvnav/wiki/RoadMap
   - auswertung nach unicode
   - iconv?
 
-- Exceptions "richtig" implementieren
-  - eigene Klassenhierarchie
-  - Fehlertypen erlauben
-  - graceful Exit ermöglichen
+- Eigene Exceptions sauber implementieren
+  - eigene Klassenhierarchie von std::exception ableiten
+  - ueberall einsetzen
 
 - Warnings "richtig" implementieren
   - zentrale WARN(); Facility

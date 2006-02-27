@@ -34,14 +34,18 @@
  *     std::range_error
  *     std::overflow_error
  *     std::underflow_error
- *   quit_application
+ * quit_application
+ * no_such_key_error
  */
+
+// TODO: eigene Exceptions von exception ableiten.  Benötigt Implemenation.
 
 #include <exception>
 #include <stdexcept>
 #include <string>
 
 class quit_application {};
+class no_such_key_error {};
 
 #define EXCEPTION(x) to_string(x) + " in " + to_string(__FUNCTION__) + "() at " + to_string(__FILE__) + ":" + to_string(__LINE__)
 
