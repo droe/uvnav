@@ -363,7 +363,8 @@ void UVImportTXT::parse_oldschool_header()
 	getline();
 
 	// Punkte: 846000
-	static UVRegExp pt_re("^Punkte: +(.*)$");
+	// Punkte: 846000.2345
+	static UVRegExp pt_re("^Punkte: +(\\d+)(?:\\.\\d+)?$");
 	if(!pt_re.match(cur))
 	{
 		throw EXCEPTION("Punkte: fehlt!");
@@ -495,7 +496,8 @@ void UVImportTXT::parse_spielerinfos()
 	getline();
 
 	// Punkte: 886
-	static UVRegExp pt_re("^Punkte: +(.*)$");
+	// Punkte: 886.2345
+	static UVRegExp pt_re("^Punkte: +(\\d+)(?:\\.\\d+)?$");
 	if(!pt_re.match(cur))
 	{
 		throw EXCEPTION("Punkte: fehlt!");
@@ -831,6 +833,10 @@ void UVImportTXT::parse_nachrichten()
 	// - Hotzenplotz hat Ihnen die Neutralität erklärt.
 	static UVRegExp ne_i_re("^- (.+) hat Ihnen die Neutralit.t erkl.rt\\.$");
 	// KR - Krieg
+	// - Doctor Who hat Ihnen den Krieg erklärt.
+	static UVRegExp kr_i_re("^- (.+) hat Ihnen den Krieg erkl.rt\\.$");
+	// - Sie haben Gugelhupf den Krieg erklärt.
+	static UVRegExp kr_o_re("^- Sie haben (.+) den Krieg erkl.rt\\.$");
 	// NG - Neutralitaet vs Gesellschaften
 	// - Mr. Spock hat ihrer Gesellschaft die Neutralität erklärt.
 	static UVRegExp ng_i_re("^- (.+) hat ihrer Gesellschaft die Neutralit.t erkl.rt\\.$");
@@ -893,6 +899,16 @@ void UVImportTXT::parse_nachrichten()
 		else if(ne_i_re.match(cur))
 		{
 			debug("nachricht-ne_i", &ne_i_re);
+			// ***
+		}
+		else if(kr_o_re.match(cur))
+		{
+			debug("nachricht-kr_o", &kr_o_re);
+			// ***
+		}
+		else if(kr_i_re.match(cur))
+		{
+			debug("nachricht-kr_i", &kr_i_re);
 			// ***
 		}
 		else if(ng_i_re.match(cur))
