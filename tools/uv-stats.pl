@@ -114,7 +114,7 @@ sub auswertung
 		{
 			$name = $1;
 		}
-		elsif(!$punkte && /^Punkte: (\d+)\r?$/)
+		elsif(!$punkte && /^Punkte: (\d+)(?:\.\d+)?\r?$/)
 		{
 			$punkte = $1;
 		}
