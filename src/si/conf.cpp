@@ -166,12 +166,20 @@ void UVConf::convert()
 			b_del("screen-double-buf");
 			b_del("screen-software");
 		case 2:
-			old_bool = b_get("map-sichtradien");
-			b_del("map-sichtradien");
+			try {
+				old_bool = b_get("map-sichtradien");
+				b_del("map-sichtradien");
+			} catch(key_not_found_error e) {
+				old_bool = true;
+			}
 			l_set("map-sichtradien", old_bool ? 2 : 0);
 		case 3:
-			old_bool = b_get("map-zonen");
-			b_del("map-zonen");
+			try {
+				old_bool = b_get("map-zonen");
+				b_del("map-zonen");
+			} catch(key_not_found_error e) {
+				old_bool = true;
+			}
 			l_set("map-zonen", old_bool ? 2 : 0);
 		case CONF_VERSION:
 		default:
@@ -312,7 +320,7 @@ string UVConf::s_get(const string& key, bool aw) const
 {
 	if(s_conf.count(key) == 0)
 	{
-		throw EXCEPTION("Unbekannter Konfigurationsschluessel: " + key);
+		throw key_not_found_error(key);
 	}
 
 	if(aw)
@@ -368,7 +376,7 @@ long UVConf::l_get(const string& key, bool aw) const
 {
 	if(l_conf.count(key) == 0)
 	{
-		throw EXCEPTION("Unbekannter Konfigurationsschluessel: " + key);
+		throw key_not_found_error(key);
 	}
 
 	if(aw)
@@ -424,7 +432,7 @@ double UVConf::f_get(const string& key, bool aw) const
 {
 	if(f_conf.count(key) == 0)
 	{
-		throw EXCEPTION("Unbekannter Konfigurationsschluessel: " + key);
+		throw key_not_found_error(key);
 	}
 
 	if(aw)
@@ -480,7 +488,7 @@ bool UVConf::b_get(const string& key, bool aw) const
 {
 	if(b_conf.count(key) == 0)
 	{
-		throw EXCEPTION("Unbekannter Konfigurationsschluessel: " + key);
+		throw key_not_found_error(key);
 	}
 
 	if(aw)

@@ -1,8 +1,5 @@
 $Id$
 
-===> Conf b_get usw throw key_not_found_error statt EXCEPTION
----> catch in upgrade code
-
 ===> Copyright aktualisieren
 
 ===> Mouse handling

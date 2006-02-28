@@ -229,6 +229,18 @@ int main(int argc, char* argv[])
 		}
 		exit(EX_OK);
 	}
+	catch(quit_application e)
+	{
+		cerr << "*** Unexpected Quit Application:" << endl;
+		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
+	}
+	catch(key_not_found_error e)
+	{
+		cerr << "*** Key Not Found Error:" << endl;
+		cerr << e.what() << endl;
+		exit(EX_SOFTWARE);
+	}
 	catch(bad_alloc e)
 	{
 		cerr << "*** Bad Allocation:" << endl;
