@@ -24,8 +24,8 @@ Allgemeines
 UV Navigator ist ein weiteres Tool fuer Universum V.  ToVU passte
 mir aus technischen Gruenden nicht so wirklich (browserbasiert,
 Java), und AMAP / PoN / ZugComposer laufen nur unter Windows, werden
-nicht mehr weiterentwickelt, und sind nicht Open Source, womit die
-Moeglichkeit fuer Bugfixes und Erweiterungen nicht gegeben ist.
+nicht mehr weiterentwickelt, und/oder sind nicht Open Source, womit
+die Moeglichkeit fuer Bugfixes und Erweiterungen nicht gegeben ist.
 
 Ergo musste was ``Richtiges'' her, und das hier ist das Resultat.
 Ich habe UVNav primaer fuer mich selber entwickelt, und momentan gibt
@@ -37,8 +37,12 @@ gibts auf den Projektseiten:
 
   https://projects.roe.ch/trac/uvnav/
 
+Wer mitarbeiten moechte, soll sich doch bitte bei mir melden.  Wer
+mit guten Patches ueberzeugt, kriegt bald mal Commit-Rechte direkt
+ins Repository.
+
 UV Navigator benutzt eine interne, stark reduzierte Version der
-genialen Library Perl Compatible Regular Expressions (PCRE) von
+genialen Perl Compatible Regular Expressions (PCRE) Library von
 Philip Hazel, Copyright (C) University of Cambridge, England.
 
 Details zu diesem und anderem verwendetem Fremdcode siehe die
@@ -59,9 +63,8 @@ leitet die Standardausgabe / Standardfehlerausgabe aber in
 Textfiles um, wo die Ausgabe bequem nachgelesen werden kann,
 auch wenn UVNav per Doppelklick im Explorer gestartet wurde.
 
-Die Kartenansicht hat noch keine Mausunterstuetzung!  Wie
-die Bedienung ueber die Tastatur derzeit funktioniert, kann
-in der Datei docs/tastenbelegung.txt nachgelesen werden.
+Wie die Bedienung im Detail funktioniert, kann in der Datei
+docs/tastenbelegung.txt nachgelesen werden.
 
 
 
@@ -73,7 +76,7 @@ UV Navigator befindet sich in der Fruehphase der Entwicklung.
 Der Parser ist mittlerwile stabil und kann so ziemlich alle
 Auswertungen korrekt einlesen, inklusive alte und uralte
 Auswertungen (bisher getestet wurden Sternzeit 55, 128,
-144-152, 154-162, 211-240).
+144-152, 154-162, 211-heute).
 
 Das Parsen der Nachrichten ist erst in den Grundzuegen
 implementiert.
@@ -94,7 +97,7 @@ zuverlaessig.  Was da noch fehlt ist ein Datenbankmodul fuer
 die Ablage von persistenten Daten.  Momentan kann daher auch
 nur eine Auswertung aufs Mal eingelesen und angeschaut werden.
 
-Fazit: Momentan noch nicht fuer produktive Arbeiten geeignet!
+Fazit: Noch sehr spartanisch, aber durchaus benutzbar.
 
 
 
@@ -102,31 +105,33 @@ Bekannte Probleme
 -----------------
 
 Bei vielen Objekten in der Darstellung ist die momentane
-Methode des herauszoomens zu langsam. Objekte sollen sich zu
-Gruppen oder farbigen Flaechen formieren sobald sie eh zu klein
-sind um einzeln erkannt zu werden. Das bedingt eine baumartige
-Strukturierung dieser Objekte, und ist daher nicht ganz einfach
-zu implementieren.
-
-Die Karte wird bei vielen Objekten sehr unuebersichtlich.
-Die momentane Art, wie Planeten und Schiffe dargestellt werden,
-muss gruendlich ueberarbeitet werden.
+Methode des herauszoomens zu langsam und unuebersichtlich.
+Objekte sollen sich zu Gruppen oder farbigen Flaechen formieren
+sobald sie zu klein sind um einzeln erkannt zu werden.  Das
+bedingt eine baumartige Strukturierung dieser Objekte, und ist
+daher nicht ganz einfach zu implementieren.
 
 
 
 Performance
 -----------
 
-Grosse Auswertungen verlangen etwas Rechenpower und Speicher (RAM).
+Der Parser fuer Textauswertungen basiert auf regulaeren Ausdrucken
+(RegExp), und verarbeitet Auswertungsdaten ueberraschend schnell:
 
-Der Parser fuer Textauswertungen verarbeitet auf meiner 2 GHz
-Workstation 4 MB/s, auf meinem alten 700 MHz Thinkpad ca 800 KB/s,
-und auf meinem neuen 1.2 GHz Centrino Thinkpad ca 4 MB/s, je nach
-Komplexitaet der Auswertungsdaten.  Unter Windows ist die Performance
-etwa 30% schlechter (mit identischem Quellcode und Compiler).
+    CPU                    Taktung     FreeBSD     Windows
+    -------------------------------------------------------
+    AMD Athlon XP 2500+    1830 MHz    4.2 MB/s    3.1 MB/s
+    Intel Pentium M        1200 MHz    3.8 MB/s    3.0 MB/s
+    Intel Pentium III       700 MHz    0.8 MB/s    0.5 MB/s
+    -------------------------------------------------------
 
-Zum Vergleich:  ToVU 4.13 ist ca um einen Faktor von 20 langsamer,
-AMAP 3.9 schleicht sogar ca 200 mal langsamer als UVNav dahin.
+UVNav wurde fuer die Messungen sowohl unter FreeBSD als auch unter
+Windows mit dem identischen Compiler und identischen Einstellungen
+erzeugt.
+
+Zum Vergleich:  ToVU 4.13 ist ca um den Faktor 20 langsamer,
+AMAP 3.9 sogar um ca Faktor 200.
 
 Die Anzeige ist sogar auf meinem alten Thinkpad mit grossen Auswertungen
 noch einigermassen fluessig.  Notfalls kann man das rechenintensive
@@ -144,8 +149,8 @@ gute Performance wichtiger ist als ein niedriger Speicherbedarf.
 Kompilieren und Installieren
 ----------------------------
 
-UVNav wird mit GCC 3.3.x und den C/C++-Libs von FreeBSD entwickelt,
-sollte aber auch mit anderen Compilern und Libs kompilieren.
+UVNav wird mit GCC 3.x und den C/C++-Libs von FreeBSD entwickelt,
+sollte aber auch mit anderen Compilern und Libraries kompilieren.
 Probleme in diesem Zusammenhang bitte melden; es ist gut moeglich,
 dass es noch kleine Veraenderungen an configure.ac und den relevanten
 Header-Files braucht, um andere Systeme zu unterstuetzen.
