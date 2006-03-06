@@ -58,7 +58,6 @@ void UVWidget::resize()
 void UVWidget::draw()
 {
 //	static UVDraw* drw = UVDraw::get_instance();
-
 	// *** FIXME
 //	drw->box(surface, x+2, y+2, x+w-5, y+h-5, 0xFF, 0x00, 0x00, 0xFF);
 }

@@ -26,15 +26,20 @@
 #include "ui/core/halign.h"
 #include "ui/core/valign.h"
 #include "util/sdl.h"
+#include "util/observer.h"
 
-class UVWindow : public UVRect
+class UVWindow : public UVRect, public Observer
 {
 public:
 	UVWindow(UVWidget*, int = 0, int = 0, int = 0, int = 0, UVHAlign = UVHALeft, UVVAlign = UVVATop, bool = false);
 	virtual ~UVWindow();
 
+	virtual void update(Subject*);
+
 	virtual void draw(SDL_Surface*);
 	virtual void resize();
+
+	bool dirty;
 
 protected:
 	UVWidget* widget;

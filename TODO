@@ -2,9 +2,6 @@ $Id$
 
 ===> Copyright aktualisieren
 
-===> Mouse handling
----> Add drag and drop meter tool
-
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)

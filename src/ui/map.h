@@ -22,6 +22,7 @@
 #define MAP_H
 
 #include "util/sdl.h"
+#include "util/observer.h"
 
 class UVImageHandler;
 class UVFont;
@@ -34,6 +35,7 @@ class UVContainer;
 class UVAnomalie;
 class UVSensorsonde;
 class UVInfosonde;
+class UVVideo;
 
 /*
 class UVMapSektor
@@ -55,11 +57,15 @@ class UVMapQuadrant
 	private:
 };
 */
-class UVMap
+class UVMap : public Observer
 {
 	public:
-		UVMap(UVUniversum*, SDL_Surface*);
+		UVMap(UVUniversum*);
 		virtual ~UVMap();
+
+		virtual void update(Subject*);
+
+		void draw(SDL_Surface*, SDL_Rect* = NULL);
 
 		void set_dim(long);
 		long get_dim() const;
@@ -70,9 +76,6 @@ class UVMap
 		void zoom_out();
 		void zoom_by(double);
 
-		void resize(SDL_Surface*);
-
-		void jump_init();
 		void jump_alle();
 		void jump_eigene();
 
@@ -100,13 +103,12 @@ class UVMap
 		void set_opt_zonen(const long);
 		void toggle_opt_zonen();
 
-		void redraw();
-		void draw(SDL_Rect*);
-
 		//long v2phys_x(long) const;
 		//long v2phys_y(long) const;
 		long p2virt_x(long) const;
 		long p2virt_y(long) const;
+
+		bool dirty;
 
 	private:
 		UVImageHandler* imagehandler;
@@ -128,6 +130,15 @@ class UVMap
 		UVFont* grid_font;
 		UVFont* label_font;
 		UVFont* zonen_font;
+
+		void init(UVVideo*);
+		void deinit();
+
+		void jump_init();
+
+		void resize();
+		void redraw();
+		void redraw(SDL_Rect*);
 
 		void draw_grid();
 

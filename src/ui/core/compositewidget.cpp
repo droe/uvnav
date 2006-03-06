@@ -45,11 +45,21 @@ UVCompositeWidget::~UVCompositeWidget()
 
 
 /*
+ * Wird aufgerufen, wenn enthaltene Widgets aendern.
+ */
+void UVCompositeWidget::update(Subject *subject)
+{
+	notify();
+}
+
+
+/*
  * Fuegt ein Widget hinzu.  Reihenfolge ist signifikant.
  */
 void UVCompositeWidget::add_widget(UVWidget* wi)
 {
 	wi->set_surface(surface);
+	wi->attach(this);
 
 	// min/max aktualisieren
 	if(orientation == UVOHorizontal)
@@ -158,7 +168,7 @@ cerr << "widgets[" << i << "]->h=" << widget->h << endl;
  */
 void UVCompositeWidget::draw()
 {
-	static UVDraw* drw = UVDraw::get_instance();
+//	static UVDraw* drw = UVDraw::get_instance();
 
 	if(modified)
 		resize();

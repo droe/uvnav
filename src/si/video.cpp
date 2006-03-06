@@ -45,7 +45,7 @@ UVVideo::UVVideo()
 {
 	conf = UVConf::get_instance();
 
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
 	{
 		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
 	}
@@ -107,24 +107,20 @@ void UVVideo::init()
 	int flags = SDL_SWSURFACE;
 	SDL_Rect r = { 0, 0, 0, 0 };
 
-	if(conf->b_get("screen-fullscreen"))
-	{
+	if(conf->b_get("screen-fullscreen")) {
 		sysdep_screensize(&r);
 #ifdef DEBUG
 		cout << " Fullscreen(" << r.w << "x" << r.h << "x?)";
 #endif
 		flags |= SDL_FULLSCREEN;
-	}
-	else
-	{
+	} else {
 		r.w = conf->l_get("screen-width");
 		r.h = conf->l_get("screen-height");
 #ifdef DEBUG
 		cout << " Windowed(" << r.w << "x" << r.h << "x?)";
 #endif
 	}
-	if(conf->b_get("screen-resizable"))
-	{
+	if(conf->b_get("screen-resizable")) {
 #ifdef DEBUG
 		cout << " Resizable";
 #endif
@@ -135,28 +131,24 @@ void UVVideo::init()
 #endif
 
 	screen = SDL_SetVideoMode(r.w, r.h, 0, flags);
-	if(screen == NULL)
-	{
+	if(screen == NULL) {
 		throw EXCEPTION(string("SDL: ") + SDL_GetError());
 	}
 
 #ifdef DEBUG
 	cout << "Effektiv erhaltene Optionen:";
-	if((screen->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN)
-	{
+	if((screen->flags & SDL_FULLSCREEN) == SDL_FULLSCREEN) {
 		cout << " Fullscreen(" << screen->w << "x" << screen->h << "x" << (screen->format->BytesPerPixel * 8) << ")";
-	}
-	else
-	{
+	} else {
 		cout << " Windowed(" << screen->w << "x" << screen->h << "x" << (screen->format->BytesPerPixel * 8) << ")";
 	}
-	if((screen->flags & SDL_RESIZABLE) == SDL_RESIZABLE)
-	{
+	if((screen->flags & SDL_RESIZABLE) == SDL_RESIZABLE) {
 		cout << " Resizable";
 	}
 	cout << "." << endl;
 	cout << "------------------------------------------------------------------------------" << endl;
 #endif
+	notify();
 }
 
 

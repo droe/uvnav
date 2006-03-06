@@ -21,10 +21,11 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "util/sdl.h"
 #include "ui/core/rect.h"
+#include "util/sdl.h"
+#include "util/observer.h"
 
-class UVWidget : public UVRect
+class UVWidget : public UVRect, public Subject
 {
 	public:
 		UVWidget(int = 1, SDL_Surface* = NULL);
@@ -36,7 +37,6 @@ class UVWidget : public UVRect
 //		virtual bool is_enabled() const;
 //		virtual void set_enabled(bool);
 
-// TODO KILL		virtual void autosize();
 		virtual void resize();
 		virtual void draw();
 		virtual void handle_click(int, int);

@@ -28,8 +28,9 @@
  * Konstruktor.
  */
 UVWindow::UVWindow(UVWidget* wi, int x_, int y_, int w_, int h_, UVHAlign ha, UVVAlign va, bool as)
-: UVRect(x_, y_, w_, h_), widget(wi), canvas(NULL), halign(ha), valign(va), autosize(as), X(x_), Y(y_)
+: UVRect(x_, y_, w_, h_), dirty(true), widget(wi), canvas(NULL), halign(ha), valign(va), autosize(as), X(x_), Y(y_)
 {
+	wi->attach(this);
 	resize();
 }
 
@@ -42,6 +43,16 @@ UVWindow::~UVWindow()
 	if(canvas)
 		SDL_FreeSurface(canvas);
 	delete widget;
+}
+
+
+/*
+ * Wird aufgerufen, wenn das Widget sich aendert.
+ */
+void UVWindow::update(Subject *subject)
+{
+	dirty = true;
+	resize();
 }
 
 
@@ -68,6 +79,7 @@ void UVWindow::resize()
 		widget->w = w - 4;
 		widget->resize();
 	}
+	dirty = true;
 }
 
 
@@ -105,6 +117,7 @@ void UVWindow::draw(SDL_Surface* surface)
 
 	SDL_Rect rect = { x, y, x + w - 1, y + h - 1};
 	SDL_BlitSurface(canvas, NULL, surface, &rect);
+	dirty = false;
 }
 
 

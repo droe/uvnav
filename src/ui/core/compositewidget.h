@@ -23,13 +23,16 @@
 
 #include "ui/core/widget.h"
 #include "ui/core/orientation.h"
+#include "util/observer.h"
 #include <vector>
 
-class UVCompositeWidget : public UVWidget
+class UVCompositeWidget : public UVWidget, public Observer
 {
 	public:
 		UVCompositeWidget(int = 1, UVOrientation = UVOHorizontal, SDL_Surface* = NULL);
 		virtual ~UVCompositeWidget();
+
+		virtual void update(Subject*);
 
 		virtual void add_widget(UVWidget*);
 

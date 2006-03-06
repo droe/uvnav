@@ -68,6 +68,7 @@ void UVLabel::set_text(string s)
 	text = font->get_surface(s);
 	min.w = text->w + text->h / 4;
 	min.h = text->h;
+	notify();
 }
 
 

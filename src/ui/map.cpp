@@ -35,6 +35,7 @@
 #include "si/font.h"
 #include "si/draw.h"
 #include "si/conf.h"
+#include "si/video.h"
 #include "si/fonthandler.h"
 #include "si/imagehandler.h"
 #include "util/version.h"
@@ -157,21 +158,22 @@ UVMapQuadrant::~UVMapQuadrant()
  * Waehlt sinnvollen Kartenausschnitt und Dimension falls alte Werte sinnlos,
  * d.h. wenn keine Daten sichtbar waeren.
  */
-UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
-: universum(u), spieler(NULL), canvas(s)
+UVMap::UVMap(UVUniversum* u)
+: dirty(true), universum(u), spieler(u->get_spieler()), canvas(NULL)
 , virt_x(0), virt_y(0), virt_w(0), virt_h(0)
 , alle_x1(0), alle_y1(0), alle_x2(0), alle_y2(0)
 , eigene_x1(0), eigene_y1(0), eigene_x2(0), eigene_y2(0)
 {
+	UVVideo *vid = UVVideo::get_instance();
+	init(vid);
+	vid->attach(this);
+
+	old_canvas_size.w = canvas->w;
+	old_canvas_size.h = canvas->h;
+
 	imagehandler = UVImageHandler::get_instance();
 
-	old_canvas_size.w = s->w;
-	old_canvas_size.h = s->h;
-
-	spieler = universum->get_spieler();
-
 	UVConf* conf = UVConf::get_instance();
-
 	bool have_conf_data = conf->have_data();
 	opt_sichtradien  = conf->l_get("map-sichtradien",  true);
 	opt_kaufradien   = conf->b_get("map-kaufradien",   true);
@@ -207,11 +209,11 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 	jump_init();
 	if(!have_conf_data)
 	{
-		zoom = max(double(alle_x2 - alle_x1) / double(s->w),
-		           double(alle_y2 - alle_y1) / double(s->h));
-		offset_x = alle_x1 - (long(rint(double(s->w) * zoom))
+		zoom = max(double(alle_x2 - alle_x1) / double(canvas->w),
+		           double(alle_y2 - alle_y1) / double(canvas->h));
+		offset_x = alle_x1 - (long(rint(double(canvas->w) * zoom))
 		                      - (alle_x2 - alle_x1)) / 2;
-		offset_y = alle_y1 - (long(rint(double(s->h) * zoom))
+		offset_y = alle_y1 - (long(rint(double(canvas->h) * zoom))
 		                      - (alle_y2 - alle_y1)) / 2;
 	}
 
@@ -224,6 +226,8 @@ UVMap::UVMap(UVUniversum* u, SDL_Surface* s)
 			conf->l_get("map-label-font-size"));
 	zonen_font = UVFontHandler::get_instance()->get_font(FNT_SANS,
 			conf->l_get("map-zonen-font-size"));
+
+	redraw();
 }
 
 
@@ -243,6 +247,51 @@ UVMap::~UVMap()
 	conf->b_set("map-schiffe",      opt_schiffe,      true);
 	conf->b_set("map-verbindungen", opt_verbindungen, true);
 	conf->l_set("map-zonen",        opt_zonen,        true);
+
+	deinit();
+}
+
+
+/*
+ * Initialisiert die internen Buffers.
+ * Kann mehrfach aufgerufen werden.
+ */
+void UVMap::init(UVVideo *vid)
+{
+	deinit();
+	SDL_Surface *screen = vid->get_screen();
+	canvas = vid->create_surface(
+		SDL_SWSURFACE, screen->w, screen->h);
+}
+
+
+/*
+ * Deinitialisiert alles, was in init() initialisiert wird.
+ */
+void UVMap::deinit()
+{
+	if(canvas)
+		SDL_FreeSurface(canvas);
+}
+
+
+/*
+ * Wird aufgerufen, wenn der Screen aendert.
+ */
+void UVMap::update(Subject *subject)
+{
+	init((UVVideo*)subject);
+	resize();
+}
+
+
+/*
+ * Zeichnet die Map auf die uebergebene Surface.
+ */
+void UVMap::draw(SDL_Surface *surface, SDL_Rect *rect)
+{
+	SDL_BlitSurface(canvas, rect, surface, rect);
+	dirty = false;
 }
 
 
@@ -565,12 +614,10 @@ void UVMap::zoom_by(double f)
 
 
 /*
- * Fuehrt einen Map Resize durch.
+ * Fuehrt einen Map Resize durch, nachdem canvas ersetzt wurde.
  */
-void UVMap::resize(SDL_Surface* s)
+void UVMap::resize()
 {
-	canvas = s;
-
 //	cout << "resize from w=" << old_canvas_size.w << " h=" << old_canvas_size.h << endl;
 //	cout << "resize to w=" << canvas->w << " h=" << canvas->h << endl;
 	double wf = double(old_canvas_size.w) / double(canvas->w);
@@ -707,19 +754,19 @@ void UVMap::toggle_opt_zonen()
 
 
 /*
- * Zeichnet alles neu.
+ * Zeichnet alles neu, auf die interne Zeichenflaeche.
  */
 void UVMap::redraw()
 {
 	SDL_Rect rect = { 0, 0, canvas->w, canvas->h };
-	draw(&rect);
+	redraw(&rect);
 }
 
 
 /*
- * Zeichnet die Welt.
+ * Zeichnet die Welt, auf die interne Zeichenflaeche.
  */
-void UVMap::draw(SDL_Rect* phys)
+void UVMap::redraw(SDL_Rect* phys)
 {
 	//virt_x = long(rint(phys->x * zoom + offset_x));
 	//virt_y = long(rint(phys->y * zoom + offset_y));
@@ -810,11 +857,8 @@ void UVMap::draw(SDL_Rect* phys)
 	SDL_FreeSurface(debug);
 #endif
 
-	/*SDL_UpdateRect(canvas, phys->x, phys->y, phys->w, phys->h);*/
-
-	/* TODO: phys/dirty nach aussen verfuegbar machen */
-
 	UNLOCK(canvas);
+	dirty = true;
 }
 
 

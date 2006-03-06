@@ -21,16 +21,17 @@
 #ifndef NAVIGATOR_H
 #define NAVIGATOR_H
 
-#include "ui/core/window.h"
 #include "util/sdl.h"
 #include "util/stl_string.h"
 #include <vector>
 
 class UVConf;
 class UVFont;
+class UVDraw;
 class UVMap;
 class UVUniversum;
 class UVSpieler;
+class UVWindow;
 
 class UVNavigator
 {
@@ -46,21 +47,24 @@ class UVNavigator
 	private:
 		UVUniversum *universum;
 		UVSpieler *spieler;
-		// *** GUI
 		UVConf *conf;
 		UVFont *font_splash;
+		UVFont *font_meter;
+		UVDraw *drw;
 
 		SDL_Surface *screen;
 
 		long status_y;
 		void splash_status(const std::string&);
 
-		void init_video();
-
-		void vid_reinit(UVMap*, SDL_Surface*&, SDL_Rect&);
-		void vid_redraw(SDL_Surface*&, std::vector<UVWindow*>&, SDL_Rect&);
+		void vid_redraw(UVMap *&, std::vector<UVWindow*> &);
 
 		std::string title_string(int);
+		long distance(long, long, long, long) const;
+
+		bool metering;
+		long meter_d, meter_x, meter_y;
+		int mouse_x, mouse_y;
 };
 
 #endif // NAVIGATOR_H

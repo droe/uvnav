@@ -22,6 +22,7 @@
 
 #include "ui/core/compositewidget.h"
 #include "ui/core/label.h"
+#include "ui/core/window.h"
 #include "ui/progress.h"
 #include "ui/map.h"
 #include "dm/abstractimporter.h"
@@ -33,10 +34,12 @@
 #include "si/video.h"
 #include "si/conf.h"
 #include "si/font.h"
+#include "si/draw.h"
 #include "util/version.h"
 #include "util/exceptions.h"
 #include "util/sysdep.h"
 
+#include <cmath>
 #include <iostream>
 
 using namespace std;
@@ -51,10 +54,15 @@ using namespace std;
  */
 UVNavigator::UVNavigator()
 : universum(NULL), spieler(NULL)
+, metering(false), meter_d(0), meter_x(0), meter_y(0), mouse_x(0), mouse_y(0)
 {
 	conf = UVConf::get_instance();
 	screen = UVVideo::get_instance()->get_screen();
-	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS, screen->h / 32);
+	drw = UVDraw::get_instance();
+	font_splash = UVFontHandler::get_instance()->get_font(FNT_SANS,
+		screen->h / 32);
+	font_meter = UVFontHandler::get_instance()->get_font(FNT_SANS,
+		conf->l_get("map-label-font-size"));
 }
 
 
@@ -116,8 +124,6 @@ void UVNavigator::splash()
 	SDL_FreeSurface(line2);
 
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
-	//SDL_UpdateRects(screen, nupdates, updates);
-	// with SDL_Rect* updates
 
 	UNLOCK(screen);
 }
@@ -138,8 +144,6 @@ void UVNavigator::splash_status(const string& text)
 	SDL_BlitSurface(surface, 0, screen, &bounds);
 
 	SDL_UpdateRect(screen, 0, 0, 0, 0);
-	//SDL_UpdateRects(screen, nupdates, updates);
-	// with SDL_Rect* updates
 
 	UNLOCK(screen);
 
@@ -208,35 +212,50 @@ void UVNavigator::wait()
 
 
 /*
- * Reinitialisiert den Screen und die Map aufgrund geänderten Einstellungen.
- */
-void UVNavigator::vid_reinit(UVMap *map, SDL_Surface *&mapsurface, SDL_Rect &rect)
-{
-	UVVideo *vid = UVVideo::get_instance();
-	vid->init();
-	screen = vid->get_screen();
-	SDL_FreeSurface(mapsurface);
-	mapsurface = vid->create_surface(
-		SDL_SWSURFACE, screen->w, screen->h);
-	map->resize(mapsurface);
-	rect.w = screen->w;
-	rect.h = screen->h;
-}
-
-
-/*
  * Die Map und die Fenster neu zeichnen.
+ * FIXME: Die Fenster duerfen nicht ueberlappen!
  */
-void UVNavigator::vid_redraw(SDL_Surface *&mapsurface, vector<UVWindow*> &windows, SDL_Rect &rect)
+void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
 {
+	int nrects = 0;
+	SDL_Rect *rects = new SDL_Rect[windows.size() + 1];
+
 	LOCK(screen);
-	SDL_BlitSurface(mapsurface, &rect, screen, &rect);
-	for(vector<UVWindow*>::iterator i = windows.begin(); i != windows.end(); i++)
-	{
-		(*i)->draw(screen);
+	if(map->dirty) {
+		map->draw(screen);
+		if(metering) {
+			SDL_Rect dst = { mouse_x - (mouse_x - meter_x) / 2, mouse_y - (mouse_y - meter_y) / 2, 0, 0 };
+			drw->line(screen, meter_x, meter_y, mouse_x, mouse_y, 0xFF, 0, 0, 0xFF);
+			SDL_Surface *label = font_meter->get_surface(to_string(meter_d) + " KE", 0xFF, 0, 0);
+			dst.x -= label->w / 2;
+			dst.y -= label->h / 2;
+			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0xAA);
+			SDL_BlitSurface(label, 0, screen, &dst);
+		}
+		for(vector<UVWindow*>::iterator i = windows.begin(); i != windows.end(); i++) {
+			SDL_Rect *rect = &rects[nrects++];
+			rect->x = 0;
+			rect->y = 0;
+			rect->w = screen->w;
+			rect->h = screen->h;
+			(*i)->dirty = true;
+			(*i)->draw(screen);
+		}
+	} else {
+		for(vector<UVWindow*>::iterator i = windows.begin(); i != windows.end(); i++) {
+			if((*i)->dirty) {
+				SDL_Rect *rect = &rects[nrects++];
+				*rect = *(*i)->to_sdl_rect();
+				map->draw(screen, rect);
+				(*i)->draw(screen);
+			}
+		}
 	}
-	SDL_UpdateRect(screen, rect.x, rect.y, rect.w, rect.h);
+
 	UNLOCK(screen);
+
+	SDL_UpdateRects(screen, nrects, rects);
+	delete [] rects;
 }
 
 
@@ -253,30 +272,18 @@ string UVNavigator::title_string(int dim)
 
 
 /*
+ * Berechnet die Distanz zwischen zwei Koordinatenpunkten.
+ * TODO: In Helper-Klasse verschieben.
+ */
+long UVNavigator::distance(long x1, long y1, long x2, long y2) const
+{
+	return long(sqrt(pow(double(x1 - x2), 2) + pow(double(y1 - y2), 2)));
+}
+
+
+/*
  * SDL Message Loop.
  */
-void UVNavigator::run()
-{
-	UVVideo *vid = UVVideo::get_instance();
-	SDL_Rect dirty_rect = { 0, 0, screen->w, screen->h };
-	vector<UVWindow*> windows;
-
-	SDL_Surface *mapsurface = vid->create_surface(
-		SDL_SWSURFACE, screen->w, screen->h);
-	UVMap *map = new UVMap(universum, mapsurface);
-	map->redraw();
-
-	UVLabel *title_label = new UVLabel(
-		title_string(conf->l_get("map-dim", true)));
-	UVWindow *title_overlay = new UVWindow(
-		title_label, 40, 20, 0, 0, UVHARight, UVVATop, true);
-	windows.push_back(title_overlay);
-
-	UVLabel *status_label = new UVLabel("(?,?)");
-	UVWindow *status_overlay = new UVWindow(
-		status_label, 40, 20, 0, 0, UVHARight, UVVABottom, true);
-	windows.push_back(status_overlay);
-
 /*
 	UVCompositeWidget* cw1 = new UVCompositeWidget();
 	UVCompositeWidget* cw2 = new UVCompositeWidget(2, UVOVertical);
@@ -292,22 +299,47 @@ void UVNavigator::run()
 	UVWindow* win = new UVWindow(cw1, 40, 30, 400, 300);
 	windows.push_back(win);
 */
+Uint32 timer_callback(Uint32 interval)
+{
+	SDL_Event user_event;
+	user_event.type = SDL_USEREVENT;
+	user_event.user.code = 2;
+	user_event.user.data1 = NULL;
+	user_event.user.data2 = NULL;
+	SDL_PushEvent(&user_event);
 
-	vid_redraw(mapsurface, windows, dirty_rect);
+	return interval;
+}
+
+void UVNavigator::run()
+{
+	UVVideo *vid = UVVideo::get_instance();
+
+	UVMap *map = new UVMap(universum);
+
+	vector<UVWindow*> windows;
+
+	UVLabel *title_label = new UVLabel(
+		title_string(conf->l_get("map-dim", true)));
+	UVWindow *title_overlay = new UVWindow(
+		title_label, 40, 20, 0, 0, UVHARight, UVVATop, true);
+	windows.push_back(title_overlay);
+
+	UVLabel *status_label = new UVLabel("(?,?)");
+	UVWindow *status_overlay = new UVWindow(
+		status_label, 40, 20, 0, 0, UVHARight, UVVABottom, true);
+	windows.push_back(status_overlay);
+
+	vid_redraw(map, windows);
 
 	SDL_Event event;
 	bool running = true;
-	bool dirty = false;
-	long meter_ticks = 0;
 	long ticks = 0;
+	metering = false;
+	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+	SDL_SetTimer(20, timer_callback);
 	while(running)
 	{
-		dirty = true;
-		dirty_rect.x = 0;
-		dirty_rect.y = 0;
-		dirty_rect.w = screen->w;
-		dirty_rect.h = screen->h;
-
 		SDL_WaitEvent(&event);
 		ticks = SDL_GetTicks();
 		switch(event.type)
@@ -315,7 +347,7 @@ void UVNavigator::run()
 		case SDL_VIDEORESIZE:
 			conf->l_set("screen-width", event.resize.w);
 			conf->l_set("screen-height", event.resize.h);
-			vid_reinit(map, mapsurface, dirty_rect);
+			vid->init();
 			break;
 		case SDL_KEYDOWN:
 			switch(event.key.keysym.sym)
@@ -327,7 +359,7 @@ void UVNavigator::run()
 
 			case SDLK_f:
 				conf->b_set("screen-fullscreen", !conf->b_get("screen-fullscreen"));
-				vid_reinit(map, mapsurface, dirty_rect);
+				vid->init();
 				break;
 
 			case SDLK_s:
@@ -379,32 +411,27 @@ void UVNavigator::run()
 			case SDLK_1:
 				map->set_dim(1);
 				title_label->set_text(title_string(1));
-				title_overlay->resize();
 				break;
 			case SDLK_2:
 				map->set_dim(2);
 				title_label->set_text(title_string(2));
-				title_overlay->resize();
 				break;
 			case SDLK_3:
 				map->set_dim(3);
 				title_label->set_text(title_string(3));
-				title_overlay->resize();
 				break;
 			case SDLK_4:
 				map->set_dim(4);
 				title_label->set_text(title_string(4));
-				title_overlay->resize();
 				break;
 			case SDLK_5:
 				map->set_dim(5);
 				title_label->set_text(title_string(5));
-				title_overlay->resize();
 				break;
 
 			default:
 #ifdef DEBUG
-				cout << "SDL_KEYDOWN: "
+				cerr << "Unhandled SDL_KEYDOWN: "
 				     << SDL_GetKeyName(event.key.keysym.sym) << endl;
 #endif
 				break;
@@ -412,12 +439,6 @@ void UVNavigator::run()
 			break;
 		case SDL_QUIT:
 			running = false;
-			break;
-		case SDL_MOUSEMOTION:
-			status_label->set_text("(" + to_string(map->p2virt_x(event.motion.x)) + "," + to_string(map->p2virt_y(event.motion.y)) + ")");
-			status_overlay->resize();
-			if(!meter_ticks)
-				dirty_rect = *status_overlay->to_sdl_rect();
 			break;
 		case SDL_MOUSEBUTTONDOWN:
 			switch(event.button.button)
@@ -427,15 +448,18 @@ void UVNavigator::run()
 				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
 				break;
 			case 2:
-				// TODO: meter tool
-				//meter_x = event.button.x;
-				//meter_y = event.button.y;
-				meter_ticks = ticks;
-				dirty = false;
+				meter_x = event.button.x;
+				meter_y = event.button.y;
+				metering = true;
 				break;
 			case 3:
 				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
 				break;
+#ifdef DEBUG
+			default:
+				cerr << "Unhandled SDL_MOUSEBUTTONDOWN: " << long(event.button.button) << endl;
+				break;
+#endif
 			}
 			break;
 		case SDL_MOUSEBUTTONUP:
@@ -444,22 +468,39 @@ void UVNavigator::run()
 			case 1:
 				break;
 			case 2:
-				meter_ticks = 0;
+				metering = false;
+				if(meter_x == event.button.x && meter_y == event.button.y)
+					map->dirty = true;
 				break;
 			case 3:
 				break;
+#ifdef DEBUG
+			default:
+				cerr << "Unhandled SDL_MOUSEBUTTONUP: " << long(event.button.button) << endl;
+				break;
+#endif
 			}
-			dirty = false;
+			break;
+		case SDL_USEREVENT:
+			SDL_GetMouseState(&mouse_x, &mouse_y);
+			{
+				long mouse_vx = map->p2virt_x(mouse_x);
+				long mouse_vy = map->p2virt_y(mouse_y);
+				if(metering) {
+					long meter_vx = map->p2virt_x(meter_x);
+					long meter_vy = map->p2virt_y(meter_y);
+					meter_d = distance(meter_vx, meter_vy, mouse_vx, mouse_vy);
+					map->dirty = true;
+				}
+				status_label->set_text("(" + to_string(mouse_vx) + "," + to_string(mouse_vy) + ")");
+			}
 			break;
 		default:
-			dirty = false;
 			break;
 		}
 
-		if(dirty)
-			vid_redraw(mapsurface, windows, dirty_rect);
+		vid_redraw(map, windows);
 	}
-	SDL_FreeSurface(mapsurface);
 	delete map;
 	delete title_overlay;
 	delete status_overlay;

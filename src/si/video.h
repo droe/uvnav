@@ -23,10 +23,11 @@
 
 #include "util/sdl.h"
 #include "util/singleton.h"
+#include "util/observer.h"
 
 class UVConf;
 
-class UVVideo : public Singleton<UVVideo>
+class UVVideo : public Singleton<UVVideo>, public Subject
 {
 	friend class Singleton<UVVideo>;
 
