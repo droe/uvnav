@@ -38,6 +38,7 @@
 #include "util/version.h"
 #include "util/exceptions.h"
 #include "util/sysdep.h"
+#include "util/minmax.h"
 
 #include <cmath>
 #include <iostream>
@@ -54,7 +55,9 @@ using namespace std;
  */
 UVNavigator::UVNavigator()
 : universum(NULL), spieler(NULL)
-, metering(false), meter_d(0), meter_x(0), meter_y(0), mouse_x(0), mouse_y(0)
+, metering(false), meter_d(0), meter_x(0), meter_y(0)
+, moving(false), move_x(0), move_y(0)
+, mouse_x(0), mouse_y(0)
 {
 	conf = UVConf::get_instance();
 	screen = UVVideo::get_instance()->get_screen();
@@ -227,6 +230,8 @@ void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
 			SDL_Rect dst = { mouse_x - (mouse_x - meter_x) / 2, mouse_y - (mouse_y - meter_y) / 2, 0, 0 };
 			drw->line(screen, meter_x, meter_y, mouse_x, mouse_y, 0xFF, 0, 0, 0xFF);
 			SDL_Surface *label = font_meter->get_surface(to_string(meter_d) + " KE", 0xFF, 0, 0);
+			dst.x = max(label->w / 2, min(screen->w - label->w / 2, dst.x));
+			dst.y = max(label->h / 2, min(screen->h - label->h / 2, dst.y));
 			dst.x -= label->w / 2;
 			dst.y -= label->h / 2;
 			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0xAA);
@@ -302,11 +307,14 @@ long UVNavigator::distance(long x1, long y1, long x2, long y2) const
 Uint32 timer_callback(Uint32 interval)
 {
 	SDL_Event user_event;
-	user_event.type = SDL_USEREVENT;
-	user_event.user.code = 2;
-	user_event.user.data1 = NULL;
-	user_event.user.data2 = NULL;
-	SDL_PushEvent(&user_event);
+
+	if(0 >= SDL_PeepEvents(&user_event, 1, SDL_PEEKEVENT, SDL_EVENTMASK(SDL_USEREVENT))) {
+		user_event.type = SDL_USEREVENT;
+		user_event.user.code = 2;
+		user_event.user.data1 = NULL;
+		user_event.user.data2 = NULL;
+		SDL_PushEvent(&user_event);
+	}
 
 	return interval;
 }
@@ -336,6 +344,9 @@ void UVNavigator::run()
 	bool running = true;
 	long ticks = 0;
 	metering = false;
+	moving = false;
+	long meter_origin_x = 0, meter_origin_y = 0;
+	long move_origin_x = 0, move_origin_y = 0;
 	SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
 	SDL_SetTimer(20, timer_callback);
 	while(running)
@@ -383,15 +394,19 @@ void UVNavigator::run()
 
 			case SDLK_LEFT:
 				map->scroll(-screen->w / 16, 0);
+				meter_x -= -screen->w / 16;
 				break;
 			case SDLK_RIGHT:
 				map->scroll(screen->w / 16, 0);
+				meter_x -= screen->w / 16;
 				break;
 			case SDLK_UP:
 				map->scroll(0, -screen->w / 16);
+				meter_y -= -screen->w / 16;
 				break;
 			case SDLK_DOWN:
 				map->scroll(0, screen->w / 16);
+				meter_y -= screen->w / 16;
 				break;
 
 			case SDLK_HOME:
@@ -443,17 +458,21 @@ void UVNavigator::run()
 		case SDL_MOUSEBUTTONDOWN:
 			switch(event.button.button)
 			{
-			case 1:
-				// TODO: select object
-				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
-				break;
 			case 2:
 				meter_x = event.button.x;
 				meter_y = event.button.y;
+				meter_origin_x = meter_x;
+				meter_origin_y = meter_y;
 				metering = true;
 				break;
+			case 1:
+				// TODO: select object
 			case 3:
-				map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
+				move_x = event.button.x;
+				move_y = event.button.y;
+				move_origin_x = move_x;
+				move_origin_y = move_y;
+				moving = true;
 				break;
 #ifdef DEBUG
 			default:
@@ -465,14 +484,17 @@ void UVNavigator::run()
 		case SDL_MOUSEBUTTONUP:
 			switch(event.button.button)
 			{
-			case 1:
-				break;
 			case 2:
 				metering = false;
-				if(meter_x == event.button.x && meter_y == event.button.y)
+				if(meter_origin_x == event.button.x && meter_origin_y == event.button.y)
 					map->dirty = true;
 				break;
+			case 1:
+				// TODO: select object
 			case 3:
+				moving = false;
+				if(move_origin_x == event.button.x && move_origin_y == event.button.y)
+					map->scroll(event.button.x - screen->w/2, event.button.y - screen->h/2);
 				break;
 #ifdef DEBUG
 			default:
@@ -491,6 +513,13 @@ void UVNavigator::run()
 					long meter_vy = map->p2virt_y(meter_y);
 					meter_d = distance(meter_vx, meter_vy, mouse_vx, mouse_vy);
 					map->dirty = true;
+				}
+				if(moving) {
+					map->scroll(move_x - mouse_x, move_y - mouse_y);
+					meter_x -= move_x - mouse_x;
+					meter_y -= move_y - mouse_y;
+					move_x = mouse_x;
+					move_y = mouse_y;
 				}
 				status_label->set_text("(" + to_string(mouse_vx) + "," + to_string(mouse_vy) + ")");
 			}
