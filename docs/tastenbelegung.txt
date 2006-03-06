@@ -20,6 +20,6 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  f             Zwischen Vollbildmodus und Fenstermodus hin und her wechseln
  q, ESC        Beenden / Abbrechen
 
- Linke Maust.  Verschieben / Zentrieren (provisorisch)
+ Linke Maust.  -
  Mittlere Mt.  Messband
  Rechte Mt.    Verschieben / Zentrieren

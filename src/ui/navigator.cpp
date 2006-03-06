@@ -458,6 +458,9 @@ void UVNavigator::run()
 		case SDL_MOUSEBUTTONDOWN:
 			switch(event.button.button)
 			{
+			case 1:
+				// TODO: select object
+				break;
 			case 2:
 				meter_x = event.button.x;
 				meter_y = event.button.y;
@@ -465,8 +468,6 @@ void UVNavigator::run()
 				meter_origin_y = meter_y;
 				metering = true;
 				break;
-			case 1:
-				// TODO: select object
 			case 3:
 				move_x = event.button.x;
 				move_y = event.button.y;
@@ -484,13 +485,14 @@ void UVNavigator::run()
 		case SDL_MOUSEBUTTONUP:
 			switch(event.button.button)
 			{
+			case 1:
+				// TODO: select object
+				break;
 			case 2:
 				metering = false;
 				if(meter_origin_x == event.button.x && meter_origin_y == event.button.y)
 					map->dirty = true;
 				break;
-			case 1:
-				// TODO: select object
 			case 3:
 				moving = false;
 				if(move_origin_x == event.button.x && move_origin_y == event.button.y)
