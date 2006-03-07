@@ -1,7 +1,8 @@
 $Id$
 
-                         * Zoneninfos werden rudimentaer angezeigt (Taste z).
                          * Mausunterstuetzung: Scrollen und Messwerkzeug.
+                         * Zoneninfos werden rudimentaer angezeigt (Taste z).
+                         * Container mit optionaler Beschriftung (Taste c).
 
 2005-09-18  0.0.3  r132  * Einige Zusatztools integriert (--enable-tools).
                          * Kartenansicht ist konfigurierbarer (Tasten x/c/v).

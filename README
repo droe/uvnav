@@ -27,9 +27,8 @@ Java), und AMAP / PoN / ZugComposer laufen nur unter Windows, werden
 nicht mehr weiterentwickelt, und/oder sind nicht Open Source, womit
 die Moeglichkeit fuer Bugfixes und Erweiterungen nicht gegeben ist.
 
-Ergo musste was ``Richtiges'' her, und das hier ist das Resultat.
 Ich habe UVNav primaer fuer mich selber entwickelt, und momentan gibt
-UVNav sicher auch noch nicht genug Features her, um die anderen Tools
+UVNav wohl auch noch nicht genug Features her, um die anderen Tools
 ernsthaft zu konkurrenzieren.
 
 UV Navigator ist freie Software.  Aktuelle Version und Source Code
@@ -82,8 +81,8 @@ Das Parsen der Nachrichten ist erst in den Grundzuegen
 implementiert.
 
 Imperatoren-Spielzeug wird zwar korrekt verarbeitet, aber noch
-groesstenteils ignoriert.  Fuer Imperatoren gibt UVNav demnach
-noch nicht viel her.
+groesstenteils ignoriert.  Fuer Imperatoren ist UVNav demnach
+noch nicht sehr hilfreich.
 
 Die Kartendarstellung ist noch sehr experimentell.  Grafik und
 Benutzerfuehrung stecken noch in den Kinderschuhen.  Viele
@@ -188,14 +187,14 @@ Kompilieren und Installieren ab Subversion Repository
 Um UVNav direkt ab Repository zu kompilieren, wird ein Subversion
 Client sowie zusaetzlich GNU Autoconf 2.59 und Automake 1.9 benoetigt
 (2.57 und 1.7 sollten auch funktionieren, alles was aelter ist aber
-nicht).
+vermutlich nicht).
 
 Um den Quellcode der aktuellsten Entwicklungs-Version zu ziehen:
 
  $ svn checkout svn://projects.roe.ch/repos/uvnav/trunk/ uvnav
  $ cd uvnav
  $ ./autogen.sh
- $ ./configure
+ $ ./configure --enable-debug
  $ make
  # make install
 
@@ -221,5 +220,14 @@ Um einen Cross-Compiler-Build ab Subversion Repo zu starten:
 Vorher sollte build-cross-mingw32.sh noch an die lokalen Gegebenheiten
 angepasst werden.  Der Default passt fuer eine FreeBSD Installation der
 devel/mingw32-* Ports (GCC 3.x).
+
+
+
+Zusaetzliche Tools
+------------------
+
+In UVNav sind noch einige hilfreiche Scripts fuer die Auswertungs-
+Analyse und Zugerstellung enthalten.  Diese werden nur installiert,
+wenn ./configure mit --enable-tools ausgefuehrt wurde.
 
 
