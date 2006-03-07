@@ -104,7 +104,7 @@ void UVNavigator::splash()
 	SDL_BlitSurface(img, 0, screen, &dst);
 
 	// SDL powered mitte unten, h / 12 ueber rand
-	img = imagehandler->get_surface(IMG_SDL_POWERED, 0, screen->h / 8);
+	img = imagehandler->get_surface(IMG_SDL_POWERED, 0, screen->h / 5);
 	dst.x = screen->w / 2 - img->w / 2;
 	dst.y = screen->h - screen->h / 12 - img->h;
 	SDL_BlitSurface(img, 0, screen, &dst);
@@ -112,16 +112,16 @@ void UVNavigator::splash()
 	// Titel
 	SDL_Surface* line1 = font_splash->get_surface(TITLE " " PACKAGE_VERSION " (" + to_string(revision) + ")");
 	dst.x = screen->w / 2 - line1->w / 2;
-	dst.y = screen->h / 2 - line1->h / 2 * 3;
+	dst.y = screen->h / 2 - line1->h / 2 * 7;
 	SDL_BlitSurface(line1, 0, screen, &dst);
 
 	// Copyright
 	SDL_Surface* line2 = font_splash->get_surface(COPYRIGHT);
 	dst.x = screen->w / 2 - line2->w / 2;
-	dst.y = screen->h / 2 - line1->h / 2;
+	dst.y = screen->h / 2 - line1->h / 2 * 5;
 	SDL_BlitSurface(line2, 0, screen, &dst);
 
-	status_y = screen->h / 2 + line1->h / 2 * 3;
+	status_y = screen->h / 2 - line1->h / 2;
 
 	SDL_FreeSurface(line1);
 	SDL_FreeSurface(line2);
@@ -170,7 +170,7 @@ void UVNavigator::load(const string& file, int v)
 
 		SDL_Rect dest;
 		dest.x = screen->w / 16; dest.w = screen->w * 7 / 8;
-		dest.y = screen->h * 5 / 8;  dest.h = screen->h / 16;
+		dest.y = screen->h * 9 / 16;  dest.h = screen->h / 16;
 		UVProgress* progress = new UVProgress(screen, &dest);
 		importer->attach(progress);
 		universum = importer->import(file);
