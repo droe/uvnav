@@ -56,8 +56,9 @@ using namespace std;
 UVNavigator::UVNavigator()
 : universum(NULL), spieler(NULL)
 , metering(false), meter_d(0), meter_x(0), meter_y(0)
+, meter_vd(0), meter_vx(0), meter_vy(0)
 , moving(false), move_x(0), move_y(0)
-, mouse_x(0), mouse_y(0)
+, mouse_x(0), mouse_y(0), mouse_vx(0), mouse_vy(0)
 {
 	conf = UVConf::get_instance();
 	screen = UVVideo::get_instance()->get_screen();
@@ -218,6 +219,7 @@ void UVNavigator::wait()
  * Die Map und die Fenster neu zeichnen.
  * FIXME: Die Fenster duerfen nicht ueberlappen!
  */
+#define METER_RGB 0x55,0xAA,0xFF
 void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
 {
 	int nrects = 0;
@@ -227,15 +229,53 @@ void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
 	if(map->dirty) {
 		map->draw(screen);
 		if(metering) {
-			SDL_Rect dst = { mouse_x - (mouse_x - meter_x) / 2, mouse_y - (mouse_y - meter_y) / 2, 0, 0 };
-			drw->line(screen, meter_x, meter_y, mouse_x, mouse_y, 0xFF, 0, 0, 0xFF);
-			SDL_Surface *label = font_meter->get_surface(to_string(meter_d) + " KE", 0xFF, 0, 0);
+			long vect_x = mouse_x - meter_x;
+			long vect_y = mouse_y - meter_y;
+			// linie
+			drw->line(screen, meter_x, meter_y, mouse_x, mouse_y, METER_RGB, 0xFF);
+			drw->line(screen, meter_x, meter_y, mouse_x, mouse_y, METER_RGB, 0xFF);
+			// start und endpunkte
+			drw->line(screen, meter_x, meter_y - 5, meter_x, meter_y + 5, METER_RGB, 0xFF);
+			drw->line(screen, meter_x - 5, meter_y, meter_x + 5, meter_y, METER_RGB, 0xFF);
+			drw->line(screen, mouse_x, mouse_y - 5, mouse_x, mouse_y + 5, METER_RGB, 0xFF);
+			drw->line(screen, mouse_x - 5, mouse_y, mouse_x + 5, mouse_y, METER_RGB, 0xFF);
+			// kreise um start und endpunkte
+			drw->circle(screen, meter_x, meter_y, meter_d, METER_RGB, 0xFF);
+			drw->circle(screen, mouse_x, mouse_y, meter_d, METER_RGB, 0xFF);
+			// kaufradius
+			drw->circle(screen, mouse_x, mouse_y, 5000 * meter_d / max(1, meter_vd), 0xFF, 0xFF, 0x00, 0xFF);
+			// label distanz
+			SDL_Surface *label = font_meter->get_surface(to_string(meter_vd) + " KE", METER_RGB);
+			SDL_Rect dst = { mouse_x - vect_x/2, mouse_y - vect_y/2, 0, 0 };
 			dst.x = max(label->w / 2, min(screen->w - label->w / 2, dst.x));
 			dst.y = max(label->h / 2, min(screen->h - label->h / 2, dst.y));
 			dst.x -= label->w / 2;
 			dst.y -= label->h / 2;
 			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0xAA);
 			SDL_BlitSurface(label, 0, screen, &dst);
+			SDL_FreeSurface(label);
+			// label startpunkt
+			label = font_meter->get_surface("(" + to_string(meter_vx) + "," + to_string(meter_vy) + ")", METER_RGB);
+			dst.x = meter_x - label->w * vect_x / max(meter_d, 1);
+			dst.y = meter_y - label->h * vect_y / max(meter_d, 1);
+			dst.x = max(label->w / 2, min(screen->w - label->w / 2, dst.x));
+			dst.y = max(label->h / 2, min(screen->h - label->h / 2, dst.y));
+			dst.x -= label->w / 2;
+			dst.y -= label->h / 2;
+			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0xAA);
+			SDL_BlitSurface(label, 0, screen, &dst);
+			SDL_FreeSurface(label);
+			// label endpunkt
+			label = font_meter->get_surface("(" + to_string(mouse_vx) + "," + to_string(mouse_vy) + ")", METER_RGB);
+			dst.x = mouse_x + label->w * vect_x / max(meter_d, 1);
+			dst.y = mouse_y + label->h * vect_y / max(meter_d, 1);
+			dst.x = max(label->w / 2, min(screen->w - label->w / 2, dst.x));
+			dst.y = max(label->h / 2, min(screen->h - label->h / 2, dst.y));
+			dst.x -= label->w / 2;
+			dst.y -= label->h / 2;
+			drw->box(screen, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0xAA);
+			SDL_BlitSurface(label, 0, screen, &dst);
+			SDL_FreeSurface(label);
 		}
 		for(vector<UVWindow*>::iterator i = windows.begin(); i != windows.end(); i++) {
 			SDL_Rect *rect = &rects[nrects++];
@@ -507,24 +547,23 @@ void UVNavigator::run()
 			break;
 		case SDL_USEREVENT:
 			SDL_GetMouseState(&mouse_x, &mouse_y);
-			{
-				long mouse_vx = map->p2virt_x(mouse_x);
-				long mouse_vy = map->p2virt_y(mouse_y);
-				if(metering) {
-					long meter_vx = map->p2virt_x(meter_x);
-					long meter_vy = map->p2virt_y(meter_y);
-					meter_d = distance(meter_vx, meter_vy, mouse_vx, mouse_vy);
-					map->dirty = true;
-				}
-				if(moving) {
-					map->scroll(move_x - mouse_x, move_y - mouse_y);
-					meter_x -= move_x - mouse_x;
-					meter_y -= move_y - mouse_y;
-					move_x = mouse_x;
-					move_y = mouse_y;
-				}
-				status_label->set_text("(" + to_string(mouse_vx) + "," + to_string(mouse_vy) + ")");
+			mouse_vx = map->p2virt_x(mouse_x);
+			mouse_vy = map->p2virt_y(mouse_y);
+			if(metering) {
+				meter_vx = map->p2virt_x(meter_x);
+				meter_vy = map->p2virt_y(meter_y);
+				meter_vd = distance(meter_vx, meter_vy, mouse_vx, mouse_vy);
+				meter_d = distance(meter_x, meter_y, mouse_x, mouse_y);
+				map->dirty = true;
 			}
+			if(moving) {
+				map->scroll(move_x - mouse_x, move_y - mouse_y);
+				meter_x -= move_x - mouse_x;
+				meter_y -= move_y - mouse_y;
+				move_x = mouse_x;
+				move_y = mouse_y;
+			}
+			status_label->set_text("(" + to_string(mouse_vx) + "," + to_string(mouse_vy) + ")");
 			break;
 		default:
 			break;

@@ -64,9 +64,11 @@ class UVNavigator
 
 		bool metering;
 		long meter_d, meter_x, meter_y;
+		long meter_vd, meter_vx, meter_vy;
 		bool moving;
 		long move_x, move_y;
 		int mouse_x, mouse_y;
+		long mouse_vx, mouse_vy;
 };
 
 #endif // NAVIGATOR_H
