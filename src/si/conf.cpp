@@ -75,7 +75,7 @@ UVConf::UVConf()
 	l_set("map-sichtradien", 2);
 	b_set("map-kaufradien", true);
 	b_set("map-schiffe", true);
-	b_set("map-container", true);
+	l_set("map-container", 2);
 	b_set("map-verbindungen", true);
 	l_set("map-zonen", 2);
 	l_set("map-offset-x", 0);
@@ -181,6 +181,14 @@ void UVConf::convert()
 				old_bool = true;
 			}
 			l_set("map-zonen", old_bool ? 2 : 0);
+		case 4:
+			try {
+				old_bool = b_get("map-container");
+				b_del("map-container");
+			} catch(key_not_found_error e) {
+				old_bool = true;
+			}
+			l_set("map-container", old_bool ? 2 : 0);
 		case CONF_VERSION:
 		default:
 			break;

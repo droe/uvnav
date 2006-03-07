@@ -178,7 +178,7 @@ UVMap::UVMap(UVUniversum* u)
 	opt_sichtradien  = conf->l_get("map-sichtradien",  true);
 	opt_kaufradien   = conf->b_get("map-kaufradien",   true);
 	opt_schiffe      = conf->b_get("map-schiffe",      true);
-	opt_container    = conf->b_get("map-container",    true);
+	opt_container    = conf->l_get("map-container",    true);
 	opt_verbindungen = conf->b_get("map-verbindungen", true);
 	opt_zonen        = conf->l_get("map-zonen",        true);
 	offset_x         = conf->l_get("map-offset-x",     true);
@@ -243,7 +243,7 @@ UVMap::~UVMap()
 	conf->l_set("map-dim",          dim,              true);
 	conf->l_set("map-sichtradien",  opt_sichtradien,  true);
 	conf->b_set("map-kaufradien",   opt_kaufradien,   true);
-	conf->b_set("map-container",    opt_container,    true);
+	conf->l_set("map-container",    opt_container,    true);
 	conf->b_set("map-schiffe",      opt_schiffe,      true);
 	conf->b_set("map-verbindungen", opt_verbindungen, true);
 	conf->l_set("map-zonen",        opt_zonen,        true);
@@ -695,19 +695,22 @@ void UVMap::toggle_opt_schiffe()
 
 /*
  * Container set/get/toggle.
+ * 0: keine Container
+ * 1: Container ohne Labels
+ * 2: Container mit Labels
  */
-bool UVMap::get_opt_container() const
+long UVMap::get_opt_container() const
 {
 	return opt_container;
 }
-void UVMap::set_opt_container(const bool o)
+void UVMap::set_opt_container(const long o)
 {
 	opt_container = o;
 	redraw();
 }
 void UVMap::toggle_opt_container()
 {
-	opt_container = !opt_container;
+	++opt_container %= 3;
 	redraw();
 }
 
@@ -1298,6 +1301,22 @@ void UVMap::draw_container(UVContainer* container)
 		drw->box(canvas, long(rint(center_x)) - h/2, long(rint(center_y)) - h/2,
 		                 long(rint(center_x)) + h/2, long(rint(center_y)) + h/2,
 		                 0xFF, 0xFF, 0xFF);
+
+		if(opt_container > 1 && zoom < 30.0) {
+			// Beschriftung
+			// *** provisorisch
+			string label_text = to_string(container->groesse) + " BRT";
+			if(zoom < 20.0) {
+				label_text += " (" + to_string(container->x) + "," + to_string(container->y) + ")";
+			}
+			SDL_Rect dst = { 0, 0, 0, 0};
+			SDL_Surface* label = label_font->get_surface(label_text, LABEL_RGB);
+			dst.x = long(rint(center_x + h / 2)) + 4;
+			dst.y = long(rint(center_y - label->h / 2));
+			drw->box(canvas, dst.x - label->h / 4, dst.y, dst.x + label->w + label->h / 4, dst.y + label->h, 0, 0, 0, 0x88);
+			SDL_BlitSurface(label, 0, canvas, &dst);
+			SDL_FreeSurface(label);
+		}
 
 //		cout << "draw Container (" << center_x << "/" << center_y << ")" << endl;
 	}

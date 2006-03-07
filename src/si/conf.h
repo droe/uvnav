@@ -31,7 +31,7 @@
  * CONF_VERSION wird inkrementiert, wenn Keys geloescht oder
  * umbenannt werden, aber nicht, wenn Keys hinzugefuegt werden.
  */
-#define CONF_VERSION 4
+#define CONF_VERSION 5
 
 class UVConf : public Singleton<UVConf>
 {

@@ -13,7 +13,7 @@ Die momentane Tastenbelegung ist nicht konfigurierbar so eingestellt:
  s             Sichtradien-Toggle: keine, nur Sonden, Schiffe+Sonden
  k             Kaufradien eigener Schiffe ein- / ausblenden
  x             Schiffe ein- / ausblenden
- c             Container ein- / ausblenden
+ c             Container-Toggle: keine, ohne Beschriftung, mit Beschriftung
  v             Verbindungen zwischen Planeten ein- / ausblenden
  z             Zonen-Potential-Toggle: keine, nur Zonen, Zonen und FUs
 

@@ -91,8 +91,8 @@ class UVMap : public Observer
 		void set_opt_schiffe(const bool);
 		void toggle_opt_schiffe();
 
-		bool get_opt_container() const;
-		void set_opt_container(const bool);
+		long get_opt_container() const;
+		void set_opt_container(const long);
 		void toggle_opt_container();
 
 		bool get_opt_verbindungen() const;
@@ -153,7 +153,7 @@ class UVMap : public Observer
 		long opt_zonen;
 		bool opt_kaufradien;
 		bool opt_schiffe;
-		bool opt_container;
+		long opt_container;
 		bool opt_verbindungen;
 };
 
