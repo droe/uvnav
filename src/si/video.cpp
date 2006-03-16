@@ -188,10 +188,12 @@ cerr << "R=" << (unsigned long)fmt.Rmask << "/" << (unsigned long)fmt.Rshift
 				fmt.Rmask <<= fmt.Bshift;
 				fmt.Gmask <<= fmt.Bshift;
 				fmt.Bmask <<= fmt.Bshift;
+				fmt.Aloss = fmt.Bloss;
 			} else {
 				// R < G < B < A
 				fmt.Amask = fmt.Bmask << fmt.Rshift;
 				fmt.Ashift = fmt.Bshift + fmt.Rshift;
+				fmt.Aloss = fmt.Bloss;
 			}
 		}
 		rmask = SDL_MapRGBA(&fmt, 0xFF, 0, 0, 0);
