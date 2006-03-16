@@ -20,7 +20,7 @@
 #
 # Installieren als /usr/local/share/mc/syntax/uv.syntax
 #
-# Aktivieren in ~/.cedit/Syntax mit
+# Aktivieren in /usr/local/share/mc/syntax/Syntax mit
 #   file ..\*\\.(uv|uvzug)$ UV\sZug
 #   include uv.syntax
 
