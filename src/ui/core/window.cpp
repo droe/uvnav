@@ -67,10 +67,12 @@ void UVWindow::resize()
 		w = widget->min.w + 4;
 	}
 
-	if(canvas)
-		SDL_FreeSurface(canvas);
-	canvas = UVVideo::get_instance()->create_surface(SDL_SRCALPHA, w, h);
-	widget->set_surface(canvas);
+	if(!canvas || canvas->w != w || canvas->h != h) {
+		if(canvas)
+			SDL_FreeSurface(canvas);
+		canvas = UVVideo::get_instance()->create_surface(SDL_SRCALPHA, w, h);
+		widget->set_surface(canvas);
+	}
 
 	if(!autosize) {
 		widget->x = 2;
