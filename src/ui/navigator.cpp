@@ -54,7 +54,7 @@ using namespace std;
  * Konstruktor.
  */
 UVNavigator::UVNavigator()
-: universum(NULL), spieler(NULL)
+: universum(NULL), spieler(NULL), map(NULL)
 , metering(false), meter_d(0), meter_x(0), meter_y(0)
 , meter_vd(0), meter_vx(0), meter_vy(0)
 , moving(false), move_x(0), move_y(0)
@@ -76,6 +76,8 @@ UVNavigator::UVNavigator()
 UVNavigator::~UVNavigator()
 {
 	UVVideo::get_instance()->dispose();
+	if(map)
+		delete map;
 }
 
 
@@ -220,7 +222,7 @@ void UVNavigator::wait()
  * FIXME: Die Fenster duerfen nicht ueberlappen!
  */
 #define METER_RGB 0x55,0xAA,0xFF
-void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
+void UVNavigator::vid_redraw(vector<UVWindow*> &windows)
 {
 	int nrects = 0;
 	SDL_Rect *rects = new SDL_Rect[windows.size() + 1];
@@ -243,7 +245,7 @@ void UVNavigator::vid_redraw(UVMap *&map, vector<UVWindow*> &windows)
 			drw->circle(screen, meter_x, meter_y, meter_d, METER_RGB, 0xFF);
 			drw->circle(screen, mouse_x, mouse_y, meter_d, METER_RGB, 0xFF);
 			// kaufradius
-			drw->circle(screen, mouse_x, mouse_y, 5000 * meter_d / max(1, meter_vd), 0xFF, 0xFF, 0x00, 0xFF);
+			drw->circle(screen, mouse_x, mouse_y, int(floor(5000 / map->get_zoom())), 0xFF, 0xFF, 0x00, 0xFF);
 			// label distanz
 			SDL_Surface *label = font_meter->get_surface(to_string(meter_vd) + " KE", METER_RGB);
 			SDL_Rect dst = { mouse_x - vect_x/2, mouse_y - vect_y/2, 0, 0 };
@@ -363,7 +365,7 @@ void UVNavigator::run()
 {
 	UVVideo *vid = UVVideo::get_instance();
 
-	UVMap *map = new UVMap(universum);
+	map = new UVMap(universum);
 
 	vector<UVWindow*> windows;
 
@@ -378,7 +380,7 @@ void UVNavigator::run()
 		status_label, 40, 20, 0, 0, UVHARight, UVVABottom, true);
 	windows.push_back(status_overlay);
 
-	vid_redraw(map, windows);
+	vid_redraw(windows);
 
 	SDL_Event event;
 	bool running = true;
@@ -569,11 +571,11 @@ void UVNavigator::run()
 			break;
 		}
 
-		vid_redraw(map, windows);
+		vid_redraw(windows);
 	}
-	delete map;
 	delete title_overlay;
 	delete status_overlay;
+	delete map; map = NULL;
 }
 
 

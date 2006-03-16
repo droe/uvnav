@@ -26,7 +26,7 @@ target=mingw32
 #build=i386-unknown-freebsd5.2.1
 prefix="/usr/local/$target"
 
-test -d aux || exit 1
+test -d util || exit 1
 
 sysver=`uname -s`
 case "$sysver" in

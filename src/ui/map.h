@@ -107,6 +107,7 @@ class UVMap : public Observer
 		//long v2phys_y(long) const;
 		long p2virt_x(long) const;
 		long p2virt_y(long) const;
+		double get_zoom() const;
 
 		bool dirty;
 

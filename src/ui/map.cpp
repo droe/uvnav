@@ -306,6 +306,10 @@ long UVMap::p2virt_y(long py) const
 {
 	return long(rint(py * zoom + offset_y));
 }
+double UVMap::get_zoom() const
+{
+	return zoom;
+}
 
 
 /*
@@ -998,7 +1002,7 @@ void UVMap::draw_grid()
  *
  *    ,--.
  *   (    ) 3456 Pleitengeier
- *   (    ) Z=3/7 1234 FUs frei
+ *   (    ) Z=3/7+2 1234 FUs frei
  *    `--'
  *
  * - wohin mit Name, Nummer?

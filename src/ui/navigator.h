@@ -51,13 +51,14 @@ class UVNavigator
 		UVFont *font_splash;
 		UVFont *font_meter;
 		UVDraw *drw;
+		UVMap *map;
 
 		SDL_Surface *screen;
 
 		long status_y;
 		void splash_status(const std::string&);
 
-		void vid_redraw(UVMap *&, std::vector<UVWindow*> &);
+		void vid_redraw(std::vector<UVWindow*> &);
 
 		std::string title_string(int);
 		long distance(long, long, long, long) const;
@@ -69,6 +70,7 @@ class UVNavigator
 		long move_x, move_y;
 		int mouse_x, mouse_y;
 		long mouse_vx, mouse_vy;
+		double map_zoom;
 };
 
 #endif // NAVIGATOR_H
