@@ -45,8 +45,7 @@ UVVideo::UVVideo()
 {
 	conf = UVConf::get_instance();
 
-	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
-	{
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0) {
 		throw EXCEPTION(string("SDL Error: ") + SDL_GetError());
 	}
 
@@ -55,13 +54,10 @@ UVVideo::UVVideo()
 	SDL_EnableUNICODE(1);
 
 	// TODO: rework into general config print facility
-	if(conf->b_get("screen-quality"))
-	{
+	if(conf->b_get("screen-quality")) {
 		cout << "Hohe Bildqualitaet aktiviert, verwende Anti-Aliasing und Interpolation." << endl;
 		cout << "Dies wird auf lahmen Maschinen zu merklich langsamerer Grafik-Ausgabe fuehren." << endl;
-	}
-	else
-	{
+	} else {
 		cout << "Optimale Geschwindigkeit aktiviert, kein Anti-Aliasing und Interpolation." << endl;
 		cout << "Gefahr: UV Navigator kann in diesem Modus zu sofortiger Erblindung fuehren." << endl;
 	}
@@ -162,59 +158,30 @@ SDL_Surface* UVVideo::get_screen()
 
 
 /*
- * Erzeugt eine neue SDL_Surface im selben Pixelformat wie screen,
- * aber je nach Flags mit zusaetzlichem Alphakanal.
+ * Erzeugt eine neue SDL_Surface.
  */
 SDL_Surface* UVVideo::create_surface(Uint32 flags, int width, int height)
 {
-	SDL_PixelFormat fmt = *screen->format;
-/*
-cerr << "R=" << (unsigned long)fmt.Rmask << "/" << (unsigned long)fmt.Rshift
-<< " G=" << (unsigned long)fmt.Gmask << "/" << (unsigned long)fmt.Gshift
-<< " B=" << (unsigned long)fmt.Bmask << "/" << (unsigned long)fmt.Bshift
-<< " A=" << (unsigned long)fmt.Amask << "/" << (unsigned long)fmt.Ashift
-<< endl;
-*/
 	Uint32 rmask, gmask, bmask, amask;
+	Uint16 bpp;
 	if(flags & SDL_SRCALPHA) {
-		if(!fmt.Amask) {
-			fmt.Aloss = fmt.Rloss;
-			if(fmt.Rshift > fmt.Gshift) {
-				// R > G > B > A
-				fmt.Bshift = fmt.Gshift;
-				fmt.Rshift += fmt.Bshift;
-				fmt.Gshift += fmt.Bshift;
-				fmt.Amask = fmt.Bmask;
-				fmt.Rmask <<= fmt.Bshift;
-				fmt.Gmask <<= fmt.Bshift;
-				fmt.Bmask <<= fmt.Bshift;
-				fmt.Aloss = fmt.Bloss;
-			} else {
-				// R < G < B < A
-				fmt.Amask = fmt.Bmask << fmt.Rshift;
-				fmt.Ashift = fmt.Bshift + fmt.Rshift;
-				fmt.Aloss = fmt.Bloss;
-			}
-		}
-		rmask = SDL_MapRGBA(&fmt, 0xFF, 0, 0, 0);
-		gmask = SDL_MapRGBA(&fmt, 0, 0xFF, 0, 0);
-		bmask = SDL_MapRGBA(&fmt, 0, 0, 0xFF, 0);
-		amask = SDL_MapRGBA(&fmt, 0, 0, 0, 0xFF);
+		bpp = 32;
+		rmask = 0xFF000000;
+		gmask = 0x00FF0000;
+		bmask = 0x0000FF00;
+		amask = 0x000000FF;
 	} else {
-		rmask = SDL_MapRGB(&fmt, 0xFF, 0, 0);
-		gmask = SDL_MapRGB(&fmt, 0, 0xFF, 0);
-		bmask = SDL_MapRGB(&fmt, 0, 0, 0xFF);
-		amask = 0;
+		bpp = 24;
+		rmask = 0x00FF0000;
+		gmask = 0x0000FF00;
+		bmask = 0x000000FF;
+		amask = 0x00000000;
 	}
-/*
-cerr << "R=" << (unsigned long)fmt.Rmask << "/" << (unsigned long)fmt.Rshift
-<< " G=" << (unsigned long)fmt.Gmask << "/" << (unsigned long)fmt.Gshift
-<< " B=" << (unsigned long)fmt.Bmask << "/" << (unsigned long)fmt.Bshift
-<< " A=" << (unsigned long)fmt.Amask << "/" << (unsigned long)fmt.Ashift
-<< endl;
-*/
-	return SDL_CreateRGBSurface(flags, width, height, fmt.BitsPerPixel,
+	SDL_Surface *tmpsfc = SDL_CreateRGBSurface(flags, width, height, bpp,
 		rmask, gmask, bmask, amask);
+	SDL_Surface *sfc = SDL_DisplayFormatAlpha(tmpsfc);
+	SDL_FreeSurface(tmpsfc);
+	return sfc;
 }
 
 

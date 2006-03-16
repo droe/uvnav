@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -71,29 +71,25 @@ UVImageHandler::UVImageHandler()
 		? SMOOTHING_ON
 		: SMOOTHING_OFF;
 
-	for(int i = 0; i < NUM_IMG; i++)
-	{
+	for(int i = 0; i < NUM_IMG; i++) {
 		SDL_Surface* surface;
 		string ff = sysdep_imagefile(img_files[i]);
 
 		// Existiert die Datei?
-		if(!sysdep_file_exists(ff))
-		{
+		if(!sysdep_file_exists(ff)) {
 			throw EXCEPTION("Image-Datei nicht gefunden: " + ff);
 		}
 
 		// Bild laden
 		surface = IMG_Load(ff.c_str());
-		if(!surface)
-		{
+		if(!surface) {
 			throw EXCEPTION(string("SDL_image Error: ") + IMG_GetError());
 		}
 
 		// Surface in Bildschirmformat konvertieren
 		images[i].original = SDL_DisplayFormatAlpha(surface);
 		SDL_FreeSurface(surface);
-		if(!images[i].original)
-		{
+		if(!images[i].original) {
 			throw EXCEPTION(string("SDL_DisplayFormatAlpha Error: ") + SDL_GetError());
 		}
 
@@ -115,15 +111,12 @@ UVImageHandler::~UVImageHandler()
  */
 void UVImageHandler::dispose()
 {
-	for(int i = 0; i < NUM_IMG; i++)
-	{
-		if(images[i].original)
-		{
+	for(int i = 0; i < NUM_IMG; i++) {
+		if(images[i].original) {
 			SDL_FreeSurface(images[i].original);
 			images[i].original = NULL;
 		}
-		if(images[i].resultat)
-		{
+		if(images[i].resultat) {
 			SDL_FreeSurface(images[i].resultat);
 			images[i].resultat = NULL;
 		}
@@ -140,34 +133,25 @@ void UVImageHandler::dispose()
  */
 SDL_Surface* UVImageHandler::get_surface(const long id, const double f)
 {
-	if(id >= NUM_IMG)
-	{
+	if(id >= NUM_IMG) {
 		throw EXCEPTION("Fehler: Ungueltige Image-ID");
 	}
 
-	if(f == 1.0)
-	{
+	if(f == 1.0) {
 		return images[id].original;
-	}
-	else
-	{
-		if(f == images[id].faktor)
-		{
+	} else {
+		if(f == images[id].faktor) {
 			// cache hit
 			return images[id].resultat;
-		}
-		else
-		{
+		} else {
 			// *** DEBUG CODE
 //			cerr << "Cache miss: zoomSurface(" << img_files[id] << ": " << images[id].faktor << " -> " << f << ")" << endl;
 			// cache miss
-			if(images[id].resultat)
-			{
+			if(images[id].resultat) {
 				SDL_FreeSurface(images[id].resultat);
 			}
 			images[id].resultat = zoomSurface(images[id].original, f, f, smoothing);
-			if(!images[id].resultat)
-			{
+			if(!images[id].resultat) {
 				throw EXCEPTION("Fehler: zoomSurface() schlug fehl");
 			}
 			images[id].faktor = f;
@@ -179,12 +163,9 @@ SDL_Surface* UVImageHandler::get_surface(const long id, const int w, const int h
 {
 	double f;
 
-	if(w)
-	{
+	if(w) {
 		f = 1.0 * w / images[id].original->w;
-	}
-	else
-	{
+	} else {
 		f = 1.0 * h / images[id].original->h;
 	}
 
