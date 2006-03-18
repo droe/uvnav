@@ -1145,7 +1145,7 @@ void UVMap::draw_planet(UVPlanet* planet)
 				bool pot_f = freie_fus > 0;
 				zonen_text = "Z=" + to_string(eigene_zonen) + "/" + to_string(max_zone);
 				if(freie_zonen > 0) {
-					zonen_text += "+" + to_string(freie_zonen);
+					zonen_text += "(" + to_string(freie_zonen) + ")";
 				}
 				if(freie_fus > 0 && opt_zonen > 1) {
 					zonen_text += " " + to_string(freie_fus) + " FUs frei";
