@@ -1,7 +1,5 @@
 $Id$
 
-===> Copyright aktualisieren
-
 - OO-Architecture Redesign
   - si/UVKeyboard als Singleton implementieren (od. UVEvents)
     - MULTITHREADED !!! yehaa :-)
