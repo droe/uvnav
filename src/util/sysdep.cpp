@@ -1,6 +1,6 @@
 /*
  * UV Navigator - Auswertungsvisualisierung fuer Universum V
- * Copyright (C) 2004-2005 Daniel Roethlisberger <roe@chronator.ch>
+ * Copyright (C) 2004-2006 Daniel Roethlisberger <roe@chronator.ch>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -142,21 +142,15 @@ void sysdep_screensize(SDL_Rect* rect)
 #if defined(SYSDEP_X11)
 	SDL_SysWMinfo wmi;
 	SDL_VERSION(&wmi.version);
-	if(SDL_GetWMInfo(&wmi))
-	{
-		if(wmi.subsystem == SDL_SYSWM_X11)
-		{
+	if(SDL_GetWMInfo(&wmi)) {
+		if(wmi.subsystem == SDL_SYSWM_X11) {
 			rect->w = DisplayWidth(wmi.info.x11.display, 0);
 			rect->h = DisplayHeight(wmi.info.x11.display, 0);
-		}
-		else
-		{
+		} else {
 			throw EXCEPTION("Unbekanntes Grafik-Subsystem. " + to_string(wmi.subsystem));
 		}
-	}
-	else
-	{
-		throw EXCEPTION("Kann Bildschirmgroesse nicht ermitteln.");
+	} else {
+		throw EXCEPTION("Kann Bildschirmgroesse nicht ermitteln: " + to_string(SDL_GetError()));
 	}
 #elif defined(SYSDEP_W32)
 	rect->w = GetSystemMetrics(SM_CXSCREEN);
