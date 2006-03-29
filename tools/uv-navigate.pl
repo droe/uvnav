@@ -42,7 +42,6 @@ EOF
 	{
 		navigate($_);
 	}
-	$term->addhistory($_) if /\S/;
 }
 print $OUT "\n";
 
