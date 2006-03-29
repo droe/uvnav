@@ -867,8 +867,10 @@ void UVImportTXT::parse_nachrichten()
 	// - Brummbaerist aus der Gesellschaft ausgetreten.
 	static UVRegExp gx_i2_re("^- (.+?)ist aus der Gesellschaft ausgetreten\\.$");
 	// KS - Kopfgeld
+	// - Sie haben das Kopfgeld auf Deuteros um 100000 Cr erhöht.
+	static UVRegExp ks_o_re("^- Sie haben das Kopfgeld auf (.+) um ([0-9]+) Cr erh.ht\\.$");
 	// - Das Kopfgeld auf Sie wurde um 100000 Cr erhöht.
-	static UVRegExp ks_re("^- Das Kopfgeld auf Sie wurde um ([0-9]+) Cr erh.ht\\.$");
+	static UVRegExp ks_i_re("^- Das Kopfgeld auf Sie wurde um ([0-9]+) Cr erh.ht\\.$");
 	// PS - Planet uebertragen
 	// ZK - Zone kaufen
 	// - Sie haben auf Planet  (1234) Zone 14 gekauft.
@@ -956,9 +958,14 @@ void UVImportTXT::parse_nachrichten()
 			debug("nachricht-gx_i2", &gx_i2_re);
 			// ***
 		}
-		else if(ks_re.match(cur))
+		else if(ks_o_re.match(cur))
 		{
-			debug("nachricht-ks", &ks_re);
+			debug("nachricht-ks_o", &ks_o_re);
+			// ***
+		}
+		else if(ks_i_re.match(cur))
+		{
+			debug("nachricht-ks_i", &ks_i_re);
 			// ***
 		}
 		else if(zk_re.match(cur))
