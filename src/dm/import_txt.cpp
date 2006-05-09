@@ -1560,11 +1560,18 @@ void UVImportTXT::parse_nachrichten()
 // 7. Befehlsgruppe
 	// AS - Artikel anmelden
 	// AW - Artikel bewerten
+	// - Du hast aufgrund deines prämierten Artikels in den Public Docs 2130122 Cr erhalten! Gratuliere!
+	static UVRegExp praemie_re("^- Du hast aufgrund deines pr.mierten Artikels in den Public Docs ([0-9]+) Cr erhalten! Gratuliere!$");
 	while(dash_re.match(cur))
 	{
 		if(cur[2] == '!')
 		{
 			// *** Fehlermeldung skipped
+		}
+		else if(praemie_re.match(cur))
+		{
+			debug("nachricht-praemie", &praemie_re);
+			// ***
 		}
 		else
 		{
